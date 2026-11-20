@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>U.C.C Institute - Student Portal 2027</title>
+  <style>
+    :root {
+      --primary: #0f5132;
+      --bg: #f1f5f9;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --danger: #dc2626;
+      --success: #16a34a;
+    }
+    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { margin: 0; background: var(--bg); color: var(--text); padding-bottom: 40px; }
+
+    #offlineWall {
+      display: none; position: fixed; inset: 0; background: #0f172a; color: #fff;
+      z-index: 300; justify-content: center; align-items: center; text-align: center; padding: 24px;
+    }
+
+    header {
+      background: var(--primary); color: #fff; padding: 14px 16px;
+      display: flex; justify-content: space-between; align-items: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+    header h1 { margin: 0; font-size: 18px; }
+    header small { font-size: 11px; opacity: 0.85; display: block; }
+    .logout-btn {
+      display: none; background: rgba(255,255,255,0.2); color: #fff;
+      border: 1px solid rgba(255,255,255,0.4); padding: 6px 10px;
+      border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer;
+    }
+
+    .container { max-width: 560px; margin: 16px auto; padding: 0 12px; }
+    .card {
+      background: var(--card); border-radius: 12px; padding: 16px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06); margin-bottom: 12px; border: 1px solid var(--border);
+    }
+    .form-group { margin-bottom: 12px; }
+    label { display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 5px; }
+    input, select {
+      width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1;
+      border-radius: 8px; font-size: 14px; background: #fff;
+    }
+    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .btn {
+      width: 100%; padding: 12px; border: none; border-radius: 9px;
+      font-size: 14px; font-weight: 700; cursor: pointer; color: #fff; background: var(--primary);
+    }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .err-box {
+      display: none; background: #fee2e2; color: #991b1b; padding: 9px 11px;
+      border-radius: 8px; font-size: 12px; font-weight: 700; margin-bottom: 10px;
+    }
+
+    .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
+    .stat-box { background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; padding: 10px 6px; text-align: center; }
+    .stat-num { font-size: 18px; font-weight: 800; }
+    .stat-lbl { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+    .months-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+    .m-cell {
+      border: 1px solid var(--border); border-radius: 8px; padding: 7px 4px;
+      text-align: center; font-size: 11px; background: #f8fafc;
+    }
+    .m-cell.paid { background: #dcfce7; border-color: #86efac; color: #166534; font-weight: 700; }
+
+    .upi-box {
+      background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 10px;
+      padding: 12px; margin-bottom: 12px; font-size: 13px;
+    }
+    .copy-btn {
+      background: #1d4ed8; color: #fff; border: none; padding: 5px 10px;
+      border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; margin-left: 6px;
+    }
+
+    .pay-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 10px 0; border-bottom: 1px dashed #e2e8f0; gap: 8px;
+    }
+    .pay-row:last-child { border-bottom: none; }
+    .rcpt-btn {
+      background: #0f172a; color: #fff; border: none; padding: 6px 10px;
+      border-radius: 7px; font-size: 11px; font-weight: 700; cursor: pointer; white-space: nowrap;
+    }
+
+    .badge-pend { background: #fef3c7; color: #92400e; padding: 3px 8px; border-radius: 10px; font-size: 11px; font-weight: 700; }
+    .badge-appr { background: #dcfce7; color: #166534; padding: 3px 8px; border-radius: 10px; font-size: 11px; font-weight: 700; }
+    .badge-rej { background: #fee2e2; color: #991b1b; padding: 3px 8px; border-radius: 10px; font-size: 11px; font-weight: 700; }
+
+    /* OFFICIAL PRINT RECEIPT MODAL */
+    .modal-bg {
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.65);
+      z-index: 100; justify-content: center; align-items: center; padding: 14px;
+    }
+    .modal-bg.open { display: flex; }
+    .rcpt-card {
+      background: #fff; width: 100%; max-width: 420px; border-radius: 12px;
+      padding: 20px; border: 2px solid var(--primary);
+    }
+    .rcpt-head { text-align: center; border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-bottom: 12px; }
+    .rcpt-line { display: flex; justify-content: space-between; font-size: 13px; padding: 5px 0; border-bottom: 1px dashed #e2e8f0; }
+    .rcpt-sign { margin-top: 18px; text-align: right; font-size: 12px; }
+
+    @media print {
+      body * { visibility: hidden; }
+      #receiptPrintArea, #receiptPrintArea * { visibility: visible; }
+      #receiptPrintArea { position: fixed; left: 0; top: 0; width: 100%; border: 2px solid #000; }
+      .no-print { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="offlineWall">
+  <div>
+    <h2>ইন্টারনেট সংযোগ নেই</h2>
+    <p style="opacity:0.85;font-size:14px;">Student Portal দেখার জন্য ইন্টারনেট অন করা বাধ্যতামূলক। নেট অন করে পেজটি রিফ্রেশ করো।</p>
+  </div>
+</div>
+
+<header>
+  <div>
+    <h1>U.C.C Institute</h1>
+    <small>Student Portal • Session 2027 (Online Only)</small>
+  </div>
+  <button id="logoutBtn" class="logout-btn" onclick="logout()">Logout</button>
+</header>
+
+<div class="container">
+  <!-- STUDENT LOGIN CARD -->
+  <div id="loginBox" class="card">
+    <h2 style="margin:0 0 6px;color:var(--primary);font-size:19px;">Student Login</h2>
+    <p style="margin:0 0 14px;font-size:12px;color:var(--muted);">তোমার Student ID (যেমন UCC001) এবং রেজিস্টার্ড মোবাইল নম্বর দাও।</p>
+    <div id="loginErr" class="err-box"></div>
+    <form onsubmit="studentLogin(event)">
+      <div class="form-group">
+        <label>Student ID *</label>
+        <input type="text" id="inId" required placeholder="e.g. UCC001" style="text-transform:uppercase;">
+      </div>
+      <div class="form-group">
+        <label>Registered Mobile Number *</label>
+        <input type="tel" id="inMob" required maxlength="10" placeholder="10-digit mobile number">
+      </div>
+      <button type="submit" id="loginBtn" class="btn">View My Portal</button>
+    </form>
+  </div>
+
+  <!-- STUDENT DASHBOARD -->
+  <div id="portalBox" style="display:none;">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+        <div>
+          <div id="sName" style="font-size:19px;font-weight:800;color:var(--primary);"></div>
+          <div id="sMeta" style="font-size:13px;color:var(--muted);font-weight:600;margin-top:2px;"></div>
+        </div>
+        <button class="rcpt-btn" style="background:var(--primary);" onclick="refreshPortal()">↻ Refresh</button>
+      </div>
+
+      <div class="stat-grid" style="margin-top:12px;">
+        <div class="stat-box">
+          <div id="sPres" class="stat-num" style="color:var(--success);">0</div>
+          <div class="stat-lbl">Present Days</div>
+        </div>
+        <div class="stat-box">
+          <div id="sAbs" class="stat-num" style="color:#b45309;">0</div>
+          <div class="stat-lbl">Absent Days</div>
+        </div>
+        <div class="stat-box">
+          <div id="sDue" class="stat-num" style="color:var(--danger);">Rs. 0</div>
+          <div class="stat-lbl">Total Due</div>
+        </div>
+      </div>
+
+      <div style="font-size:12px;color:#475569;">
+        Father: <strong id="sFather">-</strong> • Admission Date: <strong id="sAdm">-</strong>
+      </div>
+    </div>
+
+    <!-- 2027 MONTHLY FEE STATUS -->
+    <div class="card">
+      <div style="font-weight:800;font-size:14px;margin-bottom:8px;">2027 Monthly Fee Status</div>
+      <div id="sMonths" class="months-grid"></div>
+    </div>
+
+    <!-- ONLINE PAYMENT & SCREENSHOT UPLOAD -->
+    <div class="card">
+      <div style="font-weight:800;font-size:15px;color:var(--primary);margin-bottom:8px;">Pay Fees Online (UPI / PhonePe)</div>
+      <div class="upi-box">
+        <strong>Step 1:</strong> নিচের PhonePe / GPay নম্বরে মাসিক ফি (Rs. 300) পাঠাও:<br>
+        <div style="margin-top:6px;font-size:16px;font-weight:800;color:#1e3a8a;">
+          8016972121
+          <button type="button" class="copy-btn" onclick="copyPhone()">Copy Number</button>
+        </div>
+        <div style="font-size:11px;color:#475569;margin-top:4px;">
+          <strong>Step 2:</strong> পেমেন্টের স্ক্রিনশট নিচে আপলোড করো। অ্যাডমিন ভেরিফাই করলেই অটো রসিদ পেয়ে যাবে।
+        </div>
+      </div>
+
+      <div id="payErr" class="err-box"></div>
+      <form id="onlinePayForm" onsubmit="submitOnlinePay(event)">
+        <div class="row-2">
+          <div class="form-group">
+            <label>Select Unpaid Month *</label>
+            <select id="oMonth" required></select>
+          </div>
+          <div class="form-group">
+            <label>Amount Paid (Rs.) *</label>
+            <input type="number" id="oAmount" value="300" min="1" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>UTR / Transaction ID (Optional)</label>
+          <input type="text" id="oUtr" placeholder="পেমেন্টের UTR বা Ref নম্বর">
+        </div>
+        <div class="form-group">
+          <label>Upload Payment Screenshot *</label>
+          <input type="file" id="oFile" accept="image/*" required>
+        </div>
+        <button type="submit" id="oSubmitBtn" class="btn">Upload Screenshot for Verification</button>
+      </form>
+    </div>
+
+    <!-- ONLINE VERIFICATION STATUS -->
+    <div class="card" id="reqCardBox" style="display:none;">
+      <div style="font-weight:800;font-size:14px;margin-bottom:6px;">Online Payment Verification Status</div>
+      <div id="reqList"></div>
+    </div>
+
+    <!-- PAYMENT HISTORY & AUTO RECEIPTS -->
+    <div class="card">
+      <div style="font-weight:800;font-size:14px;margin-bottom:6px;">Payment History & Official Receipts</div>
+      <div id="payHistory"></div>
+    </div>
+  </div>
+</div>
+
+<!-- OFFICIAL RECEIPT MODAL -->
+<div class="modal-bg" id="rcptModal" onclick="if(event.target===this) closeReceipt()">
+  <div class="rcpt-card" id="receiptPrintArea">
+    <div class="rcpt-head">
+      <div style="font-size:20px;font-weight:800;color:var(--primary);">U.C.C INSTITUTE</div>
+      <div style="font-size:11px;color:#475569;">Penchakola, Raipur, Bankura • Ph: 8016972121 / 8159980707</div>
+      <div style="font-size:12px;font-weight:800;margin-top:4px;letter-spacing:0.5px;">OFFICIAL FEE RECEIPT (2027)</div>
+    </div>
+
+    <div class="rcpt-line"><span>Receipt No:</span><strong id="rNo"></strong></div>
+    <div class="rcpt-line"><span>Payment Date:</span><strong id="rDate"></strong></div>
+    <div class="rcpt-line"><span>Student Name:</span><strong id="rName"></strong></div>
+    <div class="rcpt-line"><span>Student ID & Class:</span><strong id="rIdCls"></strong></div>
+    <div class="rcpt-line"><span>Fee Month:</span><strong id="rMonth"></strong></div>
+    <div class="rcpt-line"><span>Payment Mode:</span><strong id="rMode"></strong></div>
+    <div class="rcpt-line" style="font-size:15px;color:var(--primary);">
+      <span><strong>Amount Paid:</strong></span><strong id="rAmt"></strong>
+    </div>
+
+    <div class="rcpt-sign">
+      Received / Verified By:<br>
+      <strong id="rCollector" style="font-size:14px;color:var(--primary);"></strong><br>
+      <span style="color:var(--muted);font-size:10px;">Authorized Signatory, U.C.C Institute</span>
+    </div>
+
+    <div class="row-2 no-print" style="margin-top:16px;">
+      <button class="btn" onclick="window.print()">Print / Save PDF</button>
+      <button class="btn" style="background:#334155;" onclick="closeReceipt()">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const API_URL = 'https://script.google.com/macros/s/AKfycbwAuSfDoikCc998pVuwz0HySky1fChn-Tj8p7OeuUAr_WPG7IFZkfGB5LUO6NlvkiKO/exec';
+  const MONTHS = [
+    ['Jan_2027','Jan'], ['Feb_2027','Feb'], ['Mar_2027','Mar'], ['Apr_2027','Apr'],
+    ['May_2027','May'], ['Jun_2027','Jun'], ['Jul_2027','Jul'], ['Aug_2027','Aug'],
+    ['Sep_2027','Sep'], ['Oct_2027','Oct'], ['Nov_2027','Nov'], ['Dec_2027','Dec']
+  ];
+
+  let currentCreds = null;
+  let portalData = null;
+
+  function checkOnline() {
+    document.getElementById('offlineWall').style.display = navigator.onLine ? 'none' : 'flex';
+  }
+  window.addEventListener('online', checkOnline);
+  window.addEventListener('offline', checkOnline);
+  window.onload = checkOnline;
+
+  function copyPhone() {
+    navigator.clipboard.writeText('8016972121').then(() => alert('Number 8016972121 copied!'));
+  }
+
+  async function studentLogin(e) {
+    e.preventDefault();
+    if (!navigator.onLine) { checkOnline(); return; }
+    const sid = document.getElementById('inId').value.trim().toUpperCase();
+    const mob = document.getElementById('inMob').value.trim();
+    currentCreds = { sid, mob };
+    await fetchStudentPortal(true);
+  }
+
+  async function refreshPortal() {
+    if (currentCreds) await fetchStudentPortal(false);
+  }
+
+  async function fetchStudentPortal(isLogin) {
+    const btn = document.getElementById('loginBtn');
+    const errBox = document.getElementById('loginErr');
+    errBox.style.display = 'none';
+    if (isLogin) { btn.disabled = true; btn.textContent = 'Checking...'; }
+
+    try {
+      const url = `${API_URL}?mode=student&id=${encodeURIComponent(currentCreds.sid)}&mobile=${encodeURIComponent(currentCreds.mob)}`;
+      const res = await fetch(url);
+      const data = await res.json();
+
+      if (data.status !== 'ok') {
+        errBox.textContent = data.message || 'Login failed!';
+        errBox.style.display = 'block';
+        return;
+      }
+
+      portalData = data;
+      document.getElementById('loginBox').style.display = 'none';
+      document.getElementById('portalBox').style.display = 'block';
+      document.getElementById('logoutBtn').style.display = 'block';
+      renderPortal();
+    } catch (err) {
+      errBox.textContent = 'ইন্টারনেট বা সার্ভার সমস্যা—আবার চেষ্টা করো।';
+      errBox.style.display = 'block';
+    } finally {
+      if (isLogin) { btn.disabled = false; btn.textContent = 'View My Portal'; }
+    }
+  }
+
+  function logout() {
+    currentCreds = null;
+    portalData = null;
+    document.getElementById('portalBox').style.display = 'none';
+    document.getElementById('logoutBtn').style.display = 'none';
+    document.getElementById('loginBox').style.display = 'block';
+    document.getElementById('inMob').value = '';
+  }
+
+  function renderPortal() {
+    const s = portalData.student;
+    document.getElementById('sName').textContent = s.name;
+    document.getElementById('sMeta').textContent = `${s.id} • ${s.studentClass}`;
+    document.getElementById('sPres').textContent = portalData.presentDays;
+    document.getElementById('sAbs').textContent = portalData.absentDays;
+    document.getElementById('sDue').textContent = 'Rs. ' + (Number(s.totalDue) || 0);
+    document.getElementById('sDue').style.color = s.totalDue > 0 ? '#dc2626' : '#16a34a';
+    document.getElementById('sFather').textContent = s.fatherName || '-';
+    document.getElementById('sAdm').textContent = s.admissionDate || '-';
+
+    let unpaidOpts = '';
+    document.getElementById('sMonths').innerHTML = MONTHS.map(([key, lbl]) => {
+      const val = Number(s.months?.[key]) || 0;
+      const paid = val > 0;
+      if (!paid) unpaidOpts += `<option value="${key}">${key.replace('_', ' ')}</option>`;
+      return `<div class="m-cell ${paid ? 'paid' : ''}">${lbl}<br>${paid ? 'Rs.' + val + ' ✓' : 'Due'}</div>`;
+    }).join('');
+
+    const oMonth = document.getElementById('oMonth');
+    const oBtn = document.getElementById('oSubmitBtn');
+    if (unpaidOpts) {
+      oMonth.innerHTML = unpaidOpts;
+      oMonth.disabled = false;
+      oBtn.disabled = false;
+      oBtn.textContent = 'Upload Screenshot for Verification';
+    } else {
+      oMonth.innerHTML = '<option>All 12 Months Paid ✓</option>';
+      oMonth.disabled = true;
+      oBtn.disabled = true;
+      oBtn.textContent = 'All 2027 Fees Paid ✓';
+    }
+
+    // Online Verification Requests
+    const reqs = portalData.requests || [];
+    if (reqs.length > 0) {
+      document.getElementById('reqCardBox').style.display = 'block';
+      document.getElementById('reqList').innerHTML = reqs.map(r => {
+        const cls = r.status === 'Approved' ? 'badge-appr' : (r.status === 'Rejected' ? 'badge-rej' : 'badge-pend');
+        return `
+          <div class="pay-row" style="font-size:12px;">
+            <div>
+              <strong>${r.month.replace('_', ' ')} • Rs. ${r.amount}</strong><br>
+              <span style="color:var(--muted);">${r.date} ${r.remarks ? '• ' + r.remarks : ''}</span>
+            </div>
+            <span class="${cls}">${r.status}</span>
+          </div>
+        `;
+      }).join('');
+    } else {
+      document.getElementById('reqCardBox').style.display = 'none';
+    }
+
+    // Verified Payment History & Receipts
+    const pays = portalData.payments || [];
+    document.getElementById('payHistory').innerHTML = pays.length
+      ? pays.map((p, idx) => `
+        <div class="pay-row">
+          <div style="font-size:12px;">
+            <strong>${p.month.replace('_', ' ')} — Rs. ${p.amount}</strong><br>
+            <span style="color:var(--muted);">Date: ${p.date} • Paid to: <strong>${p.collector}</strong> (${p.mode})</span>
+          </div>
+          <button class="rcpt-btn" onclick="openReceipt(${idx})">Receipt</button>
+        </div>
+      `).join('')
+      : '<div style="font-size:13px;color:var(--muted);text-align:center;">এখনো কোনো ভেরিফায়েড পেমেন্ট রেকর্ড নেই।</div>';
+  }
+
+  function compressImage(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = ev => {
+        const img = new Image();
+        img.onload = () => {
+          const maxW = 900;
+          const scale = img.width > maxW ? (maxW / img.width) : 1;
+          const canvas = document.createElement('canvas');
+          canvas.width = img.width * scale;
+          canvas.height = img.height * scale;
+          canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+          resolve(canvas.toDataURL('image/jpeg', 0.65));
+        };
+        img.onerror = reject;
+        img.src = ev.target.result;
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  async function submitOnlinePay(e) {
+    e.preventDefault();
+    if (!navigator.onLine) { checkOnline(); return; }
+    const errBox = document.getElementById('payErr');
+    errBox.style.display = 'none';
+
+    const fileInput = document.getElementById('oFile');
+    if (!fileInput.files || !fileInput.files[0]) {
+      errBox.textContent = 'পেমেন্টের স্ক্রিনশট সিলেক্ট করো।';
+      errBox.style.display = 'block';
+      return;
+    }
+
+    const btn = document.getElementById('oSubmitBtn');
+    btn.disabled = true;
+    btn.textContent = 'Uploading Screenshot...';
+
+    try {
+      const base64 = await compressImage(fileInput.files[0]);
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({
+          action: 'submitOnlinePayment',
+          data: {
+            studentId: currentCreds.sid,
+            mobile: currentCreds.mob,
+            month: document.getElementById('oMonth').value,
+            amount: Number(document.getElementById('oAmount').value) || 0,
+            utr: document.getElementById('oUtr').value.trim(),
+            imageBase64: base64
+          }
+        })
+      });
+      const data = await res.json();
+      if (data.status === 'ok') {
+        alert('স্ক্রিনশট আপলোড সফল হয়েছে! অ্যাডমিন ভেরিফাই করলেই তোমার রসিদ চলে আসবে।');
+        document.getElementById('onlinePayForm').reset();
+        document.getElementById('oAmount').value = '300';
+        await refreshPortal();
+      } else {
+        errBox.textContent = data.message || 'Upload failed!';
+        errBox.style.display = 'block';
+      }
+    } catch (err) {
+      errBox.textContent = 'আপলোড ব্যর্থ—ইন্টারনেট চেক করে আবার চেষ্টা করো।';
+      errBox.style.display = 'block';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Upload Screenshot for Verification';
+    }
+  }
+
+  function openReceipt(idx) {
+    const p = portalData.payments[idx];
+    const s = portalData.student;
+    if (!p) return;
+    document.getElementById('rNo').textContent = p.receiptNo || '-';
+    document.getElementById('rDate').textContent = p.date + (p.time ? ' (' + p.time + ')' : '');
+    document.getElementById('rName').textContent = s.name;
+    document.getElementById('rIdCls').textContent = `${s.id} • ${s.studentClass}`;
+    document.getElementById('rMonth').textContent = p.month.replace('_', ' ');
+    document.getElementById('rMode').textContent = p.mode;
+    document.getElementById('rAmt').textContent = 'Rs. ' + p.amount;
+    document.getElementById('rCollector').textContent = p.collector;
+    document.getElementById('rcptModal').classList.add('open');
+  }
+
+  function closeReceipt() {
+    document.getElementById('rcptModal').classList.remove('open');
+  }
+</script>
+</body>
+</html>
