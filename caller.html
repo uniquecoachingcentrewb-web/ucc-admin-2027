@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" content="#0f5132">
+  <link rel="manifest" href="manifest.json">
+  <title>U.C.C Institute - Absent Caller Panel</title>
+  <style>
+    :root {
+      --primary: #0f5132;
+      --bg: #f1f5f9;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --danger: #dc2626;
+      --success: #16a34a;
+      --call: #0284c7;
+    }
+    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { margin: 0; background: var(--bg); color: var(--text); padding-bottom: 50px; }
+
+    #loginScreen {
+      position: fixed; inset: 0; background: linear-gradient(160deg, #0f5132 0%, #062819 100%);
+      z-index: 200; display: flex; justify-content: center; align-items: center; padding: 20px;
+    }
+    .login-card {
+      background: #fff; width: 100%; max-width: 360px; border-radius: 16px;
+      padding: 24px 20px; box-shadow: 0 12px 32px rgba(0,0,0,0.3);
+    }
+
+    header {
+      background: var(--primary); color: #fff; padding: 12px 14px;
+      position: sticky; top: 0; z-index: 30;
+      display: flex; justify-content: space-between; align-items: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+    header h1 { margin: 0; font-size: 16px; }
+    header small { font-size: 11px; opacity: 0.85; display: block; }
+    .hdr-btns { display: flex; align-items: center; gap: 6px; }
+    .net-dot { width: 9px; height: 9px; border-radius: 50%; background: #4ade80; }
+    .net-dot.off { background: #f87171; }
+    .hdr-btn {
+      background: rgba(255,255,255,0.2); color: #fff; border: 1px solid rgba(255,255,255,0.35);
+      padding: 6px 9px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer;
+    }
+
+    .container { max-width: 600px; margin: 12px auto; padding: 0 12px; }
+    .card {
+      background: var(--card); border-radius: 12px; padding: 14px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06); margin-bottom: 12px; border: 1px solid var(--border);
+    }
+
+    .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
+    .stat-box { background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 10px 6px; text-align: center; }
+    .stat-num { font-size: 20px; font-weight: 800; }
+    .stat-lbl { font-size: 11px; color: var(--muted); font-weight: 600; margin-top: 2px; }
+
+    .class-bar {
+      display: flex; gap: 7px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 8px;
+      scrollbar-width: none;
+    }
+    .chip {
+      white-space: nowrap; padding: 7px 12px; border-radius: 20px;
+      border: 1px solid #cbd5e1; background: #fff; font-size: 12px;
+      font-weight: 700; color: #334155; cursor: pointer;
+    }
+    .chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+    .form-group { margin-bottom: 10px; }
+    label { display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px; }
+    input {
+      width: 100%; padding: 10px 11px; border: 1px solid #cbd5e1;
+      border-radius: 8px; font-size: 14px; background: #fff;
+    }
+    .btn {
+      width: 100%; padding: 11px; border: none; border-radius: 9px;
+      font-size: 14px; font-weight: 700; cursor: pointer; color: #fff; background: var(--primary);
+    }
+
+    .call-card {
+      background: #fff; border: 1px solid var(--border); border-left: 4px solid var(--danger);
+      border-radius: 12px; padding: 13px; margin-bottom: 10px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .cc-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+    .st-name { font-size: 16px; font-weight: 800; color: var(--text); }
+    .st-meta { font-size: 12px; color: var(--muted); margin-top: 2px; line-height: 1.45; }
+    .call-btn {
+      text-decoration: none; background: var(--call); color: #fff;
+      padding: 9px 14px; border-radius: 9px; font-size: 13px; font-weight: 800;
+      white-space: nowrap; display: inline-block;
+    }
+    .call-btn.disabled { background: #94a3b8; pointer-events: none; }
+
+    .quick-reasons { display: flex; flex-wrap: wrap; gap: 5px; margin: 10px 0 8px; }
+    .qr-chip {
+      background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 14px;
+      padding: 4px 9px; font-size: 11px; font-weight: 600; color: #334155; cursor: pointer;
+    }
+
+    .reason-row { display: flex; gap: 8px; }
+    .save-r-btn {
+      background: var(--primary); color: #fff; border: none; border-radius: 8px;
+      padding: 0 14px; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap;
+    }
+
+    .done-item {
+      display: flex; justify-content: space-between; gap: 8px;
+      padding: 8px 0; border-bottom: 1px dashed #e2e8f0; font-size: 12px;
+    }
+    .done-item:last-child { border-bottom: none; }
+
+    .toast {
+      position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+      background: #0f172a; color: #fff; padding: 9px 16px; border-radius: 20px;
+      font-size: 13px; display: none; z-index: 150; max-width: 92%; text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<!-- CALLER LOGIN -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div style="text-align:center;margin-bottom:16px;">
+      <h2 style="margin:0;color:var(--primary);font-size:20px;">U.C.C Institute</h2>
+      <p style="margin:4px 0 0;font-size:12px;color:var(--muted);">Absent Caller Panel (Offline Ready)</p>
+    </div>
+    <div id="loginErr" style="display:none;background:#fee2e2;color:#991b1b;padding:8px;border-radius:8px;font-size:12px;font-weight:700;margin-bottom:10px;text-align:center;">
+      Invalid PIN!
+    </div>
+    <form onsubmit="callerLogin(event)">
+      <div class="form-group">
+        <label>Caller Name *</label>
+        <input type="text" id="inCallerName" required placeholder="Enter your name">
+      </div>
+      <div class="form-group">
+        <label>Caller PIN *</label>
+        <input type="password" id="inCallerPin" required placeholder="Enter PIN">
+      </div>
+      <button type="submit" class="btn">Open Absent List</button>
+    </form>
+  </div>
+</div>
+
+<header>
+  <div>
+    <h1>U.C.C Absent Caller</h1>
+    <small id="hdrSub">Date: Loading...</small>
+  </div>
+  <div class="hdr-btns">
+    <div id="netDot" class="net-dot"></div>
+    <button id="syncBtn" class="hdr-btn" onclick="syncCaller()">Sync</button>
+    <button class="hdr-btn" onclick="logoutCaller()">🔒</button>
+  </div>
+</header>
+
+<div class="container">
+  <div class="stat-row">
+    <div class="stat-box">
+      <div id="stPending" class="stat-num" style="color:var(--danger);">0</div>
+      <div class="stat-lbl">Pending Calls</div>
+    </div>
+    <div class="stat-box">
+      <div id="stDone" class="stat-num" style="color:var(--success);">0</div>
+      <div class="stat-lbl">Called Today</div>
+    </div>
+    <div class="stat-box">
+      <div id="stPres" class="stat-num" style="color:var(--primary);">0</div>
+      <div class="stat-lbl">Present Today</div>
+    </div>
+  </div>
+
+  <div class="class-bar" id="classBar"></div>
+
+  <div class="form-group">
+    <input type="text" id="searchBox" placeholder="Search Name, UCC ID or Mobile..." oninput="renderPending()">
+  </div>
+
+  <div id="pendingList">
+    <div class="card" style="text-align:center;color:var(--muted);">Loading today's absent list...</div>
+  </div>
+
+  <details class="card" id="doneSection" style="display:none;">
+    <summary style="font-size:13px;font-weight:800;color:var(--primary);cursor:pointer;">
+      ✓ Called Today (<span id="doneCountLbl">0</span>)
+    </summary>
+    <div id="doneList" style="margin-top:10px;"></div>
+  </details>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+  const API_URL = 'https://script.google.com/macros/s/AKfycbwAuSfDoikCc998pVuwz0HySky1fChn-Tj8p7OeuUAr_WPG7IFZkfGB5LUO6NlvkiKO/exec';
+  const CALLER_PIN = '722150';
+
+  const QUICK_REASONS = [
+    'জ্বর / শরীর খারাপ',
+    'বাড়িতে কাজ',
+    'বাইরে গেছে',
+    'ফোন ধরেনি / বন্ধ',
+    'স্কুলে পরীক্ষা'
+  ];
+
+  function todayStr() {
+    const d = new Date();
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  }
+  function timeStr() {
+    return new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
+  }
+
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+  }
+
+  let callerName = localStorage.getItem('ucc_caller_name') || '';
+  let stored = JSON.parse(localStorage.getItem('ucc_caller_state') || 'null');
+  let callerQueue = JSON.parse(localStorage.getItem('ucc_caller_queue') || '[]');
+
+  let todayDate = todayStr();
+  let activeClasses = [];
+  let presentCount = 0;
+  let pendingStudents = [];
+  let completedToday = [];
+  let selectedFilter = 'ALL';
+
+  // Auto-clear yesterday's list when a new day starts
+  if (stored && stored.date === todayDate) {
+    activeClasses = stored.activeClasses || [];
+    presentCount = stored.presentCount || 0;
+    pendingStudents = stored.pending || [];
+    completedToday = stored.completed || [];
+  } else {
+    localStorage.removeItem('ucc_caller_state');
+  }
+
+  window.addEventListener('online', () => { updateNetUI(); if (isAuthed()) syncCaller(); });
+  window.addEventListener('offline', updateNetUI);
+
+  function isAuthed() { return localStorage.getItem('ucc_caller_auth') === 'ok' && callerName; }
+
+  function saveCallerLocal() {
+    localStorage.setItem('ucc_caller_state', JSON.stringify({
+      date: todayDate,
+      activeClasses,
+      presentCount,
+      pending: pendingStudents,
+      completed: completedToday
+    }));
+    localStorage.setItem('ucc_caller_queue', JSON.stringify(callerQueue));
+    updateNetUI();
+  }
+
+  function updateNetUI() {
+    const dot = document.getElementById('netDot');
+    const btn = document.getElementById('syncBtn');
+    if (navigator.onLine) {
+      dot.classList.remove('off');
+      btn.textContent = callerQueue.length > 0 ? `Sync (${callerQueue.length})` : 'Sync ✓';
+    } else {
+      dot.classList.add('off');
+      btn.textContent = `Offline (${callerQueue.length})`;
+    }
+  }
+
+  window.onload = function() {
+    updateNetUI();
+    if (isAuthed()) {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('hdrSub').textContent = `Date: ${todayDate} • ${callerName}`;
+      renderAll();
+      if (navigator.onLine) syncCaller();
+    }
+  };
+
+  function toast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.style.display = 'block';
+    setTimeout(() => { t.style.display = 'none'; }, 3200);
+  }
+
+  function callerLogin(e) {
+    e.preventDefault();
+    const nm = document.getElementById('inCallerName').value.trim();
+    const pin = document.getElementById('inCallerPin').value.trim();
+    if (pin !== CALLER_PIN) {
+      document.getElementById('loginErr').style.display = 'block';
+      return;
+    }
+    callerName = nm;
+    localStorage.setItem('ucc_caller_auth', 'ok');
+    localStorage.setItem('ucc_caller_name', nm);
+    document.getElementById('loginErr').style.display = 'none';
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('hdrSub').textContent = `Date: ${todayDate} • ${callerName}`;
+    renderAll();
+    if (navigator.onLine) syncCaller();
+  }
+
+  function logoutCaller() {
+    localStorage.removeItem('ucc_caller_auth');
+    document.getElementById('inCallerPin').value = '';
+    document.getElementById('loginScreen').style.display = 'flex';
+  }
+
+  async function syncCaller() {
+    if (!navigator.onLine) {
+      toast('Offline mode — reasons will auto-sync when online.');
+      return;
+    }
+    document.getElementById('syncBtn').textContent = 'Syncing...';
+    try {
+      let data;
+      if (callerQueue.length > 0) {
+        const res = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ action: 'syncCallerQueue', queue: callerQueue })
+        });
+        data = await res.json();
+        if (data.status === 'ok') callerQueue = [];
+      } else {
+        const res = await fetch(`${API_URL}?mode=caller`);
+        data = await res.json();
+      }
+
+      if (data.status === 'ok') {
+        todayDate = data.today || todayStr();
+        activeClasses = data.activeClasses || [];
+        presentCount = data.presentCount || 0;
+        pendingStudents = data.pending || [];
+        completedToday = data.completed || [];
+
+        if (selectedFilter === 'ALL' && activeClasses.length > 0) {
+          selectedFilter = 'RUNNING';
+        }
+        document.getElementById('hdrSub').textContent = `Date: ${todayDate} • ${callerName}`;
+        saveCallerLocal();
+        renderAll();
+        toast('Absent list synced!');
+      }
+    } catch (err) {
+      toast('Sync failed — try again.');
+    } finally {
+      updateNetUI();
+    }
+  }
+
+  function renderAll() {
+    document.getElementById('stPending').textContent = pendingStudents.length;
+    document.getElementById('stDone').textContent = completedToday.length;
+    document.getElementById('stPres').textContent = presentCount;
+    buildClassChips();
+    renderPending();
+    renderCompleted();
+  }
+
+  function buildClassChips() {
+    const classSet = new Set(pendingStudents.map(s => s.studentClass));
+    const uniqueClasses = Array.from(classSet).sort();
+
+    let html = '';
+    if (activeClasses.length > 0) {
+      const runCnt = pendingStudents.filter(s => activeClasses.includes(s.studentClass)).length;
+      html += `<button class="chip ${selectedFilter === 'RUNNING' ? 'active' : ''}" onclick="pickFilter('RUNNING')">Today's Classes (${runCnt})</button>`;
+    }
+    html += `<button class="chip ${selectedFilter === 'ALL' ? 'active' : ''}" onclick="pickFilter('ALL')">All (${pendingStudents.length})</button>`;
+    uniqueClasses.forEach(cls => {
+      const cnt = pendingStudents.filter(s => s.studentClass === cls).length;
+      html += `<button class="chip ${selectedFilter === cls ? 'active' : ''}" onclick="pickFilter('${cls}')">${cls} (${cnt})</button>`;
+    });
+    document.getElementById('classBar').innerHTML = html;
+  }
+
+  function pickFilter(f) { selectedFilter = f; buildClassChips(); renderPending(); }
+
+  function setQuickReason(sid, text) {
+    const inp = document.getElementById('reason_' + sid);
+    if (inp) { inp.value = text; inp.focus(); }
+  }
+
+  function renderPending() {
+    const q = (document.getElementById('searchBox').value || '').toLowerCase().trim();
+    const list = pendingStudents.filter(s => {
+      const okFilter =
+        selectedFilter === 'ALL' ||
+        (selectedFilter === 'RUNNING' && activeClasses.includes(s.studentClass)) ||
+        s.studentClass === selectedFilter;
+      const okSearch = !q ||
+        s.name.toLowerCase().includes(q) ||
+        s.id.toLowerCase().includes(q) ||
+        (s.mobile || '').includes(q);
+      return okFilter && okSearch;
+    });
+
+    const box = document.getElementById('pendingList');
+    if (list.length === 0) {
+      box.innerHTML = '<div class="card" style="text-align:center;color:var(--success);font-weight:700;">✓ No pending absent students in this list!</div>';
+      return;
+    }
+
+    box.innerHTML = list.map(s => {
+      const mob = (s.mobile || '').replace(/\D/g, '');
+      const chipsHtml = QUICK_REASONS.map(r =>
+        `<button type="button" class="qr-chip" onclick="setQuickReason('${s.id}', '${r}')">${r}</button>`
+      ).join('');
+
+      return `
+        <div class="call-card">
+          <div class="cc-top">
+            <div>
+              <div class="st-name">${s.name}</div>
+              <div class="st-meta">
+                <strong>${s.id}</strong> • ${s.studentClass}<br>
+                Father: ${s.fatherName || '-'} • Ph: <strong>${mob || 'No Number'}</strong>
+              </div>
+            </div>
+            <a href="${mob ? 'tel:' + mob : '#'}" class="call-btn ${mob ? '' : 'disabled'}">📞 Call</a>
+          </div>
+
+          <div class="quick-reasons">${chipsHtml}</div>
+
+          <div class="reason-row">
+            <input type="text" id="reason_${s.id}" placeholder="Enter absent reason after calling...">
+            <button class="save-r-btn" onclick="saveReason('${s.id}')">Save ✓</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function saveReason(sid) {
+    const inp = document.getElementById('reason_' + sid);
+    const reason = (inp.value || '').trim();
+    if (!reason) {
+      toast('⚠️ Reason is required before removing from list!');
+      inp.focus();
+      return;
+    }
+
+    const s = pendingStudents.find(x => x.id === sid);
+    if (!s) return;
+
+    const tm = timeStr();
+    const rec = {
+      date: todayDate,
+      time: tm,
+      studentId: s.id,
+      studentName: s.name,
+      studentClass: s.studentClass,
+      mobile: s.mobile,
+      reason: reason,
+      callerName: callerName
+    };
+
+    callerQueue.push(rec);
+    pendingStudents = pendingStudents.filter(x => x.id !== sid);
+    completedToday.unshift({
+      time: tm,
+      id: s.id,
+      name: s.name,
+      studentClass: s.studentClass,
+      mobile: s.mobile,
+      reason: reason,
+      callerName: callerName
+    });
+
+    saveCallerLocal();
+    renderAll();
+    toast(`✓ Saved reason for ${s.name}!`);
+
+    if (navigator.onLine) syncCaller();
+  }
+
+  function renderCompleted() {
+    const sec = document.getElementById('doneSection');
+    if (completedToday.length === 0) { sec.style.display = 'none'; return; }
+    sec.style.display = 'block';
+    document.getElementById('doneCountLbl').textContent = completedToday.length;
+    document.getElementById('doneList').innerHTML = completedToday.map(c => `
+      <div class="done-item">
+        <div>
+          <strong>${c.name}</strong> (${c.id} • ${c.studentClass})<br>
+          <span style="color:#0f5132;font-weight:600;">Reason: ${c.reason}</span>
+        </div>
+        <div style="text-align:right;color:var(--muted);white-space:nowrap;">
+          ${c.time}<br>${c.callerName}
+        </div>
+      </div>
+    `).join('');
+  }
+</script>
+</body>
+</html>
