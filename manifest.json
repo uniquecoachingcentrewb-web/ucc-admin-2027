@@ -1,0 +1,8 @@
+{
+  "name": "U.C.C Institute Admin Panel 2027",
+  "short_name": "U.C.C Admin",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0f5132",
+  "theme_color": "#0f5132"
+}
