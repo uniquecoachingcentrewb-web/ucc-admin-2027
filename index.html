@@ -10,7 +10,6 @@
   <style>
     :root {
       --primary: #0f5132;
-      --primary-dark: #0a3622;
       --bg: #f1f5f9;
       --card: #ffffff;
       --text: #0f172a;
@@ -22,18 +21,40 @@
     * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body { margin: 0; background: var(--bg); color: var(--text); padding-bottom: 76px; }
 
+    /* LOGIN SCREEN */
+    #loginScreen {
+      position: fixed; inset: 0; background: linear-gradient(160deg, #0f5132 0%, #062819 100%);
+      z-index: 200; display: flex; justify-content: center; align-items: center; padding: 20px;
+    }
+    .login-card {
+      background: #fff; width: 100%; max-width: 360px; border-radius: 16px;
+      padding: 24px 20px; box-shadow: 0 12px 32px rgba(0,0,0,0.3);
+    }
+    .login-title { text-align: center; margin-bottom: 18px; }
+    .login-title h2 { margin: 0; color: var(--primary); font-size: 21px; }
+    .login-title p { margin: 4px 0 0; font-size: 12px; color: var(--muted); }
+    .pass-wrap { position: relative; }
+    .pass-toggle {
+      position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+      border: none; background: none; color: var(--muted); font-size: 12px; font-weight: 700; cursor: pointer;
+    }
+    .login-err {
+      display: none; background: #fee2e2; color: #991b1b; padding: 8px 10px;
+      border-radius: 8px; font-size: 12px; font-weight: 700; margin-bottom: 10px; text-align: center;
+    }
+
     header {
       background: var(--primary); color: #fff; padding: 12px 14px;
       position: sticky; top: 0; z-index: 30;
       display: flex; justify-content: space-between; align-items: center;
       box-shadow: 0 2px 6px rgba(0,0,0,0.15);
     }
-    .brand h1 { margin: 0; font-size: 17px; letter-spacing: 0.3px; }
+    .brand h1 { margin: 0; font-size: 17px; }
     .brand small { font-size: 11px; opacity: 0.85; display: block; }
     .sync-wrap { display: flex; align-items: center; gap: 6px; }
     .net-dot { width: 9px; height: 9px; border-radius: 50%; background: #4ade80; }
     .net-dot.off { background: #f87171; }
-    .sync-btn {
+    .sync-btn, .lock-btn {
       background: rgba(255,255,255,0.18); color: #fff; border: 1px solid rgba(255,255,255,0.35);
       padding: 6px 10px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer;
     }
@@ -51,15 +72,13 @@
     .class-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
     .class-card {
       background: #fff; border: 1px solid var(--border); border-radius: 12px;
-      padding: 14px 12px; cursor: pointer; transition: transform 0.1s;
+      padding: 14px 12px; cursor: pointer;
     }
-    .class-card:active { transform: scale(0.98); background: #f8fafc; }
     .cc-title { font-size: 16px; font-weight: 800; color: var(--primary); }
     .cc-count { font-size: 12px; color: var(--muted); margin-top: 4px; }
     .cc-due { font-size: 12px; font-weight: 700; color: var(--danger); margin-top: 4px; }
     .cc-due.zero { color: var(--success); }
 
-    /* Student List */
     .list-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
     .back-btn {
       background: #fff; border: 1px solid #cbd5e1; padding: 7px 12px;
@@ -84,9 +103,10 @@
     }
     .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .btn {
-      width: 100%; padding: 12px; border: none; border-radius: 9px;
+      width: 100%; padding: 11px; border: none; border-radius: 9px;
       font-size: 14px; font-weight: 700; cursor: pointer; color: #fff; background: var(--primary);
     }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
     .btn-sec { background: #334155; }
     .btn-red { background: var(--danger); }
 
@@ -101,10 +121,31 @@
     .scan-popup.ok { background: #15803d; display: block; }
     .scan-popup.warn { background: #b45309; display: block; }
     .scan-popup.err { background: #b91c1c; display: block; }
-    .sp-name { font-size: 22px; font-weight: 800; margin: 4px 0; }
+    .sp-name { font-size: 21px; font-weight: 800; margin: 4px 0; }
     .sp-meta { font-size: 13px; opacity: 0.95; }
 
-    /* Modal (Student Portal) */
+    /* Hisab & Verify */
+    .filter-pills { display: flex; gap: 8px; margin-bottom: 12px; }
+    .pill {
+      flex: 1; padding: 8px; border-radius: 8px; border: 1px solid #cbd5e1;
+      background: #fff; font-weight: 700; font-size: 13px; cursor: pointer;
+    }
+    .pill.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .hisab-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 10px; }
+    .hisab-box { background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; padding: 10px 6px; text-align: center; }
+    .hisab-amt { font-size: 16px; font-weight: 800; color: var(--primary); }
+    .hisab-lbl { font-size: 11px; color: var(--muted); margin-top: 2px; font-weight: 700; }
+
+    .req-card {
+      background: #fffbeb; border: 1px solid #fcd34d; border-radius: 12px;
+      padding: 12px; margin-bottom: 10px;
+    }
+    .req-img {
+      width: 100%; max-height: 260px; object-fit: contain; background: #0f172a;
+      border-radius: 8px; margin: 8px 0; display: block;
+    }
+
+    /* Modal */
     .modal-bg {
       display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6);
       z-index: 60; justify-content: center; align-items: flex-end;
@@ -128,7 +169,7 @@
     .stat-lbl { font-size: 11px; color: var(--muted); margin-top: 2px; }
 
     .info-list { background: #f8fafc; border-radius: 10px; padding: 10px 12px; font-size: 13px; margin-bottom: 12px; }
-    .info-item { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px dashed #e2e8f0; }
+    .info-item { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px dashed #e2e8f0; gap: 8px; }
     .info-item:last-child { border-bottom: none; }
 
     .months-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 12px; }
@@ -137,6 +178,11 @@
       text-align: center; font-size: 11px; background: #f8fafc; cursor: pointer;
     }
     .m-cell.paid { background: #dcfce7; border-color: #86efac; color: #166534; font-weight: 700; }
+
+    .pay-warn {
+      display: none; background: #fef2f2; border: 1px solid #fecaca; color: #991b1b;
+      padding: 9px 11px; border-radius: 8px; font-size: 12px; font-weight: 700; margin-bottom: 10px;
+    }
 
     .pay-box { background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 10px; padding: 12px; margin-bottom: 12px; }
     .receipt-bar {
@@ -156,19 +202,49 @@
       box-shadow: 0 -2px 8px rgba(0,0,0,0.06);
     }
     .nav-btn {
-      flex: 1; padding: 10px 4px; border: none; background: none;
-      font-size: 12px; font-weight: 700; color: var(--muted); cursor: pointer;
+      flex: 1; padding: 10px 2px; border: none; background: none; position: relative;
+      font-size: 11px; font-weight: 700; color: var(--muted); cursor: pointer;
     }
     .nav-btn.active { color: var(--primary); border-top: 3px solid var(--primary); }
+    .nav-badge {
+      display: none; position: absolute; top: 4px; right: 8px;
+      background: var(--danger); color: #fff; font-size: 10px; font-weight: 800;
+      padding: 1px 6px; border-radius: 10px;
+    }
 
     .toast {
       position: fixed; bottom: 72px; left: 50%; transform: translateX(-50%);
       background: #0f172a; color: #fff; padding: 9px 16px; border-radius: 20px;
-      font-size: 13px; display: none; z-index: 100; white-space: nowrap;
+      font-size: 13px; display: none; z-index: 150; max-width: 92%; text-align: center;
     }
   </style>
 </head>
 <body>
+
+<!-- ADMIN LOGIN GATE -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="login-title">
+      <h2>U.C.C Institute</h2>
+      <p>Admin Panel 2027 • Login Required</p>
+    </div>
+    <div id="loginErr" class="login-err">User ID বা Password ভুল হয়েছে!</div>
+    <form onsubmit="handleLogin(event)">
+      <div class="form-group">
+        <label>User ID</label>
+        <input type="text" id="loginUser" required placeholder="Enter User ID" autocomplete="username">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <div class="pass-wrap">
+          <input type="password" id="loginPass" required placeholder="Enter Password" autocomplete="current-password" style="padding-right:52px;">
+          <button type="button" class="pass-toggle" onclick="togglePassView(this)">Show</button>
+        </div>
+      </div>
+      <button type="submit" class="btn" style="margin-top:6px;">Unlock Admin Panel</button>
+    </form>
+  </div>
+</div>
 
 <header>
   <div class="brand">
@@ -178,12 +254,13 @@
   <div class="sync-wrap">
     <div id="netDot" class="net-dot"></div>
     <button id="syncBtn" class="sync-btn" onclick="syncNow()">Sync</button>
+    <button class="lock-btn" onclick="lockApp()" title="Lock Panel">🔒</button>
   </div>
 </header>
 
 <!-- STANDBY QR POPUP -->
 <div id="scanPopup" class="scan-popup">
-  <div id="spStatus" style="font-size:12px;font-weight:700;text-transform:uppercase;"></div>
+  <div id="spStatus" style="font-size:13px;font-weight:800;"></div>
   <div id="spName" class="sp-name"></div>
   <div id="spMeta" class="sp-meta"></div>
 </div>
@@ -193,7 +270,7 @@
   <div id="page-classes" class="page active">
     <div id="classGridView">
       <div class="form-group">
-        <input type="text" id="globalSearch" placeholder="সব ক্লাস থেকে নাম বা UCC ID খোঁজো..." oninput="renderGlobalSearch()">
+        <input type="text" id="globalSearch" placeholder="সব ক্লাস থেকে নাম, UCC ID বা মোবাইল খোঁজো..." oninput="renderGlobalSearch()">
       </div>
       <div id="globalSearchResults"></div>
       <div class="class-grid" id="classGrid"></div>
@@ -260,6 +337,23 @@
             <input type="number" id="fAmt" placeholder="300" min="0">
           </div>
         </div>
+        <div class="row-2">
+          <div class="form-group">
+            <label>Collector (কে টাকা নিল)</label>
+            <select id="fCollector">
+              <option value="Pralay">Pralay</option>
+              <option value="Chiranjit">Chiranjit</option>
+              <option value="Saikat">Saikat</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Payment Mode</label>
+            <select id="fMode">
+              <option value="Cash">Cash</option>
+              <option value="UPI">UPI</option>
+            </select>
+          </div>
+        </div>
         <button type="submit" class="btn">Save Student Entry</button>
       </form>
     </div>
@@ -275,7 +369,7 @@
         <button class="btn btn-sec" onclick="switchCameraFacing()">Flip Camera</button>
       </div>
       <div style="font-size:12px;color:var(--muted);margin-top:8px;">
-        মোবাইল স্ট্যান্ডে রেখে ক্যামেরা অন রাখো—আইডি কার্ডের QR দেখালেই অটো অ্যাটেনডেন্স হয়ে নাম ভেসে উঠবে (অফলাইনেও চলবে)।
+        একদিনে একজন স্টুডেন্টের 1 বারই অ্যাটেনডেন্স হবে—দ্বিতীয়বার দেখালে "অলরেডি প্রেজেন্ট" দেখাবে। পরের দিন আবার স্ক্যান নেবে।
       </div>
     </div>
 
@@ -284,6 +378,52 @@
         Today's Attendance (<span id="todayCount">0</span>)
       </div>
       <div id="todayLog"></div>
+    </div>
+  </div>
+
+  <!-- PAGE 4: HISAB & ONLINE PAYMENT VERIFICATION -->
+  <div id="page-hisab" class="page">
+    <!-- Pending Online Payment Screenshots -->
+    <div class="card" id="pendingBox" style="display:none;border-color:#f59e0b;">
+      <div style="font-weight:800;font-size:15px;color:#b45309;margin-bottom:10px;">
+        🔔 Pending Online Verification (<span id="pendingCountText">0</span>)
+      </div>
+      <div id="pendingList"></div>
+    </div>
+
+    <!-- Cashbook / Collector Breakdown -->
+    <div class="card">
+      <div style="font-weight:800;font-size:15px;margin-bottom:10px;">Collection Hisab (Payment Log)</div>
+      <div class="filter-pills">
+        <button class="pill active" id="pillToday" onclick="setHisabFilter('today')">Today</button>
+        <button class="pill" id="pillAll" onclick="setHisabFilter('all')">All Time</button>
+      </div>
+
+      <div style="background:#0f5132;color:#fff;padding:12px;border-radius:10px;text-align:center;margin-bottom:10px;">
+        <div style="font-size:12px;opacity:0.85;">Total Collection</div>
+        <div id="hTotal" style="font-size:24px;font-weight:800;margin-top:2px;">Rs. 0</div>
+        <div id="hModeSplit" style="font-size:12px;margin-top:4px;opacity:0.9;">Cash: Rs. 0 • UPI: Rs. 0</div>
+      </div>
+
+      <div class="hisab-grid">
+        <div class="hisab-box">
+          <div id="hPralay" class="hisab-amt">Rs. 0</div>
+          <div class="hisab-lbl">Pralay</div>
+        </div>
+        <div class="hisab-box">
+          <div id="hChiranjit" class="hisab-amt">Rs. 0</div>
+          <div class="hisab-lbl">Chiranjit</div>
+        </div>
+        <div class="hisab-box">
+          <div id="hSaikat" class="hisab-amt">Rs. 0</div>
+          <div class="hisab-lbl">Saikat</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="font-weight:800;font-size:14px;margin-bottom:8px;">Payment History</div>
+      <div id="paymentLogList"></div>
     </div>
   </div>
 </div>
@@ -322,17 +462,30 @@
       <div class="info-item"><span>First Payment</span><strong id="pFirst">-</strong></div>
     </div>
 
-    <div style="font-size:13px;font-weight:800;margin-bottom:6px;">2027 Monthly Fees (মাসে ক্লিক করে টাকা এন্ট্রি করো)</div>
+    <div style="font-size:13px;font-weight:800;margin-bottom:6px;">2027 Monthly Fees (খালি মাসে ক্লিক করে পেমেন্ট করো)</div>
     <div class="months-grid" id="pMonths"></div>
+
+    <div id="payWarn" class="pay-warn"></div>
 
     <!-- QUICK PAYMENT BOX -->
     <div class="pay-box">
       <div style="font-size:13px;font-weight:800;color:#065f46;margin-bottom:8px;">Record Fee Payment</div>
-      <div class="row-2">
-        <select id="payMonth"></select>
-        <input type="number" id="payAmount" value="300" min="0" placeholder="Amount">
+      <div class="row-2" style="margin-bottom:8px;">
+        <select id="payMonth" onchange="hidePayWarn()"></select>
+        <input type="number" id="payAmount" value="300" min="1" placeholder="Amount">
       </div>
-      <button class="btn" style="margin-top:8px;" onclick="submitPayment()">Save Payment</button>
+      <div class="row-2" style="margin-bottom:8px;">
+        <select id="payCollector">
+          <option value="Pralay">Collector: Pralay</option>
+          <option value="Chiranjit">Collector: Chiranjit</option>
+          <option value="Saikat">Collector: Saikat</option>
+        </select>
+        <select id="payMode">
+          <option value="Cash">Mode: Cash</option>
+          <option value="UPI">Mode: UPI</option>
+        </select>
+      </div>
+      <button id="paySaveBtn" class="btn" onclick="submitPayment()">Save Payment</button>
     </div>
 
     <!-- DIRECT PAYMENT RECEIPT SMS BAR -->
@@ -371,15 +524,22 @@
 
 <!-- BOTTOM NAV -->
 <div class="bottom-nav">
-  <button class="nav-btn active" onclick="openPage('classes', this)">Classes & Dues</button>
-  <button class="nav-btn" onclick="openPage('entry', this)">+ New Entry</button>
-  <button class="nav-btn" onclick="openPage('scan', this)">QR Attendance</button>
+  <button class="nav-btn active" onclick="openPage('classes', this)">Classes</button>
+  <button class="nav-btn" onclick="openPage('entry', this)">+ Entry</button>
+  <button class="nav-btn" onclick="openPage('scan', this)">QR Scan</button>
+  <button class="nav-btn" onclick="openPage('hisab', this)">
+    Hisab
+    <span id="pendingBadge" class="nav-badge">0</span>
+  </button>
 </div>
 
 <div id="toast" class="toast"></div>
 
 <script>
   const API_URL = 'https://script.google.com/macros/s/AKfycbwAuSfDoikCc998pVuwz0HySky1fChn-Tj8p7OeuUAr_WPG7IFZkfGB5LUO6NlvkiKO/exec';
+
+  const ADMIN_USER = '722150';
+  const ADMIN_PASS = 'ucc@2027';
 
   const MONTHLY_FEE = 300;
   const CLASSES = [
@@ -395,34 +555,80 @@
 
   let students = JSON.parse(localStorage.getItem('ucc_students') || '[]');
   let attendance = JSON.parse(localStorage.getItem('ucc_attendance') || '[]');
+  let paymentLog = JSON.parse(localStorage.getItem('ucc_payment_log') || '[]');
+  let onlineRequests = JSON.parse(localStorage.getItem('ucc_online_reqs') || '[]');
   let queue = JSON.parse(localStorage.getItem('ucc_queue') || '[]');
 
   let activeClass = null;
   let activeStudentId = null;
+  let hisabFilter = 'today';
   let html5Qr = null;
   let scannerRunning = false;
   let facingMode = 'environment';
   let scanCooldown = false;
 
-  // Register Service Worker for Offline App
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js').catch(() => {});
   }
 
-  window.addEventListener('online', () => { updateNetUI(); syncNow(); });
+  window.addEventListener('online', () => {
+    updateNetUI();
+    if (isUnlocked()) syncNow();
+  });
   window.addEventListener('offline', updateNetUI);
+
+  function isUnlocked() {
+    return localStorage.getItem('ucc_admin_auth') === 'unlocked_2027';
+  }
+
+  function togglePassView(btn) {
+    const inp = document.getElementById('loginPass');
+    inp.type = inp.type === 'password' ? 'text' : 'password';
+    btn.textContent = inp.type === 'password' ? 'Show' : 'Hide';
+  }
+
+  function handleLogin(e) {
+    e.preventDefault();
+    const u = document.getElementById('loginUser').value.trim();
+    const p = document.getElementById('loginPass').value.trim();
+    if (u === ADMIN_USER && p === ADMIN_PASS) {
+      localStorage.setItem('ucc_admin_auth', 'unlocked_2027');
+      document.getElementById('loginErr').style.display = 'none';
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('loginPass').value = '';
+      if (navigator.onLine) syncNow();
+      toast('Welcome, U.C.C Admin!');
+    } else {
+      document.getElementById('loginErr').style.display = 'block';
+    }
+  }
+
+  function lockApp() {
+    if (scannerRunning) stopScanner();
+    closeProfile();
+    localStorage.removeItem('ucc_admin_auth');
+    document.getElementById('loginUser').value = '';
+    document.getElementById('loginPass').value = '';
+    document.getElementById('loginErr').style.display = 'none';
+    document.getElementById('loginScreen').style.display = 'flex';
+  }
 
   window.onload = function() {
     document.getElementById('fClass').innerHTML =
       '<option value="">Select Class</option>' + CLASSES.map(c => `<option>${c}</option>`).join('');
-    const monthOpts = MONTHS.map(([k, l]) => `<option value="${k}">${k}</option>`).join('');
-    document.getElementById('fMonth').innerHTML = '<option value="">None</option>' + monthOpts;
-    document.getElementById('payMonth').innerHTML = monthOpts;
+    document.getElementById('fMonth').innerHTML =
+      '<option value="">None</option>' + MONTHS.map(([k]) => `<option value="${k}">${k}</option>`).join('');
 
     document.getElementById('fAdmDate').value = todayStr();
     updateNetUI();
     renderAll();
-    if (navigator.onLine) syncNow();
+
+    if (isUnlocked()) {
+      document.getElementById('loginScreen').style.display = 'none';
+      if (navigator.onLine) syncNow();
+    } else {
+      document.getElementById('loginScreen').style.display = 'flex';
+    }
   };
 
   function todayStr() {
@@ -437,6 +643,8 @@
   function saveLocal() {
     localStorage.setItem('ucc_students', JSON.stringify(students));
     localStorage.setItem('ucc_attendance', JSON.stringify(attendance));
+    localStorage.setItem('ucc_payment_log', JSON.stringify(paymentLog));
+    localStorage.setItem('ucc_online_reqs', JSON.stringify(onlineRequests));
     localStorage.setItem('ucc_queue', JSON.stringify(queue));
     updateNetUI();
   }
@@ -457,7 +665,7 @@
     const t = document.getElementById('toast');
     t.textContent = msg;
     t.style.display = 'block';
-    setTimeout(() => { t.style.display = 'none'; }, 3000);
+    setTimeout(() => { t.style.display = 'none'; }, 3400);
   }
 
   function calcDueLocal(s) {
@@ -507,6 +715,8 @@
       if (data.status === 'ok') {
         students = data.students || [];
         attendance = data.attendance || [];
+        paymentLog = data.paymentLog || [];
+        onlineRequests = data.onlineRequests || [];
         saveLocal();
         renderAll(true);
         toast('Google Sheet-এর সাথে Sync সম্পন্ন!');
@@ -528,6 +738,7 @@
     btn.classList.add('active');
     if (name === 'entry') document.getElementById('nextIdPreview').textContent = getNextStudentId();
     if (name === 'scan') renderTodayAttendance();
+    if (name === 'hisab') renderHisab();
   }
 
   function renderAll(keepReceipt = false) {
@@ -535,12 +746,12 @@
     renderClassGrid();
     if (activeClass) renderClassStudents();
     renderTodayAttendance();
+    renderHisab();
     if (activeStudentId) openProfile(activeStudentId, keepReceipt);
   }
 
   function renderClassGrid() {
-    const grid = document.getElementById('classGrid');
-    grid.innerHTML = CLASSES.map(cls => {
+    document.getElementById('classGrid').innerHTML = CLASSES.map(cls => {
       const list = students.filter(s => s.studentClass === cls);
       const totalDue = list.reduce((sum, s) => sum + (Number(s.totalDue) || 0), 0);
       return `
@@ -622,6 +833,8 @@
     MONTHS.forEach(([k]) => { months[k] = ''; });
     const fMonth = document.getElementById('fMonth').value;
     const fAmt = Number(document.getElementById('fAmt').value) || 0;
+    const fCollector = document.getElementById('fCollector').value;
+    const fMode = document.getElementById('fMode').value;
     if (fMonth && fAmt > 0) months[fMonth] = fAmt;
 
     const studentObj = {
@@ -637,11 +850,26 @@
       totalDue: 0
     };
     studentObj.totalDue = calcDueLocal(studentObj);
-
     students.push(studentObj);
+
+    if (fMonth && fAmt > 0) {
+      paymentLog.push({
+        receiptNo: 'LOCAL',
+        date: studentObj.firstPayment || studentObj.admissionDate || todayStr(),
+        time: timeStr(),
+        studentId: newId,
+        studentName: studentObj.name,
+        studentClass: studentObj.studentClass,
+        month: fMonth,
+        amount: fAmt,
+        collector: fCollector,
+        mode: fMode
+      });
+    }
+
     queue.push({
       type: 'addStudent',
-      data: { ...studentObj, firstFeeMonth: fMonth, firstFeeAmount: fAmt }
+      data: { ...studentObj, firstFeeMonth: fMonth, firstFeeAmount: fAmt, collector: fCollector, mode: fMode }
     });
     saveLocal();
     renderAll();
@@ -653,10 +881,19 @@
   }
 
   // ===== STUDENT PORTAL MODAL =====
+  function showPayWarn(msg) {
+    const w = document.getElementById('payWarn');
+    w.textContent = '⚠️ ' + msg;
+    w.style.display = 'block';
+    toast(msg);
+  }
+  function hidePayWarn() { document.getElementById('payWarn').style.display = 'none'; }
+
   function openProfile(id, keepReceipt = false) {
     const s = students.find(x => x.id === id);
     if (!s) return;
     activeStudentId = id;
+    hidePayWarn();
 
     const classDays = new Set(
       attendance
@@ -685,13 +922,36 @@
     document.getElementById('eMobile').value = s.mobile || '';
     document.getElementById('eAddress').value = s.address || '';
 
+    let firstUnpaidKey = '';
+    const paySelect = document.getElementById('payMonth');
+    let selectHtml = '';
+
     document.getElementById('pMonths').innerHTML = MONTHS.map(([key, lbl]) => {
-      const val = s.months?.[key];
-      const paid = val !== '' && Number(val) > 0;
-      return `<div class="m-cell ${paid ? 'paid' : ''}" onclick="selectMonthForPay('${key}', ${paid ? val : 300})">
-        ${lbl}<br>${paid ? 'Rs.' + val : '-'}
+      const val = Number(s.months?.[key]) || 0;
+      const paid = val > 0;
+      if (!paid && !firstUnpaidKey) firstUnpaidKey = key;
+
+      selectHtml += paid
+        ? `<option value="${key}" disabled>${key} (Already Paid: Rs.${val} ✓)</option>`
+        : `<option value="${key}">${key}</option>`;
+
+      return `<div class="m-cell ${paid ? 'paid' : ''}" onclick="onMonthCellClick('${key}')">
+        ${lbl}<br>${paid ? 'Rs.' + val + ' ✓' : '-'}
       </div>`;
     }).join('');
+
+    paySelect.innerHTML = selectHtml;
+    const saveBtn = document.getElementById('paySaveBtn');
+    if (firstUnpaidKey) {
+      paySelect.value = firstUnpaidKey;
+      paySelect.disabled = false;
+      saveBtn.disabled = false;
+      saveBtn.textContent = 'Save Payment';
+    } else {
+      paySelect.disabled = true;
+      saveBtn.disabled = true;
+      saveBtn.textContent = '2027 All 12 Months Paid ✓';
+    }
 
     const qrImg = document.getElementById('pQr');
     qrImg.style.display = 'inline-block';
@@ -704,21 +964,30 @@
     document.getElementById('btnSmsDue').href = mob ? `sms:${mob}?body=${encodeURIComponent(dueMsg)}` : '#';
     document.getElementById('btnWaDue').href = mob ? `https://wa.me/91${mob}?text=${encodeURIComponent(dueMsg)}` : '#';
 
-    if (!keepReceipt) {
-      document.getElementById('receiptBar').style.display = 'none';
-    }
+    if (!keepReceipt) document.getElementById('receiptBar').style.display = 'none';
     document.getElementById('profileModal').classList.add('open');
   }
 
   function closeProfile() {
     activeStudentId = null;
+    hidePayWarn();
     document.getElementById('receiptBar').style.display = 'none';
     document.getElementById('profileModal').classList.remove('open');
   }
 
-  function selectMonthForPay(monthKey, suggestedAmt) {
+  function onMonthCellClick(monthKey) {
+    const s = students.find(x => x.id === activeStudentId);
+    if (!s) return;
+    const existingAmt = Number(s.months?.[monthKey]) || 0;
+    const niceMonth = monthKey.replace('_', ' ');
+    if (existingAmt > 0) {
+      showPayWarn(`${niceMonth} মাসে অলরেডি পেমেন্ট ডান (Rs. ${existingAmt})! রিপ্লেস করা যাবে না।`);
+      return;
+    }
+    hidePayWarn();
     document.getElementById('payMonth').value = monthKey;
-    document.getElementById('payAmount').value = suggestedAmt;
+    document.getElementById('payAmount').value = 300;
+    toast(`${niceMonth} সিলেক্ট হয়েছে—Save Payment চাপো।`);
   }
 
   function submitPayment() {
@@ -726,25 +995,55 @@
     if (!s) return;
     const month = document.getElementById('payMonth').value;
     const amount = Number(document.getElementById('payAmount').value) || 0;
+    const collector = document.getElementById('payCollector').value;
+    const mode = document.getElementById('payMode').value;
+    const niceMonth = month.replace('_', ' ');
+
+    const alreadyPaid = Number(s.months?.[month]) || 0;
+    if (alreadyPaid > 0) {
+      showPayWarn(`${niceMonth} মাসে অলরেডি পেমেন্ট ডান (Rs. ${alreadyPaid})! রিপ্লেস করা যাবে না।`);
+      return;
+    }
+    if (amount <= 0) {
+      showPayWarn('সঠিক টাকার পরিমাণ (Rs.) লেখো।');
+      return;
+    }
+
+    hidePayWarn();
     const payDate = todayStr();
+    const payTime = timeStr();
 
     if (!s.months) s.months = {};
     s.months[month] = amount;
     if (!s.firstPayment) s.firstPayment = payDate;
     s.totalDue = calcDueLocal(s);
 
+    paymentLog.push({
+      receiptNo: 'SYNCING',
+      date: payDate,
+      time: payTime,
+      studentId: s.id,
+      studentName: s.name,
+      studentClass: s.studentClass,
+      month: month,
+      amount: amount,
+      collector: collector,
+      mode: mode
+    });
+
     queue.push({
       type: 'recordPayment',
-      data: { studentId: s.id, month: month, amount: amount, payDate: payDate }
+      data: { studentId: s.id, month, amount, payDate, payTime, collector, mode }
     });
     saveLocal();
     openProfile(s.id, true);
     renderClassGrid();
+    renderHisab();
     if (activeClass) renderClassStudents();
 
     const mob = (s.mobile || '').replace(/\D/g, '');
-    const rcptMsg = `U.C.C Institute: Received Rs.${amount} for ${month.replace('_', ' ')} from ${s.name} (${s.id}). Current Due: Rs.${s.totalDue}. Date: ${payDate}. Thank you.`;
-    document.getElementById('receiptMsgPreview').textContent = `✓ Saved Rs.${amount} (${month})! এখনই রসিদ পাঠাও:`;
+    const rcptMsg = `U.C.C Institute: Received Rs.${amount} (${mode}) for ${niceMonth} from ${s.name} (${s.id}) by ${collector}. Current Due: Rs.${s.totalDue}. Date: ${payDate}. Thank you.`;
+    document.getElementById('receiptMsgPreview').textContent = `✓ Saved Rs.${amount} (${niceMonth} • ${collector})! রসিদ পাঠাও:`;
     document.getElementById('receiptSmsLink').href = mob ? `sms:${mob}?body=${encodeURIComponent(rcptMsg)}` : '#';
     document.getElementById('receiptWaLink').href = mob ? `https://wa.me/91${mob}?text=${encodeURIComponent(rcptMsg)}` : '#';
     document.getElementById('receiptBar').style.display = 'block';
@@ -769,7 +1068,127 @@
     if (navigator.onLine) syncNow();
   }
 
-  // ===== STANDBY QR CAMERA ATTENDANCE =====
+  // ===== HISAB & ONLINE SCREENSHOT VERIFICATION =====
+  function setHisabFilter(mode) {
+    hisabFilter = mode;
+    document.getElementById('pillToday').classList.toggle('active', mode === 'today');
+    document.getElementById('pillAll').classList.toggle('active', mode === 'all');
+    renderHisab();
+  }
+
+  function renderHisab() {
+    const pending = onlineRequests.filter(r => r.status === 'Pending');
+    const badge = document.getElementById('pendingBadge');
+    if (pending.length > 0) {
+      badge.textContent = pending.length;
+      badge.style.display = 'inline-block';
+      document.getElementById('pendingBox').style.display = 'block';
+      document.getElementById('pendingCountText').textContent = pending.length;
+      document.getElementById('pendingList').innerHTML = pending.map(r => `
+        <div class="req-card">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <strong>${r.studentName} (${r.studentId})</strong>
+            <span class="badge-due">Rs. ${r.amount}</span>
+          </div>
+          <div style="font-size:12px;color:#475569;margin-top:3px;">
+            ${r.studentClass} • Month: <strong>${r.month.replace('_', ' ')}</strong> • UTR: ${r.utr || '-'}<br>
+            Uploaded: ${r.date} ${r.time}
+          </div>
+          ${r.screenshotUrl ? `<a href="${r.viewUrl}" target="_blank"><img class="req-img" src="${r.screenshotUrl}" alt="Payment Screenshot"></a>` : ''}
+          <div class="form-group" style="margin-top:8px;">
+            <select id="verBy_${r.requestId}">
+              <option value="Pralay">Verified By: Pralay</option>
+              <option value="Chiranjit">Verified By: Chiranjit</option>
+              <option value="Saikat">Verified By: Saikat</option>
+            </select>
+          </div>
+          <div class="row-2">
+            <button class="btn" onclick="approveReq('${r.requestId}')">✓ Approve & Receipt</button>
+            <button class="btn btn-red" onclick="rejectReq('${r.requestId}')">✕ Reject</button>
+          </div>
+        </div>
+      `).join('');
+    } else {
+      badge.style.display = 'none';
+      document.getElementById('pendingBox').style.display = 'none';
+    }
+
+    const today = todayStr();
+    const list = (hisabFilter === 'today'
+      ? paymentLog.filter(p => p.date === today)
+      : paymentLog
+    ).slice().reverse();
+
+    let total = 0, cash = 0, upi = 0, pralay = 0, chiranjit = 0, saikat = 0;
+    list.forEach(p => {
+      const a = Number(p.amount) || 0;
+      total += a;
+      if ((p.mode || '').toLowerCase().includes('cash')) cash += a;
+      else upi += a;
+      if (p.collector === 'Pralay') pralay += a;
+      else if (p.collector === 'Chiranjit') chiranjit += a;
+      else if (p.collector === 'Saikat') saikat += a;
+    });
+
+    document.getElementById('hTotal').textContent = 'Rs. ' + total;
+    document.getElementById('hModeSplit').textContent = `Cash: Rs. ${cash} • UPI/Online: Rs. ${upi}`;
+    document.getElementById('hPralay').textContent = 'Rs. ' + pralay;
+    document.getElementById('hChiranjit').textContent = 'Rs. ' + chiranjit;
+    document.getElementById('hSaikat').textContent = 'Rs. ' + saikat;
+
+    document.getElementById('paymentLogList').innerHTML = list.length
+      ? list.map(p => `
+        <div class="info-item" style="font-size:12px;">
+          <div>
+            <strong>${p.studentName}</strong> (${p.studentId})<br>
+            <span style="color:var(--muted);">${p.date} • ${p.month.replace('_', ' ')} • ${p.collector} (${p.mode})</span>
+          </div>
+          <div style="text-align:right;font-weight:800;color:var(--primary);">Rs. ${p.amount}</div>
+        </div>
+      `).join('')
+      : '<div style="font-size:13px;color:var(--muted);text-align:center;">কোনো পেমেন্ট এন্ট্রি নেই।</div>';
+  }
+
+  function approveReq(reqId) {
+    const r = onlineRequests.find(x => x.requestId === reqId);
+    if (!r) return;
+    const verifiedBy = document.getElementById('verBy_' + reqId).value;
+    r.status = 'Approved';
+    r.verifiedBy = verifiedBy;
+
+    const s = students.find(x => x.id === r.studentId);
+    if (s) {
+      if (!s.months) s.months = {};
+      if ((Number(s.months[r.month]) || 0) === 0) {
+        s.months[r.month] = r.amount;
+        s.totalDue = calcDueLocal(s);
+      }
+    }
+
+    queue.push({ type: 'approveOnline', data: { requestId: reqId, verifiedBy } });
+    saveLocal();
+    renderAll();
+    toast('Approved! স্টুডেন্টের রসিদ তৈরি হয়ে গেছে।');
+    if (navigator.onLine) syncNow();
+  }
+
+  function rejectReq(reqId) {
+    const reason = prompt('Reject করার কারণ লেখো (যেমন: টাকা ঢোকেনি / ভুল স্ক্রিনশট):', 'Payment not received');
+    if (reason === null) return;
+    const r = onlineRequests.find(x => x.requestId === reqId);
+    if (!r) return;
+    const verifiedBy = document.getElementById('verBy_' + reqId).value;
+    r.status = 'Rejected';
+    r.remarks = reason;
+
+    queue.push({ type: 'rejectOnline', data: { requestId: reqId, verifiedBy, remarks: reason } });
+    saveLocal();
+    renderHisab();
+    toast('Request Rejected.');
+    if (navigator.onLine) syncNow();
+  }
+
+  // ===== STANDBY QR ATTENDANCE (STRICT 1 PER DAY) =====
   function playBeep(freq, duration) {
     try {
       const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -788,20 +1207,17 @@
     document.getElementById('spStatus').textContent = statusText;
     document.getElementById('spName').textContent = nameText;
     document.getElementById('spMeta').textContent = metaText;
-    setTimeout(() => { box.className = 'scan-popup'; }, 2400);
+    setTimeout(() => { box.className = 'scan-popup'; }, 2500);
   }
 
   async function toggleScanner() {
-    if (scannerRunning) {
-      await stopScanner();
-    } else {
-      await startScanner();
-    }
+    if (scannerRunning) await stopScanner();
+    else await startScanner();
   }
 
   async function startScanner() {
     if (!window.Html5Qrcode) {
-      toast('QR লাইব্রেরি লোড হয়নি—প্রথমবার নেট অন করে পেজটা রিলোড করো।');
+      toast('QR লাইব্রেরি লোড হয়নি—নেট অন করে একবার রিলোড করো।');
       return;
     }
     try {
@@ -851,10 +1267,12 @@
     }
 
     const today = todayStr();
-    const already = attendance.some(a => a.date === today && a.studentId === s.id);
-    if (already) {
-      playBeep(440, 150);
-      showScanPopup('warn', 'Already Present Today', s.name, `${s.id} • ${s.studentClass}`);
+    const alreadyInList = attendance.some(a => a.date === today && a.studentId.toUpperCase() === s.id.toUpperCase());
+    const alreadyInQueue = queue.some(q => q.type === 'markAttendance' && q.data.date === today && q.data.studentId.toUpperCase() === s.id.toUpperCase());
+
+    if (alreadyInList || alreadyInQueue) {
+      playBeep(380, 220);
+      showScanPopup('warn', 'তুমি অলরেডি প্রেজেন্ট হয়ে গেছো!', s.name, `${s.id} • ${s.studentClass} (আজকে দ্বিতীয়বার এন্ট্রি হবে না)`);
       return;
     }
 
