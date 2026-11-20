@@ -18,7 +18,7 @@
       --danger: #dc2626;
       --success: #16a34a;
     }
-    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans Bengali", sans-serif; }
     body { margin: 0; background: var(--bg); color: var(--text); padding-bottom: 76px; }
 
     #loginScreen {
@@ -140,6 +140,11 @@
       border-radius: 8px; margin: 8px 0; display: block;
     }
 
+    .mini-rcpt-btn {
+      background: var(--primary); color: #fff; border: none; padding: 5px 9px;
+      border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; margin-top: 4px;
+    }
+
     .modal-bg {
       display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6);
       z-index: 60; justify-content: center; align-items: flex-end;
@@ -163,7 +168,7 @@
     .stat-lbl { font-size: 11px; color: var(--muted); margin-top: 2px; }
 
     .info-list { background: #f8fafc; border-radius: 10px; padding: 10px 12px; font-size: 13px; margin-bottom: 12px; }
-    .info-item { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px dashed #e2e8f0; gap: 8px; }
+    .info-item { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px dashed #e2e8f0; gap: 8px; }
     .info-item:last-child { border-bottom: none; }
 
     .months-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 12px; }
@@ -185,7 +190,28 @@
     .action-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 8px; }
     .act-link {
       text-align: center; text-decoration: none; padding: 10px 6px; border-radius: 8px;
-      color: #fff; font-weight: 700; font-size: 12px; display: block;
+      color: #fff; font-weight: 700; font-size: 12px; display: block; border: none; cursor: pointer; width: 100%;
+    }
+
+    /* OFFICIAL BENGALI PDF RECEIPT MODAL */
+    .rcpt-modal-bg {
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+      z-index: 120; justify-content: center; align-items: center; padding: 14px;
+    }
+    .rcpt-modal-bg.open { display: flex; }
+    .rcpt-card {
+      background: #fff; width: 100%; max-width: 430px; border-radius: 12px;
+      padding: 18px; border: 2px solid var(--primary); max-height: 92vh; overflow-y: auto;
+    }
+    .rcpt-head { text-align: center; border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-bottom: 12px; }
+    .rcpt-line { display: flex; justify-content: space-between; font-size: 13px; padding: 5px 0; border-bottom: 1px dashed #e2e8f0; gap: 8px; }
+    .rcpt-sign { margin-top: 16px; text-align: right; font-size: 12px; }
+
+    @media print {
+      body * { visibility: hidden; }
+      #receiptPrintArea, #receiptPrintArea * { visibility: visible; }
+      #receiptPrintArea { position: fixed; left: 0; top: 0; width: 100%; border: 2px solid #000; }
+      .no-print { display: none !important; }
     }
 
     .bottom-nav {
@@ -360,7 +386,7 @@
         <button class="btn btn-sec" onclick="switchCameraFacing()">Flip Camera</button>
       </div>
       <div style="font-size:12px;color:var(--muted);margin-top:8px;">
-        1 entry per student per day. Re-scanning the same card shows "Already Present". Works offline.
+        1 entry per student per day. Re-scanning shows "Already Present". Works offline.
       </div>
     </div>
 
@@ -376,6 +402,9 @@
   <div id="page-hisab" class="page">
     <div id="approveNotifyBar" class="receipt-bar">
       <div style="font-size:13px;font-weight:700;margin-bottom:8px;" id="approveMsgText"></div>
+      <button type="button" class="act-link" style="background:#f59e0b;color:#0f172a;margin-bottom:8px;" onclick="openLastReceipt()">
+        📄 Open / Download PDF Receipt (বাংলা)
+      </button>
       <div class="row-2">
         <a id="approveWaLink" href="#" target="_blank" class="act-link" style="background:#16a34a;">WhatsApp Receipt (BN)</a>
         <a id="approveSmsLink" href="#" class="act-link" style="background:#2563eb;">SMS Receipt (BN)</a>
@@ -419,7 +448,7 @@
     </div>
 
     <div class="card">
-      <div style="font-weight:800;font-size:14px;margin-bottom:8px;">Payment History</div>
+      <div style="font-weight:800;font-size:14px;margin-bottom:8px;">Payment History (Click Receipt for PDF)</div>
       <div id="paymentLogList"></div>
     </div>
   </div>
@@ -484,9 +513,12 @@
       <button id="paySaveBtn" class="btn" onclick="submitPayment()">Save Payment</button>
     </div>
 
-    <!-- DIRECT BENGALI PAYMENT RECEIPT SMS/WA BAR -->
+    <!-- DIRECT BENGALI PDF RECEIPT & SMS/WA BAR -->
     <div id="receiptBar" class="receipt-bar">
       <div style="font-size:13px;font-weight:700;margin-bottom:8px;" id="receiptMsgPreview"></div>
+      <button type="button" class="act-link" style="background:#f59e0b;color:#0f172a;margin-bottom:8px;" onclick="openLastReceipt()">
+        📄 Open / Download PDF Receipt (বাংলা)
+      </button>
       <div class="row-2">
         <a id="receiptSmsLink" href="#" class="act-link" style="background:#2563eb;">Send SMS (বাংলা)</a>
         <a id="receiptWaLink" href="#" target="_blank" class="act-link" style="background:#16a34a;">WhatsApp (বাংলা)</a>
@@ -512,6 +544,44 @@
     <div style="text-align:center;margin-top:14px;">
       <img id="pQr" src="" alt="QR" style="width:120px;height:120px;border:1px solid var(--border);border-radius:8px;padding:4px;" onerror="this.style.display='none'">
       <div id="pQrText" style="font-size:11px;color:var(--muted);margin-top:3px;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- OFFICIAL BENGALI PDF / PNG RECEIPT MODAL -->
+<div class="rcpt-modal-bg" id="rcptModal" onclick="if(event.target===this) closeReceipt()">
+  <div class="rcpt-card" id="receiptPrintArea">
+    <div class="rcpt-head">
+      <div style="font-size:20px;font-weight:800;color:var(--primary);">ইউ.সি.সি ইনস্টিটিউট</div>
+      <div style="font-size:11px;color:#475569;">পেঁচাকোলা, রায়পুর, বাঁকুড়া • ফোন: 8016972121 / 8159980707</div>
+      <div style="font-size:12px;font-weight:800;margin-top:4px;background:#e6f4ea;color:#0f5132;display:inline-block;padding:2px 10px;border-radius:10px;">
+        অফিশিয়াল ফি রসিদ (2027)
+      </div>
+    </div>
+
+    <div class="rcpt-line"><span>রসিদ নং:</span><strong id="rNo"></strong></div>
+    <div class="rcpt-line"><span>তারিখ ও সময়:</span><strong id="rDate"></strong></div>
+    <div class="rcpt-line"><span>ছাত্র/ছাত্রীর নাম:</span><strong id="rName"></strong></div>
+    <div class="rcpt-line"><span>পিতার নাম:</span><strong id="rFather"></strong></div>
+    <div class="rcpt-line"><span>আইডি ও শ্রেণী:</span><strong id="rIdCls"></strong></div>
+    <div class="rcpt-line"><span>কোন মাসের ফি:</span><strong id="rMonth"></strong></div>
+    <div class="rcpt-line"><span>পেমেন্টের মাধ্যম:</span><strong id="rMode"></strong></div>
+    <div class="rcpt-line" style="font-size:15px;color:var(--primary);border-top:1px solid #cbd5e1;margin-top:4px;padding-top:8px;">
+      <span><strong>মোট জমা টাকা:</strong></span><strong id="rAmt"></strong>
+    </div>
+
+    <div class="rcpt-sign">
+      গ্রহণকারী / অনুমোদিত স্বাক্ষর:<br>
+      <strong id="rCollector" style="font-size:15px;color:var(--primary);"></strong><br>
+      <span style="color:var(--muted);font-size:10px;">ইউ.সি.সি ইনস্টিটিউট, পেঁচাকোলা</span>
+    </div>
+
+    <div style="display:grid;gap:8px;margin-top:16px;" class="no-print">
+      <button class="btn" onclick="window.print()">🖨️ Print / Save PDF Receipt</button>
+      <div class="row-2">
+        <button class="btn" style="background:#0284c7;" onclick="downloadReceiptImage()">⬇️ Save PNG</button>
+        <button class="btn" style="background:#334155;" onclick="closeReceipt()">Close</button>
+      </div>
     </div>
   </div>
 </div>
@@ -549,7 +619,6 @@
     ['Nov_2027','Nov','নভেম্বর 2027'], ['Dec_2027','Dec','ডিসেম্বর 2027']
   ];
 
-  // Bengali formatters ONLY for outgoing SMS/WhatsApp messages
   const BN_MONTH_NAMES = [
     'জানুয়ারি','ফেব্রুয়ারি','মার্চ','এপ্রিল','মে','জুন',
     'জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'
@@ -593,6 +662,8 @@
 
   let activeClass = null;
   let activeStudentId = null;
+  let activeReceiptData = null;
+  let lastReceiptData = null;
   let hisabFilter = 'today';
   let html5Qr = null;
   let scannerRunning = false;
@@ -633,6 +704,7 @@
   function lockApp() {
     if (scannerRunning) stopScanner();
     closeProfile();
+    closeReceipt();
     localStorage.removeItem('ucc_admin_auth');
     document.getElementById('loginUser').value = '';
     document.getElementById('loginPass').value = '';
@@ -868,7 +940,7 @@
 
     if (fMonth && fAmt > 0) {
       paymentLog.push({
-        receiptNo: 'SYNCING',
+        receiptNo: 'UCC-LOCAL',
         date: studentObj.firstPayment || studentObj.admissionDate || todayStr(),
         time: bnNowTime(),
         studentId: newId,
@@ -971,7 +1043,6 @@
     qrImg.src = 'https://quickchart.io/qr?size=140&text=' + encodeURIComponent(s.id);
     document.getElementById('pQrText').textContent = 'ID Card QR: ' + s.id;
 
-    // Outgoing Due Reminder Message in BENGALI
     const mob = (s.mobile || '').replace(/\D/g, '');
     const dueMsg = `ইউ.সি.সি ইনস্টিটিউট: সম্মানীয় অভিভাবক, ${s.name} (${s.id}, ${bnClass(s.studentClass)})-এর বর্তমানে মোট ${s.totalDue} টাকা টিউশন ফি বাকি রয়েছে। মোট উপস্থিতি: ${presentDays} দিন। অনুগ্রহ করে শীঘ্রই ফি পরিশোধ করুন।`;
     document.getElementById('btnCall').href = mob ? `tel:${mob}` : '#';
@@ -1029,8 +1100,8 @@
     if (!s.firstPayment) s.firstPayment = payDate;
     s.totalDue = calcDueLocal(s);
 
-    paymentLog.push({
-      receiptNo: 'SYNCING',
+    const newLog = {
+      receiptNo: 'UCC-R27' + String(paymentLog.length + 1).padStart(4, '0'),
       date: payDate,
       time: payTime,
       studentId: s.id,
@@ -1040,7 +1111,9 @@
       amount: amount,
       collector: collector,
       mode: mode
-    });
+    };
+    paymentLog.push(newLog);
+    lastReceiptData = newLog;
 
     queue.push({
       type: 'recordPayment',
@@ -1052,10 +1125,9 @@
     renderHisab();
     if (activeClass) renderClassStudents();
 
-    // Outgoing Payment Receipt Message in BENGALI
     const mob = (s.mobile || '').replace(/\D/g, '');
     const rcptMsg = `ইউ.সি.সি ইনস্টিটিউট (রসিদ): ${s.name} (${s.id}, ${bnClass(s.studentClass)})-এর ${bnMonth(month)} মাসের ফি বাবদ ${amount} টাকা (${bnMode(mode)}) জমা হলো। গ্রহণকারী: ${bnCollector(collector)}। তারিখ: ${formatBnDate(payDate)}, ${payTime}। বর্তমান বাকি: ${s.totalDue} টাকা। স্টুডেন্ট পোর্টাল থেকে রসিদ ডাউনলোড করতে পারবেন। ধন্যবাদ।`;
-    document.getElementById('receiptMsgPreview').textContent = `✓ Saved Rs.${amount} (${niceMonth} • ${collector})! Send Bengali Receipt:`;
+    document.getElementById('receiptMsgPreview').textContent = `✓ Saved Rs.${amount} (${niceMonth} • ${collector})!`;
     document.getElementById('receiptSmsLink').href = mob ? `sms:${mob}?body=${encodeURIComponent(rcptMsg)}` : '#';
     document.getElementById('receiptWaLink').href = mob ? `https://wa.me/91${mob}?text=${encodeURIComponent(rcptMsg)}` : '#';
     document.getElementById('receiptBar').style.display = 'block';
@@ -1125,9 +1197,10 @@
     }
 
     const today = todayStr();
+    const indexed = paymentLog.map((p, i) => ({ ...p, _idx: i }));
     const list = (hisabFilter === 'today'
-      ? paymentLog.filter(p => p.date === today)
-      : paymentLog
+      ? indexed.filter(p => p.date === today)
+      : indexed
     ).slice().reverse();
 
     let total = 0, cash = 0, upi = 0, pralay = 0, chiranjit = 0, saikat = 0;
@@ -1154,7 +1227,10 @@
             <strong>${p.studentName}</strong> (${p.studentId})<br>
             <span style="color:var(--muted);">${p.date} (${p.time}) • ${p.month.replace('_', ' ')} • ${p.collector} (${p.mode})</span>
           </div>
-          <div style="text-align:right;font-weight:800;color:var(--primary);white-space:nowrap;">Rs. ${p.amount}</div>
+          <div style="text-align:right;white-space:nowrap;">
+            <div style="font-weight:800;color:var(--primary);">Rs. ${p.amount}</div>
+            <button class="mini-rcpt-btn" onclick="openReceiptByIndex(${p._idx})">📄 Receipt</button>
+          </div>
         </div>
       `).join('')
       : '<div style="font-size:13px;color:var(--muted);text-align:center;">No payment records yet.</div>';
@@ -1181,13 +1257,27 @@
       newDue = s.totalDue;
     }
 
+    const newLog = {
+      receiptNo: 'UCC-R27' + String(paymentLog.length + 1).padStart(4, '0'),
+      date: todayStr(),
+      time: bnNowTime(),
+      studentId: r.studentId,
+      studentName: r.studentName,
+      studentClass: r.studentClass,
+      month: r.month,
+      amount: r.amount,
+      collector: verifiedBy,
+      mode: 'Online (UPI)'
+    };
+    paymentLog.push(newLog);
+    lastReceiptData = newLog;
+
     queue.push({ type: 'approveOnline', data: { requestId: reqId, verifiedBy } });
     saveLocal();
     renderAll();
 
-    // Outgoing Approval Confirmation Message in BENGALI
     const msg = `ইউ.সি.সি ইনস্টিটিউট (অনলাইন রসিদ): ${r.studentName} (${r.studentId}, ${bnClass(r.studentClass)})-এর ${bnMonth(r.month)} মাসের অনলাইন পেমেন্ট (${r.amount} টাকা) ভেরিফাই ও গ্রহণ করা হয়েছে। ভেরিফাই করেছেন: ${bnCollector(verifiedBy)}। তারিখ: ${formatBnDate(todayStr())}, ${bnNowTime()}। বর্তমান বাকি: ${newDue} টাকা। স্টুডেন্ট পোর্টাল থেকে এখনই রসিদ ডাউনলোড করে নিন। ধন্যবাদ।`;
-    document.getElementById('approveMsgText').textContent = `✓ Approved Rs.${r.amount} for ${r.studentName}! Send Bengali Confirmation:`;
+    document.getElementById('approveMsgText').textContent = `✓ Approved Rs.${r.amount} for ${r.studentName}!`;
     document.getElementById('approveWaLink').href = mob ? `https://wa.me/91${mob}?text=${encodeURIComponent(msg)}` : '#';
     document.getElementById('approveSmsLink').href = mob ? `sms:${mob}?body=${encodeURIComponent(msg)}` : '#';
     document.getElementById('approveNotifyBar').style.display = 'block';
@@ -1211,6 +1301,122 @@
     renderHisab();
     toast('Request Rejected.');
     if (navigator.onLine) syncNow();
+  }
+
+  // ===== BENGALI PDF / PNG RECEIPT GENERATOR =====
+  function openLastReceipt() {
+    if (lastReceiptData) openReceiptModal(lastReceiptData);
+  }
+  function openReceiptByIndex(idx) {
+    if (paymentLog[idx]) openReceiptModal(paymentLog[idx]);
+  }
+  function openReceiptModal(p) {
+    const s = students.find(x => x.id === p.studentId) || {};
+    activeReceiptData = { p, fatherName: s.fatherName || '-' };
+
+    document.getElementById('rNo').textContent = p.receiptNo || '-';
+    document.getElementById('rDate').textContent = `${formatBnDate(p.date)}, ${p.time || ''}`;
+    document.getElementById('rName').textContent = p.studentName;
+    document.getElementById('rFather').textContent = s.fatherName || '-';
+    document.getElementById('rIdCls').textContent = `${p.studentId} • ${bnClass(p.studentClass)}`;
+    document.getElementById('rMonth').textContent = bnMonth(p.month);
+    document.getElementById('rMode').textContent = bnMode(p.mode);
+    document.getElementById('rAmt').textContent = p.amount + ' টাকা';
+    document.getElementById('rCollector').textContent = bnCollector(p.collector);
+    document.getElementById('rcptModal').classList.add('open');
+  }
+  function closeReceipt() {
+    document.getElementById('rcptModal').classList.remove('open');
+  }
+
+  function downloadReceiptImage() {
+    if (!activeReceiptData) return;
+    const { p, fatherName } = activeReceiptData;
+    const c = document.createElement('canvas');
+    c.width = 720;
+    c.height = 860;
+    const ctx = c.getContext('2d');
+
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, c.width, c.height);
+    ctx.strokeStyle = '#0f5132';
+    ctx.lineWidth = 8;
+    ctx.strokeRect(18, 18, c.width - 36, c.height - 36);
+
+    ctx.fillStyle = '#0f5132';
+    ctx.fillRect(22, 22, c.width - 44, 155);
+    ctx.fillStyle = '#ffffff';
+    ctx.textAlign = 'center';
+    ctx.font = 'bold 38px sans-serif';
+    ctx.fillText('ইউ.সি.সি ইনস্টিটিউট', c.width / 2, 82);
+    ctx.font = '20px sans-serif';
+    ctx.fillText('পেঁচাকোলা, রায়পুর, বাঁকুড়া • ফোন: 8016972121 / 8159980707', c.width / 2, 120);
+    ctx.font = 'bold 22px sans-serif';
+    ctx.fillStyle = '#bbf7d0';
+    ctx.fillText('অফিশিয়াল টিউশন ফি রসিদ (2027)', c.width / 2, 156);
+
+    const rows = [
+      ['রসিদ নং:', p.receiptNo || '-'],
+      ['তারিখ ও সময়:', `${formatBnDate(p.date)}, ${p.time || ''}`],
+      ['ছাত্র/ছাত্রীর নাম:', p.studentName],
+      ['পিতার নাম:', fatherName],
+      ['আইডি ও শ্রেণী:', `${p.studentId} • ${bnClass(p.studentClass)}`],
+      ['কোন মাসের ফি:', bnMonth(p.month)],
+      ['পেমেন্টের মাধ্যম:', bnMode(p.mode)]
+    ];
+
+    let y = 240;
+    rows.forEach(([lbl, val]) => {
+      ctx.textAlign = 'left';
+      ctx.fillStyle = '#475569';
+      ctx.font = '22px sans-serif';
+      ctx.fillText(lbl, 55, y);
+
+      ctx.textAlign = 'right';
+      ctx.fillStyle = '#0f172a';
+      ctx.font = 'bold 23px sans-serif';
+      ctx.fillText(String(val), c.width - 55, y);
+
+      ctx.strokeStyle = '#e2e8f0';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(55, y + 18);
+      ctx.lineTo(c.width - 55, y + 18);
+      ctx.stroke();
+      y += 62;
+    });
+
+    ctx.fillStyle = '#e6f4ea';
+    ctx.fillRect(55, y - 10, c.width - 110, 68);
+    ctx.strokeStyle = '#198754';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(55, y - 10, c.width - 110, 68);
+
+    ctx.textAlign = 'left';
+    ctx.fillStyle = '#0f5132';
+    ctx.font = 'bold 26px sans-serif';
+    ctx.fillText('মোট জমা টাকা:', 75, y + 33);
+
+    ctx.textAlign = 'right';
+    ctx.font = 'bold 30px sans-serif';
+    ctx.fillText(`${p.amount} টাকা`, c.width - 75, y + 33);
+
+    y += 120;
+    ctx.textAlign = 'right';
+    ctx.fillStyle = '#475569';
+    ctx.font = '19px sans-serif';
+    ctx.fillText('গ্রহণকারী / অনুমোদিত স্বাক্ষর:', c.width - 55, y);
+    ctx.fillStyle = '#0f5132';
+    ctx.font = 'bold 28px sans-serif';
+    ctx.fillText(bnCollector(p.collector), c.width - 55, y + 36);
+    ctx.fillStyle = '#64748b';
+    ctx.font = '16px sans-serif';
+    ctx.fillText('ইউ.সি.সি ইনস্টিটিউট, পেঁচাকোলা, বাঁকুড়া', c.width - 55, y + 64);
+
+    const a = document.createElement('a');
+    a.download = `UCC_Receipt_${p.studentId}_${p.month}.png`;
+    a.href = c.toDataURL('image/png');
+    a.click();
   }
 
   // ===== QR SCANNER =====
