@@ -29,6 +29,11 @@
       background: #fff; width: 100%; max-width: 360px; border-radius: 16px;
       padding: 24px 20px; box-shadow: 0 12px 32px rgba(0,0,0,0.3);
     }
+    .pass-wrap { position: relative; }
+    .pass-toggle {
+      position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+      border: none; background: none; color: var(--muted); font-size: 12px; font-weight: 700; cursor: pointer;
+    }
 
     header {
       background: var(--primary); color: #fff; padding: 12px 14px;
@@ -121,7 +126,7 @@
 </head>
 <body>
 
-<!-- CALLER LOGIN -->
+<!-- CALLER LOGIN (FIXED USER ID & PASSWORD) -->
 <div id="loginScreen">
   <div class="login-card">
     <div style="text-align:center;margin-bottom:16px;">
@@ -129,18 +134,21 @@
       <p style="margin:4px 0 0;font-size:12px;color:var(--muted);">Absent Caller Panel (Offline Ready)</p>
     </div>
     <div id="loginErr" style="display:none;background:#fee2e2;color:#991b1b;padding:8px;border-radius:8px;font-size:12px;font-weight:700;margin-bottom:10px;text-align:center;">
-      Invalid PIN!
+      Invalid User ID or Password!
     </div>
     <form onsubmit="callerLogin(event)">
       <div class="form-group">
-        <label>Caller Name *</label>
-        <input type="text" id="inCallerName" required placeholder="Enter your name">
+        <label>User ID *</label>
+        <input type="text" id="inCallerUser" required placeholder="Enter User ID" autocomplete="username">
       </div>
       <div class="form-group">
-        <label>Caller PIN *</label>
-        <input type="password" id="inCallerPin" required placeholder="Enter PIN">
+        <label>Password *</label>
+        <div class="pass-wrap">
+          <input type="password" id="inCallerPass" required placeholder="Enter Password" autocomplete="current-password" style="padding-right:52px;">
+          <button type="button" class="pass-toggle" onclick="togglePass(this)">Show</button>
+        </div>
       </div>
-      <button type="submit" class="btn">Open Absent List</button>
+      <button type="submit" class="btn" style="margin-top:4px;">Open Absent List</button>
     </form>
   </div>
 </div>
@@ -195,7 +203,9 @@
 
 <script>
   const API_URL = 'https://script.google.com/macros/s/AKfycbwAuSfDoikCc998pVuwz0HySky1fChn-Tj8p7OeuUAr_WPG7IFZkfGB5LUO6NlvkiKO/exec';
-  const CALLER_PIN = '722150';
+  const CALLER_USER = 'UCC';
+  const CALLER_PASS = '12345678';
+  const CALLER_NAME = 'UCC';
 
   const QUICK_REASONS = [
     'জ্বর / শরীর খারাপ',
@@ -217,7 +227,6 @@
     navigator.serviceWorker.register('./sw.js').catch(() => {});
   }
 
-  let callerName = localStorage.getItem('ucc_caller_name') || '';
   let stored = JSON.parse(localStorage.getItem('ucc_caller_state') || 'null');
   let callerQueue = JSON.parse(localStorage.getItem('ucc_caller_queue') || '[]');
 
@@ -241,7 +250,13 @@
   window.addEventListener('online', () => { updateNetUI(); if (isAuthed()) syncCaller(); });
   window.addEventListener('offline', updateNetUI);
 
-  function isAuthed() { return localStorage.getItem('ucc_caller_auth') === 'ok' && callerName; }
+  function isAuthed() { return localStorage.getItem('ucc_caller_auth_v2') === 'ok'; }
+
+  function togglePass(btn) {
+    const inp = document.getElementById('inCallerPass');
+    inp.type = inp.type === 'password' ? 'text' : 'password';
+    btn.textContent = inp.type === 'password' ? 'Show' : 'Hide';
+  }
 
   function saveCallerLocal() {
     localStorage.setItem('ucc_caller_state', JSON.stringify({
@@ -271,7 +286,7 @@
     updateNetUI();
     if (isAuthed()) {
       document.getElementById('loginScreen').style.display = 'none';
-      document.getElementById('hdrSub').textContent = `Date: ${todayDate} • ${callerName}`;
+      document.getElementById('hdrSub').textContent = `Date: ${todayDate} • ${CALLER_NAME}`;
       renderAll();
       if (navigator.onLine) syncCaller();
     }
@@ -286,25 +301,25 @@
 
   function callerLogin(e) {
     e.preventDefault();
-    const nm = document.getElementById('inCallerName').value.trim();
-    const pin = document.getElementById('inCallerPin').value.trim();
-    if (pin !== CALLER_PIN) {
+    const uid = document.getElementById('inCallerUser').value.trim().toUpperCase();
+    const pass = document.getElementById('inCallerPass').value.trim();
+    if (uid !== CALLER_USER || pass !== CALLER_PASS) {
       document.getElementById('loginErr').style.display = 'block';
       return;
     }
-    callerName = nm;
-    localStorage.setItem('ucc_caller_auth', 'ok');
-    localStorage.setItem('ucc_caller_name', nm);
+    localStorage.setItem('ucc_caller_auth_v2', 'ok');
     document.getElementById('loginErr').style.display = 'none';
     document.getElementById('loginScreen').style.display = 'none';
-    document.getElementById('hdrSub').textContent = `Date: ${todayDate} • ${callerName}`;
+    document.getElementById('inCallerPass').value = '';
+    document.getElementById('hdrSub').textContent = `Date: ${todayDate} • ${CALLER_NAME}`;
     renderAll();
     if (navigator.onLine) syncCaller();
   }
 
   function logoutCaller() {
-    localStorage.removeItem('ucc_caller_auth');
-    document.getElementById('inCallerPin').value = '';
+    localStorage.removeItem('ucc_caller_auth_v2');
+    document.getElementById('inCallerUser').value = '';
+    document.getElementById('inCallerPass').value = '';
     document.getElementById('loginScreen').style.display = 'flex';
   }
 
@@ -339,7 +354,7 @@
         if (selectedFilter === 'ALL' && activeClasses.length > 0) {
           selectedFilter = 'RUNNING';
         }
-        document.getElementById('hdrSub').textContent = `Date: ${todayDate} • ${callerName}`;
+        document.getElementById('hdrSub').textContent = `Date: ${todayDate} • ${CALLER_NAME}`;
         saveCallerLocal();
         renderAll();
         toast('Absent list synced!');
@@ -455,7 +470,7 @@
       studentClass: s.studentClass,
       mobile: s.mobile,
       reason: reason,
-      callerName: callerName
+      callerName: CALLER_NAME
     };
 
     callerQueue.push(rec);
@@ -467,7 +482,7 @@
       studentClass: s.studentClass,
       mobile: s.mobile,
       reason: reason,
-      callerName: callerName
+      callerName: CALLER_NAME
     });
 
     saveCallerLocal();
