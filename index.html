@@ -171,12 +171,21 @@
     .info-item { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px dashed #e2e8f0; gap: 8px; }
     .info-item:last-child { border-bottom: none; }
 
-    .months-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 12px; }
+    .months-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 10px; }
     .m-cell {
       border: 1px solid var(--border); border-radius: 8px; padding: 7px 4px;
-      text-align: center; font-size: 11px; background: #f8fafc; cursor: pointer;
+      text-align: center; font-size: 11px; background: #f8fafc; cursor: pointer; transition: 0.15s;
     }
     .m-cell.paid { background: #dcfce7; border-color: #86efac; color: #166534; font-weight: 700; }
+    .m-cell.selected { outline: 2.5px solid #0f5132; background: #e2e8f0; }
+
+    /* SELECTED MONTH DETAIL & RECEIPT BOX */
+    .month-detail-box {
+      display: none; background: #f0fdf4; border: 1px solid #86efac;
+      border-radius: 10px; padding: 11px 12px; margin-bottom: 12px; font-size: 12px;
+    }
+    .md-title { font-weight: 800; font-size: 14px; color: #0f5132; margin-bottom: 6px; display: flex; justify-content: space-between; }
+    .md-row { padding: 3px 0; color: #1e293b; }
 
     .pay-warn {
       display: none; background: #fef2f2; border: 1px solid #fecaca; color: #991b1b;
@@ -189,11 +198,11 @@
     }
     .action-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 8px; }
     .act-link {
-      text-align: center; text-decoration: none; padding: 10px 6px; border-radius: 8px;
+      text-align: center; text-decoration: none; padding: 9px 6px; border-radius: 8px;
       color: #fff; font-weight: 700; font-size: 12px; display: block; border: none; cursor: pointer; width: 100%;
     }
 
-    /* OFFICIAL BENGALI PDF RECEIPT MODAL */
+    /* OFFICIAL BENGALI PDF / PNG RECEIPT MODAL */
     .rcpt-modal-bg {
       display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7);
       z-index: 120; justify-content: center; align-items: center; padding: 14px;
@@ -488,8 +497,18 @@
       <div class="info-item"><span>First Payment</span><strong id="pFirst">-</strong></div>
     </div>
 
-    <div style="font-size:13px;font-weight:800;margin-bottom:6px;">2027 Monthly Fees (Tap unpaid month to pay)</div>
+    <div style="font-size:13px;font-weight:800;margin-bottom:6px;">2027 Monthly Fees (Tap any month to see date, collector & receipt)</div>
     <div class="months-grid" id="pMonths"></div>
+
+    <!-- SELECTED MONTH HISTORY & RECEIPT CARD -->
+    <div id="monthDetailBox" class="month-detail-box">
+      <div class="md-title">
+        <span id="mdTitleText">Month Details</span>
+        <span id="mdStatusBadge"></span>
+      </div>
+      <div id="mdBody"></div>
+      <div id="mdActions" style="margin-top:8px;"></div>
+    </div>
 
     <div id="payWarn" class="pay-warn"></div>
 
@@ -513,7 +532,6 @@
       <button id="paySaveBtn" class="btn" onclick="submitPayment()">Save Payment</button>
     </div>
 
-    <!-- DIRECT BENGALI PDF RECEIPT & SMS/WA BAR -->
     <div id="receiptBar" class="receipt-bar">
       <div style="font-size:13px;font-weight:700;margin-bottom:8px;" id="receiptMsgPreview"></div>
       <button type="button" class="act-link" style="background:#f59e0b;color:#0f172a;margin-bottom:8px;" onclick="openLastReceipt()">
@@ -662,6 +680,7 @@
 
   let activeClass = null;
   let activeStudentId = null;
+  let selectedMonthKey = null;
   let activeReceiptData = null;
   let lastReceiptData = null;
   let hisabFilter = 'today';
@@ -940,7 +959,7 @@
 
     if (fMonth && fAmt > 0) {
       paymentLog.push({
-        receiptNo: 'UCC-LOCAL',
+        receiptNo: 'UCC-R27' + String(paymentLog.length + 1).padStart(4, '0'),
         date: studentObj.firstPayment || studentObj.admissionDate || todayStr(),
         time: bnNowTime(),
         studentId: newId,
@@ -1020,8 +1039,9 @@
         ? `<option value="${key}" disabled>${key} (Already Paid: Rs.${val} ✓)</option>`
         : `<option value="${key}">${key}</option>`;
 
-      return `<div class="m-cell ${paid ? 'paid' : ''}" onclick="onMonthCellClick('${key}')">
-        ${lbl}<br>${paid ? 'Rs.' + val + ' ✓' : '-'}
+      const selClass = selectedMonthKey === key ? 'selected' : '';
+      return `<div class="m-cell ${paid ? 'paid' : ''} ${selClass}" onclick="onMonthCellClick('${key}')">
+        ${lbl}<br>${paid ? 'Rs.' + val + ' ✓' : 'Due'}
       </div>`;
     }).join('');
 
@@ -1036,6 +1056,12 @@
       paySelect.disabled = true;
       saveBtn.disabled = true;
       saveBtn.textContent = 'All 12 Months Paid ✓';
+    }
+
+    if (selectedMonthKey) {
+      renderMonthDetailCard(s, selectedMonthKey);
+    } else {
+      document.getElementById('monthDetailBox').style.display = 'none';
     }
 
     const qrImg = document.getElementById('pQr');
@@ -1055,7 +1081,9 @@
 
   function closeProfile() {
     activeStudentId = null;
+    selectedMonthKey = null;
     hidePayWarn();
+    document.getElementById('monthDetailBox').style.display = 'none';
     document.getElementById('receiptBar').style.display = 'none';
     document.getElementById('profileModal').classList.remove('open');
   }
@@ -1063,16 +1091,85 @@
   function onMonthCellClick(monthKey) {
     const s = students.find(x => x.id === activeStudentId);
     if (!s) return;
+    selectedMonthKey = monthKey;
+
     const existingAmt = Number(s.months?.[monthKey]) || 0;
-    const niceMonth = monthKey.replace('_', ' ');
-    if (existingAmt > 0) {
-      showPayWarn(`${niceMonth} মাসে অলরেডি পেমেন্ট ডান (Rs. ${existingAmt})! রিপ্লেস করা যাবে না।`);
-      return;
+    if (existingAmt === 0 && !document.getElementById('payMonth').disabled) {
+      document.getElementById('payMonth').value = monthKey;
+      document.getElementById('payAmount').value = 300;
     }
-    hidePayWarn();
-    document.getElementById('payMonth').value = monthKey;
-    document.getElementById('payAmount').value = 300;
-    toast(`${niceMonth} selected — click Save Payment.`);
+
+    openProfile(s.id, document.getElementById('receiptBar').style.display === 'block');
+  }
+
+  function renderMonthDetailCard(s, monthKey) {
+    const box = document.getElementById('monthDetailBox');
+    const titleEl = document.getElementById('mdTitleText');
+    const badgeEl = document.getElementById('mdStatusBadge');
+    const bodyEl = document.getElementById('mdBody');
+    const actEl = document.getElementById('mdActions');
+
+    titleEl.textContent = `${bnMonth(monthKey)} (${monthKey.replace('_', ' ')})`;
+
+    // Find matching payment log entry for this student & month
+    const logEntry = paymentLog
+      .slice()
+      .reverse()
+      .find(p => p.studentId === s.id && p.month === monthKey);
+
+    const paidAmt = Number(s.months?.[monthKey]) || 0;
+
+    if (logEntry || paidAmt > 0) {
+      const amt = logEntry ? logEntry.amount : paidAmt;
+      const dt = logEntry ? formatBnDate(logEntry.date) : (s.firstPayment ? formatBnDate(s.firstPayment) : 'তারিখ লিপিবদ্ধ নেই');
+      const tm = logEntry && logEntry.time ? ` (${logEntry.time})` : '';
+      const col = logEntry ? bnCollector(logEntry.collector) : 'অ্যাডমিন';
+      const md = logEntry ? bnMode(logEntry.mode) : 'নগদ (ক্যাশ)';
+      const rNo = logEntry && logEntry.receiptNo ? logEntry.receiptNo : 'UCC-R27';
+
+      badgeEl.className = 'badge-ok';
+      badgeEl.textContent = 'Paid ✓';
+
+      bodyEl.innerHTML = `
+        <div class="md-row"><strong>জমা টাকা:</strong> ${amt} টাকা (${md})</div>
+        <div class="md-row"><strong>কবে দিয়েছে:</strong> ${dt}${tm}</div>
+        <div class="md-row"><strong>কাকে দিয়েছে:</strong> ${col}</div>
+        <div class="md-row"><strong>রসিদ নং:</strong> ${rNo}</div>
+      `;
+
+      const recObj = logEntry || {
+        receiptNo: rNo,
+        date: s.firstPayment || todayStr(),
+        time: '',
+        studentId: s.id,
+        studentName: s.name,
+        studentClass: s.studentClass,
+        month: monthKey,
+        amount: amt,
+        collector: logEntry ? logEntry.collector : 'Pralay',
+        mode: logEntry ? logEntry.mode : 'Cash'
+      };
+
+      const mob = (s.mobile || '').replace(/\D/g, '');
+      const rcptMsg = `ইউ.সি.সি ইনস্টিটিউট (রসিদ): ${s.name} (${s.id}, ${bnClass(s.studentClass)})-এর ${bnMonth(monthKey)} মাসের ফি বাবদ ${amt} টাকা (${md}) জমা হয়েছে। গ্রহণকারী: ${col}। তারিখ: ${dt}${tm}। বর্তমান বাকি: ${s.totalDue} টাকা। ধন্যবাদ।`;
+
+      actEl.innerHTML = `
+        <button type="button" class="btn" style="padding:9px;font-size:13px;margin-bottom:6px;" onclick='openReceiptFromObj(${JSON.stringify(recObj)})'>
+          📄 এই মাসের রসিদ দেখুন / ডাউনলোড করুন (PDF / PNG)
+        </button>
+        <div class="row-2">
+          <a href="${mob ? `https://wa.me/91${mob}?text=${encodeURIComponent(rcptMsg)}` : '#'}" target="_blank" class="act-link" style="background:#16a34a;">WhatsApp রসিদ</a>
+          <a href="${mob ? `sms:${mob}?body=${encodeURIComponent(rcptMsg)}` : '#'}" class="act-link" style="background:#2563eb;">SMS রসিদ</a>
+        </div>
+      `;
+    } else {
+      badgeEl.className = 'badge-due';
+      badgeEl.textContent = 'Due';
+      bodyEl.innerHTML = `<div class="md-row" style="color:#991b1b;font-weight:700;">এই মাসের টাকা এখনো জমা হয়নি (বাকি: 300 টাকা)।</div>`;
+      actEl.innerHTML = '';
+    }
+
+    box.style.display = 'block';
   }
 
   function submitPayment() {
@@ -1099,6 +1196,7 @@
     s.months[month] = amount;
     if (!s.firstPayment) s.firstPayment = payDate;
     s.totalDue = calcDueLocal(s);
+    selectedMonthKey = month;
 
     const newLog = {
       receiptNo: 'UCC-R27' + String(paymentLog.length + 1).padStart(4, '0'),
@@ -1310,12 +1408,15 @@
   function openReceiptByIndex(idx) {
     if (paymentLog[idx]) openReceiptModal(paymentLog[idx]);
   }
+  function openReceiptFromObj(p) {
+    openReceiptModal(p);
+  }
   function openReceiptModal(p) {
     const s = students.find(x => x.id === p.studentId) || {};
     activeReceiptData = { p, fatherName: s.fatherName || '-' };
 
     document.getElementById('rNo').textContent = p.receiptNo || '-';
-    document.getElementById('rDate').textContent = `${formatBnDate(p.date)}, ${p.time || ''}`;
+    document.getElementById('rDate').textContent = `${formatBnDate(p.date)}${p.time ? ', ' + p.time : ''}`;
     document.getElementById('rName').textContent = p.studentName;
     document.getElementById('rFather').textContent = s.fatherName || '-';
     document.getElementById('rIdCls').textContent = `${p.studentId} • ${bnClass(p.studentClass)}`;
@@ -1357,7 +1458,7 @@
 
     const rows = [
       ['রসিদ নং:', p.receiptNo || '-'],
-      ['তারিখ ও সময়:', `${formatBnDate(p.date)}, ${p.time || ''}`],
+      ['তারিখ ও সময়:', `${formatBnDate(p.date)}${p.time ? ', ' + p.time : ''}`],
       ['ছাত্র/ছাত্রীর নাম:', p.studentName],
       ['পিতার নাম:', fatherName],
       ['আইডি ও শ্রেণী:', `${p.studentId} • ${bnClass(p.studentClass)}`],
