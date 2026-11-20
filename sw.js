@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ucc-admin-2027-v1';
+const CACHE_NAME = 'ucc-admin-2027-v3';
 const ASSETS = [
   './',
   './index.html',
@@ -21,7 +21,8 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
-  if (event.request.url.includes('script.google.com') || event.request.url.includes('quickchart.io')) {
+  const url = event.request.url;
+  if (url.includes('script.google.com') || url.includes('quickchart.io') || url.includes('student.html') || url.includes('drive.google.com')) {
     return;
   }
   event.respondWith(
