@@ -431,4 +431,906 @@
     <div class="modal-top">
       <div>
         <div id="pName" style="font-size:19px;font-weight:800;"></div>
-        <div id="pSub" style="font-size:13px;color:var(--muted);font-weight
+        <div id="pSub" style="font-size:13px;color:var(--muted);font-weight:600;"></div>
+      </div>
+      <button class="close-btn" onclick="closeProfile()">✕</button>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat-box">
+        <div id="pPresent" class="stat-num" style="color:var(--success);">0</div>
+        <div class="stat-lbl">Present Days</div>
+      </div>
+      <div class="stat-box">
+        <div id="pAbsent" class="stat-num" style="color:#b45309;">0</div>
+        <div class="stat-lbl">Absent Days</div>
+      </div>
+      <div class="stat-box">
+        <div id="pDue" class="stat-num" style="color:var(--danger);">Rs. 0</div>
+        <div class="stat-lbl">Total Due</div>
+      </div>
+    </div>
+
+    <div class="info-list">
+      <div class="info-item"><span>Father's Name</span><strong id="pFather">-</strong></div>
+      <div class="info-item"><span>Mobile</span><strong id="pMobile">-</strong></div>
+      <div class="info-item"><span>Address</span><strong id="pAddress">-</strong></div>
+      <div class="info-item"><span>Admission Date</span><strong id="pAdm">-</strong></div>
+      <div class="info-item"><span>First Payment</span><strong id="pFirst">-</strong></div>
+    </div>
+
+    <div style="font-size:13px;font-weight:800;margin-bottom:6px;">2027 Monthly Fees (Tap unpaid month to pay)</div>
+    <div class="months-grid" id="pMonths"></div>
+
+    <div id="payWarn" class="pay-warn"></div>
+
+    <div class="pay-box">
+      <div style="font-size:13px;font-weight:800;color:#065f46;margin-bottom:8px;">Record Fee Payment</div>
+      <div class="row-2" style="margin-bottom:8px;">
+        <select id="payMonth" onchange="hidePayWarn()"></select>
+        <input type="number" id="payAmount" value="300" min="1" placeholder="Amount">
+      </div>
+      <div class="row-2" style="margin-bottom:8px;">
+        <select id="payCollector">
+          <option value="Pralay">Collector: Pralay</option>
+          <option value="Chiranjit">Collector: Chiranjit</option>
+          <option value="Saikat">Collector: Saikat</option>
+        </select>
+        <select id="payMode">
+          <option value="Cash">Mode: Cash</option>
+          <option value="UPI">Mode: UPI</option>
+        </select>
+      </div>
+      <button id="paySaveBtn" class="btn" onclick="submitPayment()">Save Payment</button>
+    </div>
+
+    <!-- DIRECT BENGALI PAYMENT RECEIPT SMS/WA BAR -->
+    <div id="receiptBar" class="receipt-bar">
+      <div style="font-size:13px;font-weight:700;margin-bottom:8px;" id="receiptMsgPreview"></div>
+      <div class="row-2">
+        <a id="receiptSmsLink" href="#" class="act-link" style="background:#2563eb;">Send SMS (বাংলা)</a>
+        <a id="receiptWaLink" href="#" target="_blank" class="act-link" style="background:#16a34a;">WhatsApp (বাংলা)</a>
+      </div>
+    </div>
+
+    <div class="action-3">
+      <a id="btnCall" href="#" class="act-link" style="background:#0284c7;">Call</a>
+      <a id="btnSmsDue" href="#" class="act-link" style="background:#7c3aed;">Due SMS</a>
+      <a id="btnWaDue" href="#" target="_blank" class="act-link" style="background:#16a34a;">WhatsApp</a>
+    </div>
+
+    <details style="margin-top:14px;background:#f8fafc;padding:10px;border-radius:10px;border:1px solid var(--border);">
+      <summary style="font-size:13px;font-weight:700;cursor:pointer;">Edit Father / Mobile / Address</summary>
+      <div style="margin-top:10px;">
+        <div class="form-group"><label>Father's Name</label><input type="text" id="eFather"></div>
+        <div class="form-group"><label>Mobile</label><input type="tel" id="eMobile" maxlength="10"></div>
+        <div class="form-group"><label>Address</label><input type="text" id="eAddress"></div>
+        <button class="btn btn-sec" onclick="saveEditedDetails()">Update Details</button>
+      </div>
+    </details>
+
+    <div style="text-align:center;margin-top:14px;">
+      <img id="pQr" src="" alt="QR" style="width:120px;height:120px;border:1px solid var(--border);border-radius:8px;padding:4px;" onerror="this.style.display='none'">
+      <div id="pQrText" style="font-size:11px;color:var(--muted);margin-top:3px;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+  <button class="nav-btn active" onclick="openPage('classes', this)">Classes</button>
+  <button class="nav-btn" onclick="openPage('entry', this)">+ Entry</button>
+  <button class="nav-btn" onclick="openPage('scan', this)">QR Scan</button>
+  <button class="nav-btn" onclick="openPage('hisab', this)">
+    Hisab
+    <span id="pendingBadge" class="nav-badge">0</span>
+  </button>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+  const API_URL = 'https://script.google.com/macros/s/AKfycbwAuSfDoikCc998pVuwz0HySky1fChn-Tj8p7OeuUAr_WPG7IFZkfGB5LUO6NlvkiKO/exec';
+  const ADMIN_USER = '722150';
+  const ADMIN_PASS = 'ucc@2027';
+  const MONTHLY_FEE = 300;
+
+  const CLASSES = [
+    'Nursery', 'KG', 'Class 1', 'Class 2', 'Class 3', 'Class 4',
+    'Class 5', 'Class 6', 'Class 7', 'Class 8', 'Class 9', 'Class 10',
+    'Class 11', 'Class 12'
+  ];
+  const MONTHS = [
+    ['Jan_2027','Jan','জানুয়ারি 2027'], ['Feb_2027','Feb','ফেব্রুয়ারি 2027'],
+    ['Mar_2027','Mar','মার্চ 2027'], ['Apr_2027','Apr','এপ্রিল 2027'],
+    ['May_2027','May','মে 2027'], ['Jun_2027','Jun','জুন 2027'],
+    ['Jul_2027','Jul','জুলাই 2027'], ['Aug_2027','Aug','আগস্ট 2027'],
+    ['Sep_2027','Sep','সেপ্টেম্বর 2027'], ['Oct_2027','Oct','অক্টোবর 2027'],
+    ['Nov_2027','Nov','নভেম্বর 2027'], ['Dec_2027','Dec','ডিসেম্বর 2027']
+  ];
+
+  // Bengali formatters ONLY for outgoing SMS/WhatsApp messages
+  const BN_MONTH_NAMES = [
+    'জানুয়ারি','ফেব্রুয়ারি','মার্চ','এপ্রিল','মে','জুন',
+    'জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'
+  ];
+  const CLASSES_BN = {
+    Nursery:'নার্সারি', KG:'কেজি', 'Class 1':'ক্লাস 1', 'Class 2':'ক্লাস 2',
+    'Class 3':'ক্লাস 3', 'Class 4':'ক্লাস 4', 'Class 5':'ক্লাস 5', 'Class 6':'ক্লাস 6',
+    'Class 7':'ক্লাস 7', 'Class 8':'ক্লাস 8', 'Class 9':'ক্লাস 9', 'Class 10':'ক্লাস 10',
+    'Class 11':'ক্লাস 11', 'Class 12':'ক্লাস 12'
+  };
+  const COLLECTOR_BN = { Pralay: 'প্রলয়', Chiranjit: 'চিরঞ্জিত', Saikat: 'সৈকত' };
+
+  function bnClass(c) { return CLASSES_BN[c] || c; }
+  function bnMonth(k) { const f = MONTHS.find(x => x[0] === k); return f ? f[2] : k; }
+  function bnCollector(c) { return COLLECTOR_BN[c] || c || 'অ্যাডমিন'; }
+  function bnMode(m) { return (m || '').toLowerCase().includes('cash') ? 'নগদ (ক্যাশ)' : 'অনলাইন (UPI)'; }
+  function formatBnDate(iso) {
+    if (!iso) return '-';
+    const p = String(iso).split('-');
+    if (p.length !== 3) return iso;
+    return `${parseInt(p[2], 10)} ${BN_MONTH_NAMES[parseInt(p[1], 10) - 1] || p[1]} ${p[0]}`;
+  }
+  function bnNowTime() {
+    const d = new Date();
+    const h = d.getHours();
+    const m = String(d.getMinutes()).padStart(2, '0');
+    const h12 = h % 12 || 12;
+    let part = 'রাত';
+    if (h >= 4 && h < 12) part = 'সকাল';
+    else if (h >= 12 && h < 16) part = 'দুপুর';
+    else if (h >= 16 && h < 18) part = 'বিকেল';
+    else if (h >= 18 && h < 20) part = 'সন্ধ্যা';
+    return `${part} ${h12}:${m}`;
+  }
+
+  let students = JSON.parse(localStorage.getItem('ucc_students') || '[]');
+  let attendance = JSON.parse(localStorage.getItem('ucc_attendance') || '[]');
+  let paymentLog = JSON.parse(localStorage.getItem('ucc_payment_log') || '[]');
+  let onlineRequests = JSON.parse(localStorage.getItem('ucc_online_reqs') || '[]');
+  let queue = JSON.parse(localStorage.getItem('ucc_queue') || '[]');
+
+  let activeClass = null;
+  let activeStudentId = null;
+  let hisabFilter = 'today';
+  let html5Qr = null;
+  let scannerRunning = false;
+  let facingMode = 'environment';
+  let scanCooldown = false;
+
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+  }
+
+  window.addEventListener('online', () => { updateNetUI(); if (isUnlocked()) syncNow(); });
+  window.addEventListener('offline', updateNetUI);
+
+  function isUnlocked() { return localStorage.getItem('ucc_admin_auth') === 'unlocked_2027'; }
+
+  function togglePassView(btn) {
+    const inp = document.getElementById('loginPass');
+    inp.type = inp.type === 'password' ? 'text' : 'password';
+    btn.textContent = inp.type === 'password' ? 'Show' : 'Hide';
+  }
+
+  function handleLogin(e) {
+    e.preventDefault();
+    const u = document.getElementById('loginUser').value.trim();
+    const p = document.getElementById('loginPass').value.trim();
+    if (u === ADMIN_USER && p === ADMIN_PASS) {
+      localStorage.setItem('ucc_admin_auth', 'unlocked_2027');
+      document.getElementById('loginErr').style.display = 'none';
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('loginPass').value = '';
+      if (navigator.onLine) syncNow();
+      toast('Welcome, U.C.C Admin!');
+    } else {
+      document.getElementById('loginErr').style.display = 'block';
+    }
+  }
+
+  function lockApp() {
+    if (scannerRunning) stopScanner();
+    closeProfile();
+    localStorage.removeItem('ucc_admin_auth');
+    document.getElementById('loginUser').value = '';
+    document.getElementById('loginPass').value = '';
+    document.getElementById('loginScreen').style.display = 'flex';
+  }
+
+  window.onload = function() {
+    document.getElementById('fClass').innerHTML =
+      '<option value="">Select Class</option>' + CLASSES.map(c => `<option>${c}</option>`).join('');
+    document.getElementById('fMonth').innerHTML =
+      '<option value="">None</option>' + MONTHS.map(([k]) => `<option value="${k}">${k}</option>`).join('');
+
+    document.getElementById('fAdmDate').value = todayStr();
+    updateNetUI();
+    renderAll();
+
+    if (isUnlocked()) {
+      document.getElementById('loginScreen').style.display = 'none';
+      if (navigator.onLine) syncNow();
+    } else {
+      document.getElementById('loginScreen').style.display = 'flex';
+    }
+  };
+
+  function todayStr() {
+    const d = new Date();
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  }
+
+  function saveLocal() {
+    localStorage.setItem('ucc_students', JSON.stringify(students));
+    localStorage.setItem('ucc_attendance', JSON.stringify(attendance));
+    localStorage.setItem('ucc_payment_log', JSON.stringify(paymentLog));
+    localStorage.setItem('ucc_online_reqs', JSON.stringify(onlineRequests));
+    localStorage.setItem('ucc_queue', JSON.stringify(queue));
+    updateNetUI();
+  }
+
+  function updateNetUI() {
+    const dot = document.getElementById('netDot');
+    const btn = document.getElementById('syncBtn');
+    if (navigator.onLine) {
+      dot.classList.remove('off');
+      btn.textContent = queue.length > 0 ? `Sync (${queue.length})` : 'Sync ✓';
+    } else {
+      dot.classList.add('off');
+      btn.textContent = `Offline (${queue.length})`;
+    }
+  }
+
+  function toast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.style.display = 'block';
+    setTimeout(() => { t.style.display = 'none'; }, 3400);
+  }
+
+  function calcDueLocal(s) {
+    const now = new Date();
+    if (now < new Date(2027, 0, 1) || !s.admissionDate) return 0;
+    const end = now > new Date(2027, 11, 31) ? new Date(2027, 11, 31) : now;
+    const adm = new Date(s.admissionDate + 'T00:00:00');
+    const start = adm < new Date(2027, 0, 1) ? new Date(2027, 0, 1) : new Date(adm.getFullYear(), adm.getMonth(), 1);
+    const monthsPassed = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth()) + 1;
+    let totalPaid = 0;
+    MONTHS.forEach(([k]) => { totalPaid += Number(s.months?.[k]) || 0; });
+    return Math.max(0, monthsPassed * MONTHLY_FEE - totalPaid);
+  }
+
+  function getNextStudentId() {
+    let maxNum = 0;
+    students.forEach(s => {
+      const m = String(s.id).match(/^UCC(\d+)$/i);
+      if (m) maxNum = Math.max(maxNum, parseInt(m[1], 10));
+    });
+    return 'UCC' + String(maxNum + 1).padStart(3, '0');
+  }
+
+  async function syncNow() {
+    if (!navigator.onLine) { toast('Offline mode — data saved locally.'); return; }
+    const btn = document.getElementById('syncBtn');
+    btn.textContent = 'Syncing...';
+
+    try {
+      let data;
+      if (queue.length > 0) {
+        const res = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ queue: queue })
+        });
+        data = await res.json();
+        if (data.status === 'ok') queue = [];
+      } else {
+        const res = await fetch(API_URL);
+        data = await res.json();
+      }
+
+      if (data.status === 'ok') {
+        students = data.students || [];
+        attendance = data.attendance || [];
+        paymentLog = data.paymentLog || [];
+        onlineRequests = data.onlineRequests || [];
+        saveLocal();
+        renderAll(true);
+        toast('Synced with Google Sheet!');
+      } else {
+        toast('Sync Error: ' + (data.message || 'Unknown'));
+      }
+    } catch (e) {
+      toast('Sync failed — try again.');
+    } finally {
+      updateNetUI();
+    }
+  }
+
+  function openPage(name, btn) {
+    if (name !== 'scan' && scannerRunning) stopScanner();
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    btn.classList.add('active');
+    if (name === 'entry') document.getElementById('nextIdPreview').textContent = getNextStudentId();
+    if (name === 'scan') renderTodayAttendance();
+    if (name === 'hisab') renderHisab();
+  }
+
+  function renderAll(keepReceipt = false) {
+    document.getElementById('nextIdPreview').textContent = getNextStudentId();
+    renderClassGrid();
+    if (activeClass) renderClassStudents();
+    renderTodayAttendance();
+    renderHisab();
+    if (activeStudentId) openProfile(activeStudentId, keepReceipt);
+  }
+
+  function renderClassGrid() {
+    document.getElementById('classGrid').innerHTML = CLASSES.map(cls => {
+      const list = students.filter(s => s.studentClass === cls);
+      const totalDue = list.reduce((sum, s) => sum + (Number(s.totalDue) || 0), 0);
+      return `
+        <div class="class-card" onclick="openClassView('${cls}')">
+          <div class="cc-title">${cls}</div>
+          <div class="cc-count">${list.length} Students</div>
+          <div class="cc-due ${totalDue === 0 ? 'zero' : ''}">
+            ${totalDue > 0 ? 'Due: Rs. ' + totalDue : 'All Clear'}
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function renderGlobalSearch() {
+    const q = document.getElementById('globalSearch').value.toLowerCase().trim();
+    const resBox = document.getElementById('globalSearchResults');
+    const grid = document.getElementById('classGrid');
+    if (!q) { resBox.innerHTML = ''; grid.style.display = 'grid'; return; }
+    grid.style.display = 'none';
+    const matches = students.filter(s =>
+      s.name.toLowerCase().includes(q) || s.id.toLowerCase().includes(q) || (s.mobile || '').includes(q)
+    );
+    resBox.innerHTML = matches.length
+      ? matches.map(studentRowHtml).join('')
+      : '<div class="card" style="text-align:center;color:var(--muted);">No student found.</div>';
+  }
+
+  function studentRowHtml(s) {
+    const due = Number(s.totalDue) || 0;
+    return `
+      <div class="student-row" onclick="openProfile('${s.id}')">
+        <div>
+          <div class="st-name">${s.name}</div>
+          <div class="st-id">${s.id} • ${s.studentClass}${s.mobile ? ' • ' + s.mobile : ''}</div>
+        </div>
+        <div class="${due > 0 ? 'badge-due' : 'badge-ok'}">
+          ${due > 0 ? 'Due Rs.' + due : 'Paid'}
+        </div>
+      </div>
+    `;
+  }
+
+  function openClassView(cls) {
+    activeClass = cls;
+    document.getElementById('classGridView').style.display = 'none';
+    document.getElementById('classListView').style.display = 'block';
+    document.getElementById('activeClassTitle').textContent = cls;
+    document.getElementById('classSearch').value = '';
+    renderClassStudents();
+  }
+
+  function closeClassView() {
+    activeClass = null;
+    document.getElementById('classListView').style.display = 'none';
+    document.getElementById('classGridView').style.display = 'block';
+  }
+
+  function renderClassStudents() {
+    const q = document.getElementById('classSearch').value.toLowerCase().trim();
+    const list = students.filter(s =>
+      s.studentClass === activeClass &&
+      (!q || s.name.toLowerCase().includes(q) || s.id.toLowerCase().includes(q))
+    );
+    document.getElementById('classStudentList').innerHTML = list.length
+      ? list.map(studentRowHtml).join('')
+      : '<div class="card" style="text-align:center;color:var(--muted);">No students in this class yet.</div>';
+  }
+
+  function saveNewStudent(e) {
+    e.preventDefault();
+    const newId = getNextStudentId();
+    const months = {};
+    MONTHS.forEach(([k]) => { months[k] = ''; });
+    const fMonth = document.getElementById('fMonth').value;
+    const fAmt = Number(document.getElementById('fAmt').value) || 0;
+    const fCollector = document.getElementById('fCollector').value;
+    const fMode = document.getElementById('fMode').value;
+    if (fMonth && fAmt > 0) months[fMonth] = fAmt;
+
+    const studentObj = {
+      id: newId,
+      name: document.getElementById('fName').value.trim(),
+      studentClass: document.getElementById('fClass').value,
+      mobile: document.getElementById('fMobile').value.trim(),
+      fatherName: document.getElementById('fFather').value.trim(),
+      address: document.getElementById('fAddress').value.trim(),
+      admissionDate: document.getElementById('fAdmDate').value,
+      firstPayment: document.getElementById('fFirstPay').value,
+      months: months,
+      totalDue: 0
+    };
+    studentObj.totalDue = calcDueLocal(studentObj);
+    students.push(studentObj);
+
+    if (fMonth && fAmt > 0) {
+      paymentLog.push({
+        receiptNo: 'SYNCING',
+        date: studentObj.firstPayment || studentObj.admissionDate || todayStr(),
+        time: bnNowTime(),
+        studentId: newId,
+        studentName: studentObj.name,
+        studentClass: studentObj.studentClass,
+        month: fMonth,
+        amount: fAmt,
+        collector: fCollector,
+        mode: fMode
+      });
+    }
+
+    queue.push({
+      type: 'addStudent',
+      data: { ...studentObj, firstFeeMonth: fMonth, firstFeeAmount: fAmt, collector: fCollector, mode: fMode }
+    });
+    saveLocal();
+    renderAll();
+
+    document.getElementById('entryForm').reset();
+    document.getElementById('fAdmDate').value = todayStr();
+    toast('Saved! Auto ID: ' + newId);
+    if (navigator.onLine) syncNow();
+  }
+
+  function showPayWarn(msg) {
+    const w = document.getElementById('payWarn');
+    w.textContent = '⚠️ ' + msg;
+    w.style.display = 'block';
+    toast(msg);
+  }
+  function hidePayWarn() { document.getElementById('payWarn').style.display = 'none'; }
+
+  function openProfile(id, keepReceipt = false) {
+    const s = students.find(x => x.id === id);
+    if (!s) return;
+    activeStudentId = id;
+    hidePayWarn();
+
+    const classDays = new Set(
+      attendance
+        .filter(a => a.studentClass === s.studentClass && (!s.admissionDate || a.date >= s.admissionDate))
+        .map(a => a.date)
+    );
+    const presentDays = new Set(
+      attendance.filter(a => a.studentId === s.id).map(a => a.date)
+    ).size;
+    const absentDays = Math.max(0, classDays.size - presentDays);
+
+    document.getElementById('pName').textContent = s.name;
+    document.getElementById('pSub').textContent = `${s.id} • ${s.studentClass}`;
+    document.getElementById('pPresent').textContent = presentDays;
+    document.getElementById('pAbsent').textContent = absentDays;
+    document.getElementById('pDue').textContent = 'Rs. ' + (Number(s.totalDue) || 0);
+    document.getElementById('pDue').style.color = s.totalDue > 0 ? '#dc2626' : '#16a34a';
+
+    document.getElementById('pFather').textContent = s.fatherName || '-';
+    document.getElementById('pMobile').textContent = s.mobile || '-';
+    document.getElementById('pAddress').textContent = s.address || '-';
+    document.getElementById('pAdm').textContent = s.admissionDate || '-';
+    document.getElementById('pFirst').textContent = s.firstPayment || '-';
+
+    document.getElementById('eFather').value = s.fatherName || '';
+    document.getElementById('eMobile').value = s.mobile || '';
+    document.getElementById('eAddress').value = s.address || '';
+
+    let firstUnpaidKey = '';
+    const paySelect = document.getElementById('payMonth');
+    let selectHtml = '';
+
+    document.getElementById('pMonths').innerHTML = MONTHS.map(([key, lbl]) => {
+      const val = Number(s.months?.[key]) || 0;
+      const paid = val > 0;
+      if (!paid && !firstUnpaidKey) firstUnpaidKey = key;
+
+      selectHtml += paid
+        ? `<option value="${key}" disabled>${key} (Already Paid: Rs.${val} ✓)</option>`
+        : `<option value="${key}">${key}</option>`;
+
+      return `<div class="m-cell ${paid ? 'paid' : ''}" onclick="onMonthCellClick('${key}')">
+        ${lbl}<br>${paid ? 'Rs.' + val + ' ✓' : '-'}
+      </div>`;
+    }).join('');
+
+    paySelect.innerHTML = selectHtml;
+    const saveBtn = document.getElementById('paySaveBtn');
+    if (firstUnpaidKey) {
+      paySelect.value = firstUnpaidKey;
+      paySelect.disabled = false;
+      saveBtn.disabled = false;
+      saveBtn.textContent = 'Save Payment';
+    } else {
+      paySelect.disabled = true;
+      saveBtn.disabled = true;
+      saveBtn.textContent = 'All 12 Months Paid ✓';
+    }
+
+    const qrImg = document.getElementById('pQr');
+    qrImg.style.display = 'inline-block';
+    qrImg.src = 'https://quickchart.io/qr?size=140&text=' + encodeURIComponent(s.id);
+    document.getElementById('pQrText').textContent = 'ID Card QR: ' + s.id;
+
+    // Outgoing Due Reminder Message in BENGALI
+    const mob = (s.mobile || '').replace(/\D/g, '');
+    const dueMsg = `ইউ.সি.সি ইনস্টিটিউট: সম্মানীয় অভিভাবক, ${s.name} (${s.id}, ${bnClass(s.studentClass)})-এর বর্তমানে মোট ${s.totalDue} টাকা টিউশন ফি বাকি রয়েছে। মোট উপস্থিতি: ${presentDays} দিন। অনুগ্রহ করে শীঘ্রই ফি পরিশোধ করুন।`;
+    document.getElementById('btnCall').href = mob ? `tel:${mob}` : '#';
+    document.getElementById('btnSmsDue').href = mob ? `sms:${mob}?body=${encodeURIComponent(dueMsg)}` : '#';
+    document.getElementById('btnWaDue').href = mob ? `https://wa.me/91${mob}?text=${encodeURIComponent(dueMsg)}` : '#';
+
+    if (!keepReceipt) document.getElementById('receiptBar').style.display = 'none';
+    document.getElementById('profileModal').classList.add('open');
+  }
+
+  function closeProfile() {
+    activeStudentId = null;
+    hidePayWarn();
+    document.getElementById('receiptBar').style.display = 'none';
+    document.getElementById('profileModal').classList.remove('open');
+  }
+
+  function onMonthCellClick(monthKey) {
+    const s = students.find(x => x.id === activeStudentId);
+    if (!s) return;
+    const existingAmt = Number(s.months?.[monthKey]) || 0;
+    const niceMonth = monthKey.replace('_', ' ');
+    if (existingAmt > 0) {
+      showPayWarn(`${niceMonth} মাসে অলরেডি পেমেন্ট ডান (Rs. ${existingAmt})! রিপ্লেস করা যাবে না।`);
+      return;
+    }
+    hidePayWarn();
+    document.getElementById('payMonth').value = monthKey;
+    document.getElementById('payAmount').value = 300;
+    toast(`${niceMonth} selected — click Save Payment.`);
+  }
+
+  function submitPayment() {
+    const s = students.find(x => x.id === activeStudentId);
+    if (!s) return;
+    const month = document.getElementById('payMonth').value;
+    const amount = Number(document.getElementById('payAmount').value) || 0;
+    const collector = document.getElementById('payCollector').value;
+    const mode = document.getElementById('payMode').value;
+    const niceMonth = month.replace('_', ' ');
+
+    const alreadyPaid = Number(s.months?.[month]) || 0;
+    if (alreadyPaid > 0) {
+      showPayWarn(`${niceMonth} মাসে অলরেডি পেমেন্ট ডান (Rs. ${alreadyPaid})! রিপ্লেস করা যাবে না।`);
+      return;
+    }
+    if (amount <= 0) { showPayWarn('Enter a valid amount.'); return; }
+
+    hidePayWarn();
+    const payDate = todayStr();
+    const payTime = bnNowTime();
+
+    if (!s.months) s.months = {};
+    s.months[month] = amount;
+    if (!s.firstPayment) s.firstPayment = payDate;
+    s.totalDue = calcDueLocal(s);
+
+    paymentLog.push({
+      receiptNo: 'SYNCING',
+      date: payDate,
+      time: payTime,
+      studentId: s.id,
+      studentName: s.name,
+      studentClass: s.studentClass,
+      month: month,
+      amount: amount,
+      collector: collector,
+      mode: mode
+    });
+
+    queue.push({
+      type: 'recordPayment',
+      data: { studentId: s.id, month, amount, payDate, payTime, collector, mode }
+    });
+    saveLocal();
+    openProfile(s.id, true);
+    renderClassGrid();
+    renderHisab();
+    if (activeClass) renderClassStudents();
+
+    // Outgoing Payment Receipt Message in BENGALI
+    const mob = (s.mobile || '').replace(/\D/g, '');
+    const rcptMsg = `ইউ.সি.সি ইনস্টিটিউট (রসিদ): ${s.name} (${s.id}, ${bnClass(s.studentClass)})-এর ${bnMonth(month)} মাসের ফি বাবদ ${amount} টাকা (${bnMode(mode)}) জমা হলো। গ্রহণকারী: ${bnCollector(collector)}। তারিখ: ${formatBnDate(payDate)}, ${payTime}। বর্তমান বাকি: ${s.totalDue} টাকা। স্টুডেন্ট পোর্টাল থেকে রসিদ ডাউনলোড করতে পারবেন। ধন্যবাদ।`;
+    document.getElementById('receiptMsgPreview').textContent = `✓ Saved Rs.${amount} (${niceMonth} • ${collector})! Send Bengali Receipt:`;
+    document.getElementById('receiptSmsLink').href = mob ? `sms:${mob}?body=${encodeURIComponent(rcptMsg)}` : '#';
+    document.getElementById('receiptWaLink').href = mob ? `https://wa.me/91${mob}?text=${encodeURIComponent(rcptMsg)}` : '#';
+    document.getElementById('receiptBar').style.display = 'block';
+
+    if (navigator.onLine) syncNow();
+  }
+
+  function saveEditedDetails() {
+    const s = students.find(x => x.id === activeStudentId);
+    if (!s) return;
+    s.fatherName = document.getElementById('eFather').value.trim();
+    s.mobile = document.getElementById('eMobile').value.trim();
+    s.address = document.getElementById('eAddress').value.trim();
+
+    queue.push({
+      type: 'updateDetails',
+      data: { studentId: s.id, fatherName: s.fatherName, mobile: s.mobile, address: s.address }
+    });
+    saveLocal();
+    openProfile(s.id, true);
+    toast('Details Updated!');
+    if (navigator.onLine) syncNow();
+  }
+
+  function setHisabFilter(mode) {
+    hisabFilter = mode;
+    document.getElementById('pillToday').classList.toggle('active', mode === 'today');
+    document.getElementById('pillAll').classList.toggle('active', mode === 'all');
+    renderHisab();
+  }
+
+  function renderHisab() {
+    const pending = onlineRequests.filter(r => r.status === 'Pending');
+    const badge = document.getElementById('pendingBadge');
+    if (pending.length > 0) {
+      badge.textContent = pending.length;
+      badge.style.display = 'inline-block';
+      document.getElementById('pendingBox').style.display = 'block';
+      document.getElementById('pendingCountText').textContent = pending.length;
+      document.getElementById('pendingList').innerHTML = pending.map(r => `
+        <div class="req-card">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <strong>${r.studentName} (${r.studentId})</strong>
+            <span class="badge-due">Rs. ${r.amount}</span>
+          </div>
+          <div style="font-size:12px;color:#475569;margin-top:4px;">
+            ${r.studentClass} • Month: <strong>${r.month.replace('_', ' ')}</strong> • UTR: ${r.utr || '-'}<br>
+            Uploaded: ${r.date} ${r.time}
+          </div>
+          ${r.screenshotData ? `<img class="req-img" src="${r.screenshotData}" alt="Payment Screenshot">` : '<div style="font-size:12px;color:#991b1b;margin:6px 0;">Screenshot not attached</div>'}
+          <div class="form-group" style="margin-top:8px;">
+            <select id="verBy_${r.requestId}">
+              <option value="Pralay">Verified By: Pralay</option>
+              <option value="Chiranjit">Verified By: Chiranjit</option>
+              <option value="Saikat">Verified By: Saikat</option>
+            </select>
+          </div>
+          <div class="row-2">
+            <button class="btn" onclick="approveReq('${r.requestId}')">✓ Approve & Receipt</button>
+            <button class="btn btn-red" onclick="rejectReq('${r.requestId}')">✕ Reject</button>
+          </div>
+        </div>
+      `).join('');
+    } else {
+      badge.style.display = 'none';
+      document.getElementById('pendingBox').style.display = 'none';
+    }
+
+    const today = todayStr();
+    const list = (hisabFilter === 'today'
+      ? paymentLog.filter(p => p.date === today)
+      : paymentLog
+    ).slice().reverse();
+
+    let total = 0, cash = 0, upi = 0, pralay = 0, chiranjit = 0, saikat = 0;
+    list.forEach(p => {
+      const a = Number(p.amount) || 0;
+      total += a;
+      if ((p.mode || '').toLowerCase().includes('cash')) cash += a;
+      else upi += a;
+      if (p.collector === 'Pralay') pralay += a;
+      else if (p.collector === 'Chiranjit') chiranjit += a;
+      else if (p.collector === 'Saikat') saikat += a;
+    });
+
+    document.getElementById('hTotal').textContent = 'Rs. ' + total;
+    document.getElementById('hModeSplit').textContent = `Cash: Rs. ${cash} • Online/UPI: Rs. ${upi}`;
+    document.getElementById('hPralay').textContent = 'Rs. ' + pralay;
+    document.getElementById('hChiranjit').textContent = 'Rs. ' + chiranjit;
+    document.getElementById('hSaikat').textContent = 'Rs. ' + saikat;
+
+    document.getElementById('paymentLogList').innerHTML = list.length
+      ? list.map(p => `
+        <div class="info-item" style="font-size:12px;">
+          <div>
+            <strong>${p.studentName}</strong> (${p.studentId})<br>
+            <span style="color:var(--muted);">${p.date} (${p.time}) • ${p.month.replace('_', ' ')} • ${p.collector} (${p.mode})</span>
+          </div>
+          <div style="text-align:right;font-weight:800;color:var(--primary);white-space:nowrap;">Rs. ${p.amount}</div>
+        </div>
+      `).join('')
+      : '<div style="font-size:13px;color:var(--muted);text-align:center;">No payment records yet.</div>';
+  }
+
+  function approveReq(reqId) {
+    const r = onlineRequests.find(x => x.requestId === reqId);
+    if (!r) return;
+    const verifiedBy = document.getElementById('verBy_' + reqId).value;
+    r.status = 'Approved';
+    r.verifiedBy = verifiedBy;
+    r.screenshotData = '';
+
+    const s = students.find(x => x.id === r.studentId);
+    let mob = '';
+    let newDue = 0;
+    if (s) {
+      mob = (s.mobile || '').replace(/\D/g, '');
+      if (!s.months) s.months = {};
+      if ((Number(s.months[r.month]) || 0) === 0) {
+        s.months[r.month] = r.amount;
+        s.totalDue = calcDueLocal(s);
+      }
+      newDue = s.totalDue;
+    }
+
+    queue.push({ type: 'approveOnline', data: { requestId: reqId, verifiedBy } });
+    saveLocal();
+    renderAll();
+
+    // Outgoing Approval Confirmation Message in BENGALI
+    const msg = `ইউ.সি.সি ইনস্টিটিউট (অনলাইন রসিদ): ${r.studentName} (${r.studentId}, ${bnClass(r.studentClass)})-এর ${bnMonth(r.month)} মাসের অনলাইন পেমেন্ট (${r.amount} টাকা) ভেরিফাই ও গ্রহণ করা হয়েছে। ভেরিফাই করেছেন: ${bnCollector(verifiedBy)}। তারিখ: ${formatBnDate(todayStr())}, ${bnNowTime()}। বর্তমান বাকি: ${newDue} টাকা। স্টুডেন্ট পোর্টাল থেকে এখনই রসিদ ডাউনলোড করে নিন। ধন্যবাদ।`;
+    document.getElementById('approveMsgText').textContent = `✓ Approved Rs.${r.amount} for ${r.studentName}! Send Bengali Confirmation:`;
+    document.getElementById('approveWaLink').href = mob ? `https://wa.me/91${mob}?text=${encodeURIComponent(msg)}` : '#';
+    document.getElementById('approveSmsLink').href = mob ? `sms:${mob}?body=${encodeURIComponent(msg)}` : '#';
+    document.getElementById('approveNotifyBar').style.display = 'block';
+
+    toast('Approved! Online receipt issued.');
+    if (navigator.onLine) syncNow();
+  }
+
+  function rejectReq(reqId) {
+    const reason = prompt('Reason for rejection (e.g. Payment not received):', 'Payment not received');
+    if (reason === null) return;
+    const r = onlineRequests.find(x => x.requestId === reqId);
+    if (!r) return;
+    const verifiedBy = document.getElementById('verBy_' + reqId).value;
+    r.status = 'Rejected';
+    r.remarks = reason;
+    r.screenshotData = '';
+
+    queue.push({ type: 'rejectOnline', data: { requestId: reqId, verifiedBy, remarks: reason } });
+    saveLocal();
+    renderHisab();
+    toast('Request Rejected.');
+    if (navigator.onLine) syncNow();
+  }
+
+  // ===== QR SCANNER =====
+  function playBeep(freq, duration) {
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = ctx.createOscillator();
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      osc.connect(ctx.destination);
+      osc.start();
+      setTimeout(() => { osc.stop(); ctx.close(); }, duration);
+    } catch (e) {}
+  }
+
+  function showScanPopup(type, statusText, nameText, metaText) {
+    const box = document.getElementById('scanPopup');
+    box.className = 'scan-popup ' + type;
+    document.getElementById('spStatus').textContent = statusText;
+    document.getElementById('spName').textContent = nameText;
+    document.getElementById('spMeta').textContent = metaText;
+    setTimeout(() => { box.className = 'scan-popup'; }, 2500);
+  }
+
+  async function toggleScanner() {
+    if (scannerRunning) await stopScanner();
+    else await startScanner();
+  }
+
+  async function startScanner() {
+    if (!window.Html5Qrcode) {
+      toast('QR scanner not loaded — refresh online once.');
+      return;
+    }
+    try {
+      html5Qr = new Html5Qrcode('reader');
+      await html5Qr.start(
+        { facingMode: facingMode },
+        { fps: 10, qrbox: { width: 220, height: 220 } },
+        onQrScanned
+      );
+      scannerRunning = true;
+      document.getElementById('camToggleBtn').textContent = 'Stop Camera';
+      document.getElementById('camToggleBtn').classList.add('btn-red');
+    } catch (err) {
+      toast('Please allow camera permission.');
+    }
+  }
+
+  async function stopScanner() {
+    if (html5Qr && scannerRunning) {
+      try { await html5Qr.stop(); } catch (e) {}
+      scannerRunning = false;
+      document.getElementById('camToggleBtn').textContent = 'Start Camera';
+      document.getElementById('camToggleBtn').classList.remove('btn-red');
+    }
+  }
+
+  async function switchCameraFacing() {
+    facingMode = (facingMode === 'environment') ? 'user' : 'environment';
+    if (scannerRunning) { await stopScanner(); await startScanner(); }
+  }
+
+  function onQrScanned(decodedText) {
+    if (scanCooldown) return;
+    scanCooldown = true;
+    setTimeout(() => { scanCooldown = false; }, 2500);
+
+    const sid = decodedText.trim().toUpperCase();
+    const s = students.find(x => x.id.toUpperCase() === sid);
+
+    if (!s) {
+      playBeep(260, 280);
+      showScanPopup('err', 'Invalid QR Code', sid, 'Student ID not found');
+      return;
+    }
+
+    const today = todayStr();
+    const alreadyInList = attendance.some(a => a.date === today && a.studentId.toUpperCase() === s.id.toUpperCase());
+    const alreadyInQueue = queue.some(q => q.type === 'markAttendance' && q.data.date === today && q.data.studentId.toUpperCase() === s.id.toUpperCase());
+
+    if (alreadyInList || alreadyInQueue) {
+      playBeep(380, 220);
+      showScanPopup('warn', 'Already Present Today!', s.name, `${s.id} • ${s.studentClass} (তুমি অলরেডি প্রেজেন্ট হয়ে গেছো)`);
+      return;
+    }
+
+    const rec = {
+      date: today,
+      time: bnNowTime(),
+      studentId: s.id,
+      name: s.name,
+      studentClass: s.studentClass,
+      status: 'Present'
+    };
+    attendance.push(rec);
+    queue.push({ type: 'markAttendance', data: rec });
+    saveLocal();
+    renderTodayAttendance();
+
+    playBeep(900, 140);
+    const dueInfo = s.totalDue > 0 ? ` • Due: Rs.${s.totalDue}` : ' • Fees Clear';
+    showScanPopup('ok', '✓ Present Marked', s.name, `${s.id} • ${s.studentClass}${dueInfo}`);
+
+    if (navigator.onLine) syncNow();
+  }
+
+  function renderTodayAttendance() {
+    const today = todayStr();
+    const list = attendance.filter(a => a.date === today).reverse();
+    document.getElementById('todayCount').textContent = list.length;
+    document.getElementById('todayLog').innerHTML = list.length
+      ? list.map(a => `
+        <div class="info-item" style="font-size:13px;">
+          <span><strong>${a.name}</strong> (${a.studentId} • ${a.studentClass})</span>
+          <span style="color:var(--success);font-weight:700;">${a.time}</span>
+        </div>
+      `).join('')
+      : '<div style="font-size:13px;color:var(--muted);">No attendance scanned today.</div>';
+  }
+</script>
+</body>
+</html>
