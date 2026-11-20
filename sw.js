@@ -1,7 +1,8 @@
-const CACHE_NAME = 'ucc-admin-2027-v3';
+const CACHE_NAME = 'ucc-system-2027-v4';
 const ASSETS = [
   './',
   './index.html',
+  './caller.html',
   './manifest.json',
   'https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js'
 ];
@@ -22,7 +23,7 @@ self.addEventListener('activate', event => {
 
 self.addEventListener('fetch', event => {
   const url = event.request.url;
-  if (url.includes('script.google.com') || url.includes('quickchart.io') || url.includes('student.html') || url.includes('drive.google.com')) {
+  if (url.includes('script.google.com') || url.includes('quickchart.io') || url.includes('student.html')) {
     return;
   }
   event.respondWith(
