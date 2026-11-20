@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="theme-color" content="#0f5132">
+  <link rel="manifest" href="manifest.json">
+  <title>U.C.C Institute - Admin Panel</title>
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+  <style>
+    :root {
+      --primary: #0f5132;
+      --primary-dark: #0a3622;
+      --bg: #f1f5f9;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --danger: #dc2626;
+      --success: #16a34a;
+    }
+    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { margin: 0; background: var(--bg); color: var(--text); padding-bottom: 76px; }
+
+    header {
+      background: var(--primary); color: #fff; padding: 12px 14px;
+      position: sticky; top: 0; z-index: 30;
+      display: flex; justify-content: space-between; align-items: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+    .brand h1 { margin: 0; font-size: 17px; letter-spacing: 0.3px; }
+    .brand small { font-size: 11px; opacity: 0.85; display: block; }
+    .sync-wrap { display: flex; align-items: center; gap: 6px; }
+    .net-dot { width: 9px; height: 9px; border-radius: 50%; background: #4ade80; }
+    .net-dot.off { background: #f87171; }
+    .sync-btn {
+      background: rgba(255,255,255,0.18); color: #fff; border: 1px solid rgba(255,255,255,0.35);
+      padding: 6px 10px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer;
+    }
+
+    .container { max-width: 640px; margin: 12px auto; padding: 0 12px; }
+    .page { display: none; }
+    .page.active { display: block; }
+
+    .card {
+      background: var(--card); border-radius: 12px; padding: 14px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06); margin-bottom: 12px; border: 1px solid var(--border);
+    }
+
+    /* Class Grid */
+    .class-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .class-card {
+      background: #fff; border: 1px solid var(--border); border-radius: 12px;
+      padding: 14px 12px; cursor: pointer; transition: transform 0.1s;
+    }
+    .class-card:active { transform: scale(0.98); background: #f8fafc; }
+    .cc-title { font-size: 16px; font-weight: 800; color: var(--primary); }
+    .cc-count { font-size: 12px; color: var(--muted); margin-top: 4px; }
+    .cc-due { font-size: 12px; font-weight: 700; color: var(--danger); margin-top: 4px; }
+    .cc-due.zero { color: var(--success); }
+
+    /* Student List */
+    .list-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .back-btn {
+      background: #fff; border: 1px solid #cbd5e1; padding: 7px 12px;
+      border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 13px;
+    }
+    .student-row {
+      background: #fff; border: 1px solid var(--border); border-radius: 10px;
+      padding: 12px 14px; margin-bottom: 8px; display: flex;
+      justify-content: space-between; align-items: center; cursor: pointer;
+    }
+    .st-name { font-weight: 700; font-size: 15px; }
+    .st-id { font-size: 11px; color: var(--muted); font-weight: 600; margin-top: 2px; }
+    .badge-ok { background: #dcfce7; color: #166534; padding: 4px 10px; border-radius: 14px; font-size: 12px; font-weight: 700; }
+    .badge-due { background: #fee2e2; color: #991b1b; padding: 4px 10px; border-radius: 14px; font-size: 12px; font-weight: 700; }
+
+    /* Forms */
+    .form-group { margin-bottom: 11px; }
+    label { display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px; }
+    input, select {
+      width: 100%; padding: 10px 11px; border: 1px solid #cbd5e1;
+      border-radius: 8px; font-size: 14px; background: #fff;
+    }
+    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .btn {
+      width: 100%; padding: 12px; border: none; border-radius: 9px;
+      font-size: 14px; font-weight: 700; cursor: pointer; color: #fff; background: var(--primary);
+    }
+    .btn-sec { background: #334155; }
+    .btn-red { background: var(--danger); }
+
+    /* Scanner */
+    #reader { width: 100%; border-radius: 12px; overflow: hidden; background: #000; min-height: 260px; }
+    .scan-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+    .scan-popup {
+      display: none; position: fixed; top: 70px; left: 50%; transform: translateX(-50%);
+      width: 92%; max-width: 420px; z-index: 90; border-radius: 14px; padding: 18px;
+      color: #fff; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    .scan-popup.ok { background: #15803d; display: block; }
+    .scan-popup.warn { background: #b45309; display: block; }
+    .scan-popup.err { background: #b91c1c; display: block; }
+    .sp-name { font-size: 22px; font-weight: 800; margin: 4px 0; }
+    .sp-meta { font-size: 13px; opacity: 0.95; }
+
+    /* Modal (Student Portal) */
+    .modal-bg {
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+      z-index: 60; justify-content: center; align-items: flex-end;
+    }
+    .modal-bg.open { display: flex; }
+    .modal-sheet {
+      background: #fff; width: 100%; max-width: 540px; max-height: 92vh;
+      overflow-y: auto; border-radius: 18px 18px 0 0; padding: 16px;
+    }
+    .modal-top {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 12px;
+    }
+    .close-btn {
+      border: none; background: #f1f5f9; width: 32px; height: 32px;
+      border-radius: 50%; font-weight: 800; font-size: 16px; cursor: pointer;
+    }
+    .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
+    .stat-box { background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; padding: 10px 6px; text-align: center; }
+    .stat-num { font-size: 18px; font-weight: 800; }
+    .stat-lbl { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+    .info-list { background: #f8fafc; border-radius: 10px; padding: 10px 12px; font-size: 13px; margin-bottom: 12px; }
+    .info-item { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px dashed #e2e8f0; }
+    .info-item:last-child { border-bottom: none; }
+
+    .months-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 12px; }
+    .m-cell {
+      border: 1px solid var(--border); border-radius: 8px; padding: 7px 4px;
+      text-align: center; font-size: 11px; background: #f8fafc; cursor: pointer;
+    }
+    .m-cell.paid { background: #dcfce7; border-color: #86efac; color: #166534; font-weight: 700; }
+
+    .pay-box { background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 10px; padding: 12px; margin-bottom: 12px; }
+    .receipt-bar {
+      display: none; background: #0f172a; color: #fff; border-radius: 10px;
+      padding: 12px; margin-bottom: 12px;
+    }
+    .action-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 8px; }
+    .act-link {
+      text-align: center; text-decoration: none; padding: 10px 6px; border-radius: 8px;
+      color: #fff; font-weight: 700; font-size: 12px; display: block;
+    }
+
+    /* Bottom Navigation */
+    .bottom-nav {
+      position: fixed; bottom: 0; left: 0; right: 0; background: #fff;
+      border-top: 1px solid var(--border); display: flex; z-index: 40;
+      box-shadow: 0 -2px 8px rgba(0,0,0,0.06);
+    }
+    .nav-btn {
+      flex: 1; padding: 10px 4px; border: none; background: none;
+      font-size: 12px; font-weight: 700; color: var(--muted); cursor: pointer;
+    }
+    .nav-btn.active { color: var(--primary); border-top: 3px solid var(--primary); }
+
+    .toast {
+      position: fixed; bottom: 72px; left: 50%; transform: translateX(-50%);
+      background: #0f172a; color: #fff; padding: 9px 16px; border-radius: 20px;
+      font-size: 13px; display: none; z-index: 100; white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <h1>U.C.C Institute</h1>
+    <small>Admin Panel • Session 2027</small>
+  </div>
+  <div class="sync-wrap">
+    <div id="netDot" class="net-dot"></div>
+    <button id="syncBtn" class="sync-btn" onclick="syncNow()">Sync</button>
+  </div>
+</header>
+
+<!-- STANDBY QR POPUP -->
+<div id="scanPopup" class="scan-popup">
+  <div id="spStatus" style="font-size:12px;font-weight:700;text-transform:uppercase;"></div>
+  <div id="spName" class="sp-name"></div>
+  <div id="spMeta" class="sp-meta"></div>
+</div>
+
+<div class="container">
+  <!-- PAGE 1: CLASSES & PROFILES -->
+  <div id="page-classes" class="page active">
+    <div id="classGridView">
+      <div class="form-group">
+        <input type="text" id="globalSearch" placeholder="সব ক্লাস থেকে নাম বা UCC ID খোঁজো..." oninput="renderGlobalSearch()">
+      </div>
+      <div id="globalSearchResults"></div>
+      <div class="class-grid" id="classGrid"></div>
+    </div>
+
+    <div id="classListView" style="display:none;">
+      <div class="list-header">
+        <button class="back-btn" onclick="closeClassView()">← Classes</button>
+        <div style="font-weight:800;font-size:17px;" id="activeClassTitle"></div>
+      </div>
+      <div class="form-group">
+        <input type="text" id="classSearch" placeholder="এই ক্লাসে নাম বা ID খোঁজো..." oninput="renderClassStudents()">
+      </div>
+      <div id="classStudentList"></div>
+    </div>
+  </div>
+
+  <!-- PAGE 2: NEW STUDENT ENTRY -->
+  <div id="page-entry" class="page">
+    <div class="card">
+      <div style="background:#e6f4ea;color:#0f5132;padding:8px 10px;border-radius:8px;font-size:12px;font-weight:700;margin-bottom:12px;">
+        Student ID অটোমেটিক তৈরি হবে (Next ID: <span id="nextIdPreview">UCC001</span>) • অফলাইনেও সেভ হবে
+      </div>
+      <form id="entryForm" onsubmit="saveNewStudent(event)">
+        <div class="form-group">
+          <label>Student Name *</label>
+          <input type="text" id="fName" required placeholder="স্টুডেন্টের পুরো নাম">
+        </div>
+        <div class="row-2">
+          <div class="form-group">
+            <label>Class *</label>
+            <select id="fClass" required></select>
+          </div>
+          <div class="form-group">
+            <label>Mobile Number *</label>
+            <input type="tel" id="fMobile" required maxlength="10" placeholder="10-digit number">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Father's Name</label>
+          <input type="text" id="fFather" placeholder="বাবার নাম">
+        </div>
+        <div class="form-group">
+          <label>Address</label>
+          <input type="text" id="fAddress" placeholder="গ্রাম, পোস্ট">
+        </div>
+        <div class="row-2">
+          <div class="form-group">
+            <label>Admission Date *</label>
+            <input type="date" id="fAdmDate" required>
+          </div>
+          <div class="form-group">
+            <label>First Payment Date</label>
+            <input type="date" id="fFirstPay">
+          </div>
+        </div>
+        <div class="row-2">
+          <div class="form-group">
+            <label>First Fee Month</label>
+            <select id="fMonth"></select>
+          </div>
+          <div class="form-group">
+            <label>Amount (Rs.)</label>
+            <input type="number" id="fAmt" placeholder="300" min="0">
+          </div>
+        </div>
+        <button type="submit" class="btn">Save Student Entry</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- PAGE 3: STANDBY QR ATTENDANCE SCANNER -->
+  <div id="page-scan" class="page">
+    <div class="card">
+      <div style="font-weight:800;font-size:15px;margin-bottom:8px;">Standby QR Attendance Scanner</div>
+      <div id="reader"></div>
+      <div class="scan-controls">
+        <button class="btn" id="camToggleBtn" onclick="toggleScanner()">Start Camera</button>
+        <button class="btn btn-sec" onclick="switchCameraFacing()">Flip Camera</button>
+      </div>
+      <div style="font-size:12px;color:var(--muted);margin-top:8px;">
+        মোবাইল স্ট্যান্ডে রেখে ক্যামেরা অন রাখো—আইডি কার্ডের QR দেখালেই অটো অ্যাটেনডেন্স হয়ে নাম ভেসে উঠবে (অফলাইনেও চলবে)।
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="font-weight:800;font-size:14px;margin-bottom:8px;">
+        Today's Attendance (<span id="todayCount">0</span>)
+      </div>
+      <div id="todayLog"></div>
+    </div>
+  </div>
+</div>
+
+<!-- STUDENT FULL PORTAL MODAL -->
+<div class="modal-bg" id="profileModal" onclick="if(event.target===this) closeProfile()">
+  <div class="modal-sheet">
+    <div class="modal-top">
+      <div>
+        <div id="pName" style="font-size:19px;font-weight:800;"></div>
+        <div id="pSub" style="font-size:13px;color:var(--muted);font-weight:600;"></div>
+      </div>
+      <button class="close-btn" onclick="closeProfile()">✕</button>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat-box">
+        <div id="pPresent" class="stat-num" style="color:var(--success);">0</div>
+        <div class="stat-lbl">Present Days</div>
+      </div>
+      <div class="stat-box">
+        <div id="pAbsent" class="stat-num" style="color:#b45309;">0</div>
+        <div class="stat-lbl">Absent Days</div>
+      </div>
+      <div class="stat-box">
+        <div id="pDue" class="stat-num" style="color:var(--danger);">Rs. 0</div>
+        <div class="stat-lbl">Total Due</div>
+      </div>
+    </div>
+
+    <div class="info-list">
+      <div class="info-item"><span>Father's Name</span><strong id="pFather">-</strong></div>
+      <div class="info-item"><span>Mobile</span><strong id="pMobile">-</strong></div>
+      <div class="info-item"><span>Address</span><strong id="pAddress">-</strong></div>
+      <div class="info-item"><span>Admission Date</span><strong id="pAdm">-</strong></div>
+      <div class="info-item"><span>First Payment</span><strong id="pFirst">-</strong></div>
+    </div>
+
+    <div style="font-size:13px;font-weight:800;margin-bottom:6px;">2027 Monthly Fees (মাসে ক্লিক করে টাকা এন্ট্রি করো)</div>
+    <div class="months-grid" id="pMonths"></div>
+
+    <!-- QUICK PAYMENT BOX -->
+    <div class="pay-box">
+      <div style="font-size:13px;font-weight:800;color:#065f46;margin-bottom:8px;">Record Fee Payment</div>
+      <div class="row-2">
+        <select id="payMonth"></select>
+        <input type="number" id="payAmount" value="300" min="0" placeholder="Amount">
+      </div>
+      <button class="btn" style="margin-top:8px;" onclick="submitPayment()">Save Payment</button>
+    </div>
+
+    <!-- DIRECT PAYMENT RECEIPT SMS BAR -->
+    <div id="receiptBar" class="receipt-bar">
+      <div style="font-size:13px;font-weight:700;margin-bottom:8px;" id="receiptMsgPreview"></div>
+      <div class="row-2">
+        <a id="receiptSmsLink" href="#" class="act-link" style="background:#2563eb;">Send Receipt SMS</a>
+        <a id="receiptWaLink" href="#" target="_blank" class="act-link" style="background:#16a34a;">Receipt WhatsApp</a>
+      </div>
+    </div>
+
+    <!-- DIRECT CONTACT / DUE SMS -->
+    <div class="action-3">
+      <a id="btnCall" href="#" class="act-link" style="background:#0284c7;">Call</a>
+      <a id="btnSmsDue" href="#" class="act-link" style="background:#7c3aed;">Due SMS</a>
+      <a id="btnWaDue" href="#" target="_blank" class="act-link" style="background:#16a34a;">WhatsApp</a>
+    </div>
+
+    <!-- EDIT MISSING DETAILS -->
+    <details style="margin-top:14px;background:#f8fafc;padding:10px;border-radius:10px;border:1px solid var(--border);">
+      <summary style="font-size:13px;font-weight:700;cursor:pointer;">Edit Father / Mobile / Address</summary>
+      <div style="margin-top:10px;">
+        <div class="form-group"><label>Father's Name</label><input type="text" id="eFather"></div>
+        <div class="form-group"><label>Mobile</label><input type="tel" id="eMobile" maxlength="10"></div>
+        <div class="form-group"><label>Address</label><input type="text" id="eAddress"></div>
+        <button class="btn btn-sec" onclick="saveEditedDetails()">Update Details</button>
+      </div>
+    </details>
+
+    <div style="text-align:center;margin-top:14px;">
+      <img id="pQr" src="" alt="QR" style="width:120px;height:120px;border:1px solid var(--border);border-radius:8px;padding:4px;" onerror="this.style.display='none'">
+      <div id="pQrText" style="font-size:11px;color:var(--muted);margin-top:3px;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+  <button class="nav-btn active" onclick="openPage('classes', this)">Classes & Dues</button>
+  <button class="nav-btn" onclick="openPage('entry', this)">+ New Entry</button>
+  <button class="nav-btn" onclick="openPage('scan', this)">QR Attendance</button>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+  const API_URL = 'https://script.google.com/macros/s/AKfycbwAuSfDoikCc998pVuwz0HySky1fChn-Tj8p7OeuUAr_WPG7IFZkfGB5LUO6NlvkiKO/exec';
+
+  const MONTHLY_FEE = 300;
+  const CLASSES = [
+    'Nursery', 'KG', 'Class 1', 'Class 2', 'Class 3', 'Class 4',
+    'Class 5', 'Class 6', 'Class 7', 'Class 8', 'Class 9', 'Class 10',
+    'Class 11', 'Class 12'
+  ];
+  const MONTHS = [
+    ['Jan_2027','Jan'], ['Feb_2027','Feb'], ['Mar_2027','Mar'], ['Apr_2027','Apr'],
+    ['May_2027','May'], ['Jun_2027','Jun'], ['Jul_2027','Jul'], ['Aug_2027','Aug'],
+    ['Sep_2027','Sep'], ['Oct_2027','Oct'], ['Nov_2027','Nov'], ['Dec_2027','Dec']
+  ];
+
+  let students = JSON.parse(localStorage.getItem('ucc_students') || '[]');
+  let attendance = JSON.parse(localStorage.getItem('ucc_attendance') || '[]');
+  let queue = JSON.parse(localStorage.getItem('ucc_queue') || '[]');
+
+  let activeClass = null;
+  let activeStudentId = null;
+  let html5Qr = null;
+  let scannerRunning = false;
+  let facingMode = 'environment';
+  let scanCooldown = false;
+
+  // Register Service Worker for Offline App
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+  }
+
+  window.addEventListener('online', () => { updateNetUI(); syncNow(); });
+  window.addEventListener('offline', updateNetUI);
+
+  window.onload = function() {
+    document.getElementById('fClass').innerHTML =
+      '<option value="">Select Class</option>' + CLASSES.map(c => `<option>${c}</option>`).join('');
+    const monthOpts = MONTHS.map(([k, l]) => `<option value="${k}">${k}</option>`).join('');
+    document.getElementById('fMonth').innerHTML = '<option value="">None</option>' + monthOpts;
+    document.getElementById('payMonth').innerHTML = monthOpts;
+
+    document.getElementById('fAdmDate').value = todayStr();
+    updateNetUI();
+    renderAll();
+    if (navigator.onLine) syncNow();
+  };
+
+  function todayStr() {
+    const d = new Date();
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  }
+
+  function timeStr() {
+    return new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
+  }
+
+  function saveLocal() {
+    localStorage.setItem('ucc_students', JSON.stringify(students));
+    localStorage.setItem('ucc_attendance', JSON.stringify(attendance));
+    localStorage.setItem('ucc_queue', JSON.stringify(queue));
+    updateNetUI();
+  }
+
+  function updateNetUI() {
+    const dot = document.getElementById('netDot');
+    const btn = document.getElementById('syncBtn');
+    if (navigator.onLine) {
+      dot.classList.remove('off');
+      btn.textContent = queue.length > 0 ? `Sync (${queue.length})` : 'Sync ✓';
+    } else {
+      dot.classList.add('off');
+      btn.textContent = `Offline (${queue.length})`;
+    }
+  }
+
+  function toast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.style.display = 'block';
+    setTimeout(() => { t.style.display = 'none'; }, 3000);
+  }
+
+  function calcDueLocal(s) {
+    const now = new Date();
+    if (now < new Date(2027, 0, 1) || !s.admissionDate) return 0;
+    const end = now > new Date(2027, 11, 31) ? new Date(2027, 11, 31) : now;
+    const adm = new Date(s.admissionDate + 'T00:00:00');
+    const start = adm < new Date(2027, 0, 1) ? new Date(2027, 0, 1) : new Date(adm.getFullYear(), adm.getMonth(), 1);
+    const monthsPassed = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth()) + 1;
+    let totalPaid = 0;
+    MONTHS.forEach(([k]) => { totalPaid += Number(s.months?.[k]) || 0; });
+    return Math.max(0, monthsPassed * MONTHLY_FEE - totalPaid);
+  }
+
+  function getNextStudentId() {
+    let maxNum = 0;
+    students.forEach(s => {
+      const m = String(s.id).match(/^UCC(\d+)$/i);
+      if (m) maxNum = Math.max(maxNum, parseInt(m[1], 10));
+    });
+    return 'UCC' + String(maxNum + 1).padStart(3, '0');
+  }
+
+  async function syncNow() {
+    if (!navigator.onLine) {
+      toast('ইন্টারনেট নেই—ডেটা ফোনে সেভ আছে।');
+      return;
+    }
+    const btn = document.getElementById('syncBtn');
+    btn.textContent = 'Syncing...';
+
+    try {
+      let data;
+      if (queue.length > 0) {
+        const res = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ queue: queue })
+        });
+        data = await res.json();
+        if (data.status === 'ok') queue = [];
+      } else {
+        const res = await fetch(API_URL);
+        data = await res.json();
+      }
+
+      if (data.status === 'ok') {
+        students = data.students || [];
+        attendance = data.attendance || [];
+        saveLocal();
+        renderAll(true);
+        toast('Google Sheet-এর সাথে Sync সম্পন্ন!');
+      } else {
+        toast('Sync Error: ' + (data.message || 'Unknown'));
+      }
+    } catch (e) {
+      toast('Sync ব্যর্থ—পরে আবার চেষ্টা করো।');
+    } finally {
+      updateNetUI();
+    }
+  }
+
+  function openPage(name, btn) {
+    if (name !== 'scan' && scannerRunning) stopScanner();
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    btn.classList.add('active');
+    if (name === 'entry') document.getElementById('nextIdPreview').textContent = getNextStudentId();
+    if (name === 'scan') renderTodayAttendance();
+  }
+
+  function renderAll(keepReceipt = false) {
+    document.getElementById('nextIdPreview').textContent = getNextStudentId();
+    renderClassGrid();
+    if (activeClass) renderClassStudents();
+    renderTodayAttendance();
+    if (activeStudentId) openProfile(activeStudentId, keepReceipt);
+  }
+
+  function renderClassGrid() {
+    const grid = document.getElementById('classGrid');
+    grid.innerHTML = CLASSES.map(cls => {
+      const list = students.filter(s => s.studentClass === cls);
+      const totalDue = list.reduce((sum, s) => sum + (Number(s.totalDue) || 0), 0);
+      return `
+        <div class="class-card" onclick="openClassView('${cls}')">
+          <div class="cc-title">${cls}</div>
+          <div class="cc-count">${list.length} Students</div>
+          <div class="cc-due ${totalDue === 0 ? 'zero' : ''}">
+            ${totalDue > 0 ? 'Due: Rs. ' + totalDue : 'All Clear'}
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function renderGlobalSearch() {
+    const q = document.getElementById('globalSearch').value.toLowerCase().trim();
+    const resBox = document.getElementById('globalSearchResults');
+    const grid = document.getElementById('classGrid');
+    if (!q) {
+      resBox.innerHTML = '';
+      grid.style.display = 'grid';
+      return;
+    }
+    grid.style.display = 'none';
+    const matches = students.filter(s =>
+      s.name.toLowerCase().includes(q) || s.id.toLowerCase().includes(q) || (s.mobile || '').includes(q)
+    );
+    resBox.innerHTML = matches.length
+      ? matches.map(studentRowHtml).join('')
+      : '<div class="card" style="text-align:center;color:var(--muted);">কোনো স্টুডেন্ট পাওয়া যায়নি।</div>';
+  }
+
+  function studentRowHtml(s) {
+    const due = Number(s.totalDue) || 0;
+    return `
+      <div class="student-row" onclick="openProfile('${s.id}')">
+        <div>
+          <div class="st-name">${s.name}</div>
+          <div class="st-id">${s.id} • ${s.studentClass}${s.mobile ? ' • ' + s.mobile : ''}</div>
+        </div>
+        <div class="${due > 0 ? 'badge-due' : 'badge-ok'}">
+          ${due > 0 ? 'Due Rs.' + due : 'Paid'}
+        </div>
+      </div>
+    `;
+  }
+
+  function openClassView(cls) {
+    activeClass = cls;
+    document.getElementById('classGridView').style.display = 'none';
+    document.getElementById('classListView').style.display = 'block';
+    document.getElementById('activeClassTitle').textContent = cls;
+    document.getElementById('classSearch').value = '';
+    renderClassStudents();
+  }
+
+  function closeClassView() {
+    activeClass = null;
+    document.getElementById('classListView').style.display = 'none';
+    document.getElementById('classGridView').style.display = 'block';
+  }
+
+  function renderClassStudents() {
+    const q = document.getElementById('classSearch').value.toLowerCase().trim();
+    const list = students.filter(s =>
+      s.studentClass === activeClass &&
+      (!q || s.name.toLowerCase().includes(q) || s.id.toLowerCase().includes(q))
+    );
+    document.getElementById('classStudentList').innerHTML = list.length
+      ? list.map(studentRowHtml).join('')
+      : '<div class="card" style="text-align:center;color:var(--muted);">এই ক্লাসে এখনো কোনো স্টুডেন্ট নেই।</div>';
+  }
+
+  // ===== NEW STUDENT ENTRY =====
+  function saveNewStudent(e) {
+    e.preventDefault();
+    const newId = getNextStudentId();
+    const months = {};
+    MONTHS.forEach(([k]) => { months[k] = ''; });
+    const fMonth = document.getElementById('fMonth').value;
+    const fAmt = Number(document.getElementById('fAmt').value) || 0;
+    if (fMonth && fAmt > 0) months[fMonth] = fAmt;
+
+    const studentObj = {
+      id: newId,
+      name: document.getElementById('fName').value.trim(),
+      studentClass: document.getElementById('fClass').value,
+      mobile: document.getElementById('fMobile').value.trim(),
+      fatherName: document.getElementById('fFather').value.trim(),
+      address: document.getElementById('fAddress').value.trim(),
+      admissionDate: document.getElementById('fAdmDate').value,
+      firstPayment: document.getElementById('fFirstPay').value,
+      months: months,
+      totalDue: 0
+    };
+    studentObj.totalDue = calcDueLocal(studentObj);
+
+    students.push(studentObj);
+    queue.push({
+      type: 'addStudent',
+      data: { ...studentObj, firstFeeMonth: fMonth, firstFeeAmount: fAmt }
+    });
+    saveLocal();
+    renderAll();
+
+    document.getElementById('entryForm').reset();
+    document.getElementById('fAdmDate').value = todayStr();
+    toast('Saved! Auto ID: ' + newId);
+    if (navigator.onLine) syncNow();
+  }
+
+  // ===== STUDENT PORTAL MODAL =====
+  function openProfile(id, keepReceipt = false) {
+    const s = students.find(x => x.id === id);
+    if (!s) return;
+    activeStudentId = id;
+
+    const classDays = new Set(
+      attendance
+        .filter(a => a.studentClass === s.studentClass && (!s.admissionDate || a.date >= s.admissionDate))
+        .map(a => a.date)
+    );
+    const presentDays = new Set(
+      attendance.filter(a => a.studentId === s.id).map(a => a.date)
+    ).size;
+    const absentDays = Math.max(0, classDays.size - presentDays);
+
+    document.getElementById('pName').textContent = s.name;
+    document.getElementById('pSub').textContent = `${s.id} • ${s.studentClass}`;
+    document.getElementById('pPresent').textContent = presentDays;
+    document.getElementById('pAbsent').textContent = absentDays;
+    document.getElementById('pDue').textContent = 'Rs. ' + (Number(s.totalDue) || 0);
+    document.getElementById('pDue').style.color = s.totalDue > 0 ? '#dc2626' : '#16a34a';
+
+    document.getElementById('pFather').textContent = s.fatherName || '-';
+    document.getElementById('pMobile').textContent = s.mobile || '-';
+    document.getElementById('pAddress').textContent = s.address || '-';
+    document.getElementById('pAdm').textContent = s.admissionDate || '-';
+    document.getElementById('pFirst').textContent = s.firstPayment || '-';
+
+    document.getElementById('eFather').value = s.fatherName || '';
+    document.getElementById('eMobile').value = s.mobile || '';
+    document.getElementById('eAddress').value = s.address || '';
+
+    document.getElementById('pMonths').innerHTML = MONTHS.map(([key, lbl]) => {
+      const val = s.months?.[key];
+      const paid = val !== '' && Number(val) > 0;
+      return `<div class="m-cell ${paid ? 'paid' : ''}" onclick="selectMonthForPay('${key}', ${paid ? val : 300})">
+        ${lbl}<br>${paid ? 'Rs.' + val : '-'}
+      </div>`;
+    }).join('');
+
+    const qrImg = document.getElementById('pQr');
+    qrImg.style.display = 'inline-block';
+    qrImg.src = 'https://quickchart.io/qr?size=140&text=' + encodeURIComponent(s.id);
+    document.getElementById('pQrText').textContent = 'ID Card QR: ' + s.id;
+
+    const mob = (s.mobile || '').replace(/\D/g, '');
+    const dueMsg = `U.C.C Institute: Dear Guardian, ${s.name} (${s.id}, ${s.studentClass}) has a pending fee due of Rs.${s.totalDue}. Present: ${presentDays} days. Please clear at your earliest.`;
+    document.getElementById('btnCall').href = mob ? `tel:${mob}` : '#';
+    document.getElementById('btnSmsDue').href = mob ? `sms:${mob}?body=${encodeURIComponent(dueMsg)}` : '#';
+    document.getElementById('btnWaDue').href = mob ? `https://wa.me/91${mob}?text=${encodeURIComponent(dueMsg)}` : '#';
+
+    if (!keepReceipt) {
+      document.getElementById('receiptBar').style.display = 'none';
+    }
+    document.getElementById('profileModal').classList.add('open');
+  }
+
+  function closeProfile() {
+    activeStudentId = null;
+    document.getElementById('receiptBar').style.display = 'none';
+    document.getElementById('profileModal').classList.remove('open');
+  }
+
+  function selectMonthForPay(monthKey, suggestedAmt) {
+    document.getElementById('payMonth').value = monthKey;
+    document.getElementById('payAmount').value = suggestedAmt;
+  }
+
+  function submitPayment() {
+    const s = students.find(x => x.id === activeStudentId);
+    if (!s) return;
+    const month = document.getElementById('payMonth').value;
+    const amount = Number(document.getElementById('payAmount').value) || 0;
+    const payDate = todayStr();
+
+    if (!s.months) s.months = {};
+    s.months[month] = amount;
+    if (!s.firstPayment) s.firstPayment = payDate;
+    s.totalDue = calcDueLocal(s);
+
+    queue.push({
+      type: 'recordPayment',
+      data: { studentId: s.id, month: month, amount: amount, payDate: payDate }
+    });
+    saveLocal();
+    openProfile(s.id, true);
+    renderClassGrid();
+    if (activeClass) renderClassStudents();
+
+    const mob = (s.mobile || '').replace(/\D/g, '');
+    const rcptMsg = `U.C.C Institute: Received Rs.${amount} for ${month.replace('_', ' ')} from ${s.name} (${s.id}). Current Due: Rs.${s.totalDue}. Date: ${payDate}. Thank you.`;
+    document.getElementById('receiptMsgPreview').textContent = `✓ Saved Rs.${amount} (${month})! এখনই রসিদ পাঠাও:`;
+    document.getElementById('receiptSmsLink').href = mob ? `sms:${mob}?body=${encodeURIComponent(rcptMsg)}` : '#';
+    document.getElementById('receiptWaLink').href = mob ? `https://wa.me/91${mob}?text=${encodeURIComponent(rcptMsg)}` : '#';
+    document.getElementById('receiptBar').style.display = 'block';
+
+    if (navigator.onLine) syncNow();
+  }
+
+  function saveEditedDetails() {
+    const s = students.find(x => x.id === activeStudentId);
+    if (!s) return;
+    s.fatherName = document.getElementById('eFather').value.trim();
+    s.mobile = document.getElementById('eMobile').value.trim();
+    s.address = document.getElementById('eAddress').value.trim();
+
+    queue.push({
+      type: 'updateDetails',
+      data: { studentId: s.id, fatherName: s.fatherName, mobile: s.mobile, address: s.address }
+    });
+    saveLocal();
+    openProfile(s.id, true);
+    toast('Details Updated!');
+    if (navigator.onLine) syncNow();
+  }
+
+  // ===== STANDBY QR CAMERA ATTENDANCE =====
+  function playBeep(freq, duration) {
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = ctx.createOscillator();
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      osc.connect(ctx.destination);
+      osc.start();
+      setTimeout(() => { osc.stop(); ctx.close(); }, duration);
+    } catch (e) {}
+  }
+
+  function showScanPopup(type, statusText, nameText, metaText) {
+    const box = document.getElementById('scanPopup');
+    box.className = 'scan-popup ' + type;
+    document.getElementById('spStatus').textContent = statusText;
+    document.getElementById('spName').textContent = nameText;
+    document.getElementById('spMeta').textContent = metaText;
+    setTimeout(() => { box.className = 'scan-popup'; }, 2400);
+  }
+
+  async function toggleScanner() {
+    if (scannerRunning) {
+      await stopScanner();
+    } else {
+      await startScanner();
+    }
+  }
+
+  async function startScanner() {
+    if (!window.Html5Qrcode) {
+      toast('QR লাইব্রেরি লোড হয়নি—প্রথমবার নেট অন করে পেজটা রিলোড করো।');
+      return;
+    }
+    try {
+      html5Qr = new Html5Qrcode('reader');
+      await html5Qr.start(
+        { facingMode: facingMode },
+        { fps: 10, qrbox: { width: 220, height: 220 } },
+        onQrScanned
+      );
+      scannerRunning = true;
+      document.getElementById('camToggleBtn').textContent = 'Stop Camera';
+      document.getElementById('camToggleBtn').classList.add('btn-red');
+    } catch (err) {
+      toast('ক্যামেরা পারমিশন দাও।');
+    }
+  }
+
+  async function stopScanner() {
+    if (html5Qr && scannerRunning) {
+      try { await html5Qr.stop(); } catch (e) {}
+      scannerRunning = false;
+      document.getElementById('camToggleBtn').textContent = 'Start Camera';
+      document.getElementById('camToggleBtn').classList.remove('btn-red');
+    }
+  }
+
+  async function switchCameraFacing() {
+    facingMode = (facingMode === 'environment') ? 'user' : 'environment';
+    if (scannerRunning) {
+      await stopScanner();
+      await startScanner();
+    }
+  }
+
+  function onQrScanned(decodedText) {
+    if (scanCooldown) return;
+    scanCooldown = true;
+    setTimeout(() => { scanCooldown = false; }, 2500);
+
+    const sid = decodedText.trim().toUpperCase();
+    const s = students.find(x => x.id.toUpperCase() === sid);
+
+    if (!s) {
+      playBeep(260, 280);
+      showScanPopup('err', 'Invalid QR Code', sid, 'এই ID কোনো স্টুডেন্টের সাথে মিলছে না');
+      return;
+    }
+
+    const today = todayStr();
+    const already = attendance.some(a => a.date === today && a.studentId === s.id);
+    if (already) {
+      playBeep(440, 150);
+      showScanPopup('warn', 'Already Present Today', s.name, `${s.id} • ${s.studentClass}`);
+      return;
+    }
+
+    const rec = {
+      date: today,
+      time: timeStr(),
+      studentId: s.id,
+      name: s.name,
+      studentClass: s.studentClass,
+      status: 'Present'
+    };
+    attendance.push(rec);
+    queue.push({ type: 'markAttendance', data: rec });
+    saveLocal();
+    renderTodayAttendance();
+
+    playBeep(900, 140);
+    const dueInfo = s.totalDue > 0 ? ` • Due: Rs.${s.totalDue}` : ' • Fees Clear';
+    showScanPopup('ok', '✓ Present Marked', s.name, `${s.id} • ${s.studentClass}${dueInfo}`);
+
+    if (navigator.onLine) syncNow();
+  }
+
+  function renderTodayAttendance() {
+    const today = todayStr();
+    const list = attendance.filter(a => a.date === today).reverse();
+    document.getElementById('todayCount').textContent = list.length;
+    document.getElementById('todayLog').innerHTML = list.length
+      ? list.map(a => `
+        <div class="info-item" style="font-size:13px;">
+          <span><strong>${a.name}</strong> (${a.studentId} • ${a.studentClass})</span>
+          <span style="color:var(--success);font-weight:700;">${a.time}</span>
+        </div>
+      `).join('')
+      : '<div style="font-size:13px;color:var(--muted);">আজকে এখনো কোনো অ্যাটেনডেন্স স্ক্যান হয়নি।</div>';
+  }
+</script>
+</body>
+</html>
