@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#08142a">
+<meta name="theme-color" content="#fff4e2">
 <link rel="icon" type="image/png" href="logo.png?v=3">
 <title>U.C.C Institute - Student App</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,234 +11,241 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --ink:#08142a;--panel:#0f1f3b;--panel-2:#16305a;
-  --ivory:#f3ecdb;--mute:#9aa8bf;
-  --gold:#c9a24a;--gold-hi:#ebd28d;
-  --line:rgba(201,162,74,.24);
-  --ok:#7fcfa6;--bad:#e88b7c;
-  --serif:'Fraunces',Georgia,serif;
-  --sans:'Hind Siliguri','Segoe UI',system-ui,sans-serif;
+  --paper:#fffaf2;--wash:#fff0d6;--saffron:#f2a548;--saffron-d:#a85a12;
+  --ink:#2e1f10;--ink-2:#6b5a45;--gold:#b98a3e;--card:#ffffff;
+  --line:rgba(185,138,62,.3);--ok:#2e7d55;--ok-soft:#e6f4ec;--bad:#b4432c;--bad-soft:#fbe6df;
+  --serif:'Fraunces',Georgia,serif;--sans:'Hind Siliguri','Segoe UI',system-ui,sans-serif;
 }
 *{box-sizing:border-box;margin:0}
 [hidden]{display:none!important}
-html,body{background:var(--ink);color:var(--ivory);font:15px/1.55 var(--sans);-webkit-font-smoothing:antialiased;padding-bottom:88px;overscroll-behavior-y:contain}
-body{min-height:100vh;background:radial-gradient(120% 55% at 100% 0%,#132c54 0%,transparent 60%),var(--ink)}
+html,body{background:var(--paper);color:var(--ink);font:500 15.5px/1.65 var(--sans);-webkit-font-smoothing:antialiased;padding-bottom:90px;overscroll-behavior-y:contain}
+body{min-height:100vh;background:radial-gradient(120% 50% at 100% -5%,#ffe0a8 0%,transparent 60%),radial-gradient(90% 40% at 0% 100%,#ffe9c8 0%,transparent 65%),var(--paper)}
 input,select,button{font:inherit;color:inherit}
 button{cursor:pointer}
 img{display:block}
 svg{width:18px;height:18px;flex-shrink:0}
-:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+:focus-visible{outline:2px solid var(--saffron-d);outline-offset:2px}
 @keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 @keyframes fade{from{opacity:0}to{opacity:1}}
-@keyframes pulse{50%{opacity:.35}}
+@keyframes pulse{50%{opacity:.4}}
 @keyframes load{to{width:100%}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
+/* Animated logo: a slowly rotating gold ring around a gently breathing logo */
+.logo{position:relative;display:grid;place-items:center;border-radius:50%;flex-shrink:0;filter:drop-shadow(0 4px 12px rgba(200,120,30,.3))}
+.logo::before{content:'';position:absolute;inset:-3px;border-radius:50%;background:conic-gradient(from 0deg,#f2a548,#ffdc8f,#b98a3e,#fff4dc,#f2a548);animation:spin 5s linear infinite}
+.logo img{position:relative;width:100%;height:100%;border-radius:50%;object-fit:cover;background:#fff;animation:breathe 3.2s ease-in-out infinite}
+.logo.sm{width:40px;height:40px}
+.logo.lg{width:84px;height:84px;margin:0 auto 16px}
+.logo.xl{width:124px;height:124px}
+
 /* Splash and login */
-#splash{position:fixed;inset:0;z-index:300;background:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .5s ease}
+#splash{position:fixed;inset:0;z-index:300;background:radial-gradient(circle at 50% 35%,#fff3dc 0%,var(--paper) 70%);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .5s ease}
 #splash.hide{opacity:0;pointer-events:none}
-#splash h1{font-family:var(--serif);font-weight:600;font-size:26px;margin-top:20px;animation:rise .8s .15s both}
-.tagline{font-size:12.5px;color:var(--gold-hi);margin-top:6px;animation:rise .8s .25s both}
-.loader{width:120px;height:2px;background:rgba(255,255,255,.08);border-radius:2px;margin-top:22px;overflow:hidden}
-.loader i{display:block;height:100%;width:0;background:var(--gold);animation:load 1.2s .2s ease forwards}
-.seal{width:104px;height:104px;border-radius:50%;padding:4px;border:1px solid var(--gold);animation:rise .8s both}
-.seal img{width:100%;height:100%;border-radius:50%;object-fit:cover;background:#fff}
-.seal.sm{width:68px;height:68px;margin:0 auto 16px;animation:none}
-#loginScreen{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;background:var(--ink)}
-.login{width:100%;max-width:360px;padding:30px 24px 26px;background:var(--panel);border:1px solid var(--line);border-top:2px solid var(--gold);border-radius:20px;animation:rise .6s both}
+.intro{display:flex;flex-direction:column;align-items:center;animation:rise .8s both}
+#splash h1{font-family:var(--serif);font-weight:600;font-size:27px;margin-top:22px}
+.tagline{font-size:14px;color:var(--saffron-d);font-weight:600;margin-top:4px}
+.loader{width:120px;height:3px;background:var(--wash);border-radius:3px;margin-top:24px;overflow:hidden}
+.loader i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--saffron),var(--gold));animation:load 1.2s .2s ease forwards}
+#loginScreen{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;background:radial-gradient(circle at 50% 0%,#ffe6b8 0%,var(--paper) 60%)}
+.login{width:100%;max-width:370px;padding:30px 24px 26px;background:var(--card);border:1px solid var(--line);border-top:3px solid var(--saffron);border-radius:22px;box-shadow:0 20px 50px rgba(140,90,20,.14);animation:rise .6s both}
 .login h2{font-family:var(--serif);font-size:24px;font-weight:600;text-align:center}
-.login .sub{color:var(--mute);font-size:13px;text-align:center;margin:4px 0 22px}
-.err{color:var(--bad);font-size:13px;text-align:center;margin-bottom:12px}
+.login .sub{color:var(--ink-2);font-size:14px;text-align:center;margin:4px 0 22px}
+.err{color:var(--bad);font-size:14px;font-weight:600;text-align:center;background:var(--bad-soft);border-radius:10px;padding:9px 12px;margin-bottom:14px}
 
 /* Forms */
-label{display:block;font-size:12.5px;color:var(--mute);margin-bottom:6px}
-input,select{width:100%;padding:12px 14px;margin-bottom:14px;border:1px solid rgba(243,236,219,.14);border-radius:10px;background:#0a1830;font-size:15px;transition:border-color .2s,box-shadow .2s}
-input::placeholder{color:#55657f}
-input:focus,select:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,162,74,.18)}
-option{background:var(--panel);color:var(--ivory)}
+label{display:block;font-size:14px;font-weight:600;color:var(--ink);margin-bottom:6px}
+input,select{width:100%;padding:12px 14px;margin-bottom:16px;border:1.5px solid rgba(185,138,62,.35);border-radius:12px;background:#fffdf8;font-size:15.5px;transition:border-color .2s,box-shadow .2s}
+input::placeholder{color:#a8967e}
+input:focus,select:focus{outline:none;border-color:var(--saffron-d);box-shadow:0 0 0 4px rgba(242,165,72,.22)}
+option{background:#fff;color:var(--ink)}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 
 /* Buttons */
-.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px 16px;border:1px solid var(--gold);border-radius:12px;background:transparent;color:var(--gold-hi);font-weight:700;font-size:14.5px;text-decoration:none;transition:background .2s,transform .1s}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px 16px;border:1.5px solid var(--saffron-d);border-radius:12px;background:#fff;color:var(--saffron-d);font-weight:700;font-size:15px;text-decoration:none;transition:background .2s,transform .1s}
 .btn:active{transform:scale(.98)}
-.btn:disabled{opacity:.45;cursor:not-allowed}
-.btn-solid{background:var(--gold);color:#1a1405}
-.btn-solid:hover{background:var(--gold-hi)}
-.btn-sm{width:auto;padding:9px 15px;font-size:13px;border-radius:10px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn-solid{background:linear-gradient(135deg,#fbbd6a,#f2a548);border-color:#e0902f;color:#2a1a08;box-shadow:0 6px 16px rgba(230,140,40,.28)}
+.btn-solid:hover{background:linear-gradient(135deg,#fcc97f,#f5b05c)}
+.btn-sm{width:auto;padding:9px 16px;font-size:14px;border-radius:10px}
 
 /* Header */
-header{position:sticky;top:0;z-index:30;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 16px;background:rgba(8,20,42,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+header{position:sticky;top:0;z-index:30;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 16px;background:rgba(255,250,242,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
 .brand{display:flex;align-items:center;gap:11px;min-width:0}
-.brand img{width:38px;height:38px;border-radius:50%;object-fit:cover;border:1px solid var(--gold);background:#fff;flex-shrink:0}
-.brand h1{font-family:var(--serif);font-size:17px;font-weight:600;white-space:nowrap}
-.brand small{display:block;font-size:12px;color:var(--mute)}
-.icon-btn{width:36px;height:36px;border-radius:10px;border:1px solid var(--line);background:transparent;color:var(--gold-hi);display:flex;align-items:center;justify-content:center}
-.icon-btn:active{background:rgba(201,162,74,.12)}
+.brand h1{font-family:var(--serif);font-size:18px;font-weight:600;white-space:nowrap}
+.brand small{display:block;font-size:13px;color:var(--ink-2)}
+.icon-btn{width:40px;height:40px;border-radius:12px;border:1px solid var(--line);background:#fff;color:var(--saffron-d);display:flex;align-items:center;justify-content:center}
+.icon-btn:active{background:var(--wash)}
 
 /* Layout */
 .wrap{max-width:580px;margin:0 auto;padding:16px}
 .page{display:none}
 .page.on{display:block;animation:fade .3s ease}
-.sec{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin:26px 0 12px;padding-bottom:9px;border-bottom:1px solid var(--line)}
-.sec h3{font-family:var(--serif);font-size:18px;font-weight:600}
-.muted{font-size:12.5px;color:var(--mute)}
-.panel{background:var(--panel);border:1px solid rgba(243,236,219,.07);border-radius:16px;padding:16px}
-.empty{color:var(--mute);font-size:13.5px;text-align:center;padding:18px 8px}
-.empty b{display:block;font-family:var(--serif);font-size:17px;font-weight:600;color:var(--ivory);margin-bottom:6px}
-.skel{height:120px;margin-bottom:14px;border-radius:16px;background:rgba(243,236,219,.04);animation:pulse 1.6s ease-in-out infinite}
+.sec{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:28px 0 12px;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.sec h3{font-family:var(--serif);font-size:19px;font-weight:600}
+.muted{font-size:13.5px;color:var(--ink-2)}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:0 8px 22px rgba(140,90,20,.07)}
+.empty{color:var(--ink-2);font-size:15px;text-align:center;padding:20px 8px}
+.empty b{display:block;font-family:var(--serif);font-size:18px;font-weight:600;color:var(--ink);margin-bottom:6px}
+.skel{height:120px;margin-bottom:14px;border-radius:18px;background:var(--wash);animation:pulse 1.6s ease-in-out infinite}
 
-/* Identity */
-.id-card{padding:20px 18px 16px;border-radius:18px;background:linear-gradient(165deg,#193660 0%,#0d1d38 100%);border:1px solid var(--line);animation:rise .6s both}
+/* Student identity */
+.id-card{padding:20px 18px 18px;border-radius:20px;background:linear-gradient(150deg,#fff6e6 0%,#ffdca3 100%);border:1px solid var(--gold);box-shadow:0 12px 28px rgba(160,100,20,.14);animation:rise .6s both}
 .id-top{display:flex;align-items:center;gap:14px}
-.initial{width:58px;height:58px;border-radius:50%;border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:26px;font-weight:600;color:var(--gold-hi);flex-shrink:0}
-.id-name{font-family:var(--serif);font-size:22px;font-weight:600;line-height:1.2;overflow-wrap:anywhere}
-.id-meta{font-size:13.5px;color:var(--mute);margin-top:4px}
-.id-meta b{color:var(--ivory);font-weight:600}
-.id-foot{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}
-.id-foot small{display:block;font-size:12px;color:var(--mute)}
-.id-foot b{font-weight:600;overflow-wrap:anywhere}
+.initial{width:60px;height:60px;border-radius:50%;background:#fff;border:2px solid var(--saffron);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:27px;font-weight:700;color:var(--saffron-d);flex-shrink:0}
+.id-name{font-family:var(--serif);font-size:23px;font-weight:600;line-height:1.2;overflow-wrap:anywhere}
+.id-meta{font-size:14.5px;color:var(--ink-2);margin-top:4px}
+.id-meta b{color:var(--ink);font-weight:700}
+.id-foot{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px;padding-top:14px;border-top:1px dashed rgba(168,90,18,.35)}
+.id-foot small{display:block;font-size:13px;color:var(--ink-2)}
+.id-foot b{font-weight:600;font-size:15px;overflow-wrap:anywhere}
 
 /* Stats */
-.stats{display:grid;grid-template-columns:repeat(3,1fr);margin:14px 0;padding:14px 0;background:var(--panel);border:1px solid rgba(243,236,219,.07);border-radius:16px}
-.stat{text-align:center;padding:2px 4px;border-left:1px solid rgba(243,236,219,.08)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);margin:14px 0;padding:16px 0;background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:0 8px 22px rgba(140,90,20,.07)}
+.stat{text-align:center;padding:2px 4px;border-left:1px solid var(--line)}
 .stat:first-child{border-left:0}
-.stat b{display:block;font-family:var(--serif);font-size:22px;font-weight:600}
-.stat span{font-size:12.5px;color:var(--mute)}
-.att{display:flex;justify-content:space-between;align-items:baseline;font-size:13.5px;color:var(--mute)}
-.att b{font-family:var(--serif);font-size:18px;font-weight:600;color:var(--ivory)}
-.bar{height:3px;margin-top:12px;background:rgba(243,236,219,.1);border-radius:3px;overflow:hidden}
-.bar i{display:block;height:100%;width:0;background:var(--gold);transition:width .6s ease}
+.stat b{display:block;font-family:var(--serif);font-size:23px;font-weight:700}
+.stat span{font-size:13.5px;color:var(--ink-2)}
+.att{display:flex;justify-content:space-between;align-items:baseline;font-size:15px;font-weight:600}
+.att b{font-family:var(--serif);font-size:19px;font-weight:700;color:var(--saffron-d)}
+.bar{height:8px;margin-top:12px;background:var(--wash);border-radius:8px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;border-radius:8px;background:linear-gradient(90deg,var(--saffron),var(--gold));transition:width .6s ease}
 
 /* Fee ledger */
-.ledger{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line)}
-.ledger div{display:flex;flex-direction:column;gap:2px;padding:12px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
-.ledger small{font-size:12.5px;color:var(--mute)}
-.ledger strong{font-size:14px;font-weight:600;color:var(--mute)}
-.ledger .paid strong{font-family:var(--serif);font-size:16px;color:var(--gold-hi)}
+.ledger{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.ledger div{display:flex;flex-direction:column;gap:2px;padding:12px;border-radius:14px;background:#fff;border:1px solid var(--line)}
+.ledger small{font-size:13.5px;color:var(--ink-2)}
+.ledger strong{font-size:15px;font-weight:700;color:var(--bad)}
+.ledger .paid{background:var(--ok-soft);border-color:rgba(46,125,85,.3)}
+.ledger .paid strong{color:var(--ok)}
 
 /* Notices */
-.notice{padding:12px 14px;margin-bottom:12px;border-left:2px solid var(--gold);background:rgba(201,162,74,.07);border-radius:0 12px 12px 0}
+.notice{padding:14px 16px;margin-bottom:12px;border-radius:14px;background:#fff4df;border-left:4px solid var(--saffron)}
 .notice-head{display:flex;justify-content:space-between;align-items:center;gap:8px}
-.notice h4{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700;color:var(--gold-hi)}
-.notice p{margin-top:4px;font-size:13.5px}
-.notice a{display:inline-block;margin-top:8px;font-size:13px;font-weight:600;color:var(--gold-hi)}
-.dot{width:7px;height:7px;border-radius:50%;background:#e5674f;flex-shrink:0;animation:pulse 1.4s infinite}
+.notice h4{display:flex;align-items:center;gap:8px;font-size:15.5px;font-weight:700}
+.notice p{margin-top:4px;font-size:15px}
+.notice a{display:inline-block;margin-top:8px;font-size:14.5px;font-weight:700;color:var(--saffron-d)}
+.dot{width:8px;height:8px;border-radius:50%;background:#e0573a;flex-shrink:0;animation:pulse 1.4s infinite}
 
 /* Classes */
-.tabs{display:flex;gap:20px;border-bottom:1px solid var(--line);margin-bottom:6px}
-.tab{display:flex;align-items:center;gap:6px;padding:11px 0;background:none;border:0;border-bottom:2px solid transparent;margin-bottom:-1px;color:var(--mute);font-weight:600;font-size:14px}
-.tab.on{color:var(--gold-hi);border-bottom-color:var(--gold)}
-.lock{text-align:center;padding:34px 18px}
-.lock svg{width:28px;height:28px;color:var(--gold);margin-bottom:12px}
-.lock h3{font-family:var(--serif);font-size:20px;font-weight:600;margin-bottom:8px}
-.lock p{font-size:13.5px;color:var(--mute);margin-bottom:20px}
-.lock b{color:var(--bad);font-weight:600}
-details>summary{list-style:none;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 2px;cursor:pointer;font-weight:700;font-size:15px}
+.tabs{display:flex;gap:6px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:5px;margin-bottom:14px}
+.tab{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:10px 4px;background:none;border:0;border-radius:10px;color:var(--ink-2);font-weight:700;font-size:14.5px}
+.tab.on{background:linear-gradient(135deg,#fbbd6a,#f2a548);color:#2a1a08}
+.lock{text-align:center;padding:34px 20px}
+.lock svg{width:30px;height:30px;color:var(--saffron-d);margin-bottom:12px}
+.lock h3{font-family:var(--serif);font-size:21px;font-weight:600;margin-bottom:8px}
+.lock p{font-size:15px;color:var(--ink-2);margin-bottom:20px}
+.lock b{color:var(--bad);font-weight:700}
+details>summary{list-style:none;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:15px 2px;cursor:pointer;font-weight:700;font-size:16px}
 details>summary::-webkit-details-marker{display:none}
-details>summary::after{content:'+';font-family:var(--serif);font-size:20px;line-height:1;color:var(--gold-hi);margin-left:4px}
-details[open]>summary::after{content:'–'}
+details>summary::after{content:'+';font-family:var(--serif);font-size:22px;line-height:1;color:var(--saffron-d);margin-left:4px}
+details[open]>summary::after{content:'−'}
 details.sub{border-bottom:1px solid var(--line)}
-details.chap{margin:0 0 6px 4px;padding-left:12px;border-left:1px solid var(--line)}
-details.chap>summary{padding:10px 0;font-size:14px;font-weight:600;color:var(--gold-hi)}
-details.chap>summary::after{font-size:16px}
-.item{padding:12px 0;border-top:1px solid rgba(243,236,219,.07)}
+details.chap{margin:0 0 8px 4px;padding-left:12px;border-left:2px solid var(--line)}
+details.chap>summary{padding:10px 0;font-size:15px;font-weight:700;color:var(--saffron-d)}
+.item{padding:13px 0;border-top:1px solid rgba(185,138,62,.18)}
 .item-head{display:flex;justify-content:space-between;align-items:center;gap:8px}
-.item h5{margin-top:6px;font-size:14.5px;font-weight:600}
-.tag{display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:1px 8px;border:1px solid var(--line);border-radius:6px;color:var(--gold-hi)}
-.tag.live{color:#f2b5a6;border-color:rgba(229,103,79,.45)}
-.video{margin-top:12px;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#000;border:1px solid var(--line)}
+.item h5{margin-top:6px;font-size:15.5px;font-weight:600}
+.tag{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;padding:2px 10px;border-radius:8px;background:var(--wash);color:var(--saffron-d)}
+.tag.live{background:var(--bad-soft);color:var(--bad)}
+.video{margin-top:12px;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#000;border:1px solid var(--line)}
 .video iframe{width:100%;height:100%;border:0}
-.chat{margin-top:14px;padding-top:12px;border-top:1px solid rgba(243,236,219,.07)}
-.chat-h{font-size:13.5px;font-weight:700;color:var(--gold-hi);margin-bottom:8px}
-.chat-list{max-height:200px;overflow-y:auto;margin-bottom:10px}
-.msg{padding:8px 0;border-bottom:1px solid rgba(243,236,219,.06);font-size:13.5px}
-.msg b{font-weight:600}
-.msg.adm b{color:var(--gold-hi)}
-.msg small{margin-left:6px;font-size:11.5px;color:var(--mute)}
+.chat{margin-top:14px;padding:14px;border-radius:14px;background:#fffbf3;border:1px solid var(--line)}
+.chat-h{font-size:15px;font-weight:700;margin-bottom:10px}
+.chat-list{max-height:220px;overflow-y:auto;margin-bottom:10px}
+.msg{padding:9px 0;border-bottom:1px solid rgba(185,138,62,.15);font-size:14.5px}
+.msg b{font-weight:700}
+.msg.adm{background:var(--wash);border-radius:10px;padding:9px 11px;margin-bottom:6px;border-bottom:0}
+.msg.adm b{color:var(--saffron-d)}
+.msg small{margin-left:6px;font-size:12px;color:var(--ink-2)}
 .chat form{display:flex;gap:8px}
 .chat input{margin:0;padding:10px 12px}
 .chat .btn-sm{padding:10px 16px}
 
 /* Pay */
-.upi{padding:20px 18px;margin-bottom:6px;border-radius:18px;background:linear-gradient(165deg,#193660 0%,#0d1d38 100%);border:1px solid var(--gold)}
-.upi small{font-size:12.5px;color:var(--mute)}
-.upi-num{font-family:var(--serif);font-size:30px;font-weight:600;letter-spacing:1.5px;margin:8px 0 14px}
+.upi{padding:20px 18px;margin-bottom:6px;border-radius:20px;background:linear-gradient(150deg,#fff6e6 0%,#ffdca3 100%);border:1px solid var(--gold);box-shadow:0 12px 28px rgba(160,100,20,.12)}
+.upi small{font-size:14px;font-weight:600;color:var(--ink-2)}
+.upi-num{font-family:var(--serif);font-size:31px;font-weight:700;letter-spacing:1.5px;margin:8px 0 14px}
 .upi-row{display:flex;justify-content:space-between;align-items:center;gap:10px}
-.upi-row p{font-size:12.5px;color:var(--mute)}
-.drop{display:flex;flex-direction:column;align-items:center;gap:3px;padding:20px 12px;margin-bottom:14px;border:1px dashed rgba(201,162,74,.5);border-radius:12px;text-align:center;cursor:pointer}
-.drop svg{width:24px;height:24px;color:var(--gold)}
-.drop b{font-size:14px;font-weight:600;color:var(--gold-hi)}
-.drop small{font-size:12px;color:var(--mute)}
-#payPreview{display:none;width:100%;max-height:200px;object-fit:contain;margin:-4px 0 14px;border-radius:10px;border:1px solid var(--line);background:#050d1c}
-.row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:13px 0;border-top:1px solid rgba(243,236,219,.07)}
+.upi-row p{font-size:14px;color:var(--ink-2)}
+.drop{display:flex;flex-direction:column;align-items:center;gap:4px;padding:22px 12px;margin-bottom:16px;border:1.5px dashed var(--saffron);border-radius:14px;background:#fffdf8;text-align:center;cursor:pointer}
+.drop svg{width:26px;height:26px;color:var(--saffron-d)}
+.drop b{font-size:15px;font-weight:700;color:var(--saffron-d)}
+.drop small{font-size:13px;color:var(--ink-2)}
+#payPreview{display:none;width:100%;max-height:220px;object-fit:contain;margin:-6px 0 16px;border-radius:12px;border:1px solid var(--line);background:#fff}
+.row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:14px 0;border-top:1px solid rgba(185,138,62,.2)}
 .row:first-child{border-top:0}
-.row b{font-weight:600;font-size:14.5px}
-.row small{display:block;font-size:12.5px;color:var(--mute);margin-top:2px}
+.row b{font-weight:700;font-size:15.5px}
+.row small{display:block;font-size:13.5px;color:var(--ink-2);margin-top:2px}
 .rr{display:flex;align-items:center;gap:12px;flex-shrink:0}
-.amt{font-family:var(--serif);font-size:16px;font-weight:600;color:var(--gold-hi);white-space:nowrap}
-.st{display:inline-block;margin-top:6px;font-size:12px;font-weight:700;padding:2px 9px;border-radius:999px}
-.st.ok{color:var(--ok);background:rgba(127,207,166,.12)}
-.st.rej{color:var(--bad);background:rgba(232,139,124,.12)}
-.st.pend{color:var(--gold-hi);background:rgba(201,162,74,.14)}
+.amt{font-family:var(--serif);font-size:17px;font-weight:700;color:var(--ink);white-space:nowrap}
+.st{display:inline-block;margin-top:6px;font-size:13px;font-weight:700;padding:2px 10px;border-radius:999px}
+.st.ok{color:var(--ok);background:var(--ok-soft)}
+.st.rej{color:var(--bad);background:var(--bad-soft)}
+.st.pend{color:var(--saffron-d);background:var(--wash)}
 
 /* Receipt paper */
-.modal{display:none;position:fixed;inset:0;z-index:120;align-items:center;justify-content:center;padding:14px;background:rgba(3,8,18,.8);backdrop-filter:blur(4px)}
+.modal{display:none;position:fixed;inset:0;z-index:120;align-items:center;justify-content:center;padding:14px;background:rgba(60,35,10,.45);backdrop-filter:blur(4px)}
 .modal.open{display:flex}
-.paper{width:100%;max-width:430px;max-height:92vh;overflow-y:auto;padding:22px;background:#fff;color:#0f172a;border-top:4px solid #b8903a;border-radius:6px;box-shadow:0 20px 50px rgba(0,0,0,.5)}
-.paper .hd{text-align:center;padding-bottom:12px;margin-bottom:8px;border-bottom:1.5px solid #0b1f3d}
-.paper h2{font-family:var(--serif);font-size:21px;font-weight:600;color:#0b1f3d}
-.paper .hd p{font-size:11.5px;color:#475569;margin-top:3px}
-.ttl{display:inline-block;margin-top:9px;font-size:12px;font-weight:700;color:#7a5712;border:1px solid #c9a24a;padding:2px 12px;border-radius:999px}
-.ln{display:flex;justify-content:space-between;gap:10px;padding:8px 0;font-size:13.5px;border-bottom:1px dashed #cbd5e1}
-.ln span{color:#475569}
+.paper{width:100%;max-width:430px;max-height:92vh;overflow-y:auto;padding:22px;background:#fff;color:#2a1a08;border-top:5px solid var(--saffron);border-radius:8px;box-shadow:0 20px 50px rgba(60,35,10,.4)}
+.paper .hd{text-align:center;padding-bottom:12px;margin-bottom:8px;border-bottom:1.5px solid #5a3a14}
+.paper h2{font-family:var(--serif);font-size:22px;font-weight:700;color:#5a3a14}
+.paper .hd p{font-size:12.5px;color:#6b5a45;margin-top:3px}
+.ttl{display:inline-block;margin-top:9px;font-size:13px;font-weight:700;color:#8a4a0e;background:#fff4df;border:1px solid var(--saffron);padding:3px 14px;border-radius:999px}
+.ln{display:flex;justify-content:space-between;gap:10px;padding:9px 0;font-size:14.5px;border-bottom:1px dashed #d9c6a6}
+.ln span{color:#6b5a45}
 .ln b{text-align:right;font-weight:600}
-.ln.tot{font-size:15.5px;color:#0b1f3d;border-top:1.5px solid #0b1f3d;border-bottom:0;margin-top:6px}
-.sig{margin-top:18px;text-align:right;font-size:12px;color:#334155}
-.sig b{display:block;margin-top:4px;font-size:15px;color:#0b1f3d}
-.paper .btn{color:#0b1f3d;border-color:#0b1f3d}
-.paper .btn-solid{background:#0b1f3d;color:#ebd28d;border-color:#0b1f3d}
+.ln.tot{font-size:16.5px;color:#5a3a14;border-top:1.5px solid #5a3a14;border-bottom:0;margin-top:6px}
+.sig{margin-top:18px;text-align:right;font-size:13px;color:#6b5a45}
+.sig b{display:block;margin-top:4px;font-size:16px;color:#5a3a14}
+.paper .btn{color:#5a3a14;border-color:#5a3a14}
+.paper .btn-solid{background:#5a3a14;color:#fff4df;border-color:#5a3a14;box-shadow:none}
 @media print{body *{visibility:hidden}#receiptPrintArea,#receiptPrintArea *{visibility:visible}#receiptPrintArea{position:fixed;left:0;top:0;width:100%;max-width:none;max-height:none;border:0;border-radius:0;box-shadow:none}.no-print{display:none!important}}
 
 /* Bottom nav and toast */
-nav{position:fixed;left:0;right:0;bottom:0;z-index:40;display:grid;grid-template-columns:repeat(4,1fr);padding:8px 6px calc(8px + env(safe-area-inset-bottom));background:rgba(8,20,42,.95);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--line)}
-.nav{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 0;background:none;border:0;color:var(--mute);font-size:12px;font-weight:600}
-.nav svg{width:20px;height:20px}
-.nav.on{color:var(--gold-hi)}
-.nav.on::before{content:'';position:absolute;top:-9px;width:28px;height:2px;border-radius:2px;background:var(--gold)}
-.toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);z-index:150;display:none;max-width:88%;padding:10px 16px;border:1px solid var(--gold);border-radius:10px;background:var(--panel-2);color:var(--ivory);font-size:13px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.5)}
+nav{position:fixed;left:0;right:0;bottom:0;z-index:40;display:grid;grid-template-columns:repeat(4,1fr);padding:8px 6px calc(8px + env(safe-area-inset-bottom));background:rgba(255,255,255,.96);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--line);box-shadow:0 -8px 24px rgba(140,90,20,.08)}
+.nav{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 0;background:none;border:0;color:var(--ink-2);font-size:13px;font-weight:700}
+.nav svg{width:22px;height:22px}
+.nav.on{color:var(--saffron-d)}
+.nav.on::before{content:'';position:absolute;top:-9px;width:32px;height:3px;border-radius:3px;background:var(--saffron)}
+.toast{position:fixed;left:50%;bottom:98px;transform:translateX(-50%);z-index:150;display:none;max-width:90%;padding:11px 18px;border-radius:12px;background:var(--ink);color:#fff4df;font-size:14px;font-weight:600;text-align:center;box-shadow:0 10px 30px rgba(60,35,10,.35)}
 </style>
 </head>
 <body>
 
 <div id="splash">
-  <div class="seal"><img src="logo.png?v=3" alt="" onerror="this.style.visibility='hidden'"></div>
-  <h1>U.C.C Institute</h1>
-  <p class="tagline">Learn · Grow · Succeed</p>
+  <div class="intro">
+    <div class="logo xl"><img src="logo.png?v=3" alt="U.C.C Institute logo" onerror="this.style.visibility='hidden'"></div>
+    <h1>U.C.C Institute</h1>
+    <p class="tagline">Learn · Grow · Succeed</p>
+  </div>
   <div class="loader"><i></i></div>
 </div>
 
 <div id="loginScreen">
   <form class="login" onsubmit="handleStudentLogin(event)">
-    <div class="seal sm"><img src="logo.png?v=3" alt="" onerror="this.style.visibility='hidden'"></div>
-    <h2>U.C.C Student Portal</h2>
-    <p class="sub">শিক্ষার্থীর আইডি ও মোবাইল নম্বর দিয়ে লগইন করো</p>
-    <div id="loginErr" class="err" hidden>Invalid Student ID or Mobile Number!</div>
-    <label for="lId">Student ID</label>
-    <input id="lId" required placeholder="e.g. UCC001" style="text-transform:uppercase" autocomplete="off">
-    <label for="lMob">Registered Mobile Number</label>
-    <input id="lMob" type="tel" inputmode="numeric" required maxlength="10" placeholder="10-digit mobile number">
-    <button id="lBtn" class="btn btn-solid" type="submit">Login to Student App</button>
+    <div class="logo lg"><img src="logo.png?v=3" alt="" onerror="this.style.visibility='hidden'"></div>
+    <h2>U.C.C শিক্ষার্থী পোর্টাল</h2>
+    <p class="sub">আইডি ও রেজিস্টার্ড মোবাইল নম্বর দিয়ে ঢোকো</p>
+    <div id="loginErr" class="err" hidden>আইডি বা মোবাইল নম্বর মিলছে না।</div>
+    <label for="lId">শিক্ষার্থী আইডি</label>
+    <input id="lId" required placeholder="যেমন UCC001" style="text-transform:uppercase" autocomplete="off">
+    <label for="lMob">রেজিস্টার্ড মোবাইল নম্বর</label>
+    <input id="lMob" type="tel" inputmode="numeric" required maxlength="10" placeholder="১০ সংখ্যার নম্বর">
+    <button id="lBtn" class="btn btn-solid" type="submit">লগইন করো</button>
   </form>
 </div>
 
 <header>
   <div class="brand">
-    <img src="logo.png?v=3" alt="" onerror="this.style.visibility='hidden'">
-    <div><h1>U.C.C Institute</h1><small id="hdrSub">Student Portal</small></div>
+    <div class="logo sm"><img src="logo.png?v=3" alt="" onerror="this.style.visibility='hidden'"></div>
+    <div><h1>U.C.C Institute</h1><small id="hdrSub">শিক্ষার্থী পোর্টাল</small></div>
   </div>
   <div style="display:flex;gap:8px">
-    <button class="icon-btn" onclick="refreshPortal(false)" aria-label="Refresh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg></button>
-    <button class="icon-btn" onclick="logoutStudent()" aria-label="Logout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></button>
+    <button class="icon-btn" onclick="refreshPortal(false)" aria-label="রিফ্রেশ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg></button>
+    <button class="icon-btn" onclick="logoutStudent()" aria-label="লগআউট"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></button>
   </div>
 </header>
 
@@ -257,44 +264,44 @@ nav{position:fixed;left:0;right:0;bottom:0;z-index:40;display:grid;grid-template
         <div class="id-top">
           <div class="initial" id="sAvatar">U</div>
           <div style="min-width:0">
-            <div class="id-name" id="sName">Loading...</div>
-            <div class="id-meta"><b id="sIdChip">UCC</b> · <span id="sClassChip">Class</span></div>
+            <div class="id-name" id="sName">লোড হচ্ছে...</div>
+            <div class="id-meta">আইডি: <b id="sIdChip">UCC</b> · শ্রেণি: <b id="sClassChip">Class</b></div>
           </div>
         </div>
         <div class="id-foot">
-          <div><small>Father</small><b id="sFather">-</b></div>
-          <div><small>Mobile</small><b id="sPhone">-</b></div>
+          <div><small>বাবার নাম</small><b id="sFather">-</b></div>
+          <div><small>মোবাইল</small><b id="sPhone">-</b></div>
         </div>
       </div>
 
       <div class="stats">
-        <div class="stat"><b id="sPresent" style="color:var(--ok)">0</b><span>Present</span></div>
-        <div class="stat"><b id="sAbsent" style="color:var(--gold-hi)">0</b><span>Absent</span></div>
-        <div class="stat"><b id="sDue">Rs. 0</b><span>Total Due</span></div>
+        <div class="stat"><b id="sPresent" style="color:var(--ok)">0</b><span>উপস্থিত</span></div>
+        <div class="stat"><b id="sAbsent" style="color:var(--saffron-d)">0</b><span>অনুপস্থিত</span></div>
+        <div class="stat"><b id="sDue">Rs. 0</b><span>মোট বাকি</span></div>
       </div>
 
       <div class="panel">
-        <div class="att"><span>Attendance</span><b id="sAttPct">0%</b></div>
+        <div class="att"><span>উপস্থিতির হার</span><b id="sAttPct">0%</b></div>
         <div class="bar"><i id="sAttBar"></i></div>
       </div>
 
-      <div class="sec"><h3>2027 Monthly Fee</h3><span id="paidCountPill" class="muted">0 / 12 পরিশোধিত</span></div>
+      <div class="sec"><h3>২০২৭ সালের মাসিক ফি</h3><span id="paidCountPill" class="muted">0 / 12</span></div>
       <div class="ledger" id="sMonths"></div>
     </section>
 
     <section id="page-classes" class="page">
       <div id="classesLockedView" class="panel lock" hidden>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-        <h3>ক্লাস ও মক টেস্ট লক করা আছে</h3>
-        <p>বাকি টিউশন ফি <b id="lockDueAmt">Rs. 0</b>। ফি পরিশোধ করলেই লাইভ ক্লাস, ভিডিও, PDF নোটস ও মক টেস্ট খুলে যাবে।</p>
-        <button class="btn btn-solid" onclick="openPage('pay', document.getElementById('navPay'))">এখনই ফি পেমেন্ট করো</button>
+        <h3>ক্লাস ও মক টেস্ট বন্ধ আছে</h3>
+        <p>বাকি ফি <b id="lockDueAmt">Rs. 0</b> পরিশোধ করলে লাইভ ক্লাস, ভিডিও, PDF নোটস ও মক টেস্ট খুলে যাবে।</p>
+        <button class="btn btn-solid" onclick="openPage('pay', document.getElementById('navPay'))">এখনই ফি দাও</button>
       </div>
 
       <div id="classesUnlockedView">
         <div class="tabs">
-          <button class="tab on" id="cpLive" onclick="setClassFilter('Live')"><i class="dot"></i>Live</button>
-          <button class="tab" id="cpVideo" onclick="setClassFilter('Video')">Recorded</button>
-          <button class="tab" id="cpOther" onclick="setClassFilter('OTHER')">PDF / Test</button>
+          <button class="tab on" id="cpLive" onclick="setClassFilter('Live')"><i class="dot"></i>লাইভ</button>
+          <button class="tab" id="cpVideo" onclick="setClassFilter('Video')">ভিডিও ক্লাস</button>
+          <button class="tab" id="cpOther" onclick="setClassFilter('OTHER')">PDF ও টেস্ট</button>
         </div>
         <div id="classesList"></div>
       </div>
@@ -302,36 +309,36 @@ nav{position:fixed;left:0;right:0;bottom:0;z-index:40;display:grid;grid-template
 
     <section id="page-pay" class="page">
       <div class="upi">
-        <div class="upi-row"><small>অফিশিয়াল UPI · PhonePe / GPay</small></div>
+        <div class="upi-row"><small>অফিশিয়াল UPI নম্বর (PhonePe / GPay)</small></div>
         <div class="upi-num">8016972121</div>
-        <div class="upi-row"><p>পেমেন্ট করে নিচে স্ক্রিনশট আপলোড করো</p><button type="button" class="btn btn-sm btn-solid" onclick="copyUpi()">Copy</button></div>
+        <div class="upi-row"><p>পেমেন্ট করার পর নিচে স্ক্রিনশট দাও</p><button type="button" class="btn btn-sm btn-solid" onclick="copyUpi()">কপি করো</button></div>
       </div>
 
-      <div class="sec"><h3>Submit Payment Proof</h3></div>
+      <div class="sec"><h3>পেমেন্টের প্রমাণ জমা দাও</h3></div>
       <form onsubmit="submitOnlinePay(event)">
         <div class="row2">
-          <div><label for="payMonth">Select Month *</label><select id="payMonth" required></select></div>
-          <div><label for="payAmt">Amount (Rs.) *</label><input id="payAmt" type="number" value="300" required min="1"></div>
+          <div><label for="payMonth">কোন মাসের ফি *</label><select id="payMonth" required></select></div>
+          <div><label for="payAmt">টাকার পরিমাণ (Rs.) *</label><input id="payAmt" type="number" value="300" required min="1"></div>
         </div>
-        <label for="payUtr">UTR / Transaction ID</label>
-        <input id="payUtr" placeholder="Last 4-12 digits">
-        <label>Payment Screenshot *</label>
+        <label for="payUtr">UTR / ট্রানজেকশন নম্বর</label>
+        <input id="payUtr" placeholder="শেষ ৪ থেকে ১২ সংখ্যা">
+        <label>পেমেন্টের স্ক্রিনশট *</label>
         <label class="drop" for="payFile">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-          <b id="uploadFileName">Tap to choose screenshot</b>
-          <small>JPG / PNG supported</small>
+          <b id="uploadFileName">স্ক্রিনশট বেছে নাও</b>
+          <small>JPG বা PNG ছবি</small>
           <input type="file" id="payFile" accept="image/*" required onchange="previewCompressedImg(event)" hidden>
         </label>
-        <img id="payPreview" alt="Payment screenshot preview">
-        <button type="submit" id="paySubmitBtn" class="btn btn-solid">Submit Payment Proof</button>
+        <img id="payPreview" alt="পেমেন্ট স্ক্রিনশট">
+        <button type="submit" id="paySubmitBtn" class="btn btn-solid">প্রমাণ জমা দাও</button>
       </form>
 
-      <div class="sec"><h3>My Payment Requests</h3></div>
+      <div class="sec"><h3>আমার পেমেন্ট রিকোয়েস্ট</h3></div>
       <div id="myReqList"></div>
     </section>
 
     <section id="page-receipts" class="page">
-      <div class="sec"><h3>Official Fee Receipts (2027)</h3></div>
+      <div class="sec"><h3>ফি রসিদ (২০২৭)</h3></div>
       <div id="myReceiptsList"></div>
     </section>
   </div>
@@ -355,13 +362,13 @@ nav{position:fixed;left:0;right:0;bottom:0;z-index:40;display:grid;grid-template
     <div class="sig">
       গ্রহণকারী / অনুমোদিত স্বাক্ষর:
       <b id="rCollector"></b>
-      <small style="color:#64748b;font-size:10px">ইউ.সি.সি ইনস্টিটিউট, পেঁচাকোলা</small>
+      <small style="color:#6b5a45;font-size:11px">ইউ.সি.সি ইনস্টিটিউট, পেঁচাকোলা</small>
     </div>
     <div class="no-print" style="display:grid;gap:8px;margin-top:18px">
-      <button class="btn" onclick="window.print()">Print / Save PDF</button>
+      <button class="btn" onclick="window.print()">প্রিন্ট / PDF সেভ</button>
       <div class="row2">
-        <button class="btn btn-solid" onclick="downloadReceiptImage()">Save PNG</button>
-        <button class="btn" onclick="closeReceipt()">Close</button>
+        <button class="btn btn-solid" onclick="downloadReceiptImage()">PNG সেভ</button>
+        <button class="btn" onclick="closeReceipt()">বন্ধ করো</button>
       </div>
     </div>
   </div>
@@ -370,19 +377,19 @@ nav{position:fixed;left:0;right:0;bottom:0;z-index:40;display:grid;grid-template
 <nav>
   <button class="nav on" onclick="openPage('home',this)">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-    <span>Home</span>
+    <span>হোম</span>
   </button>
   <button class="nav" onclick="openPage('classes',this)">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
-    <span>Classes</span>
+    <span>ক্লাস</span>
   </button>
   <button class="nav" id="navPay" onclick="openPage('pay',this)">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-    <span>Pay Fee</span>
+    <span>ফি দাও</span>
   </button>
   <button class="nav" onclick="openPage('receipts',this)">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-    <span>Receipts</span>
+    <span>রসিদ</span>
   </button>
 </nav>
 
@@ -401,6 +408,7 @@ const bnCollector=c=>{const s=String(c||'');if(s.includes('Pralay'))return'প�
 const bnMode=m=>(m||'').toLowerCase().includes('cash')?'নগদ (ক্যাশ)':'অনলাইন (UPI)';
 const formatBnDate=iso=>{if(!iso)return'-';const p=String(iso).split('-');return p.length===3?`${parseInt(p[2],10)} ${BN_MONTHS[parseInt(p[1],10)-1]||p[1]} ${p[0]}`:iso;};
 const stCls=s=>s==='Approved'?'ok':(s==='Rejected'?'rej':'pend');
+const stTxt=s=>s==='Approved'?'অনুমোদিত':(s==='Rejected'?'বাতিল':'যাচাই চলছে');
 const ft=(b,s)=>`${b?'bold ':''}${s}px 'Hind Siliguri', sans-serif`;
 
 let portalData=null,classFilter='Live',compressedBase64='',lastContentHash='',activeReceiptObj=null,lastBackPress=0,liveChatTimer=null,activeLiveIds=[];
@@ -437,7 +445,7 @@ async function handleStudentLogin(e){
   const ok=await loadStudentData(id,mob,false);
   if(ok){localStorage.setItem('ucc_st_id',id);localStorage.setItem('ucc_st_mob',mob);$('loginScreen').hidden=true;}
   else err.hidden=false;
-  btn.disabled=false;btn.textContent='Login to Student App';
+  btn.disabled=false;btn.textContent='লগইন করো';
 }
 
 async function loadStudentData(id,mob,silent){
@@ -449,14 +457,14 @@ async function loadStudentData(id,mob,silent){
     return false;
   }catch(e){
     setLoading(false);
-    if(!silent)toast('Network error! ইন্টারনেট চেক করুন।');
+    if(!silent)toast('নেটওয়ার্ক সমস্যা! ইন্টারনেট সংযোগ চেক করো।');
     return false;
   }
 }
 
 function refreshPortal(silent=false){
   const id=localStorage.getItem('ucc_st_id'),mob=localStorage.getItem('ucc_st_mob');
-  if(id&&mob){if(!silent)toast('ডেটা আপডেট হচ্ছে...');loadStudentData(id,mob,silent);}
+  if(id&&mob){if(!silent)toast('তথ্য আপডেট হচ্ছে...');loadStudentData(id,mob,silent);}
 }
 
 function logoutStudent(){
@@ -498,17 +506,17 @@ function renderPortal(){
     <div class="notice">
       <div class="notice-head"><h4><i class="dot"></i>${n.title}</h4><span class="muted">${n.date}</span></div>
       <p>${n.message}</p>
-      ${n.link?`<a href="${n.link}" target="_blank" rel="noopener">Open link →</a>`:''}
+      ${n.link?`<a href="${n.link}" target="_blank" rel="noopener">লিংক খুলো →</a>`:''}
     </div>`).join('');
 
   const prevMonth=$('payMonth').value;
   let opts='',paid=0;
   $('sMonths').innerHTML=MONTHS.map(([k,lbl])=>{
     const v=Number(s.months?.[k])||0;
-    if(v>0)paid++;else opts+=`<option value="${k}">${k.replace('_',' ')}</option>`;
-    return `<div class="${v>0?'paid':''}"><small>${lbl}</small><strong>${v>0?'₹'+v+' ✓':'বাকি'}</strong></div>`;
+    if(v>0)paid++;else opts+=`<option value="${k}">${bnMonth(k)}</option>`;
+    return `<div class="${v>0?'paid':''}"><small>${lbl}</small><strong>${v>0?'✓ ₹'+v:'বাকি'}</strong></div>`;
   }).join('');
-  $('paidCountPill').textContent=`${paid} / 12 পরিশোধিত`;
+  $('paidCountPill').textContent=`${paid} / 12 মাস পরিশোধিত`;
   $('payMonth').innerHTML=opts||'<option value="">সব মাস পরিশোধিত ✓</option>';
   if([...$('payMonth').options].some(o=>o.value===prevMonth))$('payMonth').value=prevMonth;
   $('paySubmitBtn').disabled=!opts;
@@ -523,15 +531,15 @@ function renderPortal(){
   const reqs=portalData.requests||[];
   $('myReqList').innerHTML=reqs.length?reqs.map(r=>`
     <div class="row">
-      <div><b>${r.month.replace('_',' ')}</b><small>${r.date} · UTR: ${r.utr||'-'}</small>${r.remarks?`<small style="color:var(--bad)">${r.remarks}</small>`:''}</div>
-      <div class="rr" style="flex-direction:column;align-items:flex-end;gap:0"><span class="amt">₹${r.amount}</span><span class="st ${stCls(r.status)}">${r.status}</span></div>
+      <div><b>${bnMonth(r.month)}</b><small>${r.date} · UTR: ${r.utr||'-'}</small>${r.remarks?`<small style="color:var(--bad)">${r.remarks}</small>`:''}</div>
+      <div class="rr" style="flex-direction:column;align-items:flex-end;gap:0"><span class="amt">₹${r.amount}</span><span class="st ${stCls(r.status)}">${stTxt(r.status)}</span></div>
     </div>`).join(''):'<div class="empty">এখনো কোনো অনলাইন পেমেন্ট রিকোয়েস্ট নেই।</div>';
 
   const pays=portalData.payments||[];
   $('myReceiptsList').innerHTML=pays.length?pays.map((p,i)=>`
     <div class="row">
       <div><b>${bnMonth(p.month)}</b><small>${formatBnDate(p.date)} · ${bnCollector(p.collector)}</small></div>
-      <div class="rr"><span class="amt">₹${p.amount}</span><button class="btn btn-sm" onclick="openReceipt(${i})">Receipt</button></div>
+      <div class="rr"><span class="amt">₹${p.amount}</span><button class="btn btn-sm" onclick="openReceipt(${i})">রসিদ দেখো</button></div>
     </div>`).join(''):'<div class="empty">এখনো কোনো ফি রসিদ নেই।</div>';
 }
 
@@ -561,7 +569,7 @@ function renderClassesList(){
   if(classFilter==='Live'){
     const lives=all.filter(c=>c.type==='Live');
     if(!lives.length){
-      box.innerHTML='<div class="empty"><b>এখন কোনো লাইভ ক্লাস চলছে না</b>পুরনো ক্লাস দেখতে Recorded ট্যাবে যাও।</div>';
+      box.innerHTML='<div class="empty"><b>এখন কোনো লাইভ ক্লাস নেই</b>আগের ক্লাস দেখতে "ভিডিও ক্লাস" ট্যাবে যাও।</div>';
       return;
     }
     box.innerHTML=lives.map(c=>{
@@ -570,13 +578,13 @@ function renderClassesList(){
       return `<article class="item">
         <div class="item-head"><span class="tag live"><i class="dot"></i>লাইভ · ${c.subject} (${c.chapter||'General'})</span><span class="muted">${c.date}</span></div>
         <h5>${c.title}</h5>
-        ${embed?`<div class="video"><iframe src="${embed}" allow="autoplay; fullscreen" allowfullscreen></iframe></div>`:`<a class="btn btn-solid" href="${c.link}" target="_blank" rel="noopener" style="margin-top:12px">Join Live Class →</a>`}
+        ${embed?`<div class="video"><iframe src="${embed}" allow="autoplay; fullscreen" allowfullscreen></iframe></div>`:`<a class="btn btn-solid" href="${c.link}" target="_blank" rel="noopener" style="margin-top:12px">লাইভ ক্লাসে যোগ দাও →</a>`}
         <div class="chat">
-          <div class="chat-h">Live Question & Answer</div>
+          <div class="chat-h">প্রশ্ন-উত্তর</div>
           <div id="chat_${c.id}" class="chat-list"></div>
           <form onsubmit="sendStudentChat(event,'${c.id}')">
             <input id="cin_${c.id}" required placeholder="তোমার প্রশ্ন লেখো...">
-            <button class="btn btn-solid btn-sm" type="submit">Send</button>
+            <button class="btn btn-solid btn-sm" type="submit">পাঠাও</button>
           </form>
         </div>
       </article>`;
@@ -587,7 +595,7 @@ function renderClassesList(){
   }
 
   const items=all.filter(c=>classFilter==='Video'?c.type==='Video':(c.type==='PDF'||c.type==='Mock Test'));
-  if(!items.length){box.innerHTML='<div class="empty">এখানে এখনো কোনো কনটেন্ট আপলোড হয়নি।</div>';return;}
+  if(!items.length){box.innerHTML='<div class="empty">এখানে এখনো কোনো কনটেন্ট দেওয়া হয়নি।</div>';return;}
 
   const tree={};
   items.forEach(c=>{
@@ -607,7 +615,7 @@ function renderClassesList(){
           return `<div class="item">
             <div class="item-head"><span class="tag">${c.type}</span><span class="muted">${c.date}</span></div>
             <h5>${c.title}</h5>
-            ${embed?`<div class="video"><iframe src="${embed}" allow="autoplay; fullscreen" allowfullscreen></iframe></div>`:`<a class="btn btn-sm" href="${c.link}" target="_blank" rel="noopener" style="margin-top:10px">Open ${c.type} →</a>`}
+            ${embed?`<div class="video"><iframe src="${embed}" allow="autoplay; fullscreen" allowfullscreen></iframe></div>`:`<a class="btn btn-sm" href="${c.link}" target="_blank" rel="noopener" style="margin-top:10px">${c.type} খুলো →</a>`}
           </div>`;
         }).join('')}
       </details>`).join('');
@@ -670,9 +678,9 @@ function previewCompressedImg(e){
 
 async function submitOnlinePay(e){
   e.preventDefault();
-  if(!portalData||!compressedBase64){toast('Please attach payment screenshot.');return;}
+  if(!portalData||!compressedBase64){toast('পেমেন্টের স্ক্রিনশট যুক্ত করো।');return;}
   const s=portalData.student,btn=$('paySubmitBtn');
-  btn.disabled=true;btn.textContent='Uploading Proof...';
+  btn.disabled=true;btn.textContent='জমা হচ্ছে...';
   try{
     const r=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({
       action:'submitOnlinePayment',studentId:s.id,studentName:s.name,studentClass:s.studentClass,
@@ -682,13 +690,13 @@ async function submitOnlinePay(e){
     if(d.status==='ok'){
       toast('জমা হয়েছে! অ্যাডমিন শীঘ্রই যাচাই করবেন।');
       e.target.reset();
-      $('uploadFileName').textContent='Tap to choose screenshot';
+      $('uploadFileName').textContent='স্ক্রিনশট বেছে নাও';
       $('payPreview').style.display='none';
       compressedBase64='';
       refreshPortal(true);
     }else toast('জমা দেওয়া যায়নি।');
   }catch(err){toast('আপলোড ব্যর্থ। আবার চেষ্টা করো।');}
-  finally{btn.disabled=!$('payMonth').value;btn.textContent='Submit Payment Proof';}
+  finally{btn.disabled=!$('payMonth').value;btn.textContent='প্রমাণ জমা দাও';}
 }
 
 function openReceipt(i){
@@ -714,14 +722,14 @@ function downloadReceiptImage(){
   const c=document.createElement('canvas');c.width=720;c.height=860;
   const x=c.getContext('2d');
   x.fillStyle='#fff';x.fillRect(0,0,720,860);
-  x.strokeStyle='#0b1f3d';x.lineWidth=8;x.strokeRect(18,18,684,824);
-  x.strokeStyle='#c9a24a';x.lineWidth=3;x.strokeRect(28,28,664,804);
-  x.fillStyle='#0b1f3d';x.fillRect(22,22,676,150);
-  x.fillStyle='#c9a24a';x.fillRect(22,172,676,5);
+  x.strokeStyle='#5a3a14';x.lineWidth=8;x.strokeRect(18,18,684,824);
+  x.strokeStyle='#f2a548';x.lineWidth=3;x.strokeRect(28,28,664,804);
+  x.fillStyle='#fff0d6';x.fillRect(22,22,676,150);
+  x.fillStyle='#f2a548';x.fillRect(22,172,676,5);
   x.textAlign='center';
-  x.fillStyle='#ebd28d';x.font=ft(true,38);x.fillText('ইউ.সি.সি ইনস্টিটিউট',360,82);
-  x.fillStyle='#e2e8f0';x.font=ft(false,19);x.fillText('পেঁচাকোলা, রায়পুর, বাঁকুড়া • ফোন: 8016972121 / 8159980707',360,120);
-  x.fillStyle='#c9a24a';x.font=ft(true,22);x.fillText('অফিশিয়াল টিউশন ফি রসিদ (2027)',360,156);
+  x.fillStyle='#5a3a14';x.font=ft(true,38);x.fillText('ইউ.সি.সি ইনস্টিটিউট',360,82);
+  x.fillStyle='#6b5a45';x.font=ft(false,19);x.fillText('পেঁচাকোলা, রায়পুর, বাঁকুড়া • ফোন: 8016972121 / 8159980707',360,120);
+  x.fillStyle='#a85a12';x.font=ft(true,22);x.fillText('অফিশিয়াল টিউশন ফি রসিদ (2027)',360,156);
   const rows=[
     ['রসিদ নং:',p.receiptNo||'-'],
     ['তারিখ ও সময়:',formatBnDate(p.date)+(p.time?', '+p.time:'')],
@@ -733,18 +741,18 @@ function downloadReceiptImage(){
   ];
   let y=240;
   rows.forEach(([l,v])=>{
-    x.textAlign='left';x.fillStyle='#475569';x.font=ft(false,22);x.fillText(l,55,y);
-    x.textAlign='right';x.fillStyle='#0f172a';x.font=ft(true,23);x.fillText(String(v),665,y);
-    x.strokeStyle='#e2e8f0';x.lineWidth=1.5;x.beginPath();x.moveTo(55,y+18);x.lineTo(665,y+18);x.stroke();
+    x.textAlign='left';x.fillStyle='#6b5a45';x.font=ft(false,22);x.fillText(l,55,y);
+    x.textAlign='right';x.fillStyle='#2e1f10';x.font=ft(true,23);x.fillText(String(v),665,y);
+    x.strokeStyle='#e8dcc8';x.lineWidth=1.5;x.beginPath();x.moveTo(55,y+18);x.lineTo(665,y+18);x.stroke();
     y+=62;
   });
-  x.fillStyle='#fbf5e6';x.fillRect(55,y-10,610,68);
-  x.strokeStyle='#c9a24a';x.lineWidth=2.5;x.strokeRect(55,y-10,610,68);
-  x.textAlign='left';x.fillStyle='#0b1f3d';x.font=ft(true,26);x.fillText('মোট জমা টাকা:',75,y+33);
+  x.fillStyle='#fff4df';x.fillRect(55,y-10,610,68);
+  x.strokeStyle='#f2a548';x.lineWidth=2.5;x.strokeRect(55,y-10,610,68);
+  x.textAlign='left';x.fillStyle='#5a3a14';x.font=ft(true,26);x.fillText('মোট জমা টাকা:',75,y+33);
   x.textAlign='right';x.font=ft(true,30);x.fillText(`${p.amount} টাকা`,645,y+33);
   y+=120;
-  x.textAlign='right';x.fillStyle='#475569';x.font=ft(false,19);x.fillText('গ্রহণকারী / অনুমোদিত স্বাক্ষর:',665,y);
-  x.fillStyle='#0b1f3d';x.font=ft(true,26);x.fillText(bnCollector(p.collector),665,y+36);
+  x.textAlign='right';x.fillStyle='#6b5a45';x.font=ft(false,19);x.fillText('গ্রহণকারী / অনুমোদিত স্বাক্ষর:',665,y);
+  x.fillStyle='#5a3a14';x.font=ft(true,26);x.fillText(bnCollector(p.collector),665,y+36);
   const a=document.createElement('a');
   a.download=`UCC_Receipt_${p.studentId}_${p.month}.png`;
   a.href=c.toDataURL('image/png');
