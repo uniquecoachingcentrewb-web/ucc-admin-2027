@@ -3,251 +3,702 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <meta name="theme-color" content="#0b2545">
+  <meta name="theme-color" content="#091e3a">
   <link rel="icon" type="image/png" href="logo.png?v=3">
   <title>U.C.C Institute - Student App</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #0b2545; --primary-mid: #133c6e;
-      --accent: #f97316; --accent-soft: #fff7ed; --accent-border: #fdba74;
-      --bg: #f4f7fb; --card: #ffffff; --text: #0f172a; --muted: #64748b;
-      --border: #e2e8f0; --danger: #dc2626; --success: #16a34a;
+      --navy-950: #061529;
+      --navy-900: #091e3a;
+      --navy-800: #102f59;
+      --navy-700: #1a457d;
+      --accent: #f97316;
+      --accent-dark: #ea580c;
+      --accent-soft: #fff7ed;
+      --accent-border: #fed7aa;
+      --bg: #f3f6fb;
+      --card: #ffffff;
+      --text: #0f172a;
+      --text-2: #475569;
+      --muted: #64748b;
+      --border: #e5ebf3;
+      --danger: #ef4444;
+      --danger-soft: #fef2f2;
+      --success: #10b981;
+      --success-soft: #ecfdf5;
+      --shadow-sm: 0 2px 8px rgba(9, 30, 58, 0.04);
+      --shadow-md: 0 8px 24px rgba(9, 30, 58, 0.07);
+      --shadow-lg: 0 16px 36px rgba(9, 30, 58, 0.14);
+      --radius: 18px;
     }
-    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans Bengali", sans-serif; -webkit-tap-highlight-color: transparent; }
-    html, body { margin: 0; background: var(--bg); color: var(--text); padding-bottom: 78px; overscroll-behavior-y: contain; user-select: none; }
+
+    * {
+      box-sizing: border-box;
+      font-family: 'Plus Jakarta Sans', 'Hind Siliguri', -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    html, body {
+      margin: 0; background: var(--bg); color: var(--text);
+      padding-bottom: 92px; overscroll-behavior-y: contain; user-select: none;
+      -webkit-font-smoothing: antialiased;
+    }
     input, select { user-select: text; }
+    svg { flex-shrink: 0; }
 
-    #splashScreen { position: fixed; inset: 0; z-index: 999; background: radial-gradient(circle at top right, #1b4d89 0%, #0b2545 60%, #061529 100%); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 24px; transition: opacity 0.4s ease, transform 0.4s ease; }
-    #splashScreen.hide { opacity: 0; transform: scale(1.06); pointer-events: none; }
-    .splash-logo-ring { width: 114px; height: 114px; border-radius: 50%; padding: 6px; background: linear-gradient(135deg, #ff9f43, #ffffff, #f97316); box-shadow: 0 12px 32px rgba(249,115,22,0.35); animation: popIn 0.65s ease forwards; }
-    .splash-logo-ring img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; background: #fff; display: block; }
-    .splash-title { margin: 16px 0 4px; color: #fff; font-size: 25px; font-weight: 800; opacity: 0; animation: slideUpFade 0.55s ease 0.2s forwards; }
-    .splash-tagline { margin: 0; color: #ffedd5; font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; padding: 5px 14px; border-radius: 20px; background: rgba(249,115,22,0.22); border: 1px solid rgba(253,186,116,0.45); opacity: 0; animation: slideUpFade 0.55s ease 0.35s forwards; }
-    .splash-bar { width: 130px; height: 4px; border-radius: 4px; background: rgba(255,255,255,0.2); margin-top: 22px; overflow: hidden; }
-    .splash-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #ff9f43, #f97316); animation: loadBar 1.2s ease 0.3s forwards; }
-    @keyframes popIn { 0% { opacity: 0; transform: scale(0.55); } 100% { opacity: 1; transform: scale(1); } }
-    @keyframes slideUpFade { 0% { opacity: 0; transform: translateY(14px); } 100% { opacity: 1; transform: translateY(0); } }
+    /* ===== SPLASH SCREEN ===== */
+    #splashScreen {
+      position: fixed; inset: 0; z-index: 999;
+      background: radial-gradient(circle at 80% 15%, #1d4e89 0%, #091e3a 55%, #040d1a 100%);
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      text-align: center; padding: 24px;
+      transition: opacity 0.45s cubic-bezier(0.4, 0, 0.2, 1), transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    #splashScreen.hide { opacity: 0; transform: scale(1.05); pointer-events: none; }
+    .splash-ring {
+      width: 112px; height: 112px; border-radius: 50%; padding: 5px;
+      background: linear-gradient(135deg, #fb923c, #ffffff, #f97316);
+      box-shadow: 0 0 0 10px rgba(249, 115, 22, 0.12), 0 18px 40px rgba(0, 0, 0, 0.4);
+      animation: popIn 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    .splash-ring img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; background: #fff; display: block; }
+    .splash-title {
+      margin: 20px 0 6px; color: #fff; font-size: 26px; font-weight: 800; letter-spacing: -0.3px;
+      opacity: 0; animation: slideUp 0.55s ease 0.2s forwards;
+    }
+    .splash-tag {
+      margin: 0; color: #ffedd5; font-size: 11px; font-weight: 700; letter-spacing: 2.4px; text-transform: uppercase;
+      padding: 6px 16px; border-radius: 30px; background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(253, 186, 116, 0.35); backdrop-filter: blur(8px);
+      opacity: 0; animation: slideUp 0.55s ease 0.35s forwards;
+    }
+    .splash-bar { width: 120px; height: 4px; border-radius: 99px; background: rgba(255,255,255,0.14); margin-top: 28px; overflow: hidden; }
+    .splash-fill { height: 100%; width: 0%; border-radius: 99px; background: linear-gradient(90deg, #fb923c, #f97316); animation: loadBar 1.15s ease 0.25s forwards; }
+
+    @keyframes popIn { 0% { opacity: 0; transform: scale(0.6); } 100% { opacity: 1; transform: scale(1); } }
+    @keyframes slideUp { 0% { opacity: 0; transform: translateY(14px); } 100% { opacity: 1; transform: translateY(0); } }
     @keyframes loadBar { to { width: 100%; } }
-    @keyframes pageEnter { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes pulseNotice { 0%, 100% { box-shadow: 0 0 0 0 rgba(249,115,22,0.45); border-color: #f97316; } 50% { box-shadow: 0 0 0 6px rgba(249,115,22,0); border-color: #fb923c; } }
-    @keyframes blinkDot { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
+    @keyframes pageFade { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes pulseDot { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.35); opacity: 0.45; } }
+    @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
 
-    #loginScreen { position: fixed; inset: 0; background: linear-gradient(160deg, #0b2545 0%, #133c6e 55%, #071930 100%); z-index: 200; display: flex; justify-content: center; align-items: center; padding: 20px; }
-    .login-card { background: #fff; width: 100%; max-width: 360px; border-radius: 20px; padding: 24px 20px; box-shadow: 0 18px 40px rgba(0,0,0,0.35); border-top: 5px solid var(--accent); }
-    .login-logo { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 3px solid var(--accent); padding: 2px; background: #fff; display: block; margin: 0 auto 10px; }
-    .login-title { text-align: center; margin-bottom: 16px; }
-    .login-title h2 { margin: 0; color: var(--primary); font-size: 21px; font-weight: 800; }
-    .login-title p { margin: 4px 0 0; font-size: 11px; color: var(--accent); font-weight: 700; letter-spacing: 1px; }
-    .login-err { display: none; background: #fee2e2; color: #991b1b; padding: 9px; border-radius: 10px; font-size: 12px; font-weight: 700; margin-bottom: 10px; text-align: center; }
+    /* ===== LOGIN SCREEN ===== */
+    #loginScreen {
+      position: fixed; inset: 0; z-index: 200;
+      background: radial-gradient(circle at 15% 15%, #1c4c86 0%, #091e3a 55%, #051122 100%);
+      display: flex; justify-content: center; align-items: center; padding: 20px; overflow: hidden;
+    }
+    .login-orb-1, .login-orb-2 {
+      position: absolute; border-radius: 50%; filter: blur(60px); pointer-events: none;
+    }
+    .login-orb-1 { width: 220px; height: 220px; background: rgba(249, 115, 22, 0.22); top: -60px; right: -40px; }
+    .login-orb-2 { width: 260px; height: 260px; background: rgba(56, 189, 248, 0.14); bottom: -80px; left: -60px; }
+    .login-card {
+      position: relative; background: #ffffff; width: 100%; max-width: 375px;
+      border-radius: 26px; padding: 28px 24px 24px; box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
+      animation: slideUp 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .login-logo-wrap {
+      width: 74px; height: 74px; border-radius: 50%; padding: 3px;
+      background: linear-gradient(135deg, #f97316, #091e3a);
+      margin: 0 auto 12px; box-shadow: 0 8px 20px rgba(9, 30, 58, 0.16);
+    }
+    .login-logo-wrap img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; background: #fff; display: block; }
+    .login-title { text-align: center; margin-bottom: 20px; }
+    .login-title h2 { margin: 0; color: var(--navy-900); font-size: 22px; font-weight: 800; letter-spacing: -0.3px; }
+    .login-title p { margin: 4px 0 0; font-size: 11px; color: var(--accent-dark); font-weight: 700; letter-spacing: 1.5px; }
+    .login-err {
+      display: none; background: var(--danger-soft); color: #b91c1c; border: 1px solid #fecaca;
+      padding: 10px 12px; border-radius: 12px; font-size: 12.5px; font-weight: 600; margin-bottom: 14px; text-align: center;
+    }
 
-    header { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-mid) 100%); color: #fff; padding: 10px 14px; position: sticky; top: 0; z-index: 30; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 3px 12px rgba(11,37,69,0.25); border-bottom: 2px solid var(--accent); }
-    .brand { display: flex; align-items: center; gap: 10px; }
-    .brand-logo { width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent-border); background: #fff; }
-    .brand h1 { margin: 0; font-size: 15.5px; font-weight: 800; }
-    .brand small { font-size: 11px; color: #ffedd5; display: block; font-weight: 600; }
-    .hdr-btn { background: rgba(255,255,255,0.14); color: #fff; border: 1px solid rgba(255,255,255,0.28); padding: 6px 10px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer; }
+    /* ===== PREMIUM HEADER ===== */
+    header {
+      background: rgba(9, 30, 58, 0.96); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      color: #fff; padding: 12px 16px; position: sticky; top: 0; z-index: 30;
+      display: flex; justify-content: space-between; align-items: center;
+      box-shadow: 0 4px 20px rgba(9, 30, 58, 0.16);
+    }
+    header::after {
+      content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent), #fb923c, transparent);
+    }
+    .brand { display: flex; align-items: center; gap: 11px; }
+    .brand-logo {
+      width: 38px; height: 38px; border-radius: 50%; object-fit: cover;
+      border: 2px solid rgba(253, 186, 116, 0.75); background: #fff;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+    }
+    .brand h1 { margin: 0; font-size: 16px; font-weight: 800; letter-spacing: -0.2px; }
+    .brand small { font-size: 11px; color: #cbd5e1; display: block; font-weight: 500; margin-top: 1px; }
+    .hdr-actions { display: flex; gap: 8px; }
+    .icon-btn {
+      width: 36px; height: 36px; border-radius: 11px; border: 1px solid rgba(255,255,255,0.16);
+      background: rgba(255,255,255,0.1); color: #fff; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; transition: 0.18s ease;
+    }
+    .icon-btn:active { transform: scale(0.92); background: rgba(255,255,255,0.2); }
 
-    .container { max-width: 600px; margin: 12px auto; padding: 0 12px; }
+    /* ===== CONTAINER & CARDS ===== */
+    .container { max-width: 580px; margin: 14px auto; padding: 0 14px; }
     .page { display: none; }
-    .page.active { display: block; animation: pageEnter 0.25s ease; }
+    .page.active { display: block; animation: pageFade 0.28s ease; }
 
-    .notice-banner { background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%); border: 2px solid var(--accent); border-radius: 14px; padding: 12px 14px; margin-bottom: 12px; animation: pulseNotice 1.8s infinite; }
-    .notice-head { display: flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 800; color: #c2410c; margin-bottom: 4px; }
-    .live-dot { width: 9px; height: 9px; border-radius: 50%; background: #dc2626; display: inline-block; animation: blinkDot 0.9s infinite; }
-    .notice-link { display: inline-block; margin-top: 7px; background: var(--accent); color: #fff; text-decoration: none; font-size: 12px; font-weight: 800; padding: 5px 12px; border-radius: 8px; }
+    .card {
+      background: var(--card); border-radius: var(--radius); padding: 16px;
+      box-shadow: var(--shadow-sm); margin-bottom: 14px; border: 1px solid var(--border);
+    }
+    .card-head {
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;
+    }
+    .card-title {
+      font-size: 14.5px; font-weight: 800; color: var(--navy-900);
+      display: flex; align-items: center; gap: 7px; letter-spacing: -0.1px;
+    }
+    .pill-mini {
+      font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 20px;
+      background: #f1f5f9; color: var(--navy-800);
+    }
 
-    .card { background: var(--card); border-radius: 14px; padding: 14px; box-shadow: 0 2px 8px rgba(15,23,42,0.05); margin-bottom: 12px; border: 1px solid var(--border); }
-    .hero-card { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-mid) 100%); color: #fff; border-radius: 16px; padding: 16px; margin-bottom: 12px; border-bottom: 3px solid var(--accent); }
-    .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
-    .stat-box { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 10px 6px; text-align: center; }
-    .stat-num { font-size: 18px; font-weight: 800; }
+    /* ===== SLEEK NOTICE BANNER ===== */
+    .notice-banner {
+      background: linear-gradient(135deg, #fffaf5 0%, #fff1e2 100%);
+      border: 1px solid var(--accent-border); border-left: 4px solid var(--accent);
+      border-radius: 16px; padding: 13px 14px; margin-bottom: 14px;
+      box-shadow: 0 6px 18px rgba(249, 115, 22, 0.09);
+    }
+    .notice-top {
+      display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 5px;
+    }
+    .notice-badge {
+      display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px;
+      font-weight: 800; color: #c2410c;
+    }
+    .live-dot {
+      width: 8px; height: 8px; border-radius: 50%; background: var(--danger);
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2); animation: pulseDot 1.3s infinite;
+    }
+    .notice-date { font-size: 11px; font-weight: 600; color: #9a3412; background: rgba(255,255,255,0.7); padding: 2px 8px; border-radius: 20px; }
+    .notice-body { font-size: 13.5px; color: #1e293b; line-height: 1.48; font-weight: 500; }
+    .notice-link {
+      display: inline-flex; align-items: center; gap: 5px; margin-top: 9px;
+      background: var(--accent); color: #fff; text-decoration: none;
+      font-size: 12px; font-weight: 700; padding: 6px 13px; border-radius: 9px;
+    }
+
+    /* ===== HERO STUDENT CARD ===== */
+    .hero-card {
+      position: relative; overflow: hidden;
+      background: linear-gradient(135deg, #091e3a 0%, #143b70 60%, #1d4e89 100%);
+      color: #fff; border-radius: 22px; padding: 18px; margin-bottom: 14px;
+      box-shadow: var(--shadow-lg);
+    }
+    .hero-card::before {
+      content: ''; position: absolute; width: 170px; height: 170px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(249,115,22,0.3) 0%, transparent 70%);
+      top: -55px; right: -45px; pointer-events: none;
+    }
+    .hero-card::after {
+      content: ''; position: absolute; width: 120px; height: 120px; border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.08); bottom: -45px; left: -25px; pointer-events: none;
+    }
+    .hero-row { position: relative; display: flex; align-items: center; gap: 14px; }
+    .avatar-circle {
+      width: 54px; height: 54px; border-radius: 16px;
+      background: linear-gradient(135deg, #fb923c, #ea580c);
+      color: #fff; font-size: 21px; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 8px 18px rgba(234, 88, 12, 0.35); border: 2px solid rgba(255,255,255,0.25);
+    }
+    .hero-name { font-size: 19px; font-weight: 800; letter-spacing: -0.2px; line-height: 1.2; }
+    .hero-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+    .hero-chip {
+      font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 20px;
+      background: rgba(255, 255, 255, 0.14); border: 1px solid rgba(255, 255, 255, 0.16); color: #f8fafc;
+    }
+    .hero-chip.orange { background: rgba(249, 115, 22, 0.25); border-color: rgba(253, 186, 116, 0.45); color: #ffedd5; }
+    .hero-footer {
+      position: relative; margin-top: 14px; padding-top: 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+      display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #cbd5e1;
+    }
+
+    /* ===== STATS & PROGRESS ===== */
+    .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px; }
+    .stat-box {
+      background: #fff; border: 1px solid var(--border); border-radius: 16px;
+      padding: 13px 8px; text-align: center; box-shadow: var(--shadow-sm);
+    }
+    .stat-icon {
+      width: 30px; height: 30px; border-radius: 10px; margin: 0 auto 7px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .si-green { background: var(--success-soft); color: var(--success); }
+    .si-orange { background: var(--accent-soft); color: var(--accent); }
+    .si-red { background: var(--danger-soft); color: var(--danger); }
+    .stat-num { font-size: 17.5px; font-weight: 800; letter-spacing: -0.3px; }
     .stat-lbl { font-size: 11px; color: var(--muted); margin-top: 2px; font-weight: 600; }
-    .months-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
-    .m-cell { border: 1px solid var(--border); border-radius: 10px; padding: 8px 4px; text-align: center; font-size: 11px; background: #f8fafc; }
-    .m-cell.paid { background: #dcfce7; border-color: #86efac; color: #166534; font-weight: 700; }
 
-    .filter-pills { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 12px; }
-    .pill { padding: 10px 4px; border-radius: 10px; border: 1.5px solid #cbd5e1; background: #fff; font-weight: 800; font-size: 12px; cursor: pointer; color: var(--primary); }
-    .pill.active { background: var(--primary); color: #fff; border-color: var(--primary); }
-    .lock-card { background: var(--accent-soft); border: 2px dashed var(--accent); border-radius: 16px; padding: 26px 18px; text-align: center; }
+    .prog-track { width: 100%; height: 7px; background: #e2e8f0; border-radius: 99px; overflow: hidden; margin-top: 8px; }
+    .prog-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, #10b981, #34d399); transition: width 0.5s ease; }
 
-    /* SUBJECT -> CHAPTER FOLDERS */
-    details.sub-folder { background: #fff; border: 1.5px solid var(--border); border-left: 4px solid var(--primary); border-radius: 13px; margin-bottom: 10px; overflow: hidden; }
-    details.sub-folder summary { padding: 13px 14px; font-size: 15px; font-weight: 800; color: var(--primary); cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; }
-    .sub-body { padding: 0 10px 10px; }
-    details.chap-folder { background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; margin-top: 8px; }
-    details.chap-folder summary { padding: 10px 12px; font-size: 13.5px; font-weight: 800; color: #c2410c; cursor: pointer; list-style: none; display: flex; justify-content: space-between; }
+    /* ===== MONTHS GRID ===== */
+    .months-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .m-cell {
+      border: 1px solid var(--border); border-radius: 13px; padding: 9px 4px;
+      text-align: center; background: #f8fafc; transition: 0.15s ease;
+    }
+    .m-cell .m-name { font-size: 11.5px; font-weight: 700; color: var(--text-2); }
+    .m-cell .m-val { font-size: 11px; font-weight: 700; margin-top: 3px; color: var(--muted); display: flex; align-items: center; justify-content: center; gap: 2px; }
+    .m-cell.paid {
+      background: linear-gradient(180deg, #ecfdf5 0%, #dcfce7 100%);
+      border-color: #86efac;
+    }
+    .m-cell.paid .m-name { color: #166534; }
+    .m-cell.paid .m-val { color: #15803d; }
+
+    /* ===== SEGMENTED PILLS (CLASSES) ===== */
+    .seg-bar {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;
+      background: #e9eef6; padding: 5px; border-radius: 14px; margin-bottom: 14px;
+    }
+    .seg-btn {
+      padding: 9px 4px; border-radius: 10px; border: none; background: transparent;
+      font-weight: 700; font-size: 12.5px; cursor: pointer; color: var(--text-2);
+      display: flex; align-items: center; justify-content: center; gap: 5px; transition: 0.2s ease;
+    }
+    .seg-btn.active {
+      background: #ffffff; color: var(--navy-900);
+      box-shadow: 0 3px 10px rgba(9, 30, 58, 0.1);
+    }
+    .seg-btn.live-tab.active { color: #dc2626; }
+
+    .lock-card {
+      background: linear-gradient(180deg, #ffffff 0%, #fff7ed 100%);
+      border: 1.5px solid var(--accent-border); border-radius: 22px;
+      padding: 30px 20px; text-align: center; box-shadow: var(--shadow-md);
+    }
+    .lock-icon-circle {
+      width: 64px; height: 64px; border-radius: 50%; margin: 0 auto 14px;
+      background: linear-gradient(135deg, #fff7ed, #ffedd5); color: var(--accent-dark);
+      display: flex; align-items: center; justify-content: center; border: 2px solid var(--accent-border);
+    }
+
+    /* ===== SUBJECT -> CHAPTER FOLDERS ===== */
+    details.sub-folder {
+      background: #fff; border: 1px solid var(--border); border-radius: 16px;
+      margin-bottom: 11px; overflow: hidden; box-shadow: var(--shadow-sm);
+    }
+    details.sub-folder > summary {
+      padding: 14px 15px; font-size: 14.5px; font-weight: 800; color: var(--navy-900);
+      cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center;
+    }
+    details.sub-folder > summary::-webkit-details-marker { display: none; }
+    .folder-left { display: flex; align-items: center; gap: 10px; }
+    .folder-ic {
+      width: 34px; height: 34px; border-radius: 10px; background: #eff6ff; color: var(--navy-700);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .sub-body { padding: 0 12px 12px; }
+
+    details.chap-folder {
+      background: #f8fafc; border: 1px solid var(--border); border-radius: 13px; margin-top: 8px;
+    }
+    details.chap-folder > summary {
+      padding: 11px 12px; font-size: 13.5px; font-weight: 700; color: #c2410c;
+      cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center;
+    }
+    details.chap-folder > summary::-webkit-details-marker { display: none; }
     .chap-body { padding: 0 10px 10px; }
 
-    .content-card { background: #fff; border: 1px solid var(--border); border-radius: 11px; padding: 12px; margin-top: 8px; }
-    .c-badge { display: inline-block; font-size: 11px; font-weight: 800; padding: 2px 9px; border-radius: 10px; background: var(--accent-soft); color: #c2410c; border: 1px solid var(--accent-border); }
-    .video-box { margin-top: 9px; border-radius: 10px; overflow: hidden; background: #000; aspect-ratio: 16 / 9; width: 100%; }
+    .content-card {
+      background: #fff; border: 1px solid var(--border); border-radius: 14px;
+      padding: 13px; margin-top: 8px; box-shadow: 0 2px 6px rgba(9,30,58,0.03);
+    }
+    .c-badge {
+      display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700;
+      padding: 3px 10px; border-radius: 20px; background: var(--accent-soft); color: #c2410c;
+    }
+    .c-badge.live { background: var(--danger-soft); color: #dc2626; }
+    .video-box {
+      margin-top: 10px; border-radius: 12px; overflow: hidden; background: #000;
+      aspect-ratio: 16 / 9; width: 100%; box-shadow: 0 6px 16px rgba(0,0,0,0.14);
+    }
     .video-box iframe { width: 100%; height: 100%; border: none; }
 
-    /* LIVE Q&A CHAT */
-    .live-chat-wrap { margin-top: 10px; background: #f8fafc; border: 1px solid var(--border); border-radius: 12px; padding: 10px; }
-    .chat-list { max-height: 200px; overflow-y: auto; margin-bottom: 8px; }
-    .chat-msg { background: #fff; border: 1px solid var(--border); border-radius: 9px; padding: 7px 9px; font-size: 12px; margin-bottom: 6px; }
+    /* ===== LIVE Q&A CHAT ===== */
+    .live-chat-wrap {
+      margin-top: 12px; background: #f8fafc; border: 1px solid var(--border);
+      border-radius: 14px; padding: 12px;
+    }
+    .chat-list { max-height: 210px; overflow-y: auto; margin-bottom: 10px; }
+    .chat-msg {
+      background: #fff; border: 1px solid var(--border); border-radius: 12px;
+      padding: 8px 11px; font-size: 12.5px; margin-bottom: 7px;
+    }
     .chat-msg.admin { background: var(--accent-soft); border-color: var(--accent-border); }
 
-    .form-group { margin-bottom: 11px; }
-    label { display: block; font-size: 12px; font-weight: 700; color: var(--primary); margin-bottom: 4px; }
-    input, select { width: 100%; padding: 10px 12px; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 14px; background: #fff; }
+    /* ===== BANK-CARD STYLE UPI PAYMENT ===== */
+    .upi-card {
+      position: relative; overflow: hidden;
+      background: linear-gradient(135deg, #091e3a 0%, #153c73 65%, #0e2a52 100%);
+      color: #fff; border-radius: 18px; padding: 16px; margin-bottom: 16px;
+      box-shadow: 0 10px 24px rgba(9, 30, 58, 0.22);
+    }
+    .upi-card::after {
+      content: ''; position: absolute; width: 130px; height: 130px; border-radius: 50%;
+      background: rgba(249, 115, 22, 0.24); top: -40px; right: -30px; filter: blur(18px);
+    }
+    .upi-top { display: flex; justify-content: space-between; align-items: center; position: relative; }
+    .upi-tag { font-size: 10.5px; font-weight: 700; letter-spacing: 1px; color: #fed7aa; text-transform: uppercase; }
+    .upi-num { font-size: 22px; font-weight: 800; letter-spacing: 1.5px; margin: 8px 0 4px; position: relative; }
+    .copy-pill {
+      position: relative; background: rgba(255,255,255,0.16); color: #fff; border: 1px solid rgba(255,255,255,0.28);
+      padding: 7px 12px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer;
+      display: inline-flex; align-items: center; gap: 5px; backdrop-filter: blur(6px);
+    }
+    .copy-pill:active { transform: scale(0.95); background: rgba(255,255,255,0.26); }
+
+    /* ===== FORM ELEMENTS ===== */
+    .form-group { margin-bottom: 13px; }
+    label { display: block; font-size: 12px; font-weight: 700; color: var(--navy-900); margin-bottom: 5px; }
+    input, select {
+      width: 100%; padding: 11px 13px; border: 1.5px solid #dbe3ee;
+      border-radius: 12px; font-size: 14px; background: #f8fafc; color: var(--text);
+      transition: 0.18s ease;
+    }
+    input:focus, select:focus { outline: none; border-color: var(--accent); background: #fff; box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.12); }
     .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .btn { width: 100%; padding: 12px; border: none; border-radius: 11px; font-size: 14px; font-weight: 800; cursor: pointer; color: #fff; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-mid) 100%); }
-    .btn:active { transform: scale(0.98); }
-    .btn:disabled { opacity: 0.5; }
-    .btn-accent { background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); }
-    .btn-sec { background: #334155; }
 
-    .info-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px dashed #e2e8f0; gap: 8px; }
-    .info-item:last-child { border-bottom: none; }
-    .badge-ok { background: #dcfce7; color: #166534; padding: 3px 9px; border-radius: 12px; font-size: 11px; font-weight: 800; }
-    .badge-due { background: var(--accent-soft); color: #c2410c; border: 1px solid var(--accent-border); padding: 3px 9px; border-radius: 12px; font-size: 11px; font-weight: 800; }
-    .badge-rej { background: #fee2e2; color: #991b1b; padding: 3px 9px; border-radius: 12px; font-size: 11px; font-weight: 800; }
+    .upload-zone {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      border: 1.8px dashed #cbd5e1; border-radius: 14px; padding: 18px 12px;
+      background: #f8fafc; cursor: pointer; text-align: center; transition: 0.2s ease;
+    }
+    .upload-zone:active { border-color: var(--accent); background: var(--accent-soft); }
+    .upload-zone input { display: none; }
 
-    .rcpt-modal-bg { display: none; position: fixed; inset: 0; background: rgba(6,21,41,0.75); z-index: 120; justify-content: center; align-items: center; padding: 14px; }
+    .btn {
+      width: 100%; padding: 13px 16px; border: none; border-radius: 13px;
+      font-size: 14px; font-weight: 700; cursor: pointer; color: #fff;
+      background: linear-gradient(135deg, var(--navy-900) 0%, var(--navy-700) 100%);
+      display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+      box-shadow: 0 6px 16px rgba(9, 30, 58, 0.18); transition: 0.16s ease;
+    }
+    .btn:active { transform: scale(0.97); }
+    .btn:disabled { opacity: 0.55; cursor: not-allowed; }
+    .btn-accent {
+      background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+      box-shadow: 0 6px 18px rgba(249, 115, 22, 0.28);
+    }
+    .btn-sec { background: #334155; box-shadow: none; }
+
+    /* ===== LISTS & BADGES ===== */
+    .info-item {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 11px 0; border-bottom: 1px solid #f1f5f9; gap: 10px;
+    }
+    .info-item:last-child { border-bottom: none; padding-bottom: 2px; }
+    .badge-ok { background: var(--success-soft); color: #047857; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+    .badge-due { background: var(--accent-soft); color: #c2410c; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+    .badge-rej { background: var(--danger-soft); color: #b91c1c; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+
+    /* ===== SHIMMER LOADER ===== */
+    .skel {
+      background: linear-gradient(90deg, #e8edf5 25%, #f4f7fb 50%, #e8edf5 75%);
+      background-size: 200% 100%; animation: shimmer 1.3s infinite; border-radius: 14px;
+    }
+
+    /* ===== RECEIPT MODAL ===== */
+    .rcpt-modal-bg {
+      display: none; position: fixed; inset: 0; background: rgba(6, 21, 41, 0.72);
+      backdrop-filter: blur(4px); z-index: 120; justify-content: center; align-items: center; padding: 14px;
+    }
     .rcpt-modal-bg.open { display: flex; }
-    .rcpt-card { background: #fff; width: 100%; max-width: 430px; border-radius: 14px; padding: 18px; border: 2px solid var(--primary); max-height: 92vh; overflow-y: auto; }
-    .rcpt-head { text-align: center; border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-bottom: 12px; }
-    .rcpt-line { display: flex; justify-content: space-between; font-size: 13px; padding: 5px 0; border-bottom: 1px dashed #e2e8f0; gap: 8px; }
+    .rcpt-card {
+      background: #fff; width: 100%; max-width: 430px; border-radius: 20px;
+      padding: 20px; border: 2px solid var(--navy-900); max-height: 92vh; overflow-y: auto;
+      box-shadow: 0 24px 50px rgba(0, 0, 0, 0.35);
+    }
+    .rcpt-head { text-align: center; border-bottom: 2px solid var(--navy-900); padding-bottom: 12px; margin-bottom: 12px; }
+    .rcpt-line { display: flex; justify-content: space-between; font-size: 13px; padding: 6px 0; border-bottom: 1px dashed #e2e8f0; gap: 8px; }
     .rcpt-sign { margin-top: 16px; text-align: right; font-size: 12px; }
 
     @media print {
       body * { visibility: hidden; }
       #receiptPrintArea, #receiptPrintArea * { visibility: visible; }
-      #receiptPrintArea { position: fixed; left: 0; top: 0; width: 100%; border: 2px solid #000; }
+      #receiptPrintArea { position: fixed; left: 0; top: 0; width: 100%; border: 2px solid #000; border-radius: 0; box-shadow: none; }
       .no-print { display: none !important; }
     }
 
-    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; border-top: 1px solid var(--border); display: flex; z-index: 40; box-shadow: 0 -4px 16px rgba(11,37,69,0.08); padding-bottom: env(safe-area-inset-bottom); }
-    .nav-btn { flex: 1; padding: 12px 4px; border: none; background: none; font-size: 13px; font-weight: 800; color: var(--muted); cursor: pointer; }
-    .nav-btn.active { color: var(--primary); border-top: 3px solid var(--accent); background: #fff7ed55; }
-    .toast { position: fixed; bottom: 76px; left: 50%; transform: translateX(-50%); background: var(--primary); color: #fff; padding: 10px 18px; border-radius: 24px; font-size: 13px; font-weight: 600; display: none; z-index: 150; max-width: 92%; text-align: center; border: 1px solid var(--accent); }
+    /* ===== PREMIUM FLOATING BOTTOM NAV ===== */
+    .bottom-nav {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: rgba(255, 255, 255, 0.94); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      border-top: 1px solid var(--border); display: flex; z-index: 40;
+      box-shadow: 0 -8px 26px rgba(9, 30, 58, 0.07);
+      padding: 6px 8px calc(8px + env(safe-area-inset-bottom));
+    }
+    .nav-btn {
+      flex: 1; padding: 6px 4px; border: none; background: none;
+      display: flex; flex-direction: column; align-items: center; gap: 3px;
+      font-size: 11px; font-weight: 700; color: var(--muted); cursor: pointer;
+      border-radius: 14px; transition: 0.2s ease;
+    }
+    .nav-icon-wrap {
+      width: 44px; height: 28px; border-radius: 20px;
+      display: flex; align-items: center; justify-content: center; transition: 0.2s ease;
+    }
+    .nav-btn.active { color: var(--navy-900); }
+    .nav-btn.active .nav-icon-wrap {
+      background: var(--accent-soft); color: var(--accent-dark);
+    }
+
+    .toast {
+      position: fixed; bottom: 86px; left: 50%; transform: translateX(-50%);
+      background: var(--navy-900); color: #fff; padding: 10px 18px; border-radius: 30px;
+      font-size: 12.5px; font-weight: 600; display: none; z-index: 150; max-width: 90%;
+      text-align: center; box-shadow: 0 10px 26px rgba(9, 30, 58, 0.3);
+      border: 1px solid rgba(249, 115, 22, 0.5);
+    }
   </style>
 </head>
 <body>
 
+<!-- SPLASH SCREEN -->
 <div id="splashScreen">
-  <div class="splash-logo-ring"><img src="logo.png?v=3" alt="Logo" onerror="this.style.display='none'"></div>
+  <div class="splash-ring"><img src="logo.png?v=3" alt="Logo" onerror="this.style.display='none'"></div>
   <h1 class="splash-title">U.C.C Institute</h1>
-  <p class="splash-tagline">Learn • Grow • Succeed</p>
-  <div class="splash-bar"><div class="splash-bar-fill"></div></div>
+  <p class="splash-tag">Learn • Grow • Succeed</p>
+  <div class="splash-bar"><div class="splash-fill"></div></div>
 </div>
 
+<!-- LOGIN SCREEN -->
 <div id="loginScreen">
+  <div class="login-orb-1"></div>
+  <div class="login-orb-2"></div>
   <div class="login-card">
-    <img src="logo.png?v=3" alt="Logo" class="login-logo" onerror="this.style.display='none'">
-    <div class="login-title"><h2>U.C.C Student App</h2><p>LEARN • GROW • SUCCEED</p></div>
+    <div class="login-logo-wrap"><img src="logo.png?v=3" alt="Logo" onerror="this.style.display='none'"></div>
+    <div class="login-title">
+      <h2>U.C.C Student Portal</h2>
+      <p>LEARN • GROW • SUCCEED</p>
+    </div>
     <div id="loginErr" class="login-err">Invalid Student ID or Mobile Number!</div>
     <form onsubmit="handleStudentLogin(event)">
-      <div class="form-group"><label>Student ID (e.g. UCC001)</label><input type="text" id="lId" required placeholder="UCC001" style="text-transform:uppercase;"></div>
-      <div class="form-group"><label>Registered Mobile Number</label><input type="tel" id="lMob" required maxlength="10" placeholder="10-digit mobile number"></div>
-      <button type="submit" id="lBtn" class="btn btn-accent" style="margin-top:6px;">Login to Student App</button>
+      <div class="form-group">
+        <label>Student ID</label>
+        <input type="text" id="lId" required placeholder="e.g. UCC001" style="text-transform:uppercase;">
+      </div>
+      <div class="form-group">
+        <label>Registered Mobile Number</label>
+        <input type="tel" id="lMob" required maxlength="10" placeholder="10-digit mobile number">
+      </div>
+      <button type="submit" id="lBtn" class="btn btn-accent" style="margin-top:8px;">
+        <span>Login to Student App</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </button>
     </form>
   </div>
 </div>
 
+<!-- TOP APP BAR -->
 <header>
   <div class="brand">
     <img src="logo.png?v=3" alt="Logo" class="brand-logo" onerror="this.style.display='none'">
-    <div><h1>U.C.C Institute</h1><small id="hdrSub">Student Portal • 2027</small></div>
+    <div>
+      <h1>U.C.C Institute</h1>
+      <small id="hdrSub">Student Portal • Session 2027</small>
+    </div>
   </div>
-  <div style="display:flex;gap:6px;">
-    <button class="hdr-btn" onclick="refreshPortal(false)">↻</button>
-    <button class="hdr-btn" onclick="logoutStudent()">Logout</button>
+  <div class="hdr-actions">
+    <button class="icon-btn" onclick="refreshPortal(false)" title="Refresh">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>
+    </button>
+    <button class="icon-btn" onclick="logoutStudent()" title="Logout">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+    </button>
   </div>
 </header>
 
 <div class="container">
-  <div id="noticeArea"></div>
-
-  <!-- TAB 1: HOME -->
-  <div id="page-home" class="page active">
-    <div class="hero-card">
-      <div style="font-size:19px;font-weight:800;" id="sName">-</div>
-      <div style="font-size:13px;color:#ffedd5;margin-top:2px;" id="sMeta">-</div>
-      <div style="font-size:12px;opacity:0.85;margin-top:4px;" id="sFather">Father: -</div>
-    </div>
+  <!-- SHIMMER SKELETON (SHOWS UNTIL DATA LOADS) -->
+  <div id="skeletonView" style="display:none;">
+    <div class="skel" style="height:125px;margin-bottom:14px;"></div>
     <div class="stat-grid">
-      <div class="stat-box"><div id="sPresent" class="stat-num" style="color:var(--success);">0</div><div class="stat-lbl">Present</div></div>
-      <div class="stat-box"><div id="sAbsent" class="stat-num" style="color:var(--accent);">0</div><div class="stat-lbl">Absent</div></div>
-      <div class="stat-box"><div id="sDue" class="stat-num" style="color:var(--danger);">Rs. 0</div><div class="stat-lbl">Total Due</div></div>
+      <div class="skel" style="height:86px;"></div>
+      <div class="skel" style="height:86px;"></div>
+      <div class="skel" style="height:86px;"></div>
     </div>
-    <div class="card">
-      <div style="font-weight:800;font-size:14px;color:var(--primary);margin-bottom:8px;">2027 Monthly Fee Status</div>
-      <div class="months-grid" id="sMonths"></div>
-    </div>
+    <div class="skel" style="height:210px;"></div>
   </div>
 
-  <!-- TAB 2: CLASSES (LIVE + RECORDED + PDF/TEST IN CHAPTER FOLDERS) -->
-  <div id="page-classes" class="page">
-    <div id="classesLockedView" class="lock-card" style="display:none;">
-      <div style="font-size:44px;margin-bottom:8px;">🔒</div>
-      <div style="font-size:17px;font-weight:800;color:var(--primary);">ক্লাস ও মক টেস্ট লক করা আছে</div>
-      <div style="font-size:13px;color:#475569;margin:8px 0 16px;line-height:1.5;">
-        তোমার বর্তমানে <strong id="lockDueAmt" style="color:var(--danger);">Rs. 0</strong> টিউশন ফি বাকি রয়েছে। ফি পরিশোধ করলেই লাইভ ক্লাস, রেকর্ডেড ভিডিও, PDF নোটস ও মক টেস্ট অটোমেটিক খুলে যাবে।
+  <div id="mainContent">
+    <!-- NOTICE BANNER -->
+    <div id="noticeArea"></div>
+
+    <!-- TAB 1: HOME -->
+    <div id="page-home" class="page active">
+      <div class="hero-card">
+        <div class="hero-row">
+          <div class="avatar-circle" id="sAvatar">U</div>
+          <div style="min-width:0;">
+            <div class="hero-name" id="sName">Loading...</div>
+            <div class="hero-chips">
+              <span class="hero-chip orange" id="sIdChip">UCC</span>
+              <span class="hero-chip" id="sClassChip">Class</span>
+            </div>
+          </div>
+        </div>
+        <div class="hero-footer">
+          <span id="sFather">Father: -</span>
+          <span id="sPhone" style="font-weight:700;color:#fff;">-</span>
+        </div>
       </div>
-      <button class="btn btn-accent" onclick="openPage('pay', document.getElementById('navPay'))">এখনই ফি পেমেন্ট করো</button>
+
+      <div class="stat-grid">
+        <div class="stat-box">
+          <div class="stat-icon si-green">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div id="sPresent" class="stat-num" style="color:var(--success);">0</div>
+          <div class="stat-lbl">Present</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-icon si-orange">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </div>
+          <div id="sAbsent" class="stat-num" style="color:var(--accent-dark);">0</div>
+          <div class="stat-lbl">Absent</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-icon si-red">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12"/><path d="M6 8h12"/><path d="m6 13 8.5 8"/><path d="M6 13h3"/><path d="M9 13c6.667 0 6.667-10 0-10"/></svg>
+          </div>
+          <div id="sDue" class="stat-num" style="color:var(--danger);">Rs. 0</div>
+          <div class="stat-lbl">Total Due</div>
+        </div>
+      </div>
+
+      <div class="card" style="padding:14px 16px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;font-size:12.5px;font-weight:700;">
+          <span style="color:var(--navy-900);">Attendance Performance</span>
+          <span id="sAttPct" style="color:var(--success);">0%</span>
+        </div>
+        <div class="prog-track"><div id="sAttBar" class="prog-fill" style="width:0%;"></div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <div class="card-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            2027 Monthly Fee Status
+          </div>
+          <span id="paidCountPill" class="pill-mini">0 / 12 Paid</span>
+        </div>
+        <div class="months-grid" id="sMonths"></div>
+      </div>
     </div>
 
-    <div id="classesUnlockedView">
-      <div class="filter-pills">
-        <button class="pill active" id="cpLive" onclick="setClassFilter('Live')">🔴 Live</button>
-        <button class="pill" id="cpVideo" onclick="setClassFilter('Video')">🎥 Recorded</button>
-        <button class="pill" id="cpOther" onclick="setClassFilter('OTHER')">📄 PDF / Test</button>
+    <!-- TAB 2: CLASSES -->
+    <div id="page-classes" class="page">
+      <div id="classesLockedView" class="lock-card" style="display:none;">
+        <div class="lock-icon-circle">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </div>
+        <div style="font-size:17px;font-weight:800;color:var(--navy-900);">ক্লাস ও মক টেস্ট লক করা আছে</div>
+        <div style="font-size:13px;color:var(--text-2);margin:8px 0 18px;line-height:1.55;">
+          তোমার বর্তমানে <strong id="lockDueAmt" style="color:var(--danger);">Rs. 0</strong> টিউশন ফি বাকি রয়েছে। ফি পরিশোধ করলেই লাইভ ক্লাস, রেকর্ডেড ভিডিও, PDF নোটস ও মক টেস্ট অটোমেটিক খুলে যাবে।
+        </div>
+        <button class="btn btn-accent" onclick="openPage('pay', document.getElementById('navPay'))">এখনই ফি পেমেন্ট করো</button>
       </div>
-      <div id="classesList"></div>
-    </div>
-  </div>
 
-  <!-- TAB 3: PAY FEE -->
-  <div id="page-pay" class="page">
-    <div class="card">
-      <div style="font-weight:800;font-size:15px;color:var(--primary);margin-bottom:8px;">💳 Online Tuition Fee Payment</div>
-      <div style="background:var(--accent-soft);border:1px solid var(--accent-border);padding:11px;border-radius:11px;font-size:12.5px;color:#1e293b;margin-bottom:12px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;">
-          <div><strong>PhonePe / GPay / UPI:</strong><br><span style="font-size:16px;font-weight:800;color:var(--primary);">8016972121</span></div>
-          <button type="button" class="btn" style="width:auto;padding:8px 12px;font-size:12px;" onclick="copyUpi()">📋 Copy Number</button>
+      <div id="classesUnlockedView">
+        <div class="seg-bar">
+          <button class="seg-btn live-tab active" id="cpLive" onclick="setClassFilter('Live')">
+            <span class="live-dot" style="width:7px;height:7px;"></span> Live
+          </button>
+          <button class="seg-btn" id="cpVideo" onclick="setClassFilter('Video')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="5 3 19 12 5 21 5 3"/></svg> Recorded
+          </button>
+          <button class="seg-btn" id="cpOther" onclick="setClassFilter('OTHER')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> PDF / Test
+          </button>
         </div>
-        <div style="margin-top:6px;font-size:11.5px;color:#475569;">পেমেন্ট করে নিচে স্ক্রিনশট আপলোড করো। অ্যাডমিন ভেরিফাই করলেই রসিদ পেয়ে যাবে।</div>
+        <div id="classesList"></div>
       </div>
-      <form onsubmit="submitOnlinePay(event)">
-        <div class="row-2">
-          <div class="form-group"><label>Select Month *</label><select id="payMonth" required></select></div>
-          <div class="form-group"><label>Amount (Rs.) *</label><input type="number" id="payAmt" value="300" required min="1"></div>
-        </div>
-        <div class="form-group"><label>UTR / Transaction ID</label><input type="text" id="payUtr" placeholder="Last 4-12 digits"></div>
-        <div class="form-group">
-          <label>Upload Payment Screenshot *</label>
-          <input type="file" id="payFile" accept="image/*" required onchange="previewCompressedImg(event)">
-          <img id="payPreview" style="display:none;width:100%;max-height:180px;object-fit:contain;margin-top:8px;border-radius:8px;border:1px solid var(--border);">
-        </div>
-        <button type="submit" id="paySubmitBtn" class="btn btn-accent">Submit Payment Proof</button>
-      </form>
     </div>
-    <div class="card">
-      <div style="font-weight:800;font-size:14px;color:var(--primary);margin-bottom:8px;">My Payment Requests</div>
-      <div id="myReqList"></div>
-    </div>
-  </div>
 
-  <!-- TAB 4: RECEIPTS -->
-  <div id="page-receipts" class="page">
-    <div class="card">
-      <div style="font-weight:800;font-size:15px;color:var(--primary);margin-bottom:8px;">📄 Official Fee Receipts (2027)</div>
-      <div id="myReceiptsList"></div>
+    <!-- TAB 3: PAY FEE -->
+    <div id="page-pay" class="page">
+      <div class="upi-card">
+        <div class="upi-top">
+          <span class="upi-tag">Official UPI • PhonePe / GPay</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fed7aa" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        </div>
+        <div class="upi-num">8016972121</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;gap:8px;">
+          <span style="font-size:11.5px;color:#cbd5e1;">পেমেন্ট করে নিচে স্ক্রিনশট আপলোড করো</span>
+          <button type="button" class="copy-pill" onclick="copyUpi()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy
+          </button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <div class="card-title">Submit Payment Proof</div>
+        </div>
+        <form onsubmit="submitOnlinePay(event)">
+          <div class="row-2">
+            <div class="form-group"><label>Select Month *</label><select id="payMonth" required></select></div>
+            <div class="form-group"><label>Amount (Rs.) *</label><input type="number" id="payAmt" value="300" required min="1"></div>
+          </div>
+          <div class="form-group"><label>UTR / Transaction ID</label><input type="text" id="payUtr" placeholder="Last 4-12 digits"></div>
+          <div class="form-group">
+            <label>Payment Screenshot *</label>
+            <label class="upload-zone" for="payFile">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <span id="uploadFileName" style="font-size:12.5px;font-weight:700;color:var(--navy-900);margin-top:6px;">Tap to choose screenshot</span>
+              <span style="font-size:11px;color:var(--muted);margin-top:2px;">JPG / PNG supported</span>
+              <input type="file" id="payFile" accept="image/*" required onchange="previewCompressedImg(event)">
+            </label>
+            <img id="payPreview" style="display:none;width:100%;max-height:190px;object-fit:contain;margin-top:10px;border-radius:12px;border:1px solid var(--border);background:#f8fafc;">
+          </div>
+          <button type="submit" id="paySubmitBtn" class="btn btn-accent">Submit Payment Proof</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><div class="card-title">My Payment Requests</div></div>
+        <div id="myReqList"></div>
+      </div>
+    </div>
+
+    <!-- TAB 4: RECEIPTS -->
+    <div id="page-receipts" class="page">
+      <div class="card">
+        <div class="card-head">
+          <div class="card-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            Official Fee Receipts (2027)
+          </div>
+        </div>
+        <div id="myReceiptsList"></div>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- RECEIPT MODAL -->
+<!-- OFFICIAL BENGALI RECEIPT MODAL -->
 <div class="rcpt-modal-bg" id="rcptModal" onclick="if(event.target===this) closeReceipt()">
   <div class="rcpt-card" id="receiptPrintArea">
     <div class="rcpt-head">
-      <div style="font-size:20px;font-weight:800;color:var(--primary);">ইউ.সি.সি ইনস্টিটিউট</div>
-      <div style="font-size:11px;color:#475569;">পেঁচাকোলা, রায়পুর, বাঁকুড়া • ফোন: 8016972121 / 8159980707</div>
-      <div style="font-size:12px;font-weight:800;margin-top:4px;background:var(--accent-soft);color:#c2410c;border:1px solid var(--accent-border);display:inline-block;padding:2px 10px;border-radius:10px;">অফিশিয়াল ফি রসিদ (2027)</div>
+      <div style="font-size:20px;font-weight:800;color:var(--navy-900);">ইউ.সি.সি ইনস্টিটিউট</div>
+      <div style="font-size:11px;color:#475569;margin-top:2px;">পেঁচাকোলা, রায়পুর, বাঁকুড়া • ফোন: 8016972121 / 8159980707</div>
+      <div style="font-size:12px;font-weight:800;margin-top:6px;background:var(--accent-soft);color:#c2410c;border:1px solid var(--accent-border);display:inline-block;padding:3px 12px;border-radius:20px;">অফিশিয়াল ফি রসিদ (2027)</div>
     </div>
     <div class="rcpt-line"><span>রসিদ নং:</span><strong id="rNo"></strong></div>
     <div class="rcpt-line"><span>তারিখ ও সময়:</span><strong id="rDate"></strong></div>
@@ -256,21 +707,52 @@
     <div class="rcpt-line"><span>আইডি ও শ্রেণী:</span><strong id="rIdCls"></strong></div>
     <div class="rcpt-line"><span>কোন মাসের ফি:</span><strong id="rMonth"></strong></div>
     <div class="rcpt-line"><span>পেমেন্টের মাধ্যম:</span><strong id="rMode"></strong></div>
-    <div class="rcpt-line" style="font-size:15px;color:var(--primary);border-top:1px solid #cbd5e1;margin-top:4px;padding-top:8px;"><span><strong>মোট জমা টাকা:</strong></span><strong id="rAmt"></strong></div>
-    <div class="rcpt-sign">গ্রহণকারী / অনুমোদিত স্বাক্ষর:<br><strong id="rCollector" style="font-size:15px;color:var(--primary);"></strong><br><span style="color:var(--muted);font-size:10px;">ইউ.সি.সি ইনস্টিটিউট, পেঁচাকোলা</span></div>
-    <div style="display:grid;gap:8px;margin-top:14px;" class="no-print">
-      <button class="btn" onclick="window.print()">🖨️ Print / Save PDF</button>
-      <div class="row-2"><button class="btn btn-accent" onclick="downloadReceiptImage()">⬇️ Save PNG</button><button class="btn btn-sec" onclick="closeReceipt()">Close</button></div>
+    <div class="rcpt-line" style="font-size:15px;color:var(--navy-900);border-top:1px solid #cbd5e1;margin-top:6px;padding-top:9px;">
+      <span><strong>মোট জমা টাকা:</strong></span><strong id="rAmt"></strong>
+    </div>
+    <div class="rcpt-sign">
+      গ্রহণকারী / অনুমোদিত স্বাক্ষর:<br>
+      <strong id="rCollector" style="font-size:15px;color:var(--navy-900);"></strong><br>
+      <span style="color:var(--muted);font-size:10px;">ইউ.সি.সি ইনস্টিটিউট, পেঁচাকোলা</span>
+    </div>
+    <div style="display:grid;gap:8px;margin-top:16px;" class="no-print">
+      <button class="btn" onclick="window.print()">Print / Save PDF</button>
+      <div class="row-2">
+        <button class="btn btn-accent" onclick="downloadReceiptImage()">Save PNG</button>
+        <button class="btn btn-sec" onclick="closeReceipt()">Close</button>
+      </div>
     </div>
   </div>
 </div>
 
-<div class="bottom-nav">
-  <button class="nav-btn active" onclick="openPage('home', this)">Home</button>
-  <button class="nav-btn" onclick="openPage('classes', this)">Classes</button>
-  <button class="nav-btn" id="navPay" onclick="openPage('pay', this)">Pay Fee</button>
-  <button class="nav-btn" onclick="openPage('receipts', this)">Receipts</button>
-</div>
+<!-- PREMIUM BOTTOM NAVIGATION -->
+<nav class="bottom-nav">
+  <button class="nav-btn active" onclick="openPage('home', this)">
+    <div class="nav-icon-wrap">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    </div>
+    <span>Home</span>
+  </button>
+  <button class="nav-btn" onclick="openPage('classes', this)">
+    <div class="nav-icon-wrap">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+    </div>
+    <span>Classes</span>
+  </button>
+  <button class="nav-btn" id="navPay" onclick="openPage('pay', this)">
+    <div class="nav-icon-wrap">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+    </div>
+    <span>Pay Fee</span>
+  </button>
+  <button class="nav-btn" onclick="openPage('receipts', this)">
+    <div class="nav-icon-wrap">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+    </div>
+    <span>Receipts</span>
+  </button>
+</nav>
+
 <div id="toast" class="toast"></div>
 
 <script>
@@ -300,79 +782,136 @@
     else { lastBackPress = now; toast('অ্যাপ থেকে বেরোতে আবার Back চাপুন'); window.history.pushState({ app: true }, ''); }
   });
 
-  // Fast Auto-Sync
   document.addEventListener('visibilitychange', () => { if (!document.hidden && navigator.onLine) refreshPortal(true); });
   setInterval(() => { if (!document.hidden && navigator.onLine && portalData) refreshPortal(true); }, 45000);
 
-  function toast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.style.display = 'block'; setTimeout(() => { t.style.display = 'none'; }, 3000); }
-  function copyUpi() { navigator.clipboard?.writeText('8016972121').catch(()=>{}); toast('UPI Number 8016972121 Copied!'); }
+  function toast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.style.display = 'block'; setTimeout(() => { t.style.display = 'none'; }, 2800); }
+  function copyUpi() { navigator.clipboard?.writeText('8016972121').catch(()=>{}); toast('UPI Number 8016972121 Copied'); }
+
+  function setLoading(show) {
+    document.getElementById('skeletonView').style.display = show ? 'block' : 'none';
+    document.getElementById('mainContent').style.display = show ? 'none' : 'block';
+  }
 
   window.onload = function() {
-    setTimeout(() => { const sp = document.getElementById('splashScreen'); sp.classList.add('hide'); setTimeout(() => { sp.style.display = 'none'; }, 420); }, 1500);
+    setTimeout(() => { const sp = document.getElementById('splashScreen'); sp.classList.add('hide'); setTimeout(() => { sp.style.display = 'none'; }, 450); }, 1400);
     const savedId = localStorage.getItem('ucc_st_id'), savedMob = localStorage.getItem('ucc_st_mob');
-    if (savedId && savedMob) { document.getElementById('loginScreen').style.display = 'none'; loadStudentData(savedId, savedMob, true); }
+    if (savedId && savedMob) {
+      document.getElementById('loginScreen').style.display = 'none';
+      setLoading(true);
+      loadStudentData(savedId, savedMob, true);
+    }
   };
 
   async function handleStudentLogin(e) {
     e.preventDefault();
-    const id = document.getElementById('lId').value.trim().toUpperCase(), mob = document.getElementById('lMob').value.replace(/\D/g,'').slice(-10);
+    const id = document.getElementById('lId').value.trim().toUpperCase();
+    const mob = document.getElementById('lMob').value.replace(/\D/g,'').slice(-10);
     const btn = document.getElementById('lBtn'), err = document.getElementById('loginErr');
-    btn.disabled = true; btn.textContent = 'Logging in...'; err.style.display = 'none';
+    btn.disabled = true; btn.innerHTML = '<span>Verifying...</span>'; err.style.display = 'none';
     const ok = await loadStudentData(id, mob, false);
-    if (ok) { localStorage.setItem('ucc_st_id', id); localStorage.setItem('ucc_st_mob', mob); document.getElementById('loginScreen').style.display = 'none'; }
-    else err.style.display = 'block';
-    btn.disabled = false; btn.textContent = 'Login to Student App';
+    if (ok) {
+      localStorage.setItem('ucc_st_id', id);
+      localStorage.setItem('ucc_st_mob', mob);
+      document.getElementById('loginScreen').style.display = 'none';
+    } else {
+      err.style.display = 'block';
+    }
+    btn.disabled = false; btn.innerHTML = '<span>Login to Student App</span>';
   }
 
   async function loadStudentData(id, mob, silent) {
     try {
       const res = await fetch(`${API_URL}?mode=student&id=${encodeURIComponent(id)}&mobile=${encodeURIComponent(mob)}`);
       const data = await res.json();
-      if (data.status === 'ok') { portalData = data; renderPortal(); return true; }
+      if (data.status === 'ok') {
+        portalData = data;
+        setLoading(false);
+        renderPortal();
+        return true;
+      }
+      setLoading(false);
       return false;
-    } catch (e) { if (!silent) toast('Network error!'); return false; }
+    } catch (e) {
+      setLoading(false);
+      if (!silent) toast('Network error! ইন্টারনেট চেক করুন।');
+      return false;
+    }
   }
+
   function refreshPortal(silent = false) {
     const id = localStorage.getItem('ucc_st_id'), mob = localStorage.getItem('ucc_st_mob');
-    if (id && mob) { if (!silent) toast('Refreshing...'); loadStudentData(id, mob, silent); }
+    if (id && mob) { if (!silent) toast('Updating data...'); loadStudentData(id, mob, silent); }
   }
+
   function logoutStudent() {
     if (liveChatTimer) clearInterval(liveChatTimer);
-    localStorage.removeItem('ucc_st_id'); localStorage.removeItem('ucc_st_mob'); portalData = null; lastContentHash = '';
+    localStorage.removeItem('ucc_st_id'); localStorage.removeItem('ucc_st_mob');
+    portalData = null; lastContentHash = '';
     document.getElementById('loginScreen').style.display = 'flex';
   }
+
   function openPage(name, btn) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
     document.getElementById('page-' + name).classList.add('active');
     if (btn) btn.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   function renderPortal() {
     if (!portalData) return;
     const s = portalData.student;
     document.getElementById('hdrSub').textContent = `${s.id} • ${s.studentClass}`;
+    document.getElementById('sAvatar').textContent = (s.name || 'U').trim().charAt(0).toUpperCase();
     document.getElementById('sName').textContent = s.name;
-    document.getElementById('sMeta').textContent = `${s.id} • ${s.studentClass} • ${s.mobile}`;
+    document.getElementById('sIdChip').textContent = s.id;
+    document.getElementById('sClassChip').textContent = s.studentClass;
     document.getElementById('sFather').textContent = `Father: ${s.fatherName || '-'}`;
-    document.getElementById('sPresent').textContent = portalData.presentDays || 0;
-    document.getElementById('sAbsent').textContent = portalData.absentDays || 0;
+    document.getElementById('sPhone').textContent = s.mobile || '-';
+
+    const pres = Number(portalData.presentDays) || 0;
+    const abs = Number(portalData.absentDays) || 0;
+    const totalDays = pres + abs;
+    const pct = totalDays > 0 ? Math.round((pres / totalDays) * 100) : 100;
+
+    document.getElementById('sPresent').textContent = pres;
+    document.getElementById('sAbsent').textContent = abs;
     document.getElementById('sDue').textContent = 'Rs. ' + (Number(s.totalDue) || 0);
-    document.getElementById('sDue').style.color = s.totalDue > 0 ? '#dc2626' : '#16a34a';
+    document.getElementById('sDue').style.color = s.totalDue > 0 ? 'var(--danger)' : 'var(--success)';
+    document.getElementById('sAttPct').textContent = totalDays > 0 ? `${pct}% (${pres}/${totalDays} days)` : 'New Session';
+    document.getElementById('sAttBar').style.width = `${pct}%`;
 
+    // Sleek Notices
     document.getElementById('noticeArea').innerHTML = (portalData.notices || []).map(n => `
-      <div class="notice-banner"><div class="notice-head"><span class="live-dot"></span> 📢 ${n.title} <span style="margin-left:auto;font-size:11px;color:#9a3412;">${n.date}</span></div>
-      <div style="font-size:13px;color:#1e293b;">${n.message}</div>${n.link ? `<a href="${n.link}" target="_blank" class="notice-link">Open Link →</a>` : ''}</div>`).join('');
+      <div class="notice-banner">
+        <div class="notice-top">
+          <span class="notice-badge"><span class="live-dot"></span> ${n.title}</span>
+          <span class="notice-date">${n.date}</span>
+        </div>
+        <div class="notice-body">${n.message}</div>
+        ${n.link ? `<a href="${n.link}" target="_blank" class="notice-link">Open Link →</a>` : ''}
+      </div>
+    `).join('');
 
-    let payOpts = '';
+    // Monthly Fee Grid
+    let payOpts = '', paidCount = 0;
     document.getElementById('sMonths').innerHTML = MONTHS.map(([k, lbl]) => {
       const val = Number(s.months?.[k]) || 0;
-      if (val === 0) payOpts += `<option value="${k}">${k.replace('_',' ')}</option>`;
-      return `<div class="m-cell ${val>0?'paid':''}">${lbl}<br>${val>0?'Rs.'+val+' ✓':'Due'}</div>`;
+      if (val > 0) paidCount++;
+      else payOpts += `<option value="${k}">${k.replace('_',' ')}</option>`;
+      return `
+        <div class="m-cell ${val>0?'paid':''}">
+          <div class="m-name">${lbl}</div>
+          <div class="m-val">${val>0 ? `₹${val} ✓` : 'Due'}</div>
+        </div>
+      `;
     }).join('');
+    document.getElementById('paidCountPill').textContent = `${paidCount} / 12 Paid`;
     document.getElementById('payMonth').innerHTML = payOpts || '<option value="">All Paid ✓</option>';
     document.getElementById('paySubmitBtn').disabled = !payOpts;
 
+    // Classes Due-Lock
     const isLocked = (portalData.dueLock === 'ON' && Number(s.totalDue) > 0);
     document.getElementById('classesLockedView').style.display = isLocked ? 'block' : 'none';
     document.getElementById('classesUnlockedView').style.display = isLocked ? 'none' : 'block';
@@ -381,15 +920,35 @@
     const newHash = JSON.stringify(portalData.classesContent || []) + '|' + isLocked + '|' + classFilter;
     if (!isLocked && newHash !== lastContentHash) { lastContentHash = newHash; renderClassesList(); }
 
+    // Online Payment Requests
     const reqs = portalData.requests || [];
     document.getElementById('myReqList').innerHTML = reqs.length
-      ? reqs.map(r => `<div class="info-item" style="font-size:12px;"><div><strong>${r.month.replace('_',' ')}</strong> • Rs.${r.amount}<br><span style="color:var(--muted);">${r.date} • UTR: ${r.utr||'-'}</span>${r.remarks?`<br><span style="color:#b91c1c;">${r.remarks}</span>`:''}</div><span class="${r.status==='Approved'?'badge-ok':(r.status==='Rejected'?'badge-rej':'badge-due')}">${r.status}</span></div>`).join('')
-      : '<div style="font-size:12px;color:var(--muted);">No online payment requests yet.</div>';
+      ? reqs.map(r => `
+        <div class="info-item" style="font-size:12.5px;">
+          <div>
+            <strong style="color:var(--navy-900);">${r.month.replace('_',' ')}</strong> • ₹${r.amount}<br>
+            <span style="color:var(--muted);font-size:11.5px;">${r.date} • UTR: ${r.utr||'-'}</span>
+            ${r.remarks ? `<br><span style="color:var(--danger);font-size:11.5px;">${r.remarks}</span>` : ''}
+          </div>
+          <span class="${r.status==='Approved'?'badge-ok':(r.status==='Rejected'?'badge-rej':'badge-due')}">${r.status}</span>
+        </div>`).join('')
+      : '<div style="font-size:12.5px;color:var(--muted);text-align:center;padding:8px 0;">No online payment requests yet.</div>';
 
+    // Receipts
     const pays = portalData.payments || [];
     document.getElementById('myReceiptsList').innerHTML = pays.length
-      ? pays.map((p, i) => `<div class="info-item" style="font-size:12px;"><div><strong>${bnMonth(p.month)}</strong> • Rs.${p.amount}<br><span style="color:var(--muted);">${formatBnDate(p.date)} • ${bnCollector(p.collector)}</span></div><button class="btn" style="width:auto;padding:7px 12px;font-size:12px;" onclick="openReceipt(${i})">📄 Receipt</button></div>`).join('')
-      : '<div style="font-size:12px;color:var(--muted);">No fee receipts yet.</div>';
+      ? pays.map((p, i) => `
+        <div class="info-item">
+          <div>
+            <div style="font-size:13.5px;font-weight:800;color:var(--navy-900);">${bnMonth(p.month)} • ₹${p.amount}</div>
+            <div style="font-size:11.5px;color:var(--muted);margin-top:2px;">${formatBnDate(p.date)} • ${bnCollector(p.collector)}</div>
+          </div>
+          <button class="btn" style="width:auto;padding:8px 13px;font-size:12px;border-radius:10px;" onclick="openReceipt(${i})">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Receipt
+          </button>
+        </div>`).join('')
+      : '<div style="font-size:12.5px;color:var(--muted);text-align:center;padding:12px 0;">No fee receipts available yet.</div>';
   }
 
   function setClassFilter(f) {
@@ -417,20 +976,32 @@
 
     if (classFilter === 'Live') {
       const lives = all.filter(c => c.type === 'Live');
-      if (!lives.length) { box.innerHTML = '<div class="card" style="text-align:center;color:var(--muted);font-size:13px;">এখন কোনো লাইভ ক্লাস চলছে না। পুরনো ক্লাস দেখতে <strong>🎥 Recorded</strong> ট্যাবে যাও।</div>'; return; }
+      if (!lives.length) {
+        box.innerHTML = `<div class="card" style="text-align:center;padding:28px 16px;">
+          <div style="width:48px;height:48px;border-radius:50%;background:#f1f5f9;color:var(--muted);margin:0 auto 10px;display:flex;align-items:center;justify-content:center;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+          </div>
+          <div style="font-size:14px;font-weight:700;color:var(--navy-900);">এখন কোনো লাইভ ক্লাস চলছে না</div>
+          <div style="font-size:12.5px;color:var(--muted);margin-top:4px;">পুরনো ক্লাস দেখতে <strong>Recorded</strong> ট্যাবে যাও।</div>
+        </div>`;
+        return;
+      }
       box.innerHTML = lives.map(c => {
         activeLiveIds.push(c.id);
         const embed = getEmbedUrl(c.link);
-        return `<div class="content-card" style="border-left:4px solid #dc2626;">
-          <div style="display:flex;justify-content:space-between;align-items:center;"><span class="c-badge" style="background:#fee2e2;color:#b91c1c;border-color:#fca5a5;">🔴 LIVE • ${c.subject} (${c.chapter||'General'})</span><span style="font-size:11px;color:var(--muted);">${c.date}</span></div>
-          <div style="font-size:15.5px;font-weight:800;color:var(--primary);margin-top:6px;">${c.title}</div>
-          ${embed ? `<div class="video-box"><iframe src="${embed}" allow="autoplay; fullscreen" allowfullscreen></iframe></div>` : `<a href="${c.link}" target="_blank" class="btn btn-accent" style="display:block;text-align:center;text-decoration:none;margin-top:8px;">Join Live Class →</a>`}
+        return `<div class="card" style="border-left:4px solid var(--danger);">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span class="c-badge live"><span class="live-dot" style="width:6px;height:6px;"></span> LIVE • ${c.subject} (${c.chapter||'General'})</span>
+            <span style="font-size:11px;color:var(--muted);font-weight:600;">${c.date}</span>
+          </div>
+          <div style="font-size:16px;font-weight:800;color:var(--navy-900);margin-top:8px;">${c.title}</div>
+          ${embed ? `<div class="video-box"><iframe src="${embed}" allow="autoplay; fullscreen" allowfullscreen></iframe></div>` : `<a href="${c.link}" target="_blank" class="btn btn-accent" style="text-decoration:none;margin-top:10px;">Join Live Class →</a>`}
           <div class="live-chat-wrap">
-            <div style="font-size:12px;font-weight:800;color:var(--primary);margin-bottom:6px;">💬 Live Question & Answer</div>
-            <div id="chat_${c.id}" class="chat-list"><div style="font-size:11px;color:var(--muted);">Loading Q&A...</div></div>
-            <form onsubmit="sendStudentChat(event,'${c.id}')" style="display:flex;gap:6px;">
-              <input type="text" id="cin_${c.id}" required placeholder="তোমার প্রশ্ন লেখো..." style="padding:8px 10px;font-size:13px;">
-              <button type="submit" class="btn btn-accent" style="width:auto;padding:8px 14px;font-size:12px;">Send</button>
+            <div style="font-size:12.5px;font-weight:800;color:var(--navy-900);margin-bottom:8px;">Live Question & Answer</div>
+            <div id="chat_${c.id}" class="chat-list"><div style="font-size:11.5px;color:var(--muted);">Loading Q&A...</div></div>
+            <form onsubmit="sendStudentChat(event,'${c.id}')" style="display:flex;gap:7px;">
+              <input type="text" id="cin_${c.id}" required placeholder="তোমার প্রশ্ন লেখো..." style="padding:9px 12px;font-size:13px;">
+              <button type="submit" class="btn btn-accent" style="width:auto;padding:9px 15px;font-size:12.5px;">Send</button>
             </form>
           </div>
         </div>`;
@@ -440,9 +1011,11 @@
       return;
     }
 
-    // Subject -> Chapter Folder Grouping for Recorded & PDF/Mock Test
     const items = all.filter(c => classFilter === 'Video' ? c.type === 'Video' : (c.type === 'PDF' || c.type === 'Mock Test'));
-    if (!items.length) { box.innerHTML = '<div class="card" style="text-align:center;color:var(--muted);font-size:13px;">এখানে এখনো কিছু আপলোড হয়নি।</div>'; return; }
+    if (!items.length) {
+      box.innerHTML = '<div class="card" style="text-align:center;color:var(--muted);font-size:13px;padding:24px;">এখানে এখনো কোনো কনটেন্ট আপলোড হয়নি।</div>';
+      return;
+    }
 
     const tree = {};
     items.forEach(c => {
@@ -458,14 +1031,30 @@
         const listHtml = chapters[chap].map(c => {
           const embed = c.type === 'Video' ? getEmbedUrl(c.link) : '';
           return `<div class="content-card">
-            <div style="display:flex;justify-content:space-between;"><span class="c-badge">${c.type}</span><span style="font-size:11px;color:var(--muted);">${c.date}</span></div>
-            <div style="font-size:14.5px;font-weight:800;color:var(--primary);margin-top:5px;">${c.title}</div>
-            ${embed ? `<div class="video-box"><iframe src="${embed}" allow="autoplay; fullscreen" allowfullscreen></iframe></div>` : `<a href="${c.link}" target="_blank" class="btn btn-accent" style="display:block;text-align:center;text-decoration:none;margin-top:9px;padding:9px;font-size:13px;">Open ${c.type} →</a>`}
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span class="c-badge">${c.type}</span>
+              <span style="font-size:11px;color:var(--muted);font-weight:600;">${c.date}</span>
+            </div>
+            <div style="font-size:14.5px;font-weight:800;color:var(--navy-900);margin-top:6px;">${c.title}</div>
+            ${embed ? `<div class="video-box"><iframe src="${embed}" allow="autoplay; fullscreen" allowfullscreen></iframe></div>` : `<a href="${c.link}" target="_blank" class="btn btn-accent" style="text-decoration:none;margin-top:10px;padding:10px;font-size:13px;">Open ${c.type} →</a>`}
           </div>`;
         }).join('');
-        return `<details class="chap-folder" ${sIdx===0 && cIdx===0 ? 'open' : ''}><summary><span>📂 ${chap}</span><span>${chapters[chap].length} items ▾</span></summary><div class="chap-body">${listHtml}</div></details>`;
+        return `<details class="chap-folder" ${sIdx===0 && cIdx===0 ? 'open' : ''}>
+          <summary><span>${chap}</span><span class="pill-mini">${chapters[chap].length} items ▾</span></summary>
+          <div class="chap-body">${listHtml}</div>
+        </details>`;
       }).join('');
-      return `<details class="sub-folder" ${sIdx===0 ? 'open' : ''}><summary><span>📁 ${sub}</span><span style="font-size:12px;color:var(--accent);">${Object.keys(chapters).length} Chapters ▾</span></summary><div class="sub-body">${chapHtml}</div></details>`;
+
+      return `<details class="sub-folder" ${sIdx===0 ? 'open' : ''}>
+        <summary>
+          <span class="folder-left">
+            <span class="folder-ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></span>
+            ${sub}
+          </span>
+          <span style="font-size:11.5px;color:var(--accent-dark);font-weight:700;">${Object.keys(chapters).length} Chapters ▾</span>
+        </summary>
+        <div class="sub-body">${chapHtml}</div>
+      </details>`;
     }).join('');
   }
 
@@ -482,7 +1071,7 @@
     const el = document.getElementById('chat_' + cid); if (!el) return;
     el.innerHTML = msgs.length
       ? msgs.map(m => `<div class="chat-msg ${m.role==='Admin'?'admin':''}"><strong>${m.senderName}</strong> <span style="font-size:10px;color:var(--muted);">${m.time}</span><div style="margin-top:2px;">${m.message}</div></div>`).join('')
-      : '<div style="font-size:11px;color:var(--muted);">কোনো প্রশ্ন থাকলে নিচে লিখে পাঠাও...</div>';
+      : '<div style="font-size:11.5px;color:var(--muted);">কোনো প্রশ্ন থাকলে নিচে লিখে পাঠাও...</div>';
     el.scrollTop = el.scrollHeight;
   }
   async function sendStudentChat(e, cid) {
@@ -500,6 +1089,7 @@
 
   function previewCompressedImg(e) {
     const file = e.target.files[0]; if (!file) return;
+    document.getElementById('uploadFileName').textContent = file.name;
     const reader = new FileReader();
     reader.onload = ev => {
       const img = new Image();
@@ -516,42 +1106,61 @@
   }
 
   async function submitOnlinePay(e) {
-    e.preventDefault(); if (!portalData || !compressedBase64) { toast('Attach screenshot.'); return; }
+    e.preventDefault(); if (!portalData || !compressedBase64) { toast('Please attach payment screenshot.'); return; }
     const s = portalData.student, btn = document.getElementById('paySubmitBtn');
-    btn.disabled = true; btn.textContent = 'Uploading...';
+    btn.disabled = true; btn.textContent = 'Uploading Proof...';
     try {
-      const res = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: 'submitOnlinePayment', studentId: s.id, studentName: s.name, studentClass: s.studentClass, month: document.getElementById('payMonth').value, amount: Number(document.getElementById('payAmt').value)||300, utr: document.getElementById('payUtr').value.trim(), screenshotData: compressedBase64 }) });
+      const res = await fetch(API_URL, {
+        method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({
+          action: 'submitOnlinePayment', studentId: s.id, studentName: s.name, studentClass: s.studentClass,
+          month: document.getElementById('payMonth').value, amount: Number(document.getElementById('payAmt').value)||300,
+          utr: document.getElementById('payUtr').value.trim(), screenshotData: compressedBase64
+        })
+      });
       const data = await res.json();
-      if (data.status === 'ok') { toast('Submitted! Admin will verify soon.'); e.target.reset(); document.getElementById('payPreview').style.display = 'none'; compressedBase64 = ''; refreshPortal(true); }
-      else toast('Failed.');
-    } catch (err) { toast('Upload failed.'); }
+      if (data.status === 'ok') {
+        toast('Submitted! Admin will verify soon.');
+        e.target.reset();
+        document.getElementById('uploadFileName').textContent = 'Tap to choose screenshot';
+        document.getElementById('payPreview').style.display = 'none';
+        compressedBase64 = '';
+        refreshPortal(true);
+      } else toast('Failed to submit.');
+    } catch (err) { toast('Upload failed. Try again.'); }
     finally { btn.disabled = false; btn.textContent = 'Submit Payment Proof'; }
   }
 
   function openReceipt(idx) {
     const p = portalData.payments[idx], s = portalData.student; if (!p) return;
     activeReceiptObj = { p, fatherName: s.fatherName || '-' };
-    document.getElementById('rNo').textContent = p.receiptNo || '-'; document.getElementById('rDate').textContent = `${formatBnDate(p.date)}${p.time ? ', '+p.time : ''}`;
-    document.getElementById('rName').textContent = p.studentName; document.getElementById('rFather').textContent = s.fatherName || '-';
-    document.getElementById('rIdCls').textContent = `${p.studentId} • ${bnClass(p.studentClass)}`; document.getElementById('rMonth').textContent = bnMonth(p.month);
-    document.getElementById('rMode').textContent = bnMode(p.mode); document.getElementById('rAmt').textContent = p.amount + ' টাকা';
+    document.getElementById('rNo').textContent = p.receiptNo || '-';
+    document.getElementById('rDate').textContent = `${formatBnDate(p.date)}${p.time ? ', '+p.time : ''}`;
+    document.getElementById('rName').textContent = p.studentName;
+    document.getElementById('rFather').textContent = s.fatherName || '-';
+    document.getElementById('rIdCls').textContent = `${p.studentId} • ${bnClass(p.studentClass)}`;
+    document.getElementById('rMonth').textContent = bnMonth(p.month);
+    document.getElementById('rMode').textContent = bnMode(p.mode);
+    document.getElementById('rAmt').textContent = p.amount + ' টাকা';
     document.getElementById('rCollector').textContent = bnCollector(p.collector);
     document.getElementById('rcptModal').classList.add('open');
   }
   function closeReceipt() { document.getElementById('rcptModal').classList.remove('open'); }
+
   function downloadReceiptImage() {
-    if (!activeReceiptObj) return; const { p, fatherName } = activeReceiptObj;
+    if (!activeReceiptObj) return;
+    const { p, fatherName } = activeReceiptObj;
     const c = document.createElement('canvas'); c.width = 720; c.height = 860; const ctx = c.getContext('2d');
-    ctx.fillStyle='#fff'; ctx.fillRect(0,0,720,860); ctx.strokeStyle='#0b2545'; ctx.lineWidth=8; ctx.strokeRect(18,18,684,824);
-    ctx.fillStyle='#0b2545'; ctx.fillRect(22,22,676,155); ctx.fillStyle='#f97316'; ctx.fillRect(22,173,676,6);
+    ctx.fillStyle='#fff'; ctx.fillRect(0,0,720,860); ctx.strokeStyle='#091e3a'; ctx.lineWidth=8; ctx.strokeRect(18,18,684,824);
+    ctx.fillStyle='#091e3a'; ctx.fillRect(22,22,676,155); ctx.fillStyle='#f97316'; ctx.fillRect(22,173,676,6);
     ctx.fillStyle='#fff'; ctx.textAlign='center'; ctx.font='bold 38px sans-serif'; ctx.fillText('ইউ.সি.সি ইনস্টিটিউট',360,82);
     ctx.font='20px sans-serif'; ctx.fillText('পেঁচাকোলা, রায়পুর, বাঁকুড়া • ফোন: 8016972121 / 8159980707',360,120);
     ctx.font='bold 22px sans-serif'; ctx.fillStyle='#fed7aa'; ctx.fillText('অফিশিয়াল টিউশন ফি রসিদ (2027)',360,156);
     const rows=[['রসিদ নং:',p.receiptNo||'-'],['তারিখ ও সময়:',`${formatBnDate(p.date)}${p.time?', '+p.time:''}`],['ছাত্র/ছাত্রীর নাম:',p.studentName],['পিতার নাম:',fatherName],['আইডি ও শ্রেণী:',`${p.studentId} • ${bnClass(p.studentClass)}`],['কোন মাসের ফি:',bnMonth(p.month)],['পেমেন্টের মাধ্যম:',bnMode(p.mode)]];
     let y=240; rows.forEach(([l,v])=>{ ctx.textAlign='left'; ctx.fillStyle='#475569'; ctx.font='22px sans-serif'; ctx.fillText(l,55,y); ctx.textAlign='right'; ctx.fillStyle='#0f172a'; ctx.font='bold 23px sans-serif'; ctx.fillText(String(v),665,y); ctx.strokeStyle='#e2e8f0'; ctx.lineWidth=1.5; ctx.beginPath(); ctx.moveTo(55,y+18); ctx.lineTo(665,y+18); ctx.stroke(); y+=62; });
     ctx.fillStyle='#fff7ed'; ctx.fillRect(55,y-10,610,68); ctx.strokeStyle='#f97316'; ctx.lineWidth=2; ctx.strokeRect(55,y-10,610,68);
-    ctx.textAlign='left'; ctx.fillStyle='#0b2545'; ctx.font='bold 26px sans-serif'; ctx.fillText('মোট জমা টাকা:',75,y+33); ctx.textAlign='right'; ctx.font='bold 30px sans-serif'; ctx.fillText(`${p.amount} টাকা`,645,y+33);
-    y+=120; ctx.textAlign='right'; ctx.fillStyle='#475569'; ctx.font='19px sans-serif'; ctx.fillText('গ্রহণকারী / অনুমোদিত স্বাক্ষর:',665,y); ctx.fillStyle='#0b2545'; ctx.font='bold 26px sans-serif'; ctx.fillText(bnCollector(p.collector),665,y+36);
+    ctx.textAlign='left'; ctx.fillStyle='#091e3a'; ctx.font='bold 26px sans-serif'; ctx.fillText('মোট জমা টাকা:',75,y+33); ctx.textAlign='right'; ctx.font='bold 30px sans-serif'; ctx.fillText(`${p.amount} টাকা`,645,y+33);
+    y+=120; ctx.textAlign='right'; ctx.fillStyle='#475569'; ctx.font='19px sans-serif'; ctx.fillText('গ্রহণকারী / অনুমোদিত স্বাক্ষর:',665,y); ctx.fillStyle='#091e3a'; ctx.font='bold 26px sans-serif'; ctx.fillText(bnCollector(p.collector),665,y+36);
     const a=document.createElement('a'); a.download=`UCC_Receipt_${p.studentId}_${p.month}.png`; a.href=c.toDataURL('image/png'); a.click();
   }
 </script>
