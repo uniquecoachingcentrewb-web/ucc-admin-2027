@@ -1,8 +1,6 @@
-const CACHE_NAME = 'ucc-admin-2027-v10';
+const CACHE_NAME = 'ucc-admin-2027-v12';
 
-self.addEventListener('install', (e) => {
-  self.skipWaiting();
-});
+self.addEventListener('install', (e) => { self.skipWaiting(); });
 
 self.addEventListener('activate', (e) => {
   e.waitUntil(
@@ -13,7 +11,6 @@ self.addEventListener('activate', (e) => {
   self.clients.claim();
 });
 
-// Network-first: ইন্টারনেট থাকলে সবসময় নতুন আপডেট দেখাবে, না থাকলে অফলাইন ক্যাশ
 self.addEventListener('fetch', (e) => {
   if (e.request.method !== 'GET') return;
   e.respondWith(
