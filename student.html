@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <meta name="theme-color" content="#060e1f">
+  <meta name="theme-color" content="#091e3a">
   <link rel="icon" type="image/png" href="logo.png?v=3">
   <title>U.C.C Institute - Student App</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,25 +11,27 @@
   <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-deep: #060e1f;
-      --bg-surface: #0d1a33;
-      --bg-card: #112140;
-      --bg-card-soft: #162a50;
-      --gold-light: #fae49c;
-      --gold: #d4af37;
-      --gold-dark: #a67c00;
-      --gold-grad: linear-gradient(135deg, #fce79c 0%, #d4af37 55%, #b38714 100%);
-      --gold-border: rgba(212, 175, 55, 0.28);
-      --gold-soft: rgba(212, 175, 55, 0.13);
-      --text: #f8fafc;
-      --text-2: #cbd5e1;
-      --muted: #8da2c0;
-      --border: rgba(148, 163, 184, 0.16);
-      --danger: #f87171;
-      --danger-soft: rgba(239, 68, 68, 0.15);
-      --success: #34d399;
-      --success-soft: rgba(16, 185, 129, 0.15);
-      --shadow-card: 0 10px 28px rgba(2, 6, 18, 0.45);
+      --navy-950: #061529;
+      --navy-900: #091e3a;
+      --navy-800: #102f59;
+      --navy-700: #1a457d;
+      --accent: #f97316;
+      --accent-dark: #ea580c;
+      --accent-soft: #fff7ed;
+      --accent-border: #fed7aa;
+      --bg: #f3f6fb;
+      --card: #ffffff;
+      --text: #0f172a;
+      --text-2: #475569;
+      --muted: #64748b;
+      --border: #e5ebf3;
+      --danger: #ef4444;
+      --danger-soft: #fef2f2;
+      --success: #10b981;
+      --success-soft: #ecfdf5;
+      --shadow-sm: 0 2px 8px rgba(9, 30, 58, 0.04);
+      --shadow-md: 0 8px 24px rgba(9, 30, 58, 0.07);
+      --shadow-lg: 0 16px 36px rgba(9, 30, 58, 0.14);
       --radius: 18px;
     }
 
@@ -39,468 +41,390 @@
       -webkit-tap-highlight-color: transparent;
     }
     html, body {
-      margin: 0;
-      background: radial-gradient(circle at 85% 0%, rgba(212, 175, 55, 0.11) 0%, transparent 42%),
-                  radial-gradient(circle at 10% 30%, rgba(30, 6সাদা ব্যাকগ্রাউন্ড পুরোপুরি সরিয়ে **Student App (`student.html`)**-টাকে এবার **Royal Midnight Blue + Metallic Gold** (রয়্যাল নেভি ও লাক্সারি গোল্ডেন) থিমে বানিয়ে দিলাম।
-
-**নতুন লুকে যা যা থাকছে:**
-* **ডিপ মিডনাইট নেভি বডি ও গ্লাস কার্ড:** পুরো ব্যাকগ্রাউন্ড গাঢ় রয়্যাল নেভি (`#061121`), আর তার ওপর সোনালি বর্ডার দেওয়া ডার্ক-গ্লাস কার্ড।
-* **মেটালিক গোল্ডেন অ্যাকসেন্ট:** বাটন, স্টুডেন্ট অ্যাভাটার, আইডি ব্যাজ, অ্যাটেনডেন্স বার, UPI কার্ড এবং অ্যাক্টিভ ট্যাব—সবকিছুতে আসল গোল্ডেন গ্র্যাডিয়েন্ট ও হালকা গ্লো।
-* **অফিশিয়াল প্রিন্ট-ফ্রেন্ডলি রসিদ:** অ্যাপের ভেতরটা পুরো ডার্ক-গোল্ড হলেও **PDF/PNG রসিদ** প্রিন্ট করার সময় যাতে পরিষ্কার আসে, তাই রসিদ কার্ডটা সাদা কাগজের ওপর নেভি ও গোল্ডেন বর্ডারে রাখা হয়েছে।
-
----
-
-### GitHub-এ `student.html` আপডেট করো
-
-GitHub-এ **`student.html`** খুলে **Edit (✏️)** → পুরনো সব কোড মুছে নিচের পুরো কোডটা **Copy → Paste** করে **Commit changes** (দুবার) চাপো:
-
-```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <meta name="theme-color" content="#061121">
-  <link rel="icon" type="image/png" href="logo.png?v=3">
-  <title>U.C.C Institute - Student App</title>
-  <link rel="preconnect" href="[https://fonts.googleapis.com](https://fonts.googleapis.com)">
-  <link rel="preconnect" href="[https://fonts.gstatic.com](https://fonts.gstatic.com)" crossorigin>
-  <link href="[https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap](https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap)" rel="stylesheet">
-  <style>
-    :root {
-      --bg-deep: #061121;
-      --bg-surface: #0c1b33;
-      --bg-elevated: #112442;
-      --bg-input: #081529;
-      --gold-light: #fae094;
-      --gold: #d4af37;
-      --gold-dark: #a67c1e;
-      --gold-grad: linear-gradient(135deg, #f8df8c 0%, #d4af37 52%, #b08218 100%);
-      --gold-soft: rgba(212, 175, 55, 0.14);
-      --gold-border: rgba(212, 175, 55, 0.28);
-      --text: #f8fafc;
-      --text-2: #cbd5e1;
-      --muted: #8fa3bf;
-      --border: rgba(148, 163, 184, 0.16);
-      --danger: #f87171;
-      --danger-soft: rgba(239, 68, 68, 0.15);
-      --success: #34d399;
-      --success-soft: rgba(16, 185, 129, 0.15);
-      --shadow-card: 0 10px 28px rgba(0, 0, 0, 0.35);
-      --shadow-gold: 0 8px 24px rgba(212, 175, 55, 0.22);
-      --radius: 18px;
-    }
-
-    * {
-      box-sizing: border-box;
-      font-family: 'Plus Jakarta Sans', 'Hind Siliguri', -apple-system, BlinkMacSystemFont, sans-serif;
-      -webkit-tap-highlight-color: transparent;
-    }
-    html, body {
-      margin: 0;
-      background: radial-gradient(circle at 85% 0%, #12294d 0%, #061121 48%, #040b16 100%) fixed;
-      color: var(--text);
-      padding-bottom: 94px;
-      overscroll-behavior-y: contain;
-      user-select: none;
+      margin: 0; background: var(--bg); color: var(--text);
+      padding-bottom: 92px; overscroll-behavior-y: contain; user-select: none;
       -webkit-font-smoothing: antialiased;
     }
     input, select { user-select: text; }
     svg { flex-shrink: 0; }
-    option { background: #0c1b33; color: #f8fafc; }
 
-    /* ===== ROYAL SPLASH SCREEN ===== */
+    /* ===== SPLASH SCREEN ===== */
     #splashScreen {
       position: fixed; inset: 0; z-index: 999;
-      background: radial-gradient(circle at 50% 25%, #16325c 0%, #061121 60%, #020812 100%);
+      background: radial-gradient(circle at 80% 15%, #1d4e89 0%, #091e3a 55%, #040d1a 100%);
       display: flex; flex-direction: column; justify-content: center; align-items: center;
       text-align: center; padding: 24px;
       transition: opacity 0.45s cubic-bezier(0.4, 0, 0.2, 1), transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
     }
     #splashScreen.hide { opacity: 0; transform: scale(1.05); pointer-events: none; }
     .splash-ring {
-      width: 116px; height: 116px; border-radius: 50%; padding: 4px;
-      background: var(--gold-grad);
-      box-shadow: 0 0 0 10px rgba(212, 175, 55, 0.1), 0 0 42px rgba(212, 175, 55, 0.32);
+      width: 112px; height: 112px; border-radius: 50%; padding: 5px;
+      background: linear-gradient(135deg, #fb923c, #ffffff, #f97316);
+      box-shadow: 0 0 0 10px rgba(249, 115, 22, 0.12), 0 18px 40px rgba(0, 0, 0, 0.4);
       animation: popIn 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
     .splash-ring img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; background: #fff; display: block; }
     .splash-title {
-      margin: 20px 0 6px; font-size: 27px; font-weight: 800; letter-spacing: 0.2px;
-      background: var(--gold-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      margin: 20px 0 6px; color: #fff; font-size: 26px; font-weight: 800; letter-spacing: -0.3px;
       opacity: 0; animation: slideUp 0.55s ease 0.2s forwards;
     }
     .splash-tag {
-      margin: 0; color: var(--gold-light); font-size: 11px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase;
-      padding: 6px 16px; border-radius: 30px; background: rgba(212, 175, 55, 0.1);
-      border: 1px solid var(--gold-border);
+      margin: 0; color: #ffedd5; font-size: 11px; font-weight: 700; letter-spacing: 2.4px; text-transform: uppercase;
+      padding: 6px 16px; border-radius: 30px; background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(253, 186, 116, 0.35); backdrop-filter: blur(8px);
       opacity: 0; animation: slideUp 0.55s ease 0.35s forwards;
     }
-    .splash-bar { width: 130px; height: 3.5px; border-radius: 99px; background: rgba(255,255,255,0.1); margin-top: 28px; overflow: hidden; }
-    .splash-fill { height: 100%; width: 0%; border-radius: 99px; background: var(--gold-grad); animation: loadBar 1.15s ease 0.25s forwards; }
+    .splash-bar { width: 120px; height: 4px; border-radius: 99px; background: rgba(255,255,255,0.14); margin-top: 28px; overflow: hidden; }
+    .splash-fill { height: 100%; width: 0%; border-radius: 99px; background: linear-gradient(90deg, #fb923c, #f97316); animation: loadBar 1.15s ease 0.25s forwards; }
 
     @keyframes popIn { 0% { opacity: 0; transform: scale(0.6); } 100% { opacity: 1; transform: scale(1); } }
     @keyframes slideUp { 0% { opacity: 0; transform: translateY(14px); } 100% { opacity: 1; transform: translateY(0); } }
     @keyframes loadBar { to { width: 100%; } }
     @keyframes pageFade { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes pulseDot { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.35); opacity: 0.4; } }
+    @keyframes pulseDot { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.35); opacity: 0.45; } }
     @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
 
-    /* ===== ROYAL LOGIN SCREEN ===== */
+    /* ===== LOGIN SCREEN ===== */
     #loginScreen {
       position: fixed; inset: 0; z-index: 200;
-      background: radial-gradient(circle at 20% 10%, #16335e 0%, #061121 55%, #030812 100%);
+      background: radial-gradient(circle at 15% 15%, #1c4c86 0%, #091e3a 55%, #051122 100%);
       display: flex; justify-content: center; align-items: center; padding: 20px; overflow: hidden;
     }
-    .login-orb-1, .login-orb-2 { position: absolute; border-radius: 50%; filter: blur(70px); pointer-events: none; }
-    .login-orb-1 { width: 230px; height: 230px; background: rgba(212, 175, 55, 0.2); top: -60px; right: -50px; }
-    .login-orb-2 { width: 250px; height: 250px; background: rgba(37, 99, 235, 0.16); bottom: -80px; left: -60px; }
+    .login-orb-1, .login-orb-2 {
+      position: absolute; border-radius: 50%; filter: blur(60px); pointer-events: none;
+    }
+    .login-orb-1 { width: 220px; height: 220px; background: rgba(249, 115, 22, 0.22); top: -60px; right: -40px; }
+    .login-orb-2 { width: 260px; height: 260px; background: rgba(56, 189, 248, 0.14); bottom: -80px; left: -60px; }
     .login-card {
-      position: relative; width: 100%; max-width: 375px;
-      background: linear-gradient(180deg, rgba(17, 36, 66, 0.94) 0%, rgba(10, 23, 44, 0.98) 100%);
-      border: 1px solid var(--gold-border); border-radius: 26px; padding: 28px 24px 24px;
-      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(250, 224, 148, 0.2);
+      position: relative; background: #ffffff; width: 100%; max-width: 375px;
+      border-radius: 26px; padding: 28px 24px 24px; box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
       animation: slideUp 0.45s cubic-bezier(0.22, 1, 0.36, 1);
     }
     .login-logo-wrap {
-      width: 76px; height: 76px; border-radius: 50%; padding: 3px;
-      background: var(--gold-grad); margin: 0 auto 12px;
-      box-shadow: 0 0 24px rgba(212, 175, 55, 0.32);
+      width: 74px; height: 74px; border-radius: 50%; padding: 3px;
+      background: linear-gradient(135deg, #f97316, #091e3a);
+      margin: 0 auto 12px; box-shadow: 0 8px 20px rgba(9, 30, 58, 0.16);
     }
     .login-logo-wrap img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; background: #fff; display: block; }
     .login-title { text-align: center; margin-bottom: 20px; }
-    .login-title h2 {
-      margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.2px;
-      background: var(--gold-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    }
-    .login-title p { margin: 5px 0 0; font-size: 11px; color: var(--muted); font-weight: 700; letter-spacing: 1.8px; }
+    .login-title h2 { margin: 0; color: var(--navy-900); font-size: 22px; font-weight: 800; letter-spacing: -0.3px; }
+    .login-title p { margin: 4px 0 0; font-size: 11px; color: var(--accent-dark); font-weight: 700; letter-spacing: 1.5px; }
     .login-err {
-      display: none; background: var(--danger-soft); color: #fca5a5; border: 1px solid rgba(248, 113, 113, 0.35);
+      display: none; background: var(--danger-soft); color: #b91c1c; border: 1px solid #fecaca;
       padding: 10px 12px; border-radius: 12px; font-size: 12.5px; font-weight: 600; margin-bottom: 14px; text-align: center;
     }
 
-    /* ===== PREMIUM TOP BAR ===== */
+    /* ===== PREMIUM HEADER ===== */
     header {
-      background: rgba(6, 17, 33, 0.88); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      background: rgba(9, 30, 58, 0.96); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
       color: #fff; padding: 12px 16px; position: sticky; top: 0; z-index: 30;
       display: flex; justify-content: space-between; align-items: center;
-      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
+      box-shadow: 0 4px 20px rgba(9, 30, 58, 0.16);
     }
     header::after {
-      content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1.5px;
-      background: linear-gradient(90deg, transparent, var(--gold), var(--gold-light), var(--gold), transparent);
-      opacity: 0.75;
+      content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent), #fb923c, transparent);
     }
     .brand { display: flex; align-items: center; gap: 11px; }
     .brand-logo {
-      width: 39px; height: 39px; border-radius: 50%; object-fit: cover;
-      border: 2px solid var(--gold); background: #fff;
-      box-shadow: 0 0 12px rgba(212, 175, 55, 0.35);
+      width: 38px; height: 38px; border-radius: 50%; object-fit: cover;
+      border: 2px solid rgba(253, 186, 116, 0.75); background: #fff;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
     }
-    .brand h1 {
-      margin: 0; font-size: 16px; font-weight: 800; letter-spacing: 0.1px;
-      background: var(--gold-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    }
-    .brand small { font-size: 11px; color: var(--muted); display: block; font-weight: 600; margin-top: 1px; }
+    .brand h1 { margin: 0; font-size: 16px; font-weight: 800; letter-spacing: -0.2px; }
+    .brand small { font-size: 11px; color: #cbd5e1; display: block; font-weight: 500; margin-top: 1px; }
     .hdr-actions { display: flex; gap: 8px; }
     .icon-btn {
-      width: 36px; height: 36px; border-radius: 11px; border: 1px solid var(--gold-border);
-      background: rgba(212, 175, 55, 0.08); color: var(--gold-light); cursor: pointer;
+      width: 36px; height: 36px; border-radius: 11px; border: 1px solid rgba(255,255,255,0.16);
+      background: rgba(255,255,255,0.1); color: #fff; cursor: pointer;
       display: flex; align-items: center; justify-content: center; transition: 0.18s ease;
     }
-    .icon-btn:active { transform: scale(0.92); background: rgba(212, 175, 55, 0.2); }
+    .icon-btn:active { transform: scale(0.92); background: rgba(255,255,255,0.2); }
 
-    /* ===== CONTAINER & DARK GLASS CARDS ===== */
+    /* ===== CONTAINER & CARDS ===== */
     .container { max-width: 580px; margin: 14px auto; padding: 0 14px; }
     .page { display: none; }
     .page.active { display: block; animation: pageFade 0.28s ease; }
 
     .card {
-      background: linear-gradient(180deg, rgba(16, 34, 62, 0.92) 0%, rgba(11, 25, 47, 0.96) 100%);
-      border-radius: var(--radius); padding: 16px;
-      box-shadow: var(--shadow-card), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-      margin-bottom: 14px; border: 1px solid var(--border);
+      background: var(--card); border-radius: var(--radius); padding: 16px;
+      box-shadow: var(--shadow-sm); margin-bottom: 14px; border: 1px solid var(--border);
     }
-    .card-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .card-head {
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;
+    }
     .card-title {
-      font-size: 14.5px; font-weight: 800; color: var(--gold-light);
-      display: flex; align-items: center; gap: 7px; letter-spacing: 0.1px;
+      font-size: 14.5px; font-weight: 800; color: var(--navy-900);
+      display: flex; align-items: center; gap: 7px; letter-spacing: -0.1px;
     }
     .pill-mini {
-      font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px;
-      background: var(--gold-soft); color: var(--gold-light); border: 1px solid var(--gold-border);
+      font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 20px;
+      background: #f1f5f9; color: var(--navy-800);
     }
 
-    /* ===== GOLDEN NOTICE BANNER ===== */
+    /* ===== SLEEK NOTICE BANNER ===== */
     .notice-banner {
-      background: linear-gradient(135deg, rgba(212, 175, 55, 0.16) 0%, rgba(17, 36, 66, 0.92) 100%);
-      border: 1px solid var(--gold-border); border-left: 4px solid var(--gold);
+      background: linear-gradient(135deg, #fffaf5 0%, #fff1e2 100%);
+      border: 1px solid var(--accent-border); border-left: 4px solid var(--accent);
       border-radius: 16px; padding: 13px 14px; margin-bottom: 14px;
-      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.28);
+      box-shadow: 0 6px 18px rgba(249, 115, 22, 0.09);
     }
-    .notice-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 5px; }
-    .notice-badge { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 800; color: var(--gold-light); }
+    .notice-top {
+      display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 5px;
+    }
+    .notice-badge {
+      display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px;
+      font-weight: 800; color: #c2410c;
+    }
     .live-dot {
-      width: 8px; height: 8px; border-radius: 50%; background: #ef4444;
-      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.28); animation: pulseDot 1.3s infinite;
+      width: 8px; height: 8px; border-radius: 50%; background: var(--danger);
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2); animation: pulseDot 1.3s infinite;
     }
-    .notice-date { font-size: 11px; font-weight: 600; color: var(--gold-light); background: rgba(6, 17, 33, 0.55); padding: 2px 9px; border-radius: 20px; border: 1px solid var(--gold-border); }
-    .notice-body { font-size: 13.5px; color: #f1f5f9; line-height: 1.5; font-weight: 500; }
+    .notice-date { font-size: 11px; font-weight: 600; color: #9a3412; background: rgba(255,255,255,0.7); padding: 2px 8px; border-radius: 20px; }
+    .notice-body { font-size: 13.5px; color: #1e293b; line-height: 1.48; font-weight: 500; }
     .notice-link {
       display: inline-flex; align-items: center; gap: 5px; margin-top: 9px;
-      background: var(--gold-grad); color: #061121; text-decoration: none;
-      font-size: 12px; font-weight: 800; padding: 6px 13px; border-radius: 9px;
+      background: var(--accent); color: #fff; text-decoration: none;
+      font-size: 12px; font-weight: 700; padding: 6px 13px; border-radius: 9px;
     }
 
-    /* ===== ROYAL HERO CARD ===== */
+    /* ===== HERO STUDENT CARD ===== */
     .hero-card {
       position: relative; overflow: hidden;
-      background: linear-gradient(135deg, #132a4f 0%, #0b1c36 55%, #192b46 100%);
-      border: 1px solid rgba(212, 175, 55, 0.42);
+      background: linear-gradient(135deg, #091e3a 0%, #143b70 60%, #1d4e89 100%);
       color: #fff; border-radius: 22px; padding: 18px; margin-bottom: 14px;
-      box-shadow: 0 16px 38px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(250, 224, 148, 0.25);
+      box-shadow: var(--shadow-lg);
     }
     .hero-card::before {
-      content: ''; position: absolute; width: 190px; height: 190px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(212, 175, 55, 0.25) 0%, transparent 70%);
-      top: -65px; right: -45px; pointer-events: none;
+      content: ''; position: absolute; width: 170px; height: 170px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(249,115,22,0.3) 0%, transparent 70%);
+      top: -55px; right: -45px; pointer-events: none;
     }
     .hero-card::after {
-      content: ''; position: absolute; width: 130px; height: 130px; border-radius: 50%;
-      border: 1px solid rgba(212, 175, 55, 0.14); bottom: -45px; left: -25px; pointer-events: none;
+      content: ''; position: absolute; width: 120px; height: 120px; border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.08); bottom: -45px; left: -25px; pointer-events: none;
     }
     .hero-row { position: relative; display: flex; align-items: center; gap: 14px; }
     .avatar-circle {
       width: 54px; height: 54px; border-radius: 16px;
-      background: var(--gold-grad); color: #061121; font-size: 22px; font-weight: 800;
+      background: linear-gradient(135deg, #fb923c, #ea580c);
+      color: #fff; font-size: 21px; font-weight: 800;
       display: flex; align-items: center; justify-content: center;
-      box-shadow: var(--shadow-gold); border: 2px solid rgba(255, 255, 255, 0.35);
+      box-shadow: 0 8px 18px rgba(234, 88, 12, 0.35); border: 2px solid rgba(255,255,255,0.25);
     }
-    .hero-name { font-size: 19.5px; font-weight: 800; color: #ffffff; letter-spacing: -0.2px; line-height: 1.2; }
+    .hero-name { font-size: 19px; font-weight: 800; letter-spacing: -0.2px; line-height: 1.2; }
     .hero-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
     .hero-chip {
-      font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px;
-      background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.14); color: #e2e8f0;
+      font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 20px;
+      background: rgba(255, 255, 255, 0.14); border: 1px solid rgba(255, 255, 255, 0.16); color: #f8fafc;
     }
-    .hero-chip.gold { background: var(--gold-soft); border-color: var(--gold-border); color: var(--gold-light); }
+    .hero-chip.orange { background: rgba(249, 115, 22, 0.25); border-color: rgba(253, 186, 116, 0.45); color: #ffedd5; }
     .hero-footer {
-      position: relative; margin-top: 15px; padding-top: 12px;
-      border-top: 1px solid rgba(212, 175, 55, 0.18);
-      display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--muted);
+      position: relative; margin-top: 14px; padding-top: 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+      display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #cbd5e1;
     }
 
     /* ===== STATS & PROGRESS ===== */
     .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px; }
     .stat-box {
-      background: linear-gradient(180deg, rgba(16, 34, 62, 0.94) 0%, rgba(10, 23, 44, 0.96) 100%);
-      border: 1px solid var(--border); border-radius: 16px;
-      padding: 13px 8px; text-align: center; box-shadow: var(--shadow-card);
+      background: #fff; border: 1px solid var(--border); border-radius: 16px;
+      padding: 13px 8px; text-align: center; box-shadow: var(--shadow-sm);
     }
     .stat-icon {
-      width: 32px; height: 32px; border-radius: 10px; margin: 0 auto 7px;
+      width: 30px; height: 30px; border-radius: 10px; margin: 0 auto 7px;
       display: flex; align-items: center; justify-content: center;
     }
-    .si-green { background: var(--success-soft); color: var(--success); border: 1px solid rgba(52, 211, 153, 0.25); }
-    .si-gold { background: var(--gold-soft); color: var(--gold-light); border: 1px solid var(--gold-border); }
-    .si-red { background: var(--danger-soft); color: var(--danger); border: 1px solid rgba(248, 113, 113, 0.25); }
-    .stat-num { font-size: 17.5px; font-weight: 800; letter-spacing: -0.2px; }
+    .si-green { background: var(--success-soft); color: var(--success); }
+    .si-orange { background: var(--accent-soft); color: var(--accent); }
+    .si-red { background: var(--danger-soft); color: var(--danger); }
+    .stat-num { font-size: 17.5px; font-weight: 800; letter-spacing: -0.3px; }
     .stat-lbl { font-size: 11px; color: var(--muted); margin-top: 2px; font-weight: 600; }
 
-    .prog-track { width: 100%; height: 7px; background: rgba(255, 255, 255, 0.08); border-radius: 99px; overflow: hidden; margin-top: 9px; }
-    .prog-fill { height: 100%; border-radius: 99px; background: var(--gold-grad); box-shadow: 0 0 10px rgba(212, 175, 55, 0.45); transition: width 0.5s ease; }
+    .prog-track { width: 100%; height: 7px; background: #e2e8f0; border-radius: 99px; overflow: hidden; margin-top: 8px; }
+    .prog-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, #10b981, #34d399); transition: width 0.5s ease; }
 
     /* ===== MONTHS GRID ===== */
     .months-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
     .m-cell {
       border: 1px solid var(--border); border-radius: 13px; padding: 9px 4px;
-      text-align: center; background: rgba(6, 17, 33, 0.55); transition: 0.15s ease;
+      text-align: center; background: #f8fafc; transition: 0.15s ease;
     }
     .m-cell .m-name { font-size: 11.5px; font-weight: 700; color: var(--text-2); }
-    .m-cell .m-val { font-size: 11px; font-weight: 700; margin-top: 3px; color: var(--muted); }
+    .m-cell .m-val { font-size: 11px; font-weight: 700; margin-top: 3px; color: var(--muted); display: flex; align-items: center; justify-content: center; gap: 2px; }
     .m-cell.paid {
-      background: linear-gradient(180deg, rgba(16, 185, 129, 0.18) 0%, rgba(6, 78, 59, 0.28) 100%);
-      border-color: rgba(52, 211, 153, 0.42);
+      background: linear-gradient(180deg, #ecfdf5 0%, #dcfce7 100%);
+      border-color: #86efac;
     }
-    .m-cell.paid .m-name { color: #a7f3d0; }
-    .m-cell.paid .m-val { color: #34d399; }
+    .m-cell.paid .m-name { color: #166534; }
+    .m-cell.paid .m-val { color: #15803d; }
 
-    /* ===== SEGMENTED PILLS ===== */
+    /* ===== SEGMENTED PILLS (CLASSES) ===== */
     .seg-bar {
       display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;
-      background: rgba(6, 17, 33, 0.78); border: 1px solid var(--border);
-      padding: 5px; border-radius: 14px; margin-bottom: 14px;
+      background: #e9eef6; padding: 5px; border-radius: 14px; margin-bottom: 14px;
     }
     .seg-btn {
       padding: 9px 4px; border-radius: 10px; border: none; background: transparent;
-      font-weight: 700; font-size: 12.5px; cursor: pointer; color: var(--muted);
+      font-weight: 700; font-size: 12.5px; cursor: pointer; color: var(--text-2);
       display: flex; align-items: center; justify-content: center; gap: 5px; transition: 0.2s ease;
     }
     .seg-btn.active {
-      background: var(--gold-grad); color: #061121;
-      box-shadow: 0 4px 14px rgba(212, 175, 55, 0.3);
+      background: #ffffff; color: var(--navy-900);
+      box-shadow: 0 3px 10px rgba(9, 30, 58, 0.1);
     }
+    .seg-btn.live-tab.active { color: #dc2626; }
 
     .lock-card {
-      background: linear-gradient(180deg, rgba(17, 36, 66, 0.96) 0%, rgba(10, 22, 42, 0.98) 100%);
-      border: 1.5px solid var(--gold-border); border-radius: 22px;
-      padding: 30px 20px; text-align: center; box-shadow: var(--shadow-card);
+      background: linear-gradient(180deg, #ffffff 0%, #fff7ed 100%);
+      border: 1.5px solid var(--accent-border); border-radius: 22px;
+      padding: 30px 20px; text-align: center; box-shadow: var(--shadow-md);
     }
     .lock-icon-circle {
       width: 64px; height: 64px; border-radius: 50%; margin: 0 auto 14px;
-      background: var(--gold-soft); color: var(--gold-light);
-      display: flex; align-items: center; justify-content: center; border: 1.5px solid var(--gold-border);
+      background: linear-gradient(135deg, #fff7ed, #ffedd5); color: var(--accent-dark);
+      display: flex; align-items: center; justify-content: center; border: 2px solid var(--accent-border);
     }
 
     /* ===== SUBJECT -> CHAPTER FOLDERS ===== */
     details.sub-folder {
-      background: linear-gradient(180deg, rgba(16, 34, 62, 0.94) 0%, rgba(11, 25, 47, 0.96) 100%);
-      border: 1px solid var(--gold-border); border-radius: 16px;
-      margin-bottom: 11px; overflow: hidden; box-shadow: var(--shadow-card);
+      background: #fff; border: 1px solid var(--border); border-radius: 16px;
+      margin-bottom: 11px; overflow: hidden; box-shadow: var(--shadow-sm);
     }
     details.sub-folder > summary {
-      padding: 14px 15px; font-size: 14.5px; font-weight: 800; color: #fff;
+      padding: 14px 15px; font-size: 14.5px; font-weight: 800; color: var(--navy-900);
       cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center;
     }
     details.sub-folder > summary::-webkit-details-marker { display: none; }
     .folder-left { display: flex; align-items: center; gap: 10px; }
     .folder-ic {
-      width: 34px; height: 34px; border-radius: 10px; background: var(--gold-soft); color: var(--gold-light);
-      border: 1px solid var(--gold-border); display: flex; align-items: center; justify-content: center;
+      width: 34px; height: 34px; border-radius: 10px; background: #eff6ff; color: var(--navy-700);
+      display: flex; align-items: center; justify-content: center;
     }
     .sub-body { padding: 0 12px 12px; }
 
     details.chap-folder {
-      background: rgba(6, 17, 33, 0.55); border: 1px solid var(--border); border-radius: 13px; margin-top: 8px;
+      background: #f8fafc; border: 1px solid var(--border); border-radius: 13px; margin-top: 8px;
     }
     details.chap-folder > summary {
-      padding: 11px 12px; font-size: 13.5px; font-weight: 700; color: var(--gold-light);
+      padding: 11px 12px; font-size: 13.5px; font-weight: 700; color: #c2410c;
       cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center;
     }
     details.chap-folder > summary::-webkit-details-marker { display: none; }
     .chap-body { padding: 0 10px 10px; }
 
     .content-card {
-      background: rgba(16, 34, 62, 0.85); border: 1px solid var(--border); border-radius: 14px;
-      padding: 13px; margin-top: 8px;
+      background: #fff; border: 1px solid var(--border); border-radius: 14px;
+      padding: 13px; margin-top: 8px; box-shadow: 0 2px 6px rgba(9,30,58,0.03);
     }
     .c-badge {
       display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700;
-      padding: 3px 10px; border-radius: 20px; background: var(--gold-soft); color: var(--gold-light);
-      border: 1px solid var(--gold-border);
+      padding: 3px 10px; border-radius: 20px; background: var(--accent-soft); color: #c2410c;
     }
-    .c-badge.live { background: var(--danger-soft); color: #fca5a5; border-color: rgba(248, 113, 113, 0.35); }
+    .c-badge.live { background: var(--danger-soft); color: #dc2626; }
     .video-box {
       margin-top: 10px; border-radius: 12px; overflow: hidden; background: #000;
-      aspect-ratio: 16 / 9; width: 100%; border: 1px solid var(--gold-border);
+      aspect-ratio: 16 / 9; width: 100%; box-shadow: 0 6px 16px rgba(0,0,0,0.14);
     }
     .video-box iframe { width: 100%; height: 100%; border: none; }
 
     /* ===== LIVE Q&A CHAT ===== */
     .live-chat-wrap {
-      margin-top: 12px; background: rgba(6, 17, 33, 0.65); border: 1px solid var(--border);
+      margin-top: 12px; background: #f8fafc; border: 1px solid var(--border);
       border-radius: 14px; padding: 12px;
     }
     .chat-list { max-height: 210px; overflow-y: auto; margin-bottom: 10px; }
     .chat-msg {
-      background: rgba(17, 36, 66, 0.9); border: 1px solid var(--border); border-radius: 12px;
-      padding: 8px 11px; font-size: 12.5px; margin-bottom: 7px; color: #f1f5f9;
+      background: #fff; border: 1px solid var(--border); border-radius: 12px;
+      padding: 8px 11px; font-size: 12.5px; margin-bottom: 7px;
     }
-    .chat-msg.admin { background: rgba(212, 175, 55, 0.16); border-color: var(--gold-border); }
+    .chat-msg.admin { background: var(--accent-soft); border-color: var(--accent-border); }
 
-    /* ===== ROYAL GOLD UPI CARD ===== */
+    /* ===== BANK-CARD STYLE UPI PAYMENT ===== */
     .upi-card {
       position: relative; overflow: hidden;
-      background: linear-gradient(135deg, #1b3661 0%, #0d1f3d 55%, #1d2d45 100%);
-      border: 1.5px solid rgba(212, 175, 55, 0.55);
-      color: #fff; border-radius: 20px; padding: 18px; margin-bottom: 16px;
-      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(250, 224, 148, 0.3);
+      background: linear-gradient(135deg, #091e3a 0%, #153c73 65%, #0e2a52 100%);
+      color: #fff; border-radius: 18px; padding: 16px; margin-bottom: 16px;
+      box-shadow: 0 10px 24px rgba(9, 30, 58, 0.22);
     }
     .upi-card::after {
-      content: ''; position: absolute; width: 150px; height: 150px; border-radius: 50%;
-      background: rgba(212, 175, 55, 0.24); top: -45px; right: -30px; filter: blur(22px);
+      content: ''; position: absolute; width: 130px; height: 130px; border-radius: 50%;
+      background: rgba(249, 115, 22, 0.24); top: -40px; right: -30px; filter: blur(18px);
     }
     .upi-top { display: flex; justify-content: space-between; align-items: center; position: relative; }
-    .upi-tag { font-size: 10.5px; font-weight: 700; letter-spacing: 1.2px; color: var(--gold-light); text-transform: uppercase; }
-    .upi-num {
-      font-size: 24px; font-weight: 800; letter-spacing: 2px; margin: 10px 0 6px; position: relative;
-      background: var(--gold-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    }
+    .upi-tag { font-size: 10.5px; font-weight: 700; letter-spacing: 1px; color: #fed7aa; text-transform: uppercase; }
+    .upi-num { font-size: 22px; font-weight: 800; letter-spacing: 1.5px; margin: 8px 0 4px; position: relative; }
     .copy-pill {
-      position: relative; background: var(--gold-grad); color: #061121; border: none;
-      padding: 8px 14px; border-radius: 10px; font-size: 12px; font-weight: 800; cursor: pointer;
-      display: inline-flex; align-items: center; gap: 5px; box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+      position: relative; background: rgba(255,255,255,0.16); color: #fff; border: 1px solid rgba(255,255,255,0.28);
+      padding: 7px 12px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer;
+      display: inline-flex; align-items: center; gap: 5px; backdrop-filter: blur(6px);
     }
-    .copy-pill:active { transform: scale(0.95); }
+    .copy-pill:active { transform: scale(0.95); background: rgba(255,255,255,0.26); }
 
     /* ===== FORM ELEMENTS ===== */
     .form-group { margin-bottom: 13px; }
-    label { display: block; font-size: 12px; font-weight: 700; color: var(--gold-light); margin-bottom: 6px; }
+    label { display: block; font-size: 12px; font-weight: 700; color: var(--navy-900); margin-bottom: 5px; }
     input, select {
-      width: 100%; padding: 11px 13px; border: 1.5px solid rgba(148, 163, 184, 0.22);
-      border-radius: 12px; font-size: 14px; background: var(--bg-input); color: #ffffff;
+      width: 100%; padding: 11px 13px; border: 1.5px solid #dbe3ee;
+      border-radius: 12px; font-size: 14px; background: #f8fafc; color: var(--text);
       transition: 0.18s ease;
     }
-    input::placeholder { color: #64748b; }
-    input:focus, select:focus {
-      outline: none; border-color: var(--gold); background: #0a1930;
-      box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.16);
-    }
+    input:focus, select:focus { outline: none; border-color: var(--accent); background: #fff; box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.12); }
     .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
     .upload-zone {
       display: flex; flex-direction: column; align-items: center; justify-content: center;
-      border: 1.5px dashed var(--gold-border); border-radius: 14px; padding: 18px 12px;
-      background: rgba(6, 17, 33, 0.55); cursor: pointer; text-align: center; transition: 0.2s ease;
+      border: 1.8px dashed #cbd5e1; border-radius: 14px; padding: 18px 12px;
+      background: #f8fafc; cursor: pointer; text-align: center; transition: 0.2s ease;
     }
-    .upload-zone:active { border-color: var(--gold); background: var(--gold-soft); }
+    .upload-zone:active { border-color: var(--accent); background: var(--accent-soft); }
     .upload-zone input { display: none; }
 
     .btn {
-      width: 100%; padding: 13px 16px; border: 1px solid var(--gold-border); border-radius: 13px;
-      font-size: 14px; font-weight: 800; cursor: pointer; color: var(--gold-light);
-      background: linear-gradient(135deg, #152d52 0%, #0d1f3a 100%);
+      width: 100%; padding: 13px 16px; border: none; border-radius: 13px;
+      font-size: 14px; font-weight: 700; cursor: pointer; color: #fff;
+      background: linear-gradient(135deg, var(--navy-900) 0%, var(--navy-700) 100%);
       display: inline-flex; align-items: center; justify-content: center; gap: 7px;
-      transition: 0.16s ease;
+      box-shadow: 0 6px 16px rgba(9, 30, 58, 0.18); transition: 0.16s ease;
     }
     .btn:active { transform: scale(0.97); }
-    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
-    .btn-gold {
-      background: var(--gold-grad); color: #061121; border: none;
-      box-shadow: var(--shadow-gold);
+    .btn:disabled { opacity: 0.55; cursor: not-allowed; }
+    .btn-accent {
+      background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+      box-shadow: 0 6px 18px rgba(249, 115, 22, 0.28);
     }
-    .btn-sec { background: #1e293b; color: #e2e8f0; border-color: rgba(148,163,184,0.25); }
+    .btn-sec { background: #334155; box-shadow: none; }
 
     /* ===== LISTS & BADGES ===== */
     .info-item {
       display: flex; justify-content: space-between; align-items: center;
-      padding: 11px 0; border-bottom: 1px solid rgba(148, 163, 184, 0.12); gap: 10px;
+      padding: 11px 0; border-bottom: 1px solid #f1f5f9; gap: 10px;
     }
     .info-item:last-child { border-bottom: none; padding-bottom: 2px; }
-    .badge-ok { background: var(--success-soft); color: var(--success); border: 1px solid rgba(52,211,153,0.3); padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
-    .badge-due { background: var(--gold-soft); color: var(--gold-light); border: 1px solid var(--gold-border); padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
-    .badge-rej { background: var(--danger-soft); color: var(--danger); border: 1px solid rgba(248,113,113,0.3); padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+    .badge-ok { background: var(--success-soft); color: #047857; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+    .badge-due { background: var(--accent-soft); color: #c2410c; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+    .badge-rej { background: var(--danger-soft); color: #b91c1c; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
 
     /* ===== SHIMMER LOADER ===== */
     .skel {
-      background: linear-gradient(90deg, #0d1e38 25%, #162e54 50%, #0d1e38 75%);
-      background-size: 200% 100%; animation: shimmer 1.3s infinite; border-radius: 16px;
-      border: 1px solid rgba(212, 175, 55, 0.1);
+      background: linear-gradient(90deg, #e8edf5 25%, #f4f7fb 50%, #e8edf5 75%);
+      background-size: 200% 100%; animation: shimmer 1.3s infinite; border-radius: 14px;
     }
 
-    /* ===== RECEIPT MODAL (CRISP PAPER FOR PRINT/PDF) ===== */
+    /* ===== RECEIPT MODAL ===== */
     .rcpt-modal-bg {
-      display: none; position: fixed; inset: 0; background: rgba(2, 8, 18, 0.82);
-      backdrop-filter: blur(5px); z-index: 120; justify-content: center; align-items: center; padding: 14px;
+      display: none; position: fixed; inset: 0; background: rgba(6, 21, 41, 0.72);
+      backdrop-filter: blur(4px); z-index: 120; justify-content: center; align-items: center; padding: 14px;
     }
     .rcpt-modal-bg.open { display: flex; }
     .rcpt-card {
-      background: #ffffff; color: #0f172a; width: 100%; max-width: 430px; border-radius: 20px;
-      padding: 20px; border: 2.5px solid #d4af37; max-height: 92vh; overflow-y: auto;
-      box-shadow: 0 24px 55px rgba(0, 0, 0, 0.65);
+      background: #fff; width: 100%; max-width: 430px; border-radius: 20px;
+      padding: 20px; border: 2px solid var(--navy-900); max-height: 92vh; overflow-y: auto;
+      box-shadow: 0 24px 50px rgba(0, 0, 0, 0.35);
     }
-    .rcpt-head { text-align: center; border-bottom: 2px solid #091e3a; padding-bottom: 12px; margin-bottom: 12px; }
-    .rcpt-line { display: flex; justify-content: space-between; font-size: 13px; padding: 6px 0; border-bottom: 1px dashed #cbd5e1; gap: 8px; color: #1e293b; }
-    .rcpt-sign { margin-top: 16px; text-align: right; font-size: 12px; color: #334155; }
+    .rcpt-head { text-align: center; border-bottom: 2px solid var(--navy-900); padding-bottom: 12px; margin-bottom: 12px; }
+    .rcpt-line { display: flex; justify-content: space-between; font-size: 13px; padding: 6px 0; border-bottom: 1px dashed #e2e8f0; gap: 8px; }
+    .rcpt-sign { margin-top: 16px; text-align: right; font-size: 12px; }
 
     @media print {
       body * { visibility: hidden; }
@@ -509,16 +433,16 @@ GitHub-এ **`student.html`** খুলে **Edit (✏️)** → পুরনো
       .no-print { display: none !important; }
     }
 
-    /* ===== ROYAL GLASS BOTTOM NAV ===== */
+    /* ===== PREMIUM FLOATING BOTTOM NAV ===== */
     .bottom-nav {
       position: fixed; bottom: 0; left: 0; right: 0;
-      background: rgba(7, 18, 35, 0.94); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-      border-top: 1px solid var(--gold-border); display: flex; z-index: 40;
-      box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.45);
-      padding: 7px 8px calc(9px + env(safe-area-inset-bottom));
+      background: rgba(255, 255, 255, 0.94); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      border-top: 1px solid var(--border); display: flex; z-index: 40;
+      box-shadow: 0 -8px 26px rgba(9, 30, 58, 0.07);
+      padding: 6px 8px calc(8px + env(safe-area-inset-bottom));
     }
     .nav-btn {
-      flex: 1; padding: 5px 4px; border: none; background: none;
+      flex: 1; padding: 6px 4px; border: none; background: none;
       display: flex; flex-direction: column; align-items: center; gap: 3px;
       font-size: 11px; font-weight: 700; color: var(--muted); cursor: pointer;
       border-radius: 14px; transition: 0.2s ease;
@@ -527,18 +451,17 @@ GitHub-এ **`student.html`** খুলে **Edit (✏️)** → পুরনো
       width: 44px; height: 28px; border-radius: 20px;
       display: flex; align-items: center; justify-content: center; transition: 0.2s ease;
     }
-    .nav-btn.active { color: var(--gold-light); }
+    .nav-btn.active { color: var(--navy-900); }
     .nav-btn.active .nav-icon-wrap {
-      background: var(--gold-grad); color: #061121;
-      box-shadow: 0 3px 12px rgba(212, 175, 55, 0.35);
+      background: var(--accent-soft); color: var(--accent-dark);
     }
 
     .toast {
-      position: fixed; bottom: 88px; left: 50%; transform: translateX(-50%);
-      background: #0f2342; color: var(--gold-light); padding: 10px 18px; border-radius: 30px;
-      font-size: 12.5px; font-weight: 700; display: none; z-index: 150; max-width: 90%;
-      text-align: center; box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5);
-      border: 1px solid var(--gold);
+      position: fixed; bottom: 86px; left: 50%; transform: translateX(-50%);
+      background: var(--navy-900); color: #fff; padding: 10px 18px; border-radius: 30px;
+      font-size: 12.5px; font-weight: 600; display: none; z-index: 150; max-width: 90%;
+      text-align: center; box-shadow: 0 10px 26px rgba(9, 30, 58, 0.3);
+      border: 1px solid rgba(249, 115, 22, 0.5);
     }
   </style>
 </head>
@@ -572,7 +495,7 @@ GitHub-এ **`student.html`** খুলে **Edit (✏️)** → পুরনো
         <label>Registered Mobile Number</label>
         <input type="tel" id="lMob" required maxlength="10" placeholder="10-digit mobile number">
       </div>
-      <button type="submit" id="lBtn" class="btn btn-gold" style="margin-top:8px;">
+      <button type="submit" id="lBtn" class="btn btn-accent" style="margin-top:8px;">
         <span>Login to Student App</span>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
       </button>
@@ -600,13 +523,13 @@ GitHub-এ **`student.html`** খুলে **Edit (✏️)** → পুরনো
 </header>
 
 <div class="container">
-  <!-- SHIMMER SKELETON -->
+  <!-- SHIMMER SKELETON (SHOWS UNTIL DATA LOADS) -->
   <div id="skeletonView" style="display:none;">
-    <div class="skel" style="height:128px;margin-bottom:14px;"></div>
+    <div class="skel" style="height:125px;margin-bottom:14px;"></div>
     <div class="stat-grid">
-      <div class="skel" style="height:88px;"></div>
-      <div class="skel" style="height:88px;"></div>
-      <div class="skel" style="height:88px;"></div>
+      <div class="skel" style="height:86px;"></div>
+      <div class="skel" style="height:86px;"></div>
+      <div class="skel" style="height:86px;"></div>
     </div>
     <div class="skel" style="height:210px;"></div>
   </div>
@@ -623,14 +546,14 @@ GitHub-এ **`student.html`** খুলে **Edit (✏️)** → পুরনো
           <div style="min-width:0;">
             <div class="hero-name" id="sName">Loading...</div>
             <div class="hero-chips">
-              <span class="hero-chip gold" id="sIdChip">UCC</span>
+              <span class="hero-chip orange" id="sIdChip">UCC</span>
               <span class="hero-chip" id="sClassChip">Class</span>
             </div>
           </div>
         </div>
         <div class="hero-footer">
           <span id="sFather">Father: -</span>
-          <span id="sPhone" style="font-weight:700;color:var(--gold-light);">-</span>
+          <span id="sPhone" style="font-weight:700;color:#fff;">-</span>
         </div>
       </div>
 
@@ -643,10 +566,10 @@ GitHub-এ **`student.html`** খুলে **Edit (✏️)** → পুরনো
           <div class="stat-lbl">Present</div>
         </div>
         <div class="stat-box">
-          <div class="stat-icon si-gold">
+          <div class="stat-icon si-orange">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
           </div>
-          <div id="sAbsent" class="stat-num" style="color:var(--gold-light);">0</div>
+          <div id="sAbsent" class="stat-num" style="color:var(--accent-dark);">0</div>
           <div class="stat-lbl">Absent</div>
         </div>
         <div class="stat-box">
@@ -660,8 +583,8 @@ GitHub-এ **`student.html`** খুলে **Edit (✏️)** → পুরনো
 
       <div class="card" style="padding:14px 16px;">
         <div style="display:flex;justify-content:space-between;align-items:center;font-size:12.5px;font-weight:700;">
-          <span style="color:var(--text);">Attendance Performance</span>
-          <span id="sAttPct" style="color:var(--gold-light);">0%</span>
+          <span style="color:var(--navy-900);">Attendance Performance</span>
+          <span id="sAttPct" style="color:var(--success);">0%</span>
         </div>
         <div class="prog-track"><div id="sAttBar" class="prog-fill" style="width:0%;"></div></div>
       </div>
@@ -669,7 +592,7 @@ GitHub-এ **`student.html`** খুলে **Edit (✏️)** → পুরনো
       <div class="card">
         <div class="card-head">
           <div class="card-title">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
             2027 Monthly Fee Status
           </div>
           <span id="paidCountPill" class="pill-mini">0 / 12 Paid</span>
@@ -684,23 +607,23 @@ GitHub-এ **`student.html`** খুলে **Edit (✏️)** → পুরনো
         <div class="lock-icon-circle">
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
         </div>
-        <div style="font-size:17px;font-weight:800;color:var(--gold-light);">ক্লাস ও মক টেস্ট লক করা আছে</div>
+        <div style="font-size:17px;font-weight:800;color:var(--navy-900);">ক্লাস ও মক টেস্ট লক করা আছে</div>
         <div style="font-size:13px;color:var(--text-2);margin:8px 0 18px;line-height:1.55;">
           তোমার বর্তমানে <strong id="lockDueAmt" style="color:var(--danger);">Rs. 0</strong> টিউশন ফি বাকি রয়েছে। ফি পরিশোধ করলেই লাইভ ক্লাস, রেকর্ডেড ভিডিও, PDF নোটস ও মক টেস্ট অটোমেটিক খুলে যাবে।
         </div>
-        <button class="btn btn-gold" onclick="openPage('pay', document.getElementById('navPay'))">এখনই ফি পেমেন্ট করো</button>
+        <button class="btn btn-accent" onclick="openPage('pay', document.getElementById('navPay'))">এখনই ফি পেমেন্ট করো</button>
       </div>
 
       <div id="classesUnlockedView">
         <div class="seg-bar">
-          <button class="seg-btn active" id="cpLive" onclick="setClassFilter('Live')">
+          <button class="seg-btn live-tab active" id="cpLive" onclick="setClassFilter('Live')">
             <span class="live-dot" style="width:7px;height:7px;"></span> Live
           </button>
           <button class="seg-btn" id="cpVideo" onclick="setClassFilter('Video')">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><polygon points="5 3 19 12 5 21 5 3"/></svg> Recorded
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="5 3 19 12 5 21 5 3"/></svg> Recorded
           </button>
           <button class="seg-btn" id="cpOther" onclick="setClassFilter('OTHER')">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> PDF / Test
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> PDF / Test
           </button>
         </div>
         <div id="classesList"></div>
@@ -712,13 +635,13 @@ GitHub-এ **`student.html`** খুলে **Edit (✏️)** → পুরনো
       <div class="upi-card">
         <div class="upi-top">
           <span class="upi-tag">Official UPI • PhonePe / GPay</span>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold-light)" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fed7aa" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
         </div>
         <div class="upi-num">8016972121</div>
         <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;gap:8px;">
-          <span style="font-size:11.5px;color:var(--text-2);">পেমেন্ট করে নিচে স্ক্রিনশট আপলোড করো</span>
+          <span style="font-size:11.5px;color:#cbd5e1;">পেমেন্ট করে নিচে স্ক্রিনশট আপলোড করো</span>
           <button type="button" class="copy-pill" onclick="copyUpi()">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
             Copy
           </button>
         </div>
@@ -737,14 +660,14 @@ GitHub-এ **`student.html`** খুলে **Edit (✏️)** → পুরনো
           <div class="form-group">
             <label>Payment Screenshot *</label>
             <label class="upload-zone" for="payFile">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-              <span id="uploadFileName" style="font-size:12.5px;font-weight:700;color:var(--gold-light);margin-top:6px;">Tap to choose screenshot</span>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <span id="uploadFileName" style="font-size:12.5px;font-weight:700;color:var(--navy-900);margin-top:6px;">Tap to choose screenshot</span>
               <span style="font-size:11px;color:var(--muted);margin-top:2px;">JPG / PNG supported</span>
               <input type="file" id="payFile" accept="image/*" required onchange="previewCompressedImg(event)">
             </label>
-            <img id="payPreview" style="display:none;width:100%;max-height:190px;object-fit:contain;margin-top:10px;border-radius:12px;border:1px solid var(--gold-border);background:#040b16;">
+            <img id="payPreview" style="display:none;width:100%;max-height:190px;object-fit:contain;margin-top:10px;border-radius:12px;border:1px solid var(--border);background:#f8fafc;">
           </div>
-          <button type="submit" id="paySubmitBtn" class="btn btn-gold">Submit Payment Proof</button>
+          <button type="submit" id="paySubmitBtn" class="btn btn-accent">Submit Payment Proof</button>
         </form>
       </div>
 
@@ -759,7 +682,7 @@ GitHub-এ **`student.html`** খুলে **Edit (✏️)** → পুরনো
       <div class="card">
         <div class="card-head">
           <div class="card-title">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
             Official Fee Receipts (2027)
           </div>
         </div>
@@ -773,9 +696,9 @@ GitHub-এ **`student.html`** খুলে **Edit (✏️)** → পুরনো
 <div class="rcpt-modal-bg" id="rcptModal" onclick="if(event.target===this) closeReceipt()">
   <div class="rcpt-card" id="receiptPrintArea">
     <div class="rcpt-head">
-      <div style="font-size:20px;font-weight:800;color:#091e3a;">ইউ.সি.সি ইনস্টিটিউট</div>
+      <div style="font-size:20px;font-weight:800;color:var(--navy-900);">ইউ.সি.সি ইনস্টিটিউট</div>
       <div style="font-size:11px;color:#475569;margin-top:2px;">পেঁচাকোলা, রায়পুর, বাঁকুড়া • ফোন: 8016972121 / 8159980707</div>
-      <div style="font-size:12px;font-weight:800;margin-top:6px;background:#fef9e7;color:#9a6b0e;border:1px solid #d4af37;display:inline-block;padding:3px 12px;border-radius:20px;">অফিশিয়াল ফি রসিদ (2027)</div>
+      <div style="font-size:12px;font-weight:800;margin-top:6px;background:var(--accent-soft);color:#c2410c;border:1px solid var(--accent-border);display:inline-block;padding:3px 12px;border-radius:20px;">অফিশিয়াল ফি রসিদ (2027)</div>
     </div>
     <div class="rcpt-line"><span>রসিদ নং:</span><strong id="rNo"></strong></div>
     <div class="rcpt-line"><span>তারিখ ও সময়:</span><strong id="rDate"></strong></div>
@@ -784,25 +707,25 @@ GitHub-এ **`student.html`** খুলে **Edit (✏️)** → পুরনো
     <div class="rcpt-line"><span>আইডি ও শ্রেণী:</span><strong id="rIdCls"></strong></div>
     <div class="rcpt-line"><span>কোন মাসের ফি:</span><strong id="rMonth"></strong></div>
     <div class="rcpt-line"><span>পেমেন্টের মাধ্যম:</span><strong id="rMode"></strong></div>
-    <div class="rcpt-line" style="font-size:15px;color:#091e3a;border-top:1.5px solid #cbd5e1;margin-top:6px;padding-top:9px;">
+    <div class="rcpt-line" style="font-size:15px;color:var(--navy-900);border-top:1px solid #cbd5e1;margin-top:6px;padding-top:9px;">
       <span><strong>মোট জমা টাকা:</strong></span><strong id="rAmt"></strong>
     </div>
     <div class="rcpt-sign">
       গ্রহণকারী / অনুমোদিত স্বাক্ষর:<br>
-      <strong id="rCollector" style="font-size:15px;color:#091e3a;"></strong><br>
-      <span style="color:#64748b;font-size:10px;">ইউ.সি.সি ইনস্টিটিউট, পেঁচাকোলা</span>
+      <strong id="rCollector" style="font-size:15px;color:var(--navy-900);"></strong><br>
+      <span style="color:var(--muted);font-size:10px;">ইউ.সি.সি ইনস্টিটিউট, পেঁচাকোলা</span>
     </div>
     <div style="display:grid;gap:8px;margin-top:16px;" class="no-print">
-      <button class="btn" style="background:#091e3a;color:#fae094;" onclick="window.print()">Print / Save PDF</button>
+      <button class="btn" onclick="window.print()">Print / Save PDF</button>
       <div class="row-2">
-        <button class="btn btn-gold" onclick="downloadReceiptImage()">Save PNG</button>
+        <button class="btn btn-accent" onclick="downloadReceiptImage()">Save PNG</button>
         <button class="btn btn-sec" onclick="closeReceipt()">Close</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ROYAL GLASS BOTTOM NAV -->
+<!-- PREMIUM BOTTOM NAVIGATION -->
 <nav class="bottom-nav">
   <button class="nav-btn active" onclick="openPage('home', this)">
     <div class="nav-icon-wrap">
@@ -833,7 +756,7 @@ GitHub-এ **`student.html`** খুলে **Edit (✏️)** → পুরনো
 <div id="toast" class="toast"></div>
 
 <script>
-  const API_URL = '[https://script.google.com/macros/s/AKfycbwAuSfDoikCc998pVuwz0HySky1fChn-Tj8p7OeuUAr_WPG7IFZkfGB5LUO6NlvkiKO/exec](https://script.google.com/macros/s/AKfycbwAuSfDoikCc998pVuwz0HySky1fChn-Tj8p7OeuUAr_WPG7IFZkfGB5LUO6NlvkiKO/exec)';
+  const API_URL = 'https://script.google.com/macros/s/AKfycbwAuSfDoikCc998pVuwz0HySky1fChn-Tj8p7OeuUAr_WPG7IFZkfGB5LUO6NlvkiKO/exec';
   const MONTHS = [
     ['Jan_2027','Jan','জানুয়ারি 2027'], ['Feb_2027','Feb','ফেব্রুয়ারি 2027'], ['Mar_2027','Mar','মার্চ 2027'], ['Apr_2027','Apr','এপ্রিল 2027'],
     ['May_2027','May','মে 2027'], ['Jun_2027','Jun','জুন 2027'], ['Jul_2027','Jul','জুলাই 2027'], ['Aug_2027','Aug','আগস্ট 2027'],
@@ -959,6 +882,7 @@ GitHub-এ **`student.html`** খুলে **Edit (✏️)** → পুরনো
     document.getElementById('sAttPct').textContent = totalDays > 0 ? `${pct}% (${pres}/${totalDays} days)` : 'New Session';
     document.getElementById('sAttBar').style.width = `${pct}%`;
 
+    // Sleek Notices
     document.getElementById('noticeArea').innerHTML = (portalData.notices || []).map(n => `
       <div class="notice-banner">
         <div class="notice-top">
@@ -970,6 +894,7 @@ GitHub-এ **`student.html`** খুলে **Edit (✏️)** → পুরনো
       </div>
     `).join('');
 
+    // Monthly Fee Grid
     let payOpts = '', paidCount = 0;
     document.getElementById('sMonths').innerHTML = MONTHS.map(([k, lbl]) => {
       const val = Number(s.months?.[k]) || 0;
@@ -986,6 +911,7 @@ GitHub-এ **`student.html`** খুলে **Edit (✏️)** → পুরনো
     document.getElementById('payMonth').innerHTML = payOpts || '<option value="">All Paid ✓</option>';
     document.getElementById('paySubmitBtn').disabled = !payOpts;
 
+    // Classes Due-Lock
     const isLocked = (portalData.dueLock === 'ON' && Number(s.totalDue) > 0);
     document.getElementById('classesLockedView').style.display = isLocked ? 'block' : 'none';
     document.getElementById('classesUnlockedView').style.display = isLocked ? 'none' : 'block';
@@ -994,12 +920,13 @@ GitHub-এ **`student.html`** খুলে **Edit (✏️)** → পুরনো
     const newHash = JSON.stringify(portalData.classesContent || []) + '|' + isLocked + '|' + classFilter;
     if (!isLocked && newHash !== lastContentHash) { lastContentHash = newHash; renderClassesList(); }
 
+    // Online Payment Requests
     const reqs = portalData.requests || [];
     document.getElementById('myReqList').innerHTML = reqs.length
       ? reqs.map(r => `
         <div class="info-item" style="font-size:12.5px;">
           <div>
-            <strong style="color:#fff;">${r.month.replace('_',' ')}</strong> • <span style="color:var(--gold-light);font-weight:700;">₹${r.amount}</span><br>
+            <strong style="color:var(--navy-900);">${r.month.replace('_',' ')}</strong> • ₹${r.amount}<br>
             <span style="color:var(--muted);font-size:11.5px;">${r.date} • UTR: ${r.utr||'-'}</span>
             ${r.remarks ? `<br><span style="color:var(--danger);font-size:11.5px;">${r.remarks}</span>` : ''}
           </div>
@@ -1007,16 +934,17 @@ GitHub-এ **`student.html`** খুলে **Edit (✏️)** → পুরনো
         </div>`).join('')
       : '<div style="font-size:12.5px;color:var(--muted);text-align:center;padding:8px 0;">No online payment requests yet.</div>';
 
+    // Receipts
     const pays = portalData.payments || [];
     document.getElementById('myReceiptsList').innerHTML = pays.length
       ? pays.map((p, i) => `
         <div class="info-item">
           <div>
-            <div style="font-size:13.5px;font-weight:800;color:#fff;">${bnMonth(p.month)} • <span style="color:var(--gold-light);">₹${p.amount}</span></div>
+            <div style="font-size:13.5px;font-weight:800;color:var(--navy-900);">${bnMonth(p.month)} • ₹${p.amount}</div>
             <div style="font-size:11.5px;color:var(--muted);margin-top:2px;">${formatBnDate(p.date)} • ${bnCollector(p.collector)}</div>
           </div>
-          <button class="btn btn-gold" style="width:auto;padding:8px 13px;font-size:12px;border-radius:10px;" onclick="openReceipt(${i})">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <button class="btn" style="width:auto;padding:8px 13px;font-size:12px;border-radius:10px;" onclick="openReceipt(${i})">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Receipt
           </button>
         </div>`).join('')
@@ -1034,9 +962,9 @@ GitHub-এ **`student.html`** খুলে **Edit (✏️)** → পুরনো
   function getEmbedUrl(url) {
     if (!url) return '';
     const yt = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|live\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);
-    if (yt) return `[https://www.youtube.com/embed/$](https://www.youtube.com/embed/$){yt[1]}?rel=0`;
+    if (yt) return `https://www.youtube.com/embed/${yt[1]}?rel=0`;
     const gd = url.match(/drive\.google\.com\/file\/d\/([^\/]+)/);
-    if (gd) return `[https://drive.google.com/file/d/$](https://drive.google.com/file/d/$){gd[1]}/preview`;
+    if (gd) return `https://drive.google.com/file/d/${gd[1]}/preview`;
     return '';
   }
 
@@ -1050,11 +978,11 @@ GitHub-এ **`student.html`** খুলে **Edit (✏️)** → পুরনো
       const lives = all.filter(c => c.type === 'Live');
       if (!lives.length) {
         box.innerHTML = `<div class="card" style="text-align:center;padding:28px 16px;">
-          <div style="width:48px;height:48px;border-radius:50%;background:var(--gold-soft);color:var(--gold-light);border:1px solid var(--gold-border);margin:0 auto 10px;display:flex;align-items:center;justify-content:center;">
+          <div style="width:48px;height:48px;border-radius:50%;background:#f1f5f9;color:var(--muted);margin:0 auto 10px;display:flex;align-items:center;justify-content:center;">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
           </div>
-          <div style="font-size:14.5px;font-weight:700;color:var(--gold-light);">এখন কোনো লাইভ ক্লাস চলছে না</div>
-          <div style="font-size:12.5px;color:var(--muted);margin-top:4px;">পুরনো ক্লাস দেখতে <strong style="color:#fff;">Recorded</strong> ট্যাবে যাও।</div>
+          <div style="font-size:14px;font-weight:700;color:var(--navy-900);">এখন কোনো লাইভ ক্লাস চলছে না</div>
+          <div style="font-size:12.5px;color:var(--muted);margin-top:4px;">পুরনো ক্লাস দেখতে <strong>Recorded</strong> ট্যাবে যাও।</div>
         </div>`;
         return;
       }
@@ -1066,14 +994,14 @@ GitHub-এ **`student.html`** খুলে **Edit (✏️)** → পুরনো
             <span class="c-badge live"><span class="live-dot" style="width:6px;height:6px;"></span> LIVE • ${c.subject} (${c.chapter||'General'})</span>
             <span style="font-size:11px;color:var(--muted);font-weight:600;">${c.date}</span>
           </div>
-          <div style="font-size:16px;font-weight:800;color:#fff;margin-top:8px;">${c.title}</div>
-          ${embed ? `<div class="video-box"><iframe src="${embed}" allow="autoplay; fullscreen" allowfullscreen></iframe></div>` : `<a href="${c.link}" target="_blank" class="btn btn-gold" style="text-decoration:none;margin-top:10px;">Join Live Class →</a>`}
+          <div style="font-size:16px;font-weight:800;color:var(--navy-900);margin-top:8px;">${c.title}</div>
+          ${embed ? `<div class="video-box"><iframe src="${embed}" allow="autoplay; fullscreen" allowfullscreen></iframe></div>` : `<a href="${c.link}" target="_blank" class="btn btn-accent" style="text-decoration:none;margin-top:10px;">Join Live Class →</a>`}
           <div class="live-chat-wrap">
-            <div style="font-size:12.5px;font-weight:800;color:var(--gold-light);margin-bottom:8px;">Live Question & Answer</div>
+            <div style="font-size:12.5px;font-weight:800;color:var(--navy-900);margin-bottom:8px;">Live Question & Answer</div>
             <div id="chat_${c.id}" class="chat-list"><div style="font-size:11.5px;color:var(--muted);">Loading Q&A...</div></div>
             <form onsubmit="sendStudentChat(event,'${c.id}')" style="display:flex;gap:7px;">
               <input type="text" id="cin_${c.id}" required placeholder="তোমার প্রশ্ন লেখো..." style="padding:9px 12px;font-size:13px;">
-              <button type="submit" class="btn btn-gold" style="width:auto;padding:9px 15px;font-size:12.5px;">Send</button>
+              <button type="submit" class="btn btn-accent" style="width:auto;padding:9px 15px;font-size:12.5px;">Send</button>
             </form>
           </div>
         </div>`;
@@ -1107,8 +1035,8 @@ GitHub-এ **`student.html`** খুলে **Edit (✏️)** → পুরনো
               <span class="c-badge">${c.type}</span>
               <span style="font-size:11px;color:var(--muted);font-weight:600;">${c.date}</span>
             </div>
-            <div style="font-size:14.5px;font-weight:800;color:#fff;margin-top:6px;">${c.title}</div>
-            ${embed ? `<div class="video-box"><iframe src="${embed}" allow="autoplay; fullscreen" allowfullscreen></iframe></div>` : `<a href="${c.link}" target="_blank" class="btn btn-gold" style="text-decoration:none;margin-top:10px;padding:10px;font-size:13px;">Open ${c.type} →</a>`}
+            <div style="font-size:14.5px;font-weight:800;color:var(--navy-900);margin-top:6px;">${c.title}</div>
+            ${embed ? `<div class="video-box"><iframe src="${embed}" allow="autoplay; fullscreen" allowfullscreen></iframe></div>` : `<a href="${c.link}" target="_blank" class="btn btn-accent" style="text-decoration:none;margin-top:10px;padding:10px;font-size:13px;">Open ${c.type} →</a>`}
           </div>`;
         }).join('');
         return `<details class="chap-folder" ${sIdx===0 && cIdx===0 ? 'open' : ''}>
@@ -1123,7 +1051,7 @@ GitHub-এ **`student.html`** খুলে **Edit (✏️)** → পুরনো
             <span class="folder-ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></span>
             ${sub}
           </span>
-          <span style="font-size:11.5px;color:var(--gold-light);font-weight:700;">${Object.keys(chapters).length} Chapters ▾</span>
+          <span style="font-size:11.5px;color:var(--accent-dark);font-weight:700;">${Object.keys(chapters).length} Chapters ▾</span>
         </summary>
         <div class="sub-body">${chapHtml}</div>
       </details>`;
@@ -1142,7 +1070,7 @@ GitHub-এ **`student.html`** খুলে **Edit (✏️)** → পুরনো
   function renderStudentChat(cid, msgs) {
     const el = document.getElementById('chat_' + cid); if (!el) return;
     el.innerHTML = msgs.length
-      ? msgs.map(m => `<div class="chat-msg ${m.role==='Admin'?'admin':''}"><strong style="color:var(--gold-light);">${m.senderName}</strong> <span style="font-size:10px;color:var(--muted);">${m.time}</span><div style="margin-top:2px;">${m.message}</div></div>`).join('')
+      ? msgs.map(m => `<div class="chat-msg ${m.role==='Admin'?'admin':''}"><strong>${m.senderName}</strong> <span style="font-size:10px;color:var(--muted);">${m.time}</span><div style="margin-top:2px;">${m.message}</div></div>`).join('')
       : '<div style="font-size:11.5px;color:var(--muted);">কোনো প্রশ্ন থাকলে নিচে লিখে পাঠাও...</div>';
     el.scrollTop = el.scrollHeight;
   }
@@ -1223,17 +1151,16 @@ GitHub-এ **`student.html`** খুলে **Edit (✏️)** → পুরনো
     if (!activeReceiptObj) return;
     const { p, fatherName } = activeReceiptObj;
     const c = document.createElement('canvas'); c.width = 720; c.height = 860; const ctx = c.getContext('2d');
-    ctx.fillStyle='#fff'; ctx.fillRect(0,0,720,860); ctx.strokeStyle='#061121'; ctx.lineWidth=8; ctx.strokeRect(18,18,684,824);
-    ctx.strokeStyle='#d4af37'; ctx.lineWidth=3; ctx.strokeRect(28,28,664,804);
-    ctx.fillStyle='#061121'; ctx.fillRect(22,22,676,155); ctx.fillStyle='#d4af37'; ctx.fillRect(22,173,676,6);
-    ctx.fillStyle='#fae094'; ctx.textAlign='center'; ctx.font='bold 38px sans-serif'; ctx.fillText('ইউ.সি.সি ইনস্টিটিউট',360,82);
-    ctx.fillStyle='#e2e8f0'; ctx.font='20px sans-serif'; ctx.fillText('পেঁচাকোলা, রায়পুর, বাঁকুড়া • ফোন: 8016972121 / 8159980707',360,120);
-    ctx.font='bold 22px sans-serif'; ctx.fillStyle='#d4af37'; ctx.fillText('অফিশিয়াল টিউশন ফি রসিদ (2027)',360,156);
+    ctx.fillStyle='#fff'; ctx.fillRect(0,0,720,860); ctx.strokeStyle='#091e3a'; ctx.lineWidth=8; ctx.strokeRect(18,18,684,824);
+    ctx.fillStyle='#091e3a'; ctx.fillRect(22,22,676,155); ctx.fillStyle='#f97316'; ctx.fillRect(22,173,676,6);
+    ctx.fillStyle='#fff'; ctx.textAlign='center'; ctx.font='bold 38px sans-serif'; ctx.fillText('ইউ.সি.সি ইনস্টিটিউট',360,82);
+    ctx.font='20px sans-serif'; ctx.fillText('পেঁচাকোলা, রায়পুর, বাঁকুড়া • ফোন: 8016972121 / 8159980707',360,120);
+    ctx.font='bold 22px sans-serif'; ctx.fillStyle='#fed7aa'; ctx.fillText('অফিশিয়াল টিউশন ফি রসিদ (2027)',360,156);
     const rows=[['রসিদ নং:',p.receiptNo||'-'],['তারিখ ও সময়:',`${formatBnDate(p.date)}${p.time?', '+p.time:''}`],['ছাত্র/ছাত্রীর নাম:',p.studentName],['পিতার নাম:',fatherName],['আইডি ও শ্রেণী:',`${p.studentId} • ${bnClass(p.studentClass)}`],['কোন মাসের ফি:',bnMonth(p.month)],['পেমেন্টের মাধ্যম:',bnMode(p.mode)]];
     let y=240; rows.forEach(([l,v])=>{ ctx.textAlign='left'; ctx.fillStyle='#475569'; ctx.font='22px sans-serif'; ctx.fillText(l,55,y); ctx.textAlign='right'; ctx.fillStyle='#0f172a'; ctx.font='bold 23px sans-serif'; ctx.fillText(String(v),665,y); ctx.strokeStyle='#e2e8f0'; ctx.lineWidth=1.5; ctx.beginPath(); ctx.moveTo(55,y+18); ctx.lineTo(665,y+18); ctx.stroke(); y+=62; });
-    ctx.fillStyle='#fef9e7'; ctx.fillRect(55,y-10,610,68); ctx.strokeStyle='#d4af37'; ctx.lineWidth=2.5; ctx.strokeRect(55,y-10,610,68);
-    ctx.textAlign='left'; ctx.fillStyle='#061121'; ctx.font='bold 26px sans-serif'; ctx.fillText('মোট জমা টাকা:',75,y+33); ctx.textAlign='right'; ctx.font='bold 30px sans-serif'; ctx.fillText(`${p.amount} টাকা`,645,y+33);
-    y+=120; ctx.textAlign='right'; ctx.fillStyle='#475569'; ctx.font='19px sans-serif'; ctx.fillText('গ্রহণকারী / অনুমোদিত স্বাক্ষর:',665,y); ctx.fillStyle='#061121'; ctx.font='bold 26px sans-serif'; ctx.fillText(bnCollector(p.collector),665,y+36);
+    ctx.fillStyle='#fff7ed'; ctx.fillRect(55,y-10,610,68); ctx.strokeStyle='#f97316'; ctx.lineWidth=2; ctx.strokeRect(55,y-10,610,68);
+    ctx.textAlign='left'; ctx.fillStyle='#091e3a'; ctx.font='bold 26px sans-serif'; ctx.fillText('মোট জমা টাকা:',75,y+33); ctx.textAlign='right'; ctx.font='bold 30px sans-serif'; ctx.fillText(`${p.amount} টাকা`,645,y+33);
+    y+=120; ctx.textAlign='right'; ctx.fillStyle='#475569'; ctx.font='19px sans-serif'; ctx.fillText('গ্রহণকারী / অনুমোদিত স্বাক্ষর:',665,y); ctx.fillStyle='#091e3a'; ctx.font='bold 26px sans-serif'; ctx.fillText(bnCollector(p.collector),665,y+36);
     const a=document.createElement('a'); a.download=`UCC_Receipt_${p.studentId}_${p.month}.png`; a.href=c.toDataURL('image/png'); a.click();
   }
 </script>
