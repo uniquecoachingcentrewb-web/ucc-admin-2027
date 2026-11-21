@@ -56,7 +56,6 @@
       -webkit-font-smoothing: antialiased;
       transition: background 0.35s ease, color 0.25s ease;
     }
-    /* Animated Ambient Theme Glow */
     body::before {
       content: ''; position: fixed; top: -120px; right: -100px; width: 320px; height: 320px;
       border-radius: 50%; background: var(--accent); opacity: 0.11; filter: blur(90px);
@@ -267,8 +266,9 @@
     .btn-red { background: linear-gradient(135deg, #dc2626, #991b1b); color: #fff; border: none; }
     .btn-sm { border: none; padding: 6px 11px; border-radius: 9px; font-size: 11px; font-weight: 800; cursor: pointer; }
 
-    /* ===== QR SCANNER ===== */
-    #reader { width: 100%; border-radius: 16px; overflow: hidden; background: #000; min-height: 240px; border: 1.5px solid var(--accent-border); }
+    /* ===== FAST FULL-FRAME QR SCANNER ===== */
+    #reader { width: 100%; border-radius: 16px; overflow: hidden; background: #000; min-height: 300px; border: 1.5px solid var(--accent-border); }
+    #reader video { width: 100% !important; height: auto !important; object-fit: cover; border-radius: 14px; }
     .scan-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
     .scan-popup { display: none; position: fixed; top: 72px; left: 50%; transform: translateX(-50%); width: 92%; max-width: 420px; z-index: 95; border-radius: 18px; padding: 16px; color: #fff; text-align: center; box-shadow: 0 16px 36px rgba(0,0,0,0.5); animation: slideUp 0.2s var(--ease-fast); }
     .scan-popup.ok { background: linear-gradient(135deg, #059669, #047857); display: block; }
@@ -533,7 +533,7 @@
   <!-- TAB 3: QR SCAN -->
   <div id="page-scan" class="page">
     <div class="card">
-      <div class="card-title">Standby QR Attendance Scanner</div>
+      <div class="card-title">Fast Full-Frame QR Scanner</div>
       <div id="reader"></div>
       <div class="scan-controls">
         <button class="btn btn-accent" id="camToggleBtn" onclick="toggleScanner()">Start Camera</button>
@@ -1500,17 +1500,36 @@
     const a=document.createElement('a'); a.download=`UCC_Receipt_${p.studentId}_${p.month}.png`; a.href=c.toDataURL('image/png'); a.click();
   }
 
+  // ===== SUPER-FAST FULL-FRAME QR SCANNER =====
   function playBeep(f, d) { try { const ctx=new (window.AudioContext||window.webkitAudioContext)(), o=ctx.createOscillator(); o.frequency.value=f; o.connect(ctx.destination); o.start(); setTimeout(()=>{ o.stop(); ctx.close(); }, d); } catch(e){} }
   function showScanPopup(type, st, nm, mt) { const b=document.getElementById('scanPopup'); b.className='scan-popup '+type; document.getElementById('spStatus').textContent=st; document.getElementById('spName').textContent=nm; document.getElementById('spMeta').textContent=mt; setTimeout(()=>{ b.className='scan-popup'; }, 2400); }
   async function toggleScanner() { if (scannerRunning) await stopScanner(); else await startScanner(); }
   async function startScanner() {
     if (!window.Html5Qrcode) { toast('Refresh online once.'); return; }
-    try { html5Qr = new Html5Qrcode('reader'); await html5Qr.start({ facingMode }, { fps: 10, qrbox: { width: 220, height: 220 } }, onQrScanned); scannerRunning = true; document.getElementById('camToggleBtn').textContent = 'Stop Camera'; document.getElementById('camToggleBtn').classList.remove('btn-accent'); document.getElementById('camToggleBtn').classList.add('btn-red'); } catch (e) { toast('Allow camera permission.'); }
+    try {
+      if (html5Qr) { try { await html5Qr.clear(); } catch(e){} }
+      const cfg = { fps: 15, aspectRatio: 1.0 };
+      if (window.Html5QrcodeSupportedFormats) cfg.formatsToSupport = [Html5QrcodeSupportedFormats.QR_CODE];
+      html5Qr = new Html5Qrcode('reader');
+      await html5Qr.start({ facingMode }, cfg, onQrScanned);
+      scannerRunning = true;
+      document.getElementById('camToggleBtn').textContent = 'Stop Camera';
+      document.getElementById('camToggleBtn').classList.remove('btn-accent');
+      document.getElementById('camToggleBtn').classList.add('btn-red');
+    } catch (e) { toast('Allow camera permission.'); }
   }
-  async function stopScanner() { if (html5Qr && scannerRunning) { try { await html5Qr.stop(); } catch(e){} scannerRunning = false; document.getElementById('camToggleBtn').textContent = 'Start Camera'; document.getElementById('camToggleBtn').classList.remove('btn-red'); document.getElementById('camToggleBtn').classList.add('btn-accent'); } }
+  async function stopScanner() {
+    if (html5Qr && scannerRunning) {
+      try { await html5Qr.stop(); await html5Qr.clear(); } catch(e){}
+      scannerRunning = false;
+      document.getElementById('camToggleBtn').textContent = 'Start Camera';
+      document.getElementById('camToggleBtn').classList.remove('btn-red');
+      document.getElementById('camToggleBtn').classList.add('btn-accent');
+    }
+  }
   async function switchCameraFacing() { facingMode = facingMode==='environment'?'user':'environment'; if (scannerRunning) { await stopScanner(); await startScanner(); } }
   function onQrScanned(txt) {
-    if (scanCooldown) return; scanCooldown = true; setTimeout(()=>{ scanCooldown=false; }, 2400);
+    if (scanCooldown) return; scanCooldown = true; setTimeout(()=>{ scanCooldown=false; }, 2200);
     const sid = txt.trim().toUpperCase(), s = students.find(x => x.id.toUpperCase() === sid);
     if (!s) { playBeep(260,260); showScanPopup('err','Invalid QR',sid,'Not found'); return; }
     const today = todayStr(), exists = attendance.some(a => a.date===today && a.studentId.toUpperCase()===s.id.toUpperCase()) || queue.some(q => q.type==='markAttendance' && q.data.date===today && q.data.studentId.toUpperCase()===s.id.toUpperCase());
