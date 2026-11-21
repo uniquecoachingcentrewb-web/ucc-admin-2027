@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <meta name="theme-color" content="#06101f">
+  <meta name="theme-color" content="#060e1f">
   <link rel="icon" type="image/png" href="logo.png?v=3">
   <title>U.C.C Institute - Student App</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,27 +11,25 @@
   <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #06101f;
-      --bg-2: #0a182e;
-      --surface: #0f213d;
-      --surface-2: #142a4d;
-      --surface-soft: rgba(15, 33, 61, 0.85);
-      --gold-light: #fae19a;
-      --gold: #e5b84b;
-      --gold-deep: #b8861d;
-      --gold-grad: linear-gradient(135deg, #f8df91 0%, #dfa935 55%, #b88217 100%);
-      --gold-soft: rgba(229, 184, 75, 0.13);
-      --gold-border: rgba(229, 184, 75, 0.32);
-      --border: rgba(255, 255, 255, 0.08);
+      --bg-deep: #060e1f;
+      --bg-surface: #0d1a33;
+      --bg-card: #112140;
+      --bg-card-soft: #162a50;
+      --gold-light: #fae49c;
+      --gold: #d4af37;
+      --gold-dark: #a67c00;
+      --gold-grad: linear-gradient(135deg, #fce79c 0%, #d4af37 55%, #b38714 100%);
+      --gold-border: rgba(212, 175, 55, 0.28);
+      --gold-soft: rgba(212, 175, 55, 0.13);
       --text: #f8fafc;
       --text-2: #cbd5e1;
-      --muted: #8fa3bf;
-      --success: #34d399;
-      --success-soft: rgba(16, 185, 129, 0.15);
+      --muted: #8da2c0;
+      --border: rgba(148, 163, 184, 0.16);
       --danger: #f87171;
       --danger-soft: rgba(239, 68, 68, 0.15);
-      --shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.25);
-      --shadow-lg: 0 18px 40px rgba(0, 0, 0, 0.45);
+      --success: #34d399;
+      --success-soft: rgba(16, 185, 129, 0.15);
+      --shadow-card: 0 10px 28px rgba(2, 6, 18, 0.45);
       --radius: 18px;
     }
 
@@ -42,22 +40,79 @@
     }
     html, body {
       margin: 0;
-      background: radial-gradient(circle at top right, #12294d 0%, var(--bg) 52%, #040b16 100%);
-      background-attachment: fixed;
+      background: radial-gradient(circle at 85% 0%, rgba(212, 175, 55, 0.11) 0%, transparent 42%),
+                  radial-gradient(circle at 10% 30%, rgba(30, 6সাদা ব্যাকগ্রাউন্ড পুরোপুরি সরিয়ে **Student App (`student.html`)**-টাকে এবার **Royal Midnight Blue + Metallic Gold** (রয়্যাল নেভি ও লাক্সারি গোল্ডেন) থিমে বানিয়ে দিলাম।
+
+**নতুন লুকে যা যা থাকছে:**
+* **ডিপ মিডনাইট নেভি বডি ও গ্লাস কার্ড:** পুরো ব্যাকগ্রাউন্ড গাঢ় রয়্যাল নেভি (`#061121`), আর তার ওপর সোনালি বর্ডার দেওয়া ডার্ক-গ্লাস কার্ড।
+* **মেটালিক গোল্ডেন অ্যাকসেন্ট:** বাটন, স্টুডেন্ট অ্যাভাটার, আইডি ব্যাজ, অ্যাটেনডেন্স বার, UPI কার্ড এবং অ্যাক্টিভ ট্যাব—সবকিছুতে আসল গোল্ডেন গ্র্যাডিয়েন্ট ও হালকা গ্লো।
+* **অফিশিয়াল প্রিন্ট-ফ্রেন্ডলি রসিদ:** অ্যাপের ভেতরটা পুরো ডার্ক-গোল্ড হলেও **PDF/PNG রসিদ** প্রিন্ট করার সময় যাতে পরিষ্কার আসে, তাই রসিদ কার্ডটা সাদা কাগজের ওপর নেভি ও গোল্ডেন বর্ডারে রাখা হয়েছে।
+
+---
+
+### GitHub-এ `student.html` আপডেট করো
+
+GitHub-এ **`student.html`** খুলে **Edit (✏️)** → পুরনো সব কোড মুছে নিচের পুরো কোডটা **Copy → Paste** করে **Commit changes** (দুবার) চাপো:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="theme-color" content="#061121">
+  <link rel="icon" type="image/png" href="logo.png?v=3">
+  <title>U.C.C Institute - Student App</title>
+  <link rel="preconnect" href="[https://fonts.googleapis.com](https://fonts.googleapis.com)">
+  <link rel="preconnect" href="[https://fonts.gstatic.com](https://fonts.gstatic.com)" crossorigin>
+  <link href="[https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap](https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap)" rel="stylesheet">
+  <style>
+    :root {
+      --bg-deep: #061121;
+      --bg-surface: #0c1b33;
+      --bg-elevated: #112442;
+      --bg-input: #081529;
+      --gold-light: #fae094;
+      --gold: #d4af37;
+      --gold-dark: #a67c1e;
+      --gold-grad: linear-gradient(135deg, #f8df8c 0%, #d4af37 52%, #b08218 100%);
+      --gold-soft: rgba(212, 175, 55, 0.14);
+      --gold-border: rgba(212, 175, 55, 0.28);
+      --text: #f8fafc;
+      --text-2: #cbd5e1;
+      --muted: #8fa3bf;
+      --border: rgba(148, 163, 184, 0.16);
+      --danger: #f87171;
+      --danger-soft: rgba(239, 68, 68, 0.15);
+      --success: #34d399;
+      --success-soft: rgba(16, 185, 129, 0.15);
+      --shadow-card: 0 10px 28px rgba(0, 0, 0, 0.35);
+      --shadow-gold: 0 8px 24px rgba(212, 175, 55, 0.22);
+      --radius: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: 'Plus Jakarta Sans', 'Hind Siliguri', -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    html, body {
+      margin: 0;
+      background: radial-gradient(circle at 85% 0%, #12294d 0%, #061121 48%, #040b16 100%) fixed;
       color: var(--text);
       padding-bottom: 94px;
       overscroll-behavior-y: contain;
       user-select: none;
       -webkit-font-smoothing: antialiased;
-      min-height: 100vh;
     }
     input, select { user-select: text; }
     svg { flex-shrink: 0; }
+    option { background: #0c1b33; color: #f8fafc; }
 
-    /* ===== SPLASH SCREEN ===== */
+    /* ===== ROYAL SPLASH SCREEN ===== */
     #splashScreen {
       position: fixed; inset: 0; z-index: 999;
-      background: radial-gradient(circle at 75% 20%, #173461 0%, #071326 55%, #030912 100%);
+      background: radial-gradient(circle at 50% 25%, #16325c 0%, #061121 60%, #020812 100%);
       display: flex; flex-direction: column; justify-content: center; align-items: center;
       text-align: center; padding: 24px;
       transition: opacity 0.45s cubic-bezier(0.4, 0, 0.2, 1), transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
@@ -66,72 +121,70 @@
     .splash-ring {
       width: 116px; height: 116px; border-radius: 50%; padding: 4px;
       background: var(--gold-grad);
-      box-shadow: 0 0 0 10px rgba(229, 184, 75, 0.12), 0 20px 45px rgba(0, 0, 0, 0.55);
+      box-shadow: 0 0 0 10px rgba(212, 175, 55, 0.1), 0 0 42px rgba(212, 175, 55, 0.32);
       animation: popIn 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
     .splash-ring img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; background: #fff; display: block; }
     .splash-title {
-      margin: 20px 0 6px; font-size: 26px; font-weight: 800; letter-spacing: -0.3px;
-      background: linear-gradient(90deg, #ffffff 0%, var(--gold-light) 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      margin: 20px 0 6px; font-size: 27px; font-weight: 800; letter-spacing: 0.2px;
+      background: var(--gold-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
       opacity: 0; animation: slideUp 0.55s ease 0.2s forwards;
     }
     .splash-tag {
       margin: 0; color: var(--gold-light); font-size: 11px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase;
-      padding: 6px 16px; border-radius: 30px; background: var(--gold-soft);
+      padding: 6px 16px; border-radius: 30px; background: rgba(212, 175, 55, 0.1);
       border: 1px solid var(--gold-border);
       opacity: 0; animation: slideUp 0.55s ease 0.35s forwards;
     }
-    .splash-bar { width: 130px; height: 4px; border-radius: 99px; background: rgba(255,255,255,0.12); margin-top: 28px; overflow: hidden; }
+    .splash-bar { width: 130px; height: 3.5px; border-radius: 99px; background: rgba(255,255,255,0.1); margin-top: 28px; overflow: hidden; }
     .splash-fill { height: 100%; width: 0%; border-radius: 99px; background: var(--gold-grad); animation: loadBar 1.15s ease 0.25s forwards; }
 
     @keyframes popIn { 0% { opacity: 0; transform: scale(0.6); } 100% { opacity: 1; transform: scale(1); } }
     @keyframes slideUp { 0% { opacity: 0; transform: translateY(14px); } 100% { opacity: 1; transform: translateY(0); } }
     @keyframes loadBar { to { width: 100%; } }
     @keyframes pageFade { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes pulseDot { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.35); opacity: 0.45; } }
+    @keyframes pulseDot { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.35); opacity: 0.4; } }
     @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
 
     /* ===== ROYAL LOGIN SCREEN ===== */
     #loginScreen {
       position: fixed; inset: 0; z-index: 200;
-      background: radial-gradient(circle at 20% 15%, #163360 0%, #071326 55%, #030912 100%);
+      background: radial-gradient(circle at 20% 10%, #16335e 0%, #061121 55%, #030812 100%);
       display: flex; justify-content: center; align-items: center; padding: 20px; overflow: hidden;
     }
-    .login-orb-1, .login-orb-2 { position: absolute; border-radius: 50%; filter: blur(65px); pointer-events: none; }
-    .login-orb-1 { width: 240px; height: 240px; background: rgba(229, 184, 75, 0.2); top: -70px; right: -50px; }
-    .login-orb-2 { width: 260px; height: 260px; background: rgba(37, 99, 235, 0.16); bottom: -80px; left: -60px; }
+    .login-orb-1, .login-orb-2 { position: absolute; border-radius: 50%; filter: blur(70px); pointer-events: none; }
+    .login-orb-1 { width: 230px; height: 230px; background: rgba(212, 175, 55, 0.2); top: -60px; right: -50px; }
+    .login-orb-2 { width: 250px; height: 250px; background: rgba(37, 99, 235, 0.16); bottom: -80px; left: -60px; }
     .login-card {
       position: relative; width: 100%; max-width: 375px;
-      background: linear-gradient(165deg, #102342 0%, #0a172c 100%);
-      border: 1px solid var(--gold-border); border-radius: 26px;
-      padding: 28px 24px 24px; box-shadow: 0 26px 65px rgba(0, 0, 0, 0.6);
+      background: linear-gradient(180deg, rgba(17, 36, 66, 0.94) 0%, rgba(10, 23, 44, 0.98) 100%);
+      border: 1px solid var(--gold-border); border-radius: 26px; padding: 28px 24px 24px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(250, 224, 148, 0.2);
       animation: slideUp 0.45s cubic-bezier(0.22, 1, 0.36, 1);
-    }
-    .login-card::before {
-      content: ''; position: absolute; top: 0; left: 26px; right: 26px; height: 3px;
-      background: var(--gold-grad); border-radius: 0 0 6px 6px;
     }
     .login-logo-wrap {
       width: 76px; height: 76px; border-radius: 50%; padding: 3px;
-      background: var(--gold-grad); margin: 0 auto 13px;
-      box-shadow: 0 10px 25px rgba(229, 184, 75, 0.28);
+      background: var(--gold-grad); margin: 0 auto 12px;
+      box-shadow: 0 0 24px rgba(212, 175, 55, 0.32);
     }
     .login-logo-wrap img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; background: #fff; display: block; }
     .login-title { text-align: center; margin-bottom: 20px; }
-    .login-title h2 { margin: 0; color: #fff; font-size: 22px; font-weight: 800; letter-spacing: -0.3px; }
-    .login-title p { margin: 4px 0 0; font-size: 11px; color: var(--gold); font-weight: 700; letter-spacing: 1.8px; }
+    .login-title h2 {
+      margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.2px;
+      background: var(--gold-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .login-title p { margin: 5px 0 0; font-size: 11px; color: var(--muted); font-weight: 700; letter-spacing: 1.8px; }
     .login-err {
-      display: none; background: var(--danger-soft); color: #fecaca; border: 1px solid rgba(248, 113, 113, 0.4);
+      display: none; background: var(--danger-soft); color: #fca5a5; border: 1px solid rgba(248, 113, 113, 0.35);
       padding: 10px 12px; border-radius: 12px; font-size: 12.5px; font-weight: 600; margin-bottom: 14px; text-align: center;
     }
 
-    /* ===== TOP HEADER ===== */
+    /* ===== PREMIUM TOP BAR ===== */
     header {
-      background: rgba(6, 16, 31, 0.88); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      background: rgba(6, 17, 33, 0.88); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
       color: #fff; padding: 12px 16px; position: sticky; top: 0; z-index: 30;
       display: flex; justify-content: space-between; align-items: center;
-      box-shadow: 0 6px 22px rgba(0, 0, 0, 0.35);
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
     }
     header::after {
       content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1.5px;
@@ -140,35 +193,38 @@
     }
     .brand { display: flex; align-items: center; gap: 11px; }
     .brand-logo {
-      width: 38px; height: 38px; border-radius: 50%; object-fit: cover;
+      width: 39px; height: 39px; border-radius: 50%; object-fit: cover;
       border: 2px solid var(--gold); background: #fff;
-      box-shadow: 0 0 12px rgba(229, 184, 75, 0.3);
+      box-shadow: 0 0 12px rgba(212, 175, 55, 0.35);
     }
-    .brand h1 { margin: 0; font-size: 16px; font-weight: 800; color: #fff; letter-spacing: -0.2px; }
-    .brand small { font-size: 11px; color: var(--gold-light); display: block; font-weight: 600; margin-top: 1px; opacity: 0.9; }
+    .brand h1 {
+      margin: 0; font-size: 16px; font-weight: 800; letter-spacing: 0.1px;
+      background: var(--gold-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .brand small { font-size: 11px; color: var(--muted); display: block; font-weight: 600; margin-top: 1px; }
     .hdr-actions { display: flex; gap: 8px; }
     .icon-btn {
       width: 36px; height: 36px; border-radius: 11px; border: 1px solid var(--gold-border);
-      background: rgba(229, 184, 75, 0.08); color: var(--gold-light); cursor: pointer;
+      background: rgba(212, 175, 55, 0.08); color: var(--gold-light); cursor: pointer;
       display: flex; align-items: center; justify-content: center; transition: 0.18s ease;
     }
-    .icon-btn:active { transform: scale(0.92); background: rgba(229, 184, 75, 0.2); }
+    .icon-btn:active { transform: scale(0.92); background: rgba(212, 175, 55, 0.2); }
 
-    /* ===== CONTAINER & DARK LUXURY CARDS ===== */
+    /* ===== CONTAINER & DARK GLASS CARDS ===== */
     .container { max-width: 580px; margin: 14px auto; padding: 0 14px; }
     .page { display: none; }
     .page.active { display: block; animation: pageFade 0.28s ease; }
 
     .card {
-      background: linear-gradient(160deg, var(--surface) 0%, #0b1930 100%);
+      background: linear-gradient(180deg, rgba(16, 34, 62, 0.92) 0%, rgba(11, 25, 47, 0.96) 100%);
       border-radius: var(--radius); padding: 16px;
-      box-shadow: var(--shadow-sm); margin-bottom: 14px;
-      border: 1px solid var(--border);
+      box-shadow: var(--shadow-card), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      margin-bottom: 14px; border: 1px solid var(--border);
     }
     .card-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
     .card-title {
-      font-size: 14.5px; font-weight: 800; color: #fff;
-      display: flex; align-items: center; gap: 8px;
+      font-size: 14.5px; font-weight: 800; color: var(--gold-light);
+      display: flex; align-items: center; gap: 7px; letter-spacing: 0.1px;
     }
     .pill-mini {
       font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px;
@@ -177,7 +233,7 @@
 
     /* ===== GOLDEN NOTICE BANNER ===== */
     .notice-banner {
-      background: linear-gradient(135deg, rgba(229, 184, 75, 0.16) 0%, rgba(184, 130, 23, 0.08) 100%);
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.16) 0%, rgba(17, 36, 66, 0.92) 100%);
       border: 1px solid var(--gold-border); border-left: 4px solid var(--gold);
       border-radius: 16px; padding: 13px 14px; margin-bottom: 14px;
       box-shadow: 0 8px 22px rgba(0, 0, 0, 0.28);
@@ -186,40 +242,41 @@
     .notice-badge { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 800; color: var(--gold-light); }
     .live-dot {
       width: 8px; height: 8px; border-radius: 50%; background: #ef4444;
-      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.25); animation: pulseDot 1.3s infinite;
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.28); animation: pulseDot 1.3s infinite;
     }
-    .notice-date { font-size: 11px; font-weight: 600; color: var(--gold-light); background: rgba(0,0,0,0.28); padding: 2px 9px; border-radius: 20px; }
+    .notice-date { font-size: 11px; font-weight: 600; color: var(--gold-light); background: rgba(6, 17, 33, 0.55); padding: 2px 9px; border-radius: 20px; border: 1px solid var(--gold-border); }
     .notice-body { font-size: 13.5px; color: #f1f5f9; line-height: 1.5; font-weight: 500; }
     .notice-link {
       display: inline-flex; align-items: center; gap: 5px; margin-top: 9px;
-      background: var(--gold-grad); color: #06101f; text-decoration: none;
-      font-size: 12px; font-weight: 800; padding: 6px 14px; border-radius: 9px;
+      background: var(--gold-grad); color: #061121; text-decoration: none;
+      font-size: 12px; font-weight: 800; padding: 6px 13px; border-radius: 9px;
     }
 
-    /* ===== ROYAL HERO STUDENT CARD ===== */
+    /* ===== ROYAL HERO CARD ===== */
     .hero-card {
       position: relative; overflow: hidden;
-      background: linear-gradient(135deg, #132c54 0%, #0c1d38 55%, #162a47 100%);
+      background: linear-gradient(135deg, #132a4f 0%, #0b1c36 55%, #192b46 100%);
+      border: 1px solid rgba(212, 175, 55, 0.42);
       color: #fff; border-radius: 22px; padding: 18px; margin-bottom: 14px;
-      border: 1px solid var(--gold-border); box-shadow: var(--shadow-lg);
+      box-shadow: 0 16px 38px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(250, 224, 148, 0.25);
     }
     .hero-card::before {
       content: ''; position: absolute; width: 190px; height: 190px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(229, 184, 75, 0.26) 0%, transparent 70%);
-      top: -65px; right: -55px; pointer-events: none;
+      background: radial-gradient(circle, rgba(212, 175, 55, 0.25) 0%, transparent 70%);
+      top: -65px; right: -45px; pointer-events: none;
     }
     .hero-card::after {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-      background: var(--gold-grad);
+      content: ''; position: absolute; width: 130px; height: 130px; border-radius: 50%;
+      border: 1px solid rgba(212, 175, 55, 0.14); bottom: -45px; left: -25px; pointer-events: none;
     }
     .hero-row { position: relative; display: flex; align-items: center; gap: 14px; }
     .avatar-circle {
       width: 54px; height: 54px; border-radius: 16px;
-      background: var(--gold-grad); color: #06101f; font-size: 22px; font-weight: 800;
+      background: var(--gold-grad); color: #061121; font-size: 22px; font-weight: 800;
       display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 8px 20px rgba(229, 184, 75, 0.32);
+      box-shadow: var(--shadow-gold); border: 2px solid rgba(255, 255, 255, 0.35);
     }
-    .hero-name { font-size: 19px; font-weight: 800; letter-spacing: -0.2px; color: #fff; }
+    .hero-name { font-size: 19.5px; font-weight: 800; color: #ffffff; letter-spacing: -0.2px; line-height: 1.2; }
     .hero-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
     .hero-chip {
       font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px;
@@ -227,50 +284,51 @@
     }
     .hero-chip.gold { background: var(--gold-soft); border-color: var(--gold-border); color: var(--gold-light); }
     .hero-footer {
-      position: relative; margin-top: 14px; padding-top: 12px;
-      border-top: 1px solid rgba(229, 184, 75, 0.16);
-      display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--text-2);
+      position: relative; margin-top: 15px; padding-top: 12px;
+      border-top: 1px solid rgba(212, 175, 55, 0.18);
+      display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--muted);
     }
 
-    /* ===== STATS & GOLDEN PROGRESS ===== */
+    /* ===== STATS & PROGRESS ===== */
     .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px; }
     .stat-box {
-      background: linear-gradient(160deg, var(--surface) 0%, #0b1930 100%);
+      background: linear-gradient(180deg, rgba(16, 34, 62, 0.94) 0%, rgba(10, 23, 44, 0.96) 100%);
       border: 1px solid var(--border); border-radius: 16px;
-      padding: 13px 8px; text-align: center; box-shadow: var(--shadow-sm);
+      padding: 13px 8px; text-align: center; box-shadow: var(--shadow-card);
     }
     .stat-icon {
       width: 32px; height: 32px; border-radius: 10px; margin: 0 auto 7px;
       display: flex; align-items: center; justify-content: center;
     }
-    .si-green { background: var(--success-soft); color: var(--success); }
-    .si-gold { background: var(--gold-soft); color: var(--gold-light); }
-    .si-red { background: var(--danger-soft); color: var(--danger); }
-    .stat-num { font-size: 17.5px; font-weight: 800; letter-spacing: -0.3px; }
+    .si-green { background: var(--success-soft); color: var(--success); border: 1px solid rgba(52, 211, 153, 0.25); }
+    .si-gold { background: var(--gold-soft); color: var(--gold-light); border: 1px solid var(--gold-border); }
+    .si-red { background: var(--danger-soft); color: var(--danger); border: 1px solid rgba(248, 113, 113, 0.25); }
+    .stat-num { font-size: 17.5px; font-weight: 800; letter-spacing: -0.2px; }
     .stat-lbl { font-size: 11px; color: var(--muted); margin-top: 2px; font-weight: 600; }
 
-    .prog-track { width: 100%; height: 8px; background: rgba(255,255,255,0.08); border-radius: 99px; overflow: hidden; margin-top: 9px; }
-    .prog-fill { height: 100%; border-radius: 99px; background: var(--gold-grad); transition: width 0.5s ease; }
+    .prog-track { width: 100%; height: 7px; background: rgba(255, 255, 255, 0.08); border-radius: 99px; overflow: hidden; margin-top: 9px; }
+    .prog-fill { height: 100%; border-radius: 99px; background: var(--gold-grad); box-shadow: 0 0 10px rgba(212, 175, 55, 0.45); transition: width 0.5s ease; }
 
     /* ===== MONTHS GRID ===== */
     .months-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
     .m-cell {
       border: 1px solid var(--border); border-radius: 13px; padding: 9px 4px;
-      text-align: center; background: rgba(255, 255, 255, 0.03);
+      text-align: center; background: rgba(6, 17, 33, 0.55); transition: 0.15s ease;
     }
     .m-cell .m-name { font-size: 11.5px; font-weight: 700; color: var(--text-2); }
     .m-cell .m-val { font-size: 11px; font-weight: 700; margin-top: 3px; color: var(--muted); }
     .m-cell.paid {
-      background: linear-gradient(160deg, rgba(16, 185, 129, 0.18) 0%, rgba(229, 184, 75, 0.12) 100%);
-      border-color: rgba(52, 211, 153, 0.45);
+      background: linear-gradient(180deg, rgba(16, 185, 129, 0.18) 0%, rgba(6, 78, 59, 0.28) 100%);
+      border-color: rgba(52, 211, 153, 0.42);
     }
     .m-cell.paid .m-name { color: #a7f3d0; }
-    .m-cell.paid .m-val { color: var(--success); }
+    .m-cell.paid .m-val { color: #34d399; }
 
-    /* ===== SEGMENTED PILLS (CLASSES) ===== */
+    /* ===== SEGMENTED PILLS ===== */
     .seg-bar {
       display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;
-      background: #091528; border: 1px solid var(--border); padding: 5px; border-radius: 14px; margin-bottom: 14px;
+      background: rgba(6, 17, 33, 0.78); border: 1px solid var(--border);
+      padding: 5px; border-radius: 14px; margin-bottom: 14px;
     }
     .seg-btn {
       padding: 9px 4px; border-radius: 10px; border: none; background: transparent;
@@ -278,27 +336,26 @@
       display: flex; align-items: center; justify-content: center; gap: 5px; transition: 0.2s ease;
     }
     .seg-btn.active {
-      background: var(--gold-grad); color: #06101f; font-weight: 800;
-      box-shadow: 0 4px 14px rgba(229, 184, 75, 0.28);
+      background: var(--gold-grad); color: #061121;
+      box-shadow: 0 4px 14px rgba(212, 175, 55, 0.3);
     }
-    .seg-btn.live-tab.active { background: linear-gradient(135deg, #f87171, #dc2626); color: #fff; }
 
     .lock-card {
-      background: linear-gradient(160deg, var(--surface) 0%, #0b1930 100%);
+      background: linear-gradient(180deg, rgba(17, 36, 66, 0.96) 0%, rgba(10, 22, 42, 0.98) 100%);
       border: 1.5px solid var(--gold-border); border-radius: 22px;
-      padding: 30px 20px; text-align: center; box-shadow: var(--shadow-lg);
+      padding: 30px 20px; text-align: center; box-shadow: var(--shadow-card);
     }
     .lock-icon-circle {
       width: 64px; height: 64px; border-radius: 50%; margin: 0 auto 14px;
       background: var(--gold-soft); color: var(--gold-light);
-      display: flex; align-items: center; justify-content: center; border: 2px solid var(--gold-border);
+      display: flex; align-items: center; justify-content: center; border: 1.5px solid var(--gold-border);
     }
 
     /* ===== SUBJECT -> CHAPTER FOLDERS ===== */
     details.sub-folder {
-      background: linear-gradient(160deg, var(--surface) 0%, #0b1930 100%);
-      border: 1px solid var(--border); border-left: 3px solid var(--gold);
-      border-radius: 16px; margin-bottom: 11px; overflow: hidden; box-shadow: var(--shadow-sm);
+      background: linear-gradient(180deg, rgba(16, 34, 62, 0.94) 0%, rgba(11, 25, 47, 0.96) 100%);
+      border: 1px solid var(--gold-border); border-radius: 16px;
+      margin-bottom: 11px; overflow: hidden; box-shadow: var(--shadow-card);
     }
     details.sub-folder > summary {
       padding: 14px 15px; font-size: 14.5px; font-weight: 800; color: #fff;
@@ -308,12 +365,12 @@
     .folder-left { display: flex; align-items: center; gap: 10px; }
     .folder-ic {
       width: 34px; height: 34px; border-radius: 10px; background: var(--gold-soft); color: var(--gold-light);
-      display: flex; align-items: center; justify-content: center; border: 1px solid var(--gold-border);
+      border: 1px solid var(--gold-border); display: flex; align-items: center; justify-content: center;
     }
     .sub-body { padding: 0 12px 12px; }
 
     details.chap-folder {
-      background: rgba(6, 16, 31, 0.55); border: 1px solid var(--border); border-radius: 13px; margin-top: 8px;
+      background: rgba(6, 17, 33, 0.55); border: 1px solid var(--border); border-radius: 13px; margin-top: 8px;
     }
     details.chap-folder > summary {
       padding: 11px 12px; font-size: 13.5px; font-weight: 700; color: var(--gold-light);
@@ -323,7 +380,7 @@
     .chap-body { padding: 0 10px 10px; }
 
     .content-card {
-      background: var(--surface-2); border: 1px solid var(--border); border-radius: 14px;
+      background: rgba(16, 34, 62, 0.85); border: 1px solid var(--border); border-radius: 14px;
       padding: 13px; margin-top: 8px;
     }
     .c-badge {
@@ -331,7 +388,7 @@
       padding: 3px 10px; border-radius: 20px; background: var(--gold-soft); color: var(--gold-light);
       border: 1px solid var(--gold-border);
     }
-    .c-badge.live { background: var(--danger-soft); color: #fca5a5; border-color: rgba(248,113,113,0.4); }
+    .c-badge.live { background: var(--danger-soft); color: #fca5a5; border-color: rgba(248, 113, 113, 0.35); }
     .video-box {
       margin-top: 10px; border-radius: 12px; overflow: hidden; background: #000;
       aspect-ratio: 16 / 9; width: 100%; border: 1px solid var(--gold-border);
@@ -340,43 +397,845 @@
 
     /* ===== LIVE Q&A CHAT ===== */
     .live-chat-wrap {
-      margin-top: 12px; background: rgba(6, 16, 31, 0.7); border: 1px solid var(--border);
+      margin-top: 12px; background: rgba(6, 17, 33, 0.65); border: 1px solid var(--border);
       border-radius: 14px; padding: 12px;
     }
     .chat-list { max-height: 210px; overflow-y: auto; margin-bottom: 10px; }
     .chat-msg {
-      background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+      background: rgba(17, 36, 66, 0.9); border: 1px solid var(--border); border-radius: 12px;
       padding: 8px 11px; font-size: 12.5px; margin-bottom: 7px; color: #f1f5f9;
     }
-    .chat-msg.admin { background: var(--gold-soft); border-color: var(--gold-border); }
+    .chat-msg.admin { background: rgba(212, 175, 55, 0.16); border-color: var(--gold-border); }
 
-    /* ===== LUXURY BLACK-GOLD UPI CARD ===== */
+    /* ===== ROYAL GOLD UPI CARD ===== */
     .upi-card {
       position: relative; overflow: hidden;
-      background: linear-gradient(135deg, #1b1710 0%, #0c172b 52%, #231c0f 100%);
+      background: linear-gradient(135deg, #1b3661 0%, #0d1f3d 55%, #1d2d45 100%);
+      border: 1.5px solid rgba(212, 175, 55, 0.55);
       color: #fff; border-radius: 20px; padding: 18px; margin-bottom: 16px;
-      border: 1px solid var(--gold-border); box-shadow: 0 14px 32px rgba(0, 0, 0, 0.45);
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(250, 224, 148, 0.3);
     }
-    .upi-card::before {
-      content: ''; position: absolute; width: 160px; height: 160px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(229, 184, 75, 0.3) 0%, transparent 70%);
-      top: -55px; right: -40px; pointer-events: none;
+    .upi-card::after {
+      content: ''; position: absolute; width: 150px; height: 150px; border-radius: 50%;
+      background: rgba(212, 175, 55, 0.24); top: -45px; right: -30px; filter: blur(22px);
     }
     .upi-top { display: flex; justify-content: space-between; align-items: center; position: relative; }
-    .upi-tag { font-size: 10.5px; font-weight: 800; letter-spacing: 1.4px; color: var(--gold-light); text-transform: uppercase; }
+    .upi-tag { font-size: 10.5px; font-weight: 700; letter-spacing: 1.2px; color: var(--gold-light); text-transform: uppercase; }
     .upi-num {
       font-size: 24px; font-weight: 800; letter-spacing: 2px; margin: 10px 0 6px; position: relative;
       background: var(--gold-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
     .copy-pill {
-      position: relative; background: var(--gold-soft); color: var(--gold-light);
-      border: 1px solid var(--gold-border); padding: 7px 13px; border-radius: 10px;
-      font-size: 12px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 5px;
+      position: relative; background: var(--gold-grad); color: #061121; border: none;
+      padding: 8px 14px; border-radius: 10px; font-size: 12px; font-weight: 800; cursor: pointer;
+      display: inline-flex; align-items: center; gap: 5px; box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
     }
-    .copy-pill:active { transform: scale(0.95); background: rgba(229, 184, 75, 0.28); }
+    .copy-pill:active { transform: scale(0.95); }
 
-    /* ===== DARK FORM ELEMENTS ===== */
+    /* ===== FORM ELEMENTS ===== */
     .form-group { margin-bottom: 13px; }
     label { display: block; font-size: 12px; font-weight: 700; color: var(--gold-light); margin-bottom: 6px; }
     input, select {
-      width: 100%; padding: 11px 13px; border: 1.5px
+      width: 100%; padding: 11px 13px; border: 1.5px solid rgba(148, 163, 184, 0.22);
+      border-radius: 12px; font-size: 14px; background: var(--bg-input); color: #ffffff;
+      transition: 0.18s ease;
+    }
+    input::placeholder { color: #64748b; }
+    input:focus, select:focus {
+      outline: none; border-color: var(--gold); background: #0a1930;
+      box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.16);
+    }
+    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+    .upload-zone {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      border: 1.5px dashed var(--gold-border); border-radius: 14px; padding: 18px 12px;
+      background: rgba(6, 17, 33, 0.55); cursor: pointer; text-align: center; transition: 0.2s ease;
+    }
+    .upload-zone:active { border-color: var(--gold); background: var(--gold-soft); }
+    .upload-zone input { display: none; }
+
+    .btn {
+      width: 100%; padding: 13px 16px; border: 1px solid var(--gold-border); border-radius: 13px;
+      font-size: 14px; font-weight: 800; cursor: pointer; color: var(--gold-light);
+      background: linear-gradient(135deg, #152d52 0%, #0d1f3a 100%);
+      display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+      transition: 0.16s ease;
+    }
+    .btn:active { transform: scale(0.97); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-gold {
+      background: var(--gold-grad); color: #061121; border: none;
+      box-shadow: var(--shadow-gold);
+    }
+    .btn-sec { background: #1e293b; color: #e2e8f0; border-color: rgba(148,163,184,0.25); }
+
+    /* ===== LISTS & BADGES ===== */
+    .info-item {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 11px 0; border-bottom: 1px solid rgba(148, 163, 184, 0.12); gap: 10px;
+    }
+    .info-item:last-child { border-bottom: none; padding-bottom: 2px; }
+    .badge-ok { background: var(--success-soft); color: var(--success); border: 1px solid rgba(52,211,153,0.3); padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+    .badge-due { background: var(--gold-soft); color: var(--gold-light); border: 1px solid var(--gold-border); padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+    .badge-rej { background: var(--danger-soft); color: var(--danger); border: 1px solid rgba(248,113,113,0.3); padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+
+    /* ===== SHIMMER LOADER ===== */
+    .skel {
+      background: linear-gradient(90deg, #0d1e38 25%, #162e54 50%, #0d1e38 75%);
+      background-size: 200% 100%; animation: shimmer 1.3s infinite; border-radius: 16px;
+      border: 1px solid rgba(212, 175, 55, 0.1);
+    }
+
+    /* ===== RECEIPT MODAL (CRISP PAPER FOR PRINT/PDF) ===== */
+    .rcpt-modal-bg {
+      display: none; position: fixed; inset: 0; background: rgba(2, 8, 18, 0.82);
+      backdrop-filter: blur(5px); z-index: 120; justify-content: center; align-items: center; padding: 14px;
+    }
+    .rcpt-modal-bg.open { display: flex; }
+    .rcpt-card {
+      background: #ffffff; color: #0f172a; width: 100%; max-width: 430px; border-radius: 20px;
+      padding: 20px; border: 2.5px solid #d4af37; max-height: 92vh; overflow-y: auto;
+      box-shadow: 0 24px 55px rgba(0, 0, 0, 0.65);
+    }
+    .rcpt-head { text-align: center; border-bottom: 2px solid #091e3a; padding-bottom: 12px; margin-bottom: 12px; }
+    .rcpt-line { display: flex; justify-content: space-between; font-size: 13px; padding: 6px 0; border-bottom: 1px dashed #cbd5e1; gap: 8px; color: #1e293b; }
+    .rcpt-sign { margin-top: 16px; text-align: right; font-size: 12px; color: #334155; }
+
+    @media print {
+      body * { visibility: hidden; }
+      #receiptPrintArea, #receiptPrintArea * { visibility: visible; }
+      #receiptPrintArea { position: fixed; left: 0; top: 0; width: 100%; border: 2px solid #000; border-radius: 0; box-shadow: none; }
+      .no-print { display: none !important; }
+    }
+
+    /* ===== ROYAL GLASS BOTTOM NAV ===== */
+    .bottom-nav {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: rgba(7, 18, 35, 0.94); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border-top: 1px solid var(--gold-border); display: flex; z-index: 40;
+      box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.45);
+      padding: 7px 8px calc(9px + env(safe-area-inset-bottom));
+    }
+    .nav-btn {
+      flex: 1; padding: 5px 4px; border: none; background: none;
+      display: flex; flex-direction: column; align-items: center; gap: 3px;
+      font-size: 11px; font-weight: 700; color: var(--muted); cursor: pointer;
+      border-radius: 14px; transition: 0.2s ease;
+    }
+    .nav-icon-wrap {
+      width: 44px; height: 28px; border-radius: 20px;
+      display: flex; align-items: center; justify-content: center; transition: 0.2s ease;
+    }
+    .nav-btn.active { color: var(--gold-light); }
+    .nav-btn.active .nav-icon-wrap {
+      background: var(--gold-grad); color: #061121;
+      box-shadow: 0 3px 12px rgba(212, 175, 55, 0.35);
+    }
+
+    .toast {
+      position: fixed; bottom: 88px; left: 50%; transform: translateX(-50%);
+      background: #0f2342; color: var(--gold-light); padding: 10px 18px; border-radius: 30px;
+      font-size: 12.5px; font-weight: 700; display: none; z-index: 150; max-width: 90%;
+      text-align: center; box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5);
+      border: 1px solid var(--gold);
+    }
+  </style>
+</head>
+<body>
+
+<!-- SPLASH SCREEN -->
+<div id="splashScreen">
+  <div class="splash-ring"><img src="logo.png?v=3" alt="Logo" onerror="this.style.display='none'"></div>
+  <h1 class="splash-title">U.C.C Institute</h1>
+  <p class="splash-tag">Learn • Grow • Succeed</p>
+  <div class="splash-bar"><div class="splash-fill"></div></div>
+</div>
+
+<!-- LOGIN SCREEN -->
+<div id="loginScreen">
+  <div class="login-orb-1"></div>
+  <div class="login-orb-2"></div>
+  <div class="login-card">
+    <div class="login-logo-wrap"><img src="logo.png?v=3" alt="Logo" onerror="this.style.display='none'"></div>
+    <div class="login-title">
+      <h2>U.C.C Student Portal</h2>
+      <p>LEARN • GROW • SUCCEED</p>
+    </div>
+    <div id="loginErr" class="login-err">Invalid Student ID or Mobile Number!</div>
+    <form onsubmit="handleStudentLogin(event)">
+      <div class="form-group">
+        <label>Student ID</label>
+        <input type="text" id="lId" required placeholder="e.g. UCC001" style="text-transform:uppercase;">
+      </div>
+      <div class="form-group">
+        <label>Registered Mobile Number</label>
+        <input type="tel" id="lMob" required maxlength="10" placeholder="10-digit mobile number">
+      </div>
+      <button type="submit" id="lBtn" class="btn btn-gold" style="margin-top:8px;">
+        <span>Login to Student App</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- TOP APP BAR -->
+<header>
+  <div class="brand">
+    <img src="logo.png?v=3" alt="Logo" class="brand-logo" onerror="this.style.display='none'">
+    <div>
+      <h1>U.C.C Institute</h1>
+      <small id="hdrSub">Student Portal • Session 2027</small>
+    </div>
+  </div>
+  <div class="hdr-actions">
+    <button class="icon-btn" onclick="refreshPortal(false)" title="Refresh">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>
+    </button>
+    <button class="icon-btn" onclick="logoutStudent()" title="Logout">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+    </button>
+  </div>
+</header>
+
+<div class="container">
+  <!-- SHIMMER SKELETON -->
+  <div id="skeletonView" style="display:none;">
+    <div class="skel" style="height:128px;margin-bottom:14px;"></div>
+    <div class="stat-grid">
+      <div class="skel" style="height:88px;"></div>
+      <div class="skel" style="height:88px;"></div>
+      <div class="skel" style="height:88px;"></div>
+    </div>
+    <div class="skel" style="height:210px;"></div>
+  </div>
+
+  <div id="mainContent">
+    <!-- NOTICE BANNER -->
+    <div id="noticeArea"></div>
+
+    <!-- TAB 1: HOME -->
+    <div id="page-home" class="page active">
+      <div class="hero-card">
+        <div class="hero-row">
+          <div class="avatar-circle" id="sAvatar">U</div>
+          <div style="min-width:0;">
+            <div class="hero-name" id="sName">Loading...</div>
+            <div class="hero-chips">
+              <span class="hero-chip gold" id="sIdChip">UCC</span>
+              <span class="hero-chip" id="sClassChip">Class</span>
+            </div>
+          </div>
+        </div>
+        <div class="hero-footer">
+          <span id="sFather">Father: -</span>
+          <span id="sPhone" style="font-weight:700;color:var(--gold-light);">-</span>
+        </div>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat-box">
+          <div class="stat-icon si-green">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div id="sPresent" class="stat-num" style="color:var(--success);">0</div>
+          <div class="stat-lbl">Present</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-icon si-gold">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </div>
+          <div id="sAbsent" class="stat-num" style="color:var(--gold-light);">0</div>
+          <div class="stat-lbl">Absent</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-icon si-red">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12"/><path d="M6 8h12"/><path d="m6 13 8.5 8"/><path d="M6 13h3"/><path d="M9 13c6.667 0 6.667-10 0-10"/></svg>
+          </div>
+          <div id="sDue" class="stat-num" style="color:var(--danger);">Rs. 0</div>
+          <div class="stat-lbl">Total Due</div>
+        </div>
+      </div>
+
+      <div class="card" style="padding:14px 16px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;font-size:12.5px;font-weight:700;">
+          <span style="color:var(--text);">Attendance Performance</span>
+          <span id="sAttPct" style="color:var(--gold-light);">0%</span>
+        </div>
+        <div class="prog-track"><div id="sAttBar" class="prog-fill" style="width:0%;"></div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <div class="card-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            2027 Monthly Fee Status
+          </div>
+          <span id="paidCountPill" class="pill-mini">0 / 12 Paid</span>
+        </div>
+        <div class="months-grid" id="sMonths"></div>
+      </div>
+    </div>
+
+    <!-- TAB 2: CLASSES -->
+    <div id="page-classes" class="page">
+      <div id="classesLockedView" class="lock-card" style="display:none;">
+        <div class="lock-icon-circle">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </div>
+        <div style="font-size:17px;font-weight:800;color:var(--gold-light);">ক্লাস ও মক টেস্ট লক করা আছে</div>
+        <div style="font-size:13px;color:var(--text-2);margin:8px 0 18px;line-height:1.55;">
+          তোমার বর্তমানে <strong id="lockDueAmt" style="color:var(--danger);">Rs. 0</strong> টিউশন ফি বাকি রয়েছে। ফি পরিশোধ করলেই লাইভ ক্লাস, রেকর্ডেড ভিডিও, PDF নোটস ও মক টেস্ট অটোমেটিক খুলে যাবে।
+        </div>
+        <button class="btn btn-gold" onclick="openPage('pay', document.getElementById('navPay'))">এখনই ফি পেমেন্ট করো</button>
+      </div>
+
+      <div id="classesUnlockedView">
+        <div class="seg-bar">
+          <button class="seg-btn active" id="cpLive" onclick="setClassFilter('Live')">
+            <span class="live-dot" style="width:7px;height:7px;"></span> Live
+          </button>
+          <button class="seg-btn" id="cpVideo" onclick="setClassFilter('Video')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><polygon points="5 3 19 12 5 21 5 3"/></svg> Recorded
+          </button>
+          <button class="seg-btn" id="cpOther" onclick="setClassFilter('OTHER')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> PDF / Test
+          </button>
+        </div>
+        <div id="classesList"></div>
+      </div>
+    </div>
+
+    <!-- TAB 3: PAY FEE -->
+    <div id="page-pay" class="page">
+      <div class="upi-card">
+        <div class="upi-top">
+          <span class="upi-tag">Official UPI • PhonePe / GPay</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold-light)" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        </div>
+        <div class="upi-num">8016972121</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;gap:8px;">
+          <span style="font-size:11.5px;color:var(--text-2);">পেমেন্ট করে নিচে স্ক্রিনশট আপলোড করো</span>
+          <button type="button" class="copy-pill" onclick="copyUpi()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy
+          </button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <div class="card-title">Submit Payment Proof</div>
+        </div>
+        <form onsubmit="submitOnlinePay(event)">
+          <div class="row-2">
+            <div class="form-group"><label>Select Month *</label><select id="payMonth" required></select></div>
+            <div class="form-group"><label>Amount (Rs.) *</label><input type="number" id="payAmt" value="300" required min="1"></div>
+          </div>
+          <div class="form-group"><label>UTR / Transaction ID</label><input type="text" id="payUtr" placeholder="Last 4-12 digits"></div>
+          <div class="form-group">
+            <label>Payment Screenshot *</label>
+            <label class="upload-zone" for="payFile">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <span id="uploadFileName" style="font-size:12.5px;font-weight:700;color:var(--gold-light);margin-top:6px;">Tap to choose screenshot</span>
+              <span style="font-size:11px;color:var(--muted);margin-top:2px;">JPG / PNG supported</span>
+              <input type="file" id="payFile" accept="image/*" required onchange="previewCompressedImg(event)">
+            </label>
+            <img id="payPreview" style="display:none;width:100%;max-height:190px;object-fit:contain;margin-top:10px;border-radius:12px;border:1px solid var(--gold-border);background:#040b16;">
+          </div>
+          <button type="submit" id="paySubmitBtn" class="btn btn-gold">Submit Payment Proof</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><div class="card-title">My Payment Requests</div></div>
+        <div id="myReqList"></div>
+      </div>
+    </div>
+
+    <!-- TAB 4: RECEIPTS -->
+    <div id="page-receipts" class="page">
+      <div class="card">
+        <div class="card-head">
+          <div class="card-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            Official Fee Receipts (2027)
+          </div>
+        </div>
+        <div id="myReceiptsList"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- OFFICIAL BENGALI RECEIPT MODAL -->
+<div class="rcpt-modal-bg" id="rcptModal" onclick="if(event.target===this) closeReceipt()">
+  <div class="rcpt-card" id="receiptPrintArea">
+    <div class="rcpt-head">
+      <div style="font-size:20px;font-weight:800;color:#091e3a;">ইউ.সি.সি ইনস্টিটিউট</div>
+      <div style="font-size:11px;color:#475569;margin-top:2px;">পেঁচাকোলা, রায়পুর, বাঁকুড়া • ফোন: 8016972121 / 8159980707</div>
+      <div style="font-size:12px;font-weight:800;margin-top:6px;background:#fef9e7;color:#9a6b0e;border:1px solid #d4af37;display:inline-block;padding:3px 12px;border-radius:20px;">অফিশিয়াল ফি রসিদ (2027)</div>
+    </div>
+    <div class="rcpt-line"><span>রসিদ নং:</span><strong id="rNo"></strong></div>
+    <div class="rcpt-line"><span>তারিখ ও সময়:</span><strong id="rDate"></strong></div>
+    <div class="rcpt-line"><span>ছাত্র/ছাত্রীর নাম:</span><strong id="rName"></strong></div>
+    <div class="rcpt-line"><span>পিতার নাম:</span><strong id="rFather"></strong></div>
+    <div class="rcpt-line"><span>আইডি ও শ্রেণী:</span><strong id="rIdCls"></strong></div>
+    <div class="rcpt-line"><span>কোন মাসের ফি:</span><strong id="rMonth"></strong></div>
+    <div class="rcpt-line"><span>পেমেন্টের মাধ্যম:</span><strong id="rMode"></strong></div>
+    <div class="rcpt-line" style="font-size:15px;color:#091e3a;border-top:1.5px solid #cbd5e1;margin-top:6px;padding-top:9px;">
+      <span><strong>মোট জমা টাকা:</strong></span><strong id="rAmt"></strong>
+    </div>
+    <div class="rcpt-sign">
+      গ্রহণকারী / অনুমোদিত স্বাক্ষর:<br>
+      <strong id="rCollector" style="font-size:15px;color:#091e3a;"></strong><br>
+      <span style="color:#64748b;font-size:10px;">ইউ.সি.সি ইনস্টিটিউট, পেঁচাকোলা</span>
+    </div>
+    <div style="display:grid;gap:8px;margin-top:16px;" class="no-print">
+      <button class="btn" style="background:#091e3a;color:#fae094;" onclick="window.print()">Print / Save PDF</button>
+      <div class="row-2">
+        <button class="btn btn-gold" onclick="downloadReceiptImage()">Save PNG</button>
+        <button class="btn btn-sec" onclick="closeReceipt()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ROYAL GLASS BOTTOM NAV -->
+<nav class="bottom-nav">
+  <button class="nav-btn active" onclick="openPage('home', this)">
+    <div class="nav-icon-wrap">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    </div>
+    <span>Home</span>
+  </button>
+  <button class="nav-btn" onclick="openPage('classes', this)">
+    <div class="nav-icon-wrap">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+    </div>
+    <span>Classes</span>
+  </button>
+  <button class="nav-btn" id="navPay" onclick="openPage('pay', this)">
+    <div class="nav-icon-wrap">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+    </div>
+    <span>Pay Fee</span>
+  </button>
+  <button class="nav-btn" onclick="openPage('receipts', this)">
+    <div class="nav-icon-wrap">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+    </div>
+    <span>Receipts</span>
+  </button>
+</nav>
+
+<div id="toast" class="toast"></div>
+
+<script>
+  const API_URL = '[https://script.google.com/macros/s/AKfycbwAuSfDoikCc998pVuwz0HySky1fChn-Tj8p7OeuUAr_WPG7IFZkfGB5LUO6NlvkiKO/exec](https://script.google.com/macros/s/AKfycbwAuSfDoikCc998pVuwz0HySky1fChn-Tj8p7OeuUAr_WPG7IFZkfGB5LUO6NlvkiKO/exec)';
+  const MONTHS = [
+    ['Jan_2027','Jan','জানুয়ারি 2027'], ['Feb_2027','Feb','ফেব্রুয়ারি 2027'], ['Mar_2027','Mar','মার্চ 2027'], ['Apr_2027','Apr','এপ্রিল 2027'],
+    ['May_2027','May','মে 2027'], ['Jun_2027','Jun','জুন 2027'], ['Jul_2027','Jul','জুলাই 2027'], ['Aug_2027','Aug','আগস্ট 2027'],
+    ['Sep_2027','Sep','সেপ্টেম্বর 2027'], ['Oct_2027','Oct','অক্টোবর 2027'], ['Nov_2027','Nov','নভেম্বর 2027'], ['Dec_2027','Dec','ডিসেম্বর 2027']
+  ];
+  const BN_MONTH_NAMES = ['জানুয়ারি','ফেব্রুয়ারি','মার্চ','এপ্রিল','মে','জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'];
+  const CLASSES_BN = { Nursery:'নার্সারি', KG:'কেজি', 'Class 1':'ক্লাস 1', 'Class 2':'ক্লাস 2', 'Class 3':'ক্লাস 3', 'Class 4':'ক্লাস 4', 'Class 5':'ক্লাস 5', 'Class 6':'ক্লাস 6', 'Class 7':'ক্লাস 7', 'Class 8':'ক্লাস 8', 'Class 9':'ক্লাস 9', 'Class 10':'ক্লাস 10', 'Class 11':'ক্লাস 11', 'Class 12':'ক্লাস 12' };
+
+  function bnClass(c) { return CLASSES_BN[c] || c; }
+  function bnMonth(k) { const f = MONTHS.find(x => x[0] === k); return f ? f[2] : k; }
+  function bnCollector(c) { const s = String(c||''); if (s.includes('Pralay')) return 'প্রলয় ষন্নিগ্রহী'; if (s.includes('Chiranjit')) return 'চিরঞ্জিত ষন্নিগ্রহী'; if (s.includes('Saikat')) return 'সৈকত ষন্নিগ্রহী'; return s || 'অ্যাডমিন'; }
+  function bnMode(m) { return (m||'').toLowerCase().includes('cash') ? 'নগদ (ক্যাশ)' : 'অনলাইন (UPI)'; }
+  function formatBnDate(iso) { if (!iso) return '-'; const p = String(iso).split('-'); return p.length===3 ? `${parseInt(p[2],10)} ${BN_MONTH_NAMES[parseInt(p[1],10)-1]||p[1]} ${p[0]}` : iso; }
+
+  let portalData = null, classFilter = 'Live', compressedBase64 = '', lastContentHash = '';
+  let activeReceiptObj = null, lastBackPress = 0, liveChatTimer = null, activeLiveIds = [];
+
+  window.history.pushState({ app: true }, '');
+  window.addEventListener('popstate', () => {
+    if (document.getElementById('rcptModal').classList.contains('open')) { closeReceipt(); window.history.pushState({ app: true }, ''); return; }
+    const now = Date.now();
+    if (now - lastBackPress < 2000) window.history.back();
+    else { lastBackPress = now; toast('অ্যাপ থেকে বেরোতে আবার Back চাপুন'); window.history.pushState({ app: true }, ''); }
+  });
+
+  document.addEventListener('visibilitychange', () => { if (!document.hidden && navigator.onLine) refreshPortal(true); });
+  setInterval(() => { if (!document.hidden && navigator.onLine && portalData) refreshPortal(true); }, 45000);
+
+  function toast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.style.display = 'block'; setTimeout(() => { t.style.display = 'none'; }, 2800); }
+  function copyUpi() { navigator.clipboard?.writeText('8016972121').catch(()=>{}); toast('UPI Number 8016972121 Copied'); }
+
+  function setLoading(show) {
+    document.getElementById('skeletonView').style.display = show ? 'block' : 'none';
+    document.getElementById('mainContent').style.display = show ? 'none' : 'block';
+  }
+
+  window.onload = function() {
+    setTimeout(() => { const sp = document.getElementById('splashScreen'); sp.classList.add('hide'); setTimeout(() => { sp.style.display = 'none'; }, 450); }, 1400);
+    const savedId = localStorage.getItem('ucc_st_id'), savedMob = localStorage.getItem('ucc_st_mob');
+    if (savedId && savedMob) {
+      document.getElementById('loginScreen').style.display = 'none';
+      setLoading(true);
+      loadStudentData(savedId, savedMob, true);
+    }
+  };
+
+  async function handleStudentLogin(e) {
+    e.preventDefault();
+    const id = document.getElementById('lId').value.trim().toUpperCase();
+    const mob = document.getElementById('lMob').value.replace(/\D/g,'').slice(-10);
+    const btn = document.getElementById('lBtn'), err = document.getElementById('loginErr');
+    btn.disabled = true; btn.innerHTML = '<span>Verifying...</span>'; err.style.display = 'none';
+    const ok = await loadStudentData(id, mob, false);
+    if (ok) {
+      localStorage.setItem('ucc_st_id', id);
+      localStorage.setItem('ucc_st_mob', mob);
+      document.getElementById('loginScreen').style.display = 'none';
+    } else {
+      err.style.display = 'block';
+    }
+    btn.disabled = false; btn.innerHTML = '<span>Login to Student App</span>';
+  }
+
+  async function loadStudentData(id, mob, silent) {
+    try {
+      const res = await fetch(`${API_URL}?mode=student&id=${encodeURIComponent(id)}&mobile=${encodeURIComponent(mob)}`);
+      const data = await res.json();
+      if (data.status === 'ok') {
+        portalData = data;
+        setLoading(false);
+        renderPortal();
+        return true;
+      }
+      setLoading(false);
+      return false;
+    } catch (e) {
+      setLoading(false);
+      if (!silent) toast('Network error! ইন্টারনেট চেক করুন।');
+      return false;
+    }
+  }
+
+  function refreshPortal(silent = false) {
+    const id = localStorage.getItem('ucc_st_id'), mob = localStorage.getItem('ucc_st_mob');
+    if (id && mob) { if (!silent) toast('Updating data...'); loadStudentData(id, mob, silent); }
+  }
+
+  function logoutStudent() {
+    if (liveChatTimer) clearInterval(liveChatTimer);
+    localStorage.removeItem('ucc_st_id'); localStorage.removeItem('ucc_st_mob');
+    portalData = null; lastContentHash = '';
+    document.getElementById('loginScreen').style.display = 'flex';
+  }
+
+  function openPage(name, btn) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    if (btn) btn.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function renderPortal() {
+    if (!portalData) return;
+    const s = portalData.student;
+    document.getElementById('hdrSub').textContent = `${s.id} • ${s.studentClass}`;
+    document.getElementById('sAvatar').textContent = (s.name || 'U').trim().charAt(0).toUpperCase();
+    document.getElementById('sName').textContent = s.name;
+    document.getElementById('sIdChip').textContent = s.id;
+    document.getElementById('sClassChip').textContent = s.studentClass;
+    document.getElementById('sFather').textContent = `Father: ${s.fatherName || '-'}`;
+    document.getElementById('sPhone').textContent = s.mobile || '-';
+
+    const pres = Number(portalData.presentDays) || 0;
+    const abs = Number(portalData.absentDays) || 0;
+    const totalDays = pres + abs;
+    const pct = totalDays > 0 ? Math.round((pres / totalDays) * 100) : 100;
+
+    document.getElementById('sPresent').textContent = pres;
+    document.getElementById('sAbsent').textContent = abs;
+    document.getElementById('sDue').textContent = 'Rs. ' + (Number(s.totalDue) || 0);
+    document.getElementById('sDue').style.color = s.totalDue > 0 ? 'var(--danger)' : 'var(--success)';
+    document.getElementById('sAttPct').textContent = totalDays > 0 ? `${pct}% (${pres}/${totalDays} days)` : 'New Session';
+    document.getElementById('sAttBar').style.width = `${pct}%`;
+
+    document.getElementById('noticeArea').innerHTML = (portalData.notices || []).map(n => `
+      <div class="notice-banner">
+        <div class="notice-top">
+          <span class="notice-badge"><span class="live-dot"></span> ${n.title}</span>
+          <span class="notice-date">${n.date}</span>
+        </div>
+        <div class="notice-body">${n.message}</div>
+        ${n.link ? `<a href="${n.link}" target="_blank" class="notice-link">Open Link →</a>` : ''}
+      </div>
+    `).join('');
+
+    let payOpts = '', paidCount = 0;
+    document.getElementById('sMonths').innerHTML = MONTHS.map(([k, lbl]) => {
+      const val = Number(s.months?.[k]) || 0;
+      if (val > 0) paidCount++;
+      else payOpts += `<option value="${k}">${k.replace('_',' ')}</option>`;
+      return `
+        <div class="m-cell ${val>0?'paid':''}">
+          <div class="m-name">${lbl}</div>
+          <div class="m-val">${val>0 ? `₹${val} ✓` : 'Due'}</div>
+        </div>
+      `;
+    }).join('');
+    document.getElementById('paidCountPill').textContent = `${paidCount} / 12 Paid`;
+    document.getElementById('payMonth').innerHTML = payOpts || '<option value="">All Paid ✓</option>';
+    document.getElementById('paySubmitBtn').disabled = !payOpts;
+
+    const isLocked = (portalData.dueLock === 'ON' && Number(s.totalDue) > 0);
+    document.getElementById('classesLockedView').style.display = isLocked ? 'block' : 'none';
+    document.getElementById('classesUnlockedView').style.display = isLocked ? 'none' : 'block';
+    document.getElementById('lockDueAmt').textContent = 'Rs. ' + s.totalDue;
+
+    const newHash = JSON.stringify(portalData.classesContent || []) + '|' + isLocked + '|' + classFilter;
+    if (!isLocked && newHash !== lastContentHash) { lastContentHash = newHash; renderClassesList(); }
+
+    const reqs = portalData.requests || [];
+    document.getElementById('myReqList').innerHTML = reqs.length
+      ? reqs.map(r => `
+        <div class="info-item" style="font-size:12.5px;">
+          <div>
+            <strong style="color:#fff;">${r.month.replace('_',' ')}</strong> • <span style="color:var(--gold-light);font-weight:700;">₹${r.amount}</span><br>
+            <span style="color:var(--muted);font-size:11.5px;">${r.date} • UTR: ${r.utr||'-'}</span>
+            ${r.remarks ? `<br><span style="color:var(--danger);font-size:11.5px;">${r.remarks}</span>` : ''}
+          </div>
+          <span class="${r.status==='Approved'?'badge-ok':(r.status==='Rejected'?'badge-rej':'badge-due')}">${r.status}</span>
+        </div>`).join('')
+      : '<div style="font-size:12.5px;color:var(--muted);text-align:center;padding:8px 0;">No online payment requests yet.</div>';
+
+    const pays = portalData.payments || [];
+    document.getElementById('myReceiptsList').innerHTML = pays.length
+      ? pays.map((p, i) => `
+        <div class="info-item">
+          <div>
+            <div style="font-size:13.5px;font-weight:800;color:#fff;">${bnMonth(p.month)} • <span style="color:var(--gold-light);">₹${p.amount}</span></div>
+            <div style="font-size:11.5px;color:var(--muted);margin-top:2px;">${formatBnDate(p.date)} • ${bnCollector(p.collector)}</div>
+          </div>
+          <button class="btn btn-gold" style="width:auto;padding:8px 13px;font-size:12px;border-radius:10px;" onclick="openReceipt(${i})">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Receipt
+          </button>
+        </div>`).join('')
+      : '<div style="font-size:12.5px;color:var(--muted);text-align:center;padding:12px 0;">No fee receipts available yet.</div>';
+  }
+
+  function setClassFilter(f) {
+    classFilter = f; lastContentHash = '';
+    document.getElementById('cpLive').classList.toggle('active', f==='Live');
+    document.getElementById('cpVideo').classList.toggle('active', f==='Video');
+    document.getElementById('cpOther').classList.toggle('active', f==='OTHER');
+    renderClassesList();
+  }
+
+  function getEmbedUrl(url) {
+    if (!url) return '';
+    const yt = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|live\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);
+    if (yt) return `[https://www.youtube.com/embed/$](https://www.youtube.com/embed/$){yt[1]}?rel=0`;
+    const gd = url.match(/drive\.google\.com\/file\/d\/([^\/]+)/);
+    if (gd) return `[https://drive.google.com/file/d/$](https://drive.google.com/file/d/$){gd[1]}/preview`;
+    return '';
+  }
+
+  function renderClassesList() {
+    const all = (portalData && portalData.classesContent) || [];
+    const box = document.getElementById('classesList');
+    if (liveChatTimer) clearInterval(liveChatTimer);
+    activeLiveIds = [];
+
+    if (classFilter === 'Live') {
+      const lives = all.filter(c => c.type === 'Live');
+      if (!lives.length) {
+        box.innerHTML = `<div class="card" style="text-align:center;padding:28px 16px;">
+          <div style="width:48px;height:48px;border-radius:50%;background:var(--gold-soft);color:var(--gold-light);border:1px solid var(--gold-border);margin:0 auto 10px;display:flex;align-items:center;justify-content:center;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+          </div>
+          <div style="font-size:14.5px;font-weight:700;color:var(--gold-light);">এখন কোনো লাইভ ক্লাস চলছে না</div>
+          <div style="font-size:12.5px;color:var(--muted);margin-top:4px;">পুরনো ক্লাস দেখতে <strong style="color:#fff;">Recorded</strong> ট্যাবে যাও।</div>
+        </div>`;
+        return;
+      }
+      box.innerHTML = lives.map(c => {
+        activeLiveIds.push(c.id);
+        const embed = getEmbedUrl(c.link);
+        return `<div class="card" style="border-left:4px solid var(--danger);">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span class="c-badge live"><span class="live-dot" style="width:6px;height:6px;"></span> LIVE • ${c.subject} (${c.chapter||'General'})</span>
+            <span style="font-size:11px;color:var(--muted);font-weight:600;">${c.date}</span>
+          </div>
+          <div style="font-size:16px;font-weight:800;color:#fff;margin-top:8px;">${c.title}</div>
+          ${embed ? `<div class="video-box"><iframe src="${embed}" allow="autoplay; fullscreen" allowfullscreen></iframe></div>` : `<a href="${c.link}" target="_blank" class="btn btn-gold" style="text-decoration:none;margin-top:10px;">Join Live Class →</a>`}
+          <div class="live-chat-wrap">
+            <div style="font-size:12.5px;font-weight:800;color:var(--gold-light);margin-bottom:8px;">Live Question & Answer</div>
+            <div id="chat_${c.id}" class="chat-list"><div style="font-size:11.5px;color:var(--muted);">Loading Q&A...</div></div>
+            <form onsubmit="sendStudentChat(event,'${c.id}')" style="display:flex;gap:7px;">
+              <input type="text" id="cin_${c.id}" required placeholder="তোমার প্রশ্ন লেখো..." style="padding:9px 12px;font-size:13px;">
+              <button type="submit" class="btn btn-gold" style="width:auto;padding:9px 15px;font-size:12.5px;">Send</button>
+            </form>
+          </div>
+        </div>`;
+      }).join('');
+      refreshAllLiveChats();
+      liveChatTimer = setInterval(refreshAllLiveChats, 6000);
+      return;
+    }
+
+    const items = all.filter(c => classFilter === 'Video' ? c.type === 'Video' : (c.type === 'PDF' || c.type === 'Mock Test'));
+    if (!items.length) {
+      box.innerHTML = '<div class="card" style="text-align:center;color:var(--muted);font-size:13px;padding:24px;">এখানে এখনো কোনো কনটেন্ট আপলোড হয়নি।</div>';
+      return;
+    }
+
+    const tree = {};
+    items.forEach(c => {
+      const sub = c.subject || 'General', chap = c.chapter || 'General';
+      if (!tree[sub]) tree[sub] = {};
+      if (!tree[sub][chap]) tree[sub][chap] = [];
+      tree[sub][chap].push(c);
+    });
+
+    box.innerHTML = Object.keys(tree).map((sub, sIdx) => {
+      const chapters = tree[sub];
+      const chapHtml = Object.keys(chapters).map((chap, cIdx) => {
+        const listHtml = chapters[chap].map(c => {
+          const embed = c.type === 'Video' ? getEmbedUrl(c.link) : '';
+          return `<div class="content-card">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span class="c-badge">${c.type}</span>
+              <span style="font-size:11px;color:var(--muted);font-weight:600;">${c.date}</span>
+            </div>
+            <div style="font-size:14.5px;font-weight:800;color:#fff;margin-top:6px;">${c.title}</div>
+            ${embed ? `<div class="video-box"><iframe src="${embed}" allow="autoplay; fullscreen" allowfullscreen></iframe></div>` : `<a href="${c.link}" target="_blank" class="btn btn-gold" style="text-decoration:none;margin-top:10px;padding:10px;font-size:13px;">Open ${c.type} →</a>`}
+          </div>`;
+        }).join('');
+        return `<details class="chap-folder" ${sIdx===0 && cIdx===0 ? 'open' : ''}>
+          <summary><span>${chap}</span><span class="pill-mini">${chapters[chap].length} items ▾</span></summary>
+          <div class="chap-body">${listHtml}</div>
+        </details>`;
+      }).join('');
+
+      return `<details class="sub-folder" ${sIdx===0 ? 'open' : ''}>
+        <summary>
+          <span class="folder-left">
+            <span class="folder-ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></span>
+            ${sub}
+          </span>
+          <span style="font-size:11.5px;color:var(--gold-light);font-weight:700;">${Object.keys(chapters).length} Chapters ▾</span>
+        </summary>
+        <div class="sub-body">${chapHtml}</div>
+      </details>`;
+    }).join('');
+  }
+
+  async function refreshAllLiveChats() {
+    for (const cid of activeLiveIds) {
+      try {
+        const res = await fetch(`${API_URL}?mode=chat&contentId=${encodeURIComponent(cid)}`);
+        const data = await res.json();
+        if (data.status === 'ok') renderStudentChat(cid, data.messages || []);
+      } catch (e) {}
+    }
+  }
+  function renderStudentChat(cid, msgs) {
+    const el = document.getElementById('chat_' + cid); if (!el) return;
+    el.innerHTML = msgs.length
+      ? msgs.map(m => `<div class="chat-msg ${m.role==='Admin'?'admin':''}"><strong style="color:var(--gold-light);">${m.senderName}</strong> <span style="font-size:10px;color:var(--muted);">${m.time}</span><div style="margin-top:2px;">${m.message}</div></div>`).join('')
+      : '<div style="font-size:11.5px;color:var(--muted);">কোনো প্রশ্ন থাকলে নিচে লিখে পাঠাও...</div>';
+    el.scrollTop = el.scrollHeight;
+  }
+  async function sendStudentChat(e, cid) {
+    e.preventDefault(); if (!portalData) return;
+    const inp = document.getElementById('cin_' + cid), msg = inp.value.trim(); if (!msg) return;
+    inp.value = '';
+    const s = portalData.student;
+    const res = await fetch(API_URL, {
+      method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action: 'sendChat', contentId: cid, senderId: s.id, senderName: s.name, role: 'Student', message: msg })
+    });
+    const data = await res.json();
+    if (data.status === 'ok') renderStudentChat(cid, data.messages || []);
+  }
+
+  function previewCompressedImg(e) {
+    const file = e.target.files[0]; if (!file) return;
+    document.getElementById('uploadFileName').textContent = file.name;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      const img = new Image();
+      img.onload = () => {
+        const c = document.createElement('canvas'), scale = Math.min(1, 480 / img.width);
+        c.width = img.width * scale; c.height = img.height * scale;
+        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+        compressedBase64 = c.toDataURL('image/jpeg', 0.5);
+        const prev = document.getElementById('payPreview'); prev.src = compressedBase64; prev.style.display = 'block';
+      };
+      img.src = ev.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  async function submitOnlinePay(e) {
+    e.preventDefault(); if (!portalData || !compressedBase64) { toast('Please attach payment screenshot.'); return; }
+    const s = portalData.student, btn = document.getElementById('paySubmitBtn');
+    btn.disabled = true; btn.textContent = 'Uploading Proof...';
+    try {
+      const res = await fetch(API_URL, {
+        method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({
+          action: 'submitOnlinePayment', studentId: s.id, studentName: s.name, studentClass: s.studentClass,
+          month: document.getElementById('payMonth').value, amount: Number(document.getElementById('payAmt').value)||300,
+          utr: document.getElementById('payUtr').value.trim(), screenshotData: compressedBase64
+        })
+      });
+      const data = await res.json();
+      if (data.status === 'ok') {
+        toast('Submitted! Admin will verify soon.');
+        e.target.reset();
+        document.getElementById('uploadFileName').textContent = 'Tap to choose screenshot';
+        document.getElementById('payPreview').style.display = 'none';
+        compressedBase64 = '';
+        refreshPortal(true);
+      } else toast('Failed to submit.');
+    } catch (err) { toast('Upload failed. Try again.'); }
+    finally { btn.disabled = false; btn.textContent = 'Submit Payment Proof'; }
+  }
+
+  function openReceipt(idx) {
+    const p = portalData.payments[idx], s = portalData.student; if (!p) return;
+    activeReceiptObj = { p, fatherName: s.fatherName || '-' };
+    document.getElementById('rNo').textContent = p.receiptNo || '-';
+    document.getElementById('rDate').textContent = `${formatBnDate(p.date)}${p.time ? ', '+p.time : ''}`;
+    document.getElementById('rName').textContent = p.studentName;
+    document.getElementById('rFather').textContent = s.fatherName || '-';
+    document.getElementById('rIdCls').textContent = `${p.studentId} • ${bnClass(p.studentClass)}`;
+    document.getElementById('rMonth').textContent = bnMonth(p.month);
+    document.getElementById('rMode').textContent = bnMode(p.mode);
+    document.getElementById('rAmt').textContent = p.amount + ' টাকা';
+    document.getElementById('rCollector').textContent = bnCollector(p.collector);
+    document.getElementById('rcptModal').classList.add('open');
+  }
+  function closeReceipt() { document.getElementById('rcptModal').classList.remove('open'); }
+
+  function downloadReceiptImage() {
+    if (!activeReceiptObj) return;
+    const { p, fatherName } = activeReceiptObj;
+    const c = document.createElement('canvas'); c.width = 720; c.height = 860; const ctx = c.getContext('2d');
+    ctx.fillStyle='#fff'; ctx.fillRect(0,0,720,860); ctx.strokeStyle='#061121'; ctx.lineWidth=8; ctx.strokeRect(18,18,684,824);
+    ctx.strokeStyle='#d4af37'; ctx.lineWidth=3; ctx.strokeRect(28,28,664,804);
+    ctx.fillStyle='#061121'; ctx.fillRect(22,22,676,155); ctx.fillStyle='#d4af37'; ctx.fillRect(22,173,676,6);
+    ctx.fillStyle='#fae094'; ctx.textAlign='center'; ctx.font='bold 38px sans-serif'; ctx.fillText('ইউ.সি.সি ইনস্টিটিউট',360,82);
+    ctx.fillStyle='#e2e8f0'; ctx.font='20px sans-serif'; ctx.fillText('পেঁচাকোলা, রায়পুর, বাঁকুড়া • ফোন: 8016972121 / 8159980707',360,120);
+    ctx.font='bold 22px sans-serif'; ctx.fillStyle='#d4af37'; ctx.fillText('অফিশিয়াল টিউশন ফি রসিদ (2027)',360,156);
+    const rows=[['রসিদ নং:',p.receiptNo||'-'],['তারিখ ও সময়:',`${formatBnDate(p.date)}${p.time?', '+p.time:''}`],['ছাত্র/ছাত্রীর নাম:',p.studentName],['পিতার নাম:',fatherName],['আইডি ও শ্রেণী:',`${p.studentId} • ${bnClass(p.studentClass)}`],['কোন মাসের ফি:',bnMonth(p.month)],['পেমেন্টের মাধ্যম:',bnMode(p.mode)]];
+    let y=240; rows.forEach(([l,v])=>{ ctx.textAlign='left'; ctx.fillStyle='#475569'; ctx.font='22px sans-serif'; ctx.fillText(l,55,y); ctx.textAlign='right'; ctx.fillStyle='#0f172a'; ctx.font='bold 23px sans-serif'; ctx.fillText(String(v),665,y); ctx.strokeStyle='#e2e8f0'; ctx.lineWidth=1.5; ctx.beginPath(); ctx.moveTo(55,y+18); ctx.lineTo(665,y+18); ctx.stroke(); y+=62; });
+    ctx.fillStyle='#fef9e7'; ctx.fillRect(55,y-10,610,68); ctx.strokeStyle='#d4af37'; ctx.lineWidth=2.5; ctx.strokeRect(55,y-10,610,68);
+    ctx.textAlign='left'; ctx.fillStyle='#061121'; ctx.font='bold 26px sans-serif'; ctx.fillText('মোট জমা টাকা:',75,y+33); ctx.textAlign='right'; ctx.font='bold 30px sans-serif'; ctx.fillText(`${p.amount} টাকা`,645,y+33);
+    y+=120; ctx.textAlign='right'; ctx.fillStyle='#475569'; ctx.font='19px sans-serif'; ctx.fillText('গ্রহণকারী / অনুমোদিত স্বাক্ষর:',665,y); ctx.fillStyle='#061121'; ctx.font='bold 26px sans-serif'; ctx.fillText(bnCollector(p.collector),665,y+36);
+    const a=document.createElement('a'); a.download=`UCC_Receipt_${p.studentId}_${p.month}.png`; a.href=c.toDataURL('image/png'); a.click();
+  }
+</script>
+</body>
+</html>
