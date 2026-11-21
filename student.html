@@ -1,754 +1,387 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <meta name="theme-color" content="#091e3a">
-  <link rel="icon" type="image/png" href="logo.png?v=3">
-  <title>U.C.C Institute - Student App</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --navy-950: #061529;
-      --navy-900: #091e3a;
-      --navy-800: #102f59;
-      --navy-700: #1a457d;
-      --accent: #f97316;
-      --accent-dark: #ea580c;
-      --accent-soft: #fff7ed;
-      --accent-border: #fed7aa;
-      --bg: #f3f6fb;
-      --card: #ffffff;
-      --text: #0f172a;
-      --text-2: #475569;
-      --muted: #64748b;
-      --border: #e5ebf3;
-      --danger: #ef4444;
-      --danger-soft: #fef2f2;
-      --success: #10b981;
-      --success-soft: #ecfdf5;
-      --shadow-sm: 0 2px 8px rgba(9, 30, 58, 0.04);
-      --shadow-md: 0 8px 24px rgba(9, 30, 58, 0.07);
-      --shadow-lg: 0 16px 36px rgba(9, 30, 58, 0.14);
-      --radius: 18px;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#08142a">
+<link rel="icon" type="image/png" href="logo.png?v=3">
+<title>U.C.C Institute - Student App</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#08142a;--panel:#0f1f3b;--panel-2:#16305a;
+  --ivory:#f3ecdb;--mute:#9aa8bf;
+  --gold:#c9a24a;--gold-hi:#ebd28d;
+  --line:rgba(201,162,74,.24);
+  --ok:#7fcfa6;--bad:#e88b7c;
+  --serif:'Fraunces',Georgia,serif;
+  --sans:'Hind Siliguri','Segoe UI',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0}
+[hidden]{display:none!important}
+html,body{background:var(--ink);color:var(--ivory);font:15px/1.55 var(--sans);-webkit-font-smoothing:antialiased;padding-bottom:88px;overscroll-behavior-y:contain}
+body{min-height:100vh;background:radial-gradient(120% 55% at 100% 0%,#132c54 0%,transparent 60%),var(--ink)}
+input,select,button{font:inherit;color:inherit}
+button{cursor:pointer}
+img{display:block}
+svg{width:18px;height:18px;flex-shrink:0}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes pulse{50%{opacity:.35}}
+@keyframes load{to{width:100%}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
-    * {
-      box-sizing: border-box;
-      font-family: 'Plus Jakarta Sans', 'Hind Siliguri', -apple-system, BlinkMacSystemFont, sans-serif;
-      -webkit-tap-highlight-color: transparent;
-    }
-    html, body {
-      margin: 0; background: var(--bg); color: var(--text);
-      padding-bottom: 92px; overscroll-behavior-y: contain; user-select: none;
-      -webkit-font-smoothing: antialiased;
-    }
-    input, select { user-select: text; }
-    svg { flex-shrink: 0; }
+/* Splash and login */
+#splash{position:fixed;inset:0;z-index:300;background:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .5s ease}
+#splash.hide{opacity:0;pointer-events:none}
+#splash h1{font-family:var(--serif);font-weight:600;font-size:26px;margin-top:20px;animation:rise .8s .15s both}
+.tagline{font-size:12.5px;color:var(--gold-hi);margin-top:6px;animation:rise .8s .25s both}
+.loader{width:120px;height:2px;background:rgba(255,255,255,.08);border-radius:2px;margin-top:22px;overflow:hidden}
+.loader i{display:block;height:100%;width:0;background:var(--gold);animation:load 1.2s .2s ease forwards}
+.seal{width:104px;height:104px;border-radius:50%;padding:4px;border:1px solid var(--gold);animation:rise .8s both}
+.seal img{width:100%;height:100%;border-radius:50%;object-fit:cover;background:#fff}
+.seal.sm{width:68px;height:68px;margin:0 auto 16px;animation:none}
+#loginScreen{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;background:var(--ink)}
+.login{width:100%;max-width:360px;padding:30px 24px 26px;background:var(--panel);border:1px solid var(--line);border-top:2px solid var(--gold);border-radius:20px;animation:rise .6s both}
+.login h2{font-family:var(--serif);font-size:24px;font-weight:600;text-align:center}
+.login .sub{color:var(--mute);font-size:13px;text-align:center;margin:4px 0 22px}
+.err{color:var(--bad);font-size:13px;text-align:center;margin-bottom:12px}
 
-    /* ===== SPLASH SCREEN ===== */
-    #splashScreen {
-      position: fixed; inset: 0; z-index: 999;
-      background: radial-gradient(circle at 80% 15%, #1d4e89 0%, #091e3a 55%, #040d1a 100%);
-      display: flex; flex-direction: column; justify-content: center; align-items: center;
-      text-align: center; padding: 24px;
-      transition: opacity 0.45s cubic-bezier(0.4, 0, 0.2, 1), transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    #splashScreen.hide { opacity: 0; transform: scale(1.05); pointer-events: none; }
-    .splash-ring {
-      width: 112px; height: 112px; border-radius: 50%; padding: 5px;
-      background: linear-gradient(135deg, #fb923c, #ffffff, #f97316);
-      box-shadow: 0 0 0 10px rgba(249, 115, 22, 0.12), 0 18px 40px rgba(0, 0, 0, 0.4);
-      animation: popIn 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-    }
-    .splash-ring img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; background: #fff; display: block; }
-    .splash-title {
-      margin: 20px 0 6px; color: #fff; font-size: 26px; font-weight: 800; letter-spacing: -0.3px;
-      opacity: 0; animation: slideUp 0.55s ease 0.2s forwards;
-    }
-    .splash-tag {
-      margin: 0; color: #ffedd5; font-size: 11px; font-weight: 700; letter-spacing: 2.4px; text-transform: uppercase;
-      padding: 6px 16px; border-radius: 30px; background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(253, 186, 116, 0.35); backdrop-filter: blur(8px);
-      opacity: 0; animation: slideUp 0.55s ease 0.35s forwards;
-    }
-    .splash-bar { width: 120px; height: 4px; border-radius: 99px; background: rgba(255,255,255,0.14); margin-top: 28px; overflow: hidden; }
-    .splash-fill { height: 100%; width: 0%; border-radius: 99px; background: linear-gradient(90deg, #fb923c, #f97316); animation: loadBar 1.15s ease 0.25s forwards; }
+/* Forms */
+label{display:block;font-size:12.5px;color:var(--mute);margin-bottom:6px}
+input,select{width:100%;padding:12px 14px;margin-bottom:14px;border:1px solid rgba(243,236,219,.14);border-radius:10px;background:#0a1830;font-size:15px;transition:border-color .2s,box-shadow .2s}
+input::placeholder{color:#55657f}
+input:focus,select:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,162,74,.18)}
+option{background:var(--panel);color:var(--ivory)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 
-    @keyframes popIn { 0% { opacity: 0; transform: scale(0.6); } 100% { opacity: 1; transform: scale(1); } }
-    @keyframes slideUp { 0% { opacity: 0; transform: translateY(14px); } 100% { opacity: 1; transform: translateY(0); } }
-    @keyframes loadBar { to { width: 100%; } }
-    @keyframes pageFade { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes pulseDot { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.35); opacity: 0.45; } }
-    @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+/* Buttons */
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px 16px;border:1px solid var(--gold);border-radius:12px;background:transparent;color:var(--gold-hi);font-weight:700;font-size:14.5px;text-decoration:none;transition:background .2s,transform .1s}
+.btn:active{transform:scale(.98)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn-solid{background:var(--gold);color:#1a1405}
+.btn-solid:hover{background:var(--gold-hi)}
+.btn-sm{width:auto;padding:9px 15px;font-size:13px;border-radius:10px}
 
-    /* ===== LOGIN SCREEN ===== */
-    #loginScreen {
-      position: fixed; inset: 0; z-index: 200;
-      background: radial-gradient(circle at 15% 15%, #1c4c86 0%, #091e3a 55%, #051122 100%);
-      display: flex; justify-content: center; align-items: center; padding: 20px; overflow: hidden;
-    }
-    .login-orb-1, .login-orb-2 {
-      position: absolute; border-radius: 50%; filter: blur(60px); pointer-events: none;
-    }
-    .login-orb-1 { width: 220px; height: 220px; background: rgba(249, 115, 22, 0.22); top: -60px; right: -40px; }
-    .login-orb-2 { width: 260px; height: 260px; background: rgba(56, 189, 248, 0.14); bottom: -80px; left: -60px; }
-    .login-card {
-      position: relative; background: #ffffff; width: 100%; max-width: 375px;
-      border-radius: 26px; padding: 28px 24px 24px; box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
-      animation: slideUp 0.45s cubic-bezier(0.22, 1, 0.36, 1);
-    }
-    .login-logo-wrap {
-      width: 74px; height: 74px; border-radius: 50%; padding: 3px;
-      background: linear-gradient(135deg, #f97316, #091e3a);
-      margin: 0 auto 12px; box-shadow: 0 8px 20px rgba(9, 30, 58, 0.16);
-    }
-    .login-logo-wrap img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; background: #fff; display: block; }
-    .login-title { text-align: center; margin-bottom: 20px; }
-    .login-title h2 { margin: 0; color: var(--navy-900); font-size: 22px; font-weight: 800; letter-spacing: -0.3px; }
-    .login-title p { margin: 4px 0 0; font-size: 11px; color: var(--accent-dark); font-weight: 700; letter-spacing: 1.5px; }
-    .login-err {
-      display: none; background: var(--danger-soft); color: #b91c1c; border: 1px solid #fecaca;
-      padding: 10px 12px; border-radius: 12px; font-size: 12.5px; font-weight: 600; margin-bottom: 14px; text-align: center;
-    }
+/* Header */
+header{position:sticky;top:0;z-index:30;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 16px;background:rgba(8,20,42,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:11px;min-width:0}
+.brand img{width:38px;height:38px;border-radius:50%;object-fit:cover;border:1px solid var(--gold);background:#fff;flex-shrink:0}
+.brand h1{font-family:var(--serif);font-size:17px;font-weight:600;white-space:nowrap}
+.brand small{display:block;font-size:12px;color:var(--mute)}
+.icon-btn{width:36px;height:36px;border-radius:10px;border:1px solid var(--line);background:transparent;color:var(--gold-hi);display:flex;align-items:center;justify-content:center}
+.icon-btn:active{background:rgba(201,162,74,.12)}
 
-    /* ===== PREMIUM HEADER ===== */
-    header {
-      background: rgba(9, 30, 58, 0.96); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-      color: #fff; padding: 12px 16px; position: sticky; top: 0; z-index: 30;
-      display: flex; justify-content: space-between; align-items: center;
-      box-shadow: 0 4px 20px rgba(9, 30, 58, 0.16);
-    }
-    header::after {
-      content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 2px;
-      background: linear-gradient(90deg, transparent, var(--accent), #fb923c, transparent);
-    }
-    .brand { display: flex; align-items: center; gap: 11px; }
-    .brand-logo {
-      width: 38px; height: 38px; border-radius: 50%; object-fit: cover;
-      border: 2px solid rgba(253, 186, 116, 0.75); background: #fff;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
-    }
-    .brand h1 { margin: 0; font-size: 16px; font-weight: 800; letter-spacing: -0.2px; }
-    .brand small { font-size: 11px; color: #cbd5e1; display: block; font-weight: 500; margin-top: 1px; }
-    .hdr-actions { display: flex; gap: 8px; }
-    .icon-btn {
-      width: 36px; height: 36px; border-radius: 11px; border: 1px solid rgba(255,255,255,0.16);
-      background: rgba(255,255,255,0.1); color: #fff; cursor: pointer;
-      display: flex; align-items: center; justify-content: center; transition: 0.18s ease;
-    }
-    .icon-btn:active { transform: scale(0.92); background: rgba(255,255,255,0.2); }
+/* Layout */
+.wrap{max-width:580px;margin:0 auto;padding:16px}
+.page{display:none}
+.page.on{display:block;animation:fade .3s ease}
+.sec{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin:26px 0 12px;padding-bottom:9px;border-bottom:1px solid var(--line)}
+.sec h3{font-family:var(--serif);font-size:18px;font-weight:600}
+.muted{font-size:12.5px;color:var(--mute)}
+.panel{background:var(--panel);border:1px solid rgba(243,236,219,.07);border-radius:16px;padding:16px}
+.empty{color:var(--mute);font-size:13.5px;text-align:center;padding:18px 8px}
+.empty b{display:block;font-family:var(--serif);font-size:17px;font-weight:600;color:var(--ivory);margin-bottom:6px}
+.skel{height:120px;margin-bottom:14px;border-radius:16px;background:rgba(243,236,219,.04);animation:pulse 1.6s ease-in-out infinite}
 
-    /* ===== CONTAINER & CARDS ===== */
-    .container { max-width: 580px; margin: 14px auto; padding: 0 14px; }
-    .page { display: none; }
-    .page.active { display: block; animation: pageFade 0.28s ease; }
+/* Identity */
+.id-card{padding:20px 18px 16px;border-radius:18px;background:linear-gradient(165deg,#193660 0%,#0d1d38 100%);border:1px solid var(--line);animation:rise .6s both}
+.id-top{display:flex;align-items:center;gap:14px}
+.initial{width:58px;height:58px;border-radius:50%;border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:26px;font-weight:600;color:var(--gold-hi);flex-shrink:0}
+.id-name{font-family:var(--serif);font-size:22px;font-weight:600;line-height:1.2;overflow-wrap:anywhere}
+.id-meta{font-size:13.5px;color:var(--mute);margin-top:4px}
+.id-meta b{color:var(--ivory);font-weight:600}
+.id-foot{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}
+.id-foot small{display:block;font-size:12px;color:var(--mute)}
+.id-foot b{font-weight:600;overflow-wrap:anywhere}
 
-    .card {
-      background: var(--card); border-radius: var(--radius); padding: 16px;
-      box-shadow: var(--shadow-sm); margin-bottom: 14px; border: 1px solid var(--border);
-    }
-    .card-head {
-      display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;
-    }
-    .card-title {
-      font-size: 14.5px; font-weight: 800; color: var(--navy-900);
-      display: flex; align-items: center; gap: 7px; letter-spacing: -0.1px;
-    }
-    .pill-mini {
-      font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 20px;
-      background: #f1f5f9; color: var(--navy-800);
-    }
+/* Stats */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);margin:14px 0;padding:14px 0;background:var(--panel);border:1px solid rgba(243,236,219,.07);border-radius:16px}
+.stat{text-align:center;padding:2px 4px;border-left:1px solid rgba(243,236,219,.08)}
+.stat:first-child{border-left:0}
+.stat b{display:block;font-family:var(--serif);font-size:22px;font-weight:600}
+.stat span{font-size:12.5px;color:var(--mute)}
+.att{display:flex;justify-content:space-between;align-items:baseline;font-size:13.5px;color:var(--mute)}
+.att b{font-family:var(--serif);font-size:18px;font-weight:600;color:var(--ivory)}
+.bar{height:3px;margin-top:12px;background:rgba(243,236,219,.1);border-radius:3px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--gold);transition:width .6s ease}
 
-    /* ===== SLEEK NOTICE BANNER ===== */
-    .notice-banner {
-      background: linear-gradient(135deg, #fffaf5 0%, #fff1e2 100%);
-      border: 1px solid var(--accent-border); border-left: 4px solid var(--accent);
-      border-radius: 16px; padding: 13px 14px; margin-bottom: 14px;
-      box-shadow: 0 6px 18px rgba(249, 115, 22, 0.09);
-    }
-    .notice-top {
-      display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 5px;
-    }
-    .notice-badge {
-      display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px;
-      font-weight: 800; color: #c2410c;
-    }
-    .live-dot {
-      width: 8px; height: 8px; border-radius: 50%; background: var(--danger);
-      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2); animation: pulseDot 1.3s infinite;
-    }
-    .notice-date { font-size: 11px; font-weight: 600; color: #9a3412; background: rgba(255,255,255,0.7); padding: 2px 8px; border-radius: 20px; }
-    .notice-body { font-size: 13.5px; color: #1e293b; line-height: 1.48; font-weight: 500; }
-    .notice-link {
-      display: inline-flex; align-items: center; gap: 5px; margin-top: 9px;
-      background: var(--accent); color: #fff; text-decoration: none;
-      font-size: 12px; font-weight: 700; padding: 6px 13px; border-radius: 9px;
-    }
+/* Fee ledger */
+.ledger{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line)}
+.ledger div{display:flex;flex-direction:column;gap:2px;padding:12px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.ledger small{font-size:12.5px;color:var(--mute)}
+.ledger strong{font-size:14px;font-weight:600;color:var(--mute)}
+.ledger .paid strong{font-family:var(--serif);font-size:16px;color:var(--gold-hi)}
 
-    /* ===== HERO STUDENT CARD ===== */
-    .hero-card {
-      position: relative; overflow: hidden;
-      background: linear-gradient(135deg, #091e3a 0%, #143b70 60%, #1d4e89 100%);
-      color: #fff; border-radius: 22px; padding: 18px; margin-bottom: 14px;
-      box-shadow: var(--shadow-lg);
-    }
-    .hero-card::before {
-      content: ''; position: absolute; width: 170px; height: 170px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(249,115,22,0.3) 0%, transparent 70%);
-      top: -55px; right: -45px; pointer-events: none;
-    }
-    .hero-card::after {
-      content: ''; position: absolute; width: 120px; height: 120px; border-radius: 50%;
-      border: 1px solid rgba(255,255,255,0.08); bottom: -45px; left: -25px; pointer-events: none;
-    }
-    .hero-row { position: relative; display: flex; align-items: center; gap: 14px; }
-    .avatar-circle {
-      width: 54px; height: 54px; border-radius: 16px;
-      background: linear-gradient(135deg, #fb923c, #ea580c);
-      color: #fff; font-size: 21px; font-weight: 800;
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 8px 18px rgba(234, 88, 12, 0.35); border: 2px solid rgba(255,255,255,0.25);
-    }
-    .hero-name { font-size: 19px; font-weight: 800; letter-spacing: -0.2px; line-height: 1.2; }
-    .hero-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
-    .hero-chip {
-      font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 20px;
-      background: rgba(255, 255, 255, 0.14); border: 1px solid rgba(255, 255, 255, 0.16); color: #f8fafc;
-    }
-    .hero-chip.orange { background: rgba(249, 115, 22, 0.25); border-color: rgba(253, 186, 116, 0.45); color: #ffedd5; }
-    .hero-footer {
-      position: relative; margin-top: 14px; padding-top: 12px;
-      border-top: 1px solid rgba(255, 255, 255, 0.12);
-      display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #cbd5e1;
-    }
+/* Notices */
+.notice{padding:12px 14px;margin-bottom:12px;border-left:2px solid var(--gold);background:rgba(201,162,74,.07);border-radius:0 12px 12px 0}
+.notice-head{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.notice h4{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700;color:var(--gold-hi)}
+.notice p{margin-top:4px;font-size:13.5px}
+.notice a{display:inline-block;margin-top:8px;font-size:13px;font-weight:600;color:var(--gold-hi)}
+.dot{width:7px;height:7px;border-radius:50%;background:#e5674f;flex-shrink:0;animation:pulse 1.4s infinite}
 
-    /* ===== STATS & PROGRESS ===== */
-    .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px; }
-    .stat-box {
-      background: #fff; border: 1px solid var(--border); border-radius: 16px;
-      padding: 13px 8px; text-align: center; box-shadow: var(--shadow-sm);
-    }
-    .stat-icon {
-      width: 30px; height: 30px; border-radius: 10px; margin: 0 auto 7px;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .si-green { background: var(--success-soft); color: var(--success); }
-    .si-orange { background: var(--accent-soft); color: var(--accent); }
-    .si-red { background: var(--danger-soft); color: var(--danger); }
-    .stat-num { font-size: 17.5px; font-weight: 800; letter-spacing: -0.3px; }
-    .stat-lbl { font-size: 11px; color: var(--muted); margin-top: 2px; font-weight: 600; }
+/* Classes */
+.tabs{display:flex;gap:20px;border-bottom:1px solid var(--line);margin-bottom:6px}
+.tab{display:flex;align-items:center;gap:6px;padding:11px 0;background:none;border:0;border-bottom:2px solid transparent;margin-bottom:-1px;color:var(--mute);font-weight:600;font-size:14px}
+.tab.on{color:var(--gold-hi);border-bottom-color:var(--gold)}
+.lock{text-align:center;padding:34px 18px}
+.lock svg{width:28px;height:28px;color:var(--gold);margin-bottom:12px}
+.lock h3{font-family:var(--serif);font-size:20px;font-weight:600;margin-bottom:8px}
+.lock p{font-size:13.5px;color:var(--mute);margin-bottom:20px}
+.lock b{color:var(--bad);font-weight:600}
+details>summary{list-style:none;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 2px;cursor:pointer;font-weight:700;font-size:15px}
+details>summary::-webkit-details-marker{display:none}
+details>summary::after{content:'+';font-family:var(--serif);font-size:20px;line-height:1;color:var(--gold-hi);margin-left:4px}
+details[open]>summary::after{content:'–'}
+details.sub{border-bottom:1px solid var(--line)}
+details.chap{margin:0 0 6px 4px;padding-left:12px;border-left:1px solid var(--line)}
+details.chap>summary{padding:10px 0;font-size:14px;font-weight:600;color:var(--gold-hi)}
+details.chap>summary::after{font-size:16px}
+.item{padding:12px 0;border-top:1px solid rgba(243,236,219,.07)}
+.item-head{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.item h5{margin-top:6px;font-size:14.5px;font-weight:600}
+.tag{display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:1px 8px;border:1px solid var(--line);border-radius:6px;color:var(--gold-hi)}
+.tag.live{color:#f2b5a6;border-color:rgba(229,103,79,.45)}
+.video{margin-top:12px;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#000;border:1px solid var(--line)}
+.video iframe{width:100%;height:100%;border:0}
+.chat{margin-top:14px;padding-top:12px;border-top:1px solid rgba(243,236,219,.07)}
+.chat-h{font-size:13.5px;font-weight:700;color:var(--gold-hi);margin-bottom:8px}
+.chat-list{max-height:200px;overflow-y:auto;margin-bottom:10px}
+.msg{padding:8px 0;border-bottom:1px solid rgba(243,236,219,.06);font-size:13.5px}
+.msg b{font-weight:600}
+.msg.adm b{color:var(--gold-hi)}
+.msg small{margin-left:6px;font-size:11.5px;color:var(--mute)}
+.chat form{display:flex;gap:8px}
+.chat input{margin:0;padding:10px 12px}
+.chat .btn-sm{padding:10px 16px}
 
-    .prog-track { width: 100%; height: 7px; background: #e2e8f0; border-radius: 99px; overflow: hidden; margin-top: 8px; }
-    .prog-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, #10b981, #34d399); transition: width 0.5s ease; }
+/* Pay */
+.upi{padding:20px 18px;margin-bottom:6px;border-radius:18px;background:linear-gradient(165deg,#193660 0%,#0d1d38 100%);border:1px solid var(--gold)}
+.upi small{font-size:12.5px;color:var(--mute)}
+.upi-num{font-family:var(--serif);font-size:30px;font-weight:600;letter-spacing:1.5px;margin:8px 0 14px}
+.upi-row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.upi-row p{font-size:12.5px;color:var(--mute)}
+.drop{display:flex;flex-direction:column;align-items:center;gap:3px;padding:20px 12px;margin-bottom:14px;border:1px dashed rgba(201,162,74,.5);border-radius:12px;text-align:center;cursor:pointer}
+.drop svg{width:24px;height:24px;color:var(--gold)}
+.drop b{font-size:14px;font-weight:600;color:var(--gold-hi)}
+.drop small{font-size:12px;color:var(--mute)}
+#payPreview{display:none;width:100%;max-height:200px;object-fit:contain;margin:-4px 0 14px;border-radius:10px;border:1px solid var(--line);background:#050d1c}
+.row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:13px 0;border-top:1px solid rgba(243,236,219,.07)}
+.row:first-child{border-top:0}
+.row b{font-weight:600;font-size:14.5px}
+.row small{display:block;font-size:12.5px;color:var(--mute);margin-top:2px}
+.rr{display:flex;align-items:center;gap:12px;flex-shrink:0}
+.amt{font-family:var(--serif);font-size:16px;font-weight:600;color:var(--gold-hi);white-space:nowrap}
+.st{display:inline-block;margin-top:6px;font-size:12px;font-weight:700;padding:2px 9px;border-radius:999px}
+.st.ok{color:var(--ok);background:rgba(127,207,166,.12)}
+.st.rej{color:var(--bad);background:rgba(232,139,124,.12)}
+.st.pend{color:var(--gold-hi);background:rgba(201,162,74,.14)}
 
-    /* ===== MONTHS GRID ===== */
-    .months-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-    .m-cell {
-      border: 1px solid var(--border); border-radius: 13px; padding: 9px 4px;
-      text-align: center; background: #f8fafc; transition: 0.15s ease;
-    }
-    .m-cell .m-name { font-size: 11.5px; font-weight: 700; color: var(--text-2); }
-    .m-cell .m-val { font-size: 11px; font-weight: 700; margin-top: 3px; color: var(--muted); display: flex; align-items: center; justify-content: center; gap: 2px; }
-    .m-cell.paid {
-      background: linear-gradient(180deg, #ecfdf5 0%, #dcfce7 100%);
-      border-color: #86efac;
-    }
-    .m-cell.paid .m-name { color: #166534; }
-    .m-cell.paid .m-val { color: #15803d; }
+/* Receipt paper */
+.modal{display:none;position:fixed;inset:0;z-index:120;align-items:center;justify-content:center;padding:14px;background:rgba(3,8,18,.8);backdrop-filter:blur(4px)}
+.modal.open{display:flex}
+.paper{width:100%;max-width:430px;max-height:92vh;overflow-y:auto;padding:22px;background:#fff;color:#0f172a;border-top:4px solid #b8903a;border-radius:6px;box-shadow:0 20px 50px rgba(0,0,0,.5)}
+.paper .hd{text-align:center;padding-bottom:12px;margin-bottom:8px;border-bottom:1.5px solid #0b1f3d}
+.paper h2{font-family:var(--serif);font-size:21px;font-weight:600;color:#0b1f3d}
+.paper .hd p{font-size:11.5px;color:#475569;margin-top:3px}
+.ttl{display:inline-block;margin-top:9px;font-size:12px;font-weight:700;color:#7a5712;border:1px solid #c9a24a;padding:2px 12px;border-radius:999px}
+.ln{display:flex;justify-content:space-between;gap:10px;padding:8px 0;font-size:13.5px;border-bottom:1px dashed #cbd5e1}
+.ln span{color:#475569}
+.ln b{text-align:right;font-weight:600}
+.ln.tot{font-size:15.5px;color:#0b1f3d;border-top:1.5px solid #0b1f3d;border-bottom:0;margin-top:6px}
+.sig{margin-top:18px;text-align:right;font-size:12px;color:#334155}
+.sig b{display:block;margin-top:4px;font-size:15px;color:#0b1f3d}
+.paper .btn{color:#0b1f3d;border-color:#0b1f3d}
+.paper .btn-solid{background:#0b1f3d;color:#ebd28d;border-color:#0b1f3d}
+@media print{body *{visibility:hidden}#receiptPrintArea,#receiptPrintArea *{visibility:visible}#receiptPrintArea{position:fixed;left:0;top:0;width:100%;max-width:none;max-height:none;border:0;border-radius:0;box-shadow:none}.no-print{display:none!important}}
 
-    /* ===== SEGMENTED PILLS (CLASSES) ===== */
-    .seg-bar {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;
-      background: #e9eef6; padding: 5px; border-radius: 14px; margin-bottom: 14px;
-    }
-    .seg-btn {
-      padding: 9px 4px; border-radius: 10px; border: none; background: transparent;
-      font-weight: 700; font-size: 12.5px; cursor: pointer; color: var(--text-2);
-      display: flex; align-items: center; justify-content: center; gap: 5px; transition: 0.2s ease;
-    }
-    .seg-btn.active {
-      background: #ffffff; color: var(--navy-900);
-      box-shadow: 0 3px 10px rgba(9, 30, 58, 0.1);
-    }
-    .seg-btn.live-tab.active { color: #dc2626; }
-
-    .lock-card {
-      background: linear-gradient(180deg, #ffffff 0%, #fff7ed 100%);
-      border: 1.5px solid var(--accent-border); border-radius: 22px;
-      padding: 30px 20px; text-align: center; box-shadow: var(--shadow-md);
-    }
-    .lock-icon-circle {
-      width: 64px; height: 64px; border-radius: 50%; margin: 0 auto 14px;
-      background: linear-gradient(135deg, #fff7ed, #ffedd5); color: var(--accent-dark);
-      display: flex; align-items: center; justify-content: center; border: 2px solid var(--accent-border);
-    }
-
-    /* ===== SUBJECT -> CHAPTER FOLDERS ===== */
-    details.sub-folder {
-      background: #fff; border: 1px solid var(--border); border-radius: 16px;
-      margin-bottom: 11px; overflow: hidden; box-shadow: var(--shadow-sm);
-    }
-    details.sub-folder > summary {
-      padding: 14px 15px; font-size: 14.5px; font-weight: 800; color: var(--navy-900);
-      cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center;
-    }
-    details.sub-folder > summary::-webkit-details-marker { display: none; }
-    .folder-left { display: flex; align-items: center; gap: 10px; }
-    .folder-ic {
-      width: 34px; height: 34px; border-radius: 10px; background: #eff6ff; color: var(--navy-700);
-      display: flex; align-items: center; justify-content: center;
-    }
-    .sub-body { padding: 0 12px 12px; }
-
-    details.chap-folder {
-      background: #f8fafc; border: 1px solid var(--border); border-radius: 13px; margin-top: 8px;
-    }
-    details.chap-folder > summary {
-      padding: 11px 12px; font-size: 13.5px; font-weight: 700; color: #c2410c;
-      cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center;
-    }
-    details.chap-folder > summary::-webkit-details-marker { display: none; }
-    .chap-body { padding: 0 10px 10px; }
-
-    .content-card {
-      background: #fff; border: 1px solid var(--border); border-radius: 14px;
-      padding: 13px; margin-top: 8px; box-shadow: 0 2px 6px rgba(9,30,58,0.03);
-    }
-    .c-badge {
-      display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700;
-      padding: 3px 10px; border-radius: 20px; background: var(--accent-soft); color: #c2410c;
-    }
-    .c-badge.live { background: var(--danger-soft); color: #dc2626; }
-    .video-box {
-      margin-top: 10px; border-radius: 12px; overflow: hidden; background: #000;
-      aspect-ratio: 16 / 9; width: 100%; box-shadow: 0 6px 16px rgba(0,0,0,0.14);
-    }
-    .video-box iframe { width: 100%; height: 100%; border: none; }
-
-    /* ===== LIVE Q&A CHAT ===== */
-    .live-chat-wrap {
-      margin-top: 12px; background: #f8fafc; border: 1px solid var(--border);
-      border-radius: 14px; padding: 12px;
-    }
-    .chat-list { max-height: 210px; overflow-y: auto; margin-bottom: 10px; }
-    .chat-msg {
-      background: #fff; border: 1px solid var(--border); border-radius: 12px;
-      padding: 8px 11px; font-size: 12.5px; margin-bottom: 7px;
-    }
-    .chat-msg.admin { background: var(--accent-soft); border-color: var(--accent-border); }
-
-    /* ===== BANK-CARD STYLE UPI PAYMENT ===== */
-    .upi-card {
-      position: relative; overflow: hidden;
-      background: linear-gradient(135deg, #091e3a 0%, #153c73 65%, #0e2a52 100%);
-      color: #fff; border-radius: 18px; padding: 16px; margin-bottom: 16px;
-      box-shadow: 0 10px 24px rgba(9, 30, 58, 0.22);
-    }
-    .upi-card::after {
-      content: ''; position: absolute; width: 130px; height: 130px; border-radius: 50%;
-      background: rgba(249, 115, 22, 0.24); top: -40px; right: -30px; filter: blur(18px);
-    }
-    .upi-top { display: flex; justify-content: space-between; align-items: center; position: relative; }
-    .upi-tag { font-size: 10.5px; font-weight: 700; letter-spacing: 1px; color: #fed7aa; text-transform: uppercase; }
-    .upi-num { font-size: 22px; font-weight: 800; letter-spacing: 1.5px; margin: 8px 0 4px; position: relative; }
-    .copy-pill {
-      position: relative; background: rgba(255,255,255,0.16); color: #fff; border: 1px solid rgba(255,255,255,0.28);
-      padding: 7px 12px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer;
-      display: inline-flex; align-items: center; gap: 5px; backdrop-filter: blur(6px);
-    }
-    .copy-pill:active { transform: scale(0.95); background: rgba(255,255,255,0.26); }
-
-    /* ===== FORM ELEMENTS ===== */
-    .form-group { margin-bottom: 13px; }
-    label { display: block; font-size: 12px; font-weight: 700; color: var(--navy-900); margin-bottom: 5px; }
-    input, select {
-      width: 100%; padding: 11px 13px; border: 1.5px solid #dbe3ee;
-      border-radius: 12px; font-size: 14px; background: #f8fafc; color: var(--text);
-      transition: 0.18s ease;
-    }
-    input:focus, select:focus { outline: none; border-color: var(--accent); background: #fff; box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.12); }
-    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-
-    .upload-zone {
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      border: 1.8px dashed #cbd5e1; border-radius: 14px; padding: 18px 12px;
-      background: #f8fafc; cursor: pointer; text-align: center; transition: 0.2s ease;
-    }
-    .upload-zone:active { border-color: var(--accent); background: var(--accent-soft); }
-    .upload-zone input { display: none; }
-
-    .btn {
-      width: 100%; padding: 13px 16px; border: none; border-radius: 13px;
-      font-size: 14px; font-weight: 700; cursor: pointer; color: #fff;
-      background: linear-gradient(135deg, var(--navy-900) 0%, var(--navy-700) 100%);
-      display: inline-flex; align-items: center; justify-content: center; gap: 7px;
-      box-shadow: 0 6px 16px rgba(9, 30, 58, 0.18); transition: 0.16s ease;
-    }
-    .btn:active { transform: scale(0.97); }
-    .btn:disabled { opacity: 0.55; cursor: not-allowed; }
-    .btn-accent {
-      background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
-      box-shadow: 0 6px 18px rgba(249, 115, 22, 0.28);
-    }
-    .btn-sec { background: #334155; box-shadow: none; }
-
-    /* ===== LISTS & BADGES ===== */
-    .info-item {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 11px 0; border-bottom: 1px solid #f1f5f9; gap: 10px;
-    }
-    .info-item:last-child { border-bottom: none; padding-bottom: 2px; }
-    .badge-ok { background: var(--success-soft); color: #047857; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
-    .badge-due { background: var(--accent-soft); color: #c2410c; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
-    .badge-rej { background: var(--danger-soft); color: #b91c1c; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
-
-    /* ===== SHIMMER LOADER ===== */
-    .skel {
-      background: linear-gradient(90deg, #e8edf5 25%, #f4f7fb 50%, #e8edf5 75%);
-      background-size: 200% 100%; animation: shimmer 1.3s infinite; border-radius: 14px;
-    }
-
-    /* ===== RECEIPT MODAL ===== */
-    .rcpt-modal-bg {
-      display: none; position: fixed; inset: 0; background: rgba(6, 21, 41, 0.72);
-      backdrop-filter: blur(4px); z-index: 120; justify-content: center; align-items: center; padding: 14px;
-    }
-    .rcpt-modal-bg.open { display: flex; }
-    .rcpt-card {
-      background: #fff; width: 100%; max-width: 430px; border-radius: 20px;
-      padding: 20px; border: 2px solid var(--navy-900); max-height: 92vh; overflow-y: auto;
-      box-shadow: 0 24px 50px rgba(0, 0, 0, 0.35);
-    }
-    .rcpt-head { text-align: center; border-bottom: 2px solid var(--navy-900); padding-bottom: 12px; margin-bottom: 12px; }
-    .rcpt-line { display: flex; justify-content: space-between; font-size: 13px; padding: 6px 0; border-bottom: 1px dashed #e2e8f0; gap: 8px; }
-    .rcpt-sign { margin-top: 16px; text-align: right; font-size: 12px; }
-
-    @media print {
-      body * { visibility: hidden; }
-      #receiptPrintArea, #receiptPrintArea * { visibility: visible; }
-      #receiptPrintArea { position: fixed; left: 0; top: 0; width: 100%; border: 2px solid #000; border-radius: 0; box-shadow: none; }
-      .no-print { display: none !important; }
-    }
-
-    /* ===== PREMIUM FLOATING BOTTOM NAV ===== */
-    .bottom-nav {
-      position: fixed; bottom: 0; left: 0; right: 0;
-      background: rgba(255, 255, 255, 0.94); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
-      border-top: 1px solid var(--border); display: flex; z-index: 40;
-      box-shadow: 0 -8px 26px rgba(9, 30, 58, 0.07);
-      padding: 6px 8px calc(8px + env(safe-area-inset-bottom));
-    }
-    .nav-btn {
-      flex: 1; padding: 6px 4px; border: none; background: none;
-      display: flex; flex-direction: column; align-items: center; gap: 3px;
-      font-size: 11px; font-weight: 700; color: var(--muted); cursor: pointer;
-      border-radius: 14px; transition: 0.2s ease;
-    }
-    .nav-icon-wrap {
-      width: 44px; height: 28px; border-radius: 20px;
-      display: flex; align-items: center; justify-content: center; transition: 0.2s ease;
-    }
-    .nav-btn.active { color: var(--navy-900); }
-    .nav-btn.active .nav-icon-wrap {
-      background: var(--accent-soft); color: var(--accent-dark);
-    }
-
-    .toast {
-      position: fixed; bottom: 86px; left: 50%; transform: translateX(-50%);
-      background: var(--navy-900); color: #fff; padding: 10px 18px; border-radius: 30px;
-      font-size: 12.5px; font-weight: 600; display: none; z-index: 150; max-width: 90%;
-      text-align: center; box-shadow: 0 10px 26px rgba(9, 30, 58, 0.3);
-      border: 1px solid rgba(249, 115, 22, 0.5);
-    }
-  </style>
+/* Bottom nav and toast */
+nav{position:fixed;left:0;right:0;bottom:0;z-index:40;display:grid;grid-template-columns:repeat(4,1fr);padding:8px 6px calc(8px + env(safe-area-inset-bottom));background:rgba(8,20,42,.95);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--line)}
+.nav{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 0;background:none;border:0;color:var(--mute);font-size:12px;font-weight:600}
+.nav svg{width:20px;height:20px}
+.nav.on{color:var(--gold-hi)}
+.nav.on::before{content:'';position:absolute;top:-9px;width:28px;height:2px;border-radius:2px;background:var(--gold)}
+.toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);z-index:150;display:none;max-width:88%;padding:10px 16px;border:1px solid var(--gold);border-radius:10px;background:var(--panel-2);color:var(--ivory);font-size:13px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.5)}
+</style>
 </head>
 <body>
 
-<!-- SPLASH SCREEN -->
-<div id="splashScreen">
-  <div class="splash-ring"><img src="logo.png?v=3" alt="Logo" onerror="this.style.display='none'"></div>
-  <h1 class="splash-title">U.C.C Institute</h1>
-  <p class="splash-tag">Learn • Grow • Succeed</p>
-  <div class="splash-bar"><div class="splash-fill"></div></div>
+<div id="splash">
+  <div class="seal"><img src="logo.png?v=3" alt="" onerror="this.style.visibility='hidden'"></div>
+  <h1>U.C.C Institute</h1>
+  <p class="tagline">Learn · Grow · Succeed</p>
+  <div class="loader"><i></i></div>
 </div>
 
-<!-- LOGIN SCREEN -->
 <div id="loginScreen">
-  <div class="login-orb-1"></div>
-  <div class="login-orb-2"></div>
-  <div class="login-card">
-    <div class="login-logo-wrap"><img src="logo.png?v=3" alt="Logo" onerror="this.style.display='none'"></div>
-    <div class="login-title">
-      <h2>U.C.C Student Portal</h2>
-      <p>LEARN • GROW • SUCCEED</p>
-    </div>
-    <div id="loginErr" class="login-err">Invalid Student ID or Mobile Number!</div>
-    <form onsubmit="handleStudentLogin(event)">
-      <div class="form-group">
-        <label>Student ID</label>
-        <input type="text" id="lId" required placeholder="e.g. UCC001" style="text-transform:uppercase;">
-      </div>
-      <div class="form-group">
-        <label>Registered Mobile Number</label>
-        <input type="tel" id="lMob" required maxlength="10" placeholder="10-digit mobile number">
-      </div>
-      <button type="submit" id="lBtn" class="btn btn-accent" style="margin-top:8px;">
-        <span>Login to Student App</span>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-      </button>
-    </form>
-  </div>
+  <form class="login" onsubmit="handleStudentLogin(event)">
+    <div class="seal sm"><img src="logo.png?v=3" alt="" onerror="this.style.visibility='hidden'"></div>
+    <h2>U.C.C Student Portal</h2>
+    <p class="sub">শিক্ষার্থীর আইডি ও মোবাইল নম্বর দিয়ে লগইন করো</p>
+    <div id="loginErr" class="err" hidden>Invalid Student ID or Mobile Number!</div>
+    <label for="lId">Student ID</label>
+    <input id="lId" required placeholder="e.g. UCC001" style="text-transform:uppercase" autocomplete="off">
+    <label for="lMob">Registered Mobile Number</label>
+    <input id="lMob" type="tel" inputmode="numeric" required maxlength="10" placeholder="10-digit mobile number">
+    <button id="lBtn" class="btn btn-solid" type="submit">Login to Student App</button>
+  </form>
 </div>
 
-<!-- TOP APP BAR -->
 <header>
   <div class="brand">
-    <img src="logo.png?v=3" alt="Logo" class="brand-logo" onerror="this.style.display='none'">
-    <div>
-      <h1>U.C.C Institute</h1>
-      <small id="hdrSub">Student Portal • Session 2027</small>
-    </div>
+    <img src="logo.png?v=3" alt="" onerror="this.style.visibility='hidden'">
+    <div><h1>U.C.C Institute</h1><small id="hdrSub">Student Portal</small></div>
   </div>
-  <div class="hdr-actions">
-    <button class="icon-btn" onclick="refreshPortal(false)" title="Refresh">
-      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>
-    </button>
-    <button class="icon-btn" onclick="logoutStudent()" title="Logout">
-      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-    </button>
+  <div style="display:flex;gap:8px">
+    <button class="icon-btn" onclick="refreshPortal(false)" aria-label="Refresh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg></button>
+    <button class="icon-btn" onclick="logoutStudent()" aria-label="Logout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></button>
   </div>
 </header>
 
-<div class="container">
-  <!-- SHIMMER SKELETON (SHOWS UNTIL DATA LOADS) -->
-  <div id="skeletonView" style="display:none;">
-    <div class="skel" style="height:125px;margin-bottom:14px;"></div>
-    <div class="stat-grid">
-      <div class="skel" style="height:86px;"></div>
-      <div class="skel" style="height:86px;"></div>
-      <div class="skel" style="height:86px;"></div>
-    </div>
-    <div class="skel" style="height:210px;"></div>
+<main class="wrap">
+  <div id="skeletonView" hidden>
+    <div class="skel" style="height:150px"></div>
+    <div class="skel" style="height:90px"></div>
+    <div class="skel" style="height:200px"></div>
   </div>
 
   <div id="mainContent">
-    <!-- NOTICE BANNER -->
     <div id="noticeArea"></div>
 
-    <!-- TAB 1: HOME -->
-    <div id="page-home" class="page active">
-      <div class="hero-card">
-        <div class="hero-row">
-          <div class="avatar-circle" id="sAvatar">U</div>
-          <div style="min-width:0;">
-            <div class="hero-name" id="sName">Loading...</div>
-            <div class="hero-chips">
-              <span class="hero-chip orange" id="sIdChip">UCC</span>
-              <span class="hero-chip" id="sClassChip">Class</span>
-            </div>
+    <section id="page-home" class="page on">
+      <div class="id-card">
+        <div class="id-top">
+          <div class="initial" id="sAvatar">U</div>
+          <div style="min-width:0">
+            <div class="id-name" id="sName">Loading...</div>
+            <div class="id-meta"><b id="sIdChip">UCC</b> · <span id="sClassChip">Class</span></div>
           </div>
         </div>
-        <div class="hero-footer">
-          <span id="sFather">Father: -</span>
-          <span id="sPhone" style="font-weight:700;color:#fff;">-</span>
+        <div class="id-foot">
+          <div><small>Father</small><b id="sFather">-</b></div>
+          <div><small>Mobile</small><b id="sPhone">-</b></div>
         </div>
       </div>
 
-      <div class="stat-grid">
-        <div class="stat-box">
-          <div class="stat-icon si-green">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          </div>
-          <div id="sPresent" class="stat-num" style="color:var(--success);">0</div>
-          <div class="stat-lbl">Present</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-icon si-orange">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-          </div>
-          <div id="sAbsent" class="stat-num" style="color:var(--accent-dark);">0</div>
-          <div class="stat-lbl">Absent</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-icon si-red">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12"/><path d="M6 8h12"/><path d="m6 13 8.5 8"/><path d="M6 13h3"/><path d="M9 13c6.667 0 6.667-10 0-10"/></svg>
-          </div>
-          <div id="sDue" class="stat-num" style="color:var(--danger);">Rs. 0</div>
-          <div class="stat-lbl">Total Due</div>
-        </div>
+      <div class="stats">
+        <div class="stat"><b id="sPresent" style="color:var(--ok)">0</b><span>Present</span></div>
+        <div class="stat"><b id="sAbsent" style="color:var(--gold-hi)">0</b><span>Absent</span></div>
+        <div class="stat"><b id="sDue">Rs. 0</b><span>Total Due</span></div>
       </div>
 
-      <div class="card" style="padding:14px 16px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;font-size:12.5px;font-weight:700;">
-          <span style="color:var(--navy-900);">Attendance Performance</span>
-          <span id="sAttPct" style="color:var(--success);">0%</span>
-        </div>
-        <div class="prog-track"><div id="sAttBar" class="prog-fill" style="width:0%;"></div></div>
+      <div class="panel">
+        <div class="att"><span>Attendance</span><b id="sAttPct">0%</b></div>
+        <div class="bar"><i id="sAttBar"></i></div>
       </div>
 
-      <div class="card">
-        <div class="card-head">
-          <div class="card-title">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-            2027 Monthly Fee Status
-          </div>
-          <span id="paidCountPill" class="pill-mini">0 / 12 Paid</span>
-        </div>
-        <div class="months-grid" id="sMonths"></div>
-      </div>
-    </div>
+      <div class="sec"><h3>2027 Monthly Fee</h3><span id="paidCountPill" class="muted">0 / 12 পরিশোধিত</span></div>
+      <div class="ledger" id="sMonths"></div>
+    </section>
 
-    <!-- TAB 2: CLASSES -->
-    <div id="page-classes" class="page">
-      <div id="classesLockedView" class="lock-card" style="display:none;">
-        <div class="lock-icon-circle">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-        </div>
-        <div style="font-size:17px;font-weight:800;color:var(--navy-900);">ক্লাস ও মক টেস্ট লক করা আছে</div>
-        <div style="font-size:13px;color:var(--text-2);margin:8px 0 18px;line-height:1.55;">
-          তোমার বর্তমানে <strong id="lockDueAmt" style="color:var(--danger);">Rs. 0</strong> টিউশন ফি বাকি রয়েছে। ফি পরিশোধ করলেই লাইভ ক্লাস, রেকর্ডেড ভিডিও, PDF নোটস ও মক টেস্ট অটোমেটিক খুলে যাবে।
-        </div>
-        <button class="btn btn-accent" onclick="openPage('pay', document.getElementById('navPay'))">এখনই ফি পেমেন্ট করো</button>
+    <section id="page-classes" class="page">
+      <div id="classesLockedView" class="panel lock" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <h3>ক্লাস ও মক টেস্ট লক করা আছে</h3>
+        <p>বাকি টিউশন ফি <b id="lockDueAmt">Rs. 0</b>। ফি পরিশোধ করলেই লাইভ ক্লাস, ভিডিও, PDF নোটস ও মক টেস্ট খুলে যাবে।</p>
+        <button class="btn btn-solid" onclick="openPage('pay', document.getElementById('navPay'))">এখনই ফি পেমেন্ট করো</button>
       </div>
 
       <div id="classesUnlockedView">
-        <div class="seg-bar">
-          <button class="seg-btn live-tab active" id="cpLive" onclick="setClassFilter('Live')">
-            <span class="live-dot" style="width:7px;height:7px;"></span> Live
-          </button>
-          <button class="seg-btn" id="cpVideo" onclick="setClassFilter('Video')">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="5 3 19 12 5 21 5 3"/></svg> Recorded
-          </button>
-          <button class="seg-btn" id="cpOther" onclick="setClassFilter('OTHER')">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> PDF / Test
-          </button>
+        <div class="tabs">
+          <button class="tab on" id="cpLive" onclick="setClassFilter('Live')"><i class="dot"></i>Live</button>
+          <button class="tab" id="cpVideo" onclick="setClassFilter('Video')">Recorded</button>
+          <button class="tab" id="cpOther" onclick="setClassFilter('OTHER')">PDF / Test</button>
         </div>
         <div id="classesList"></div>
       </div>
-    </div>
+    </section>
 
-    <!-- TAB 3: PAY FEE -->
-    <div id="page-pay" class="page">
-      <div class="upi-card">
-        <div class="upi-top">
-          <span class="upi-tag">Official UPI • PhonePe / GPay</span>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fed7aa" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-        </div>
+    <section id="page-pay" class="page">
+      <div class="upi">
+        <div class="upi-row"><small>অফিশিয়াল UPI · PhonePe / GPay</small></div>
         <div class="upi-num">8016972121</div>
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;gap:8px;">
-          <span style="font-size:11.5px;color:#cbd5e1;">পেমেন্ট করে নিচে স্ক্রিনশট আপলোড করো</span>
-          <button type="button" class="copy-pill" onclick="copyUpi()">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-            Copy
-          </button>
-        </div>
+        <div class="upi-row"><p>পেমেন্ট করে নিচে স্ক্রিনশট আপলোড করো</p><button type="button" class="btn btn-sm btn-solid" onclick="copyUpi()">Copy</button></div>
       </div>
 
-      <div class="card">
-        <div class="card-head">
-          <div class="card-title">Submit Payment Proof</div>
+      <div class="sec"><h3>Submit Payment Proof</h3></div>
+      <form onsubmit="submitOnlinePay(event)">
+        <div class="row2">
+          <div><label for="payMonth">Select Month *</label><select id="payMonth" required></select></div>
+          <div><label for="payAmt">Amount (Rs.) *</label><input id="payAmt" type="number" value="300" required min="1"></div>
         </div>
-        <form onsubmit="submitOnlinePay(event)">
-          <div class="row-2">
-            <div class="form-group"><label>Select Month *</label><select id="payMonth" required></select></div>
-            <div class="form-group"><label>Amount (Rs.) *</label><input type="number" id="payAmt" value="300" required min="1"></div>
-          </div>
-          <div class="form-group"><label>UTR / Transaction ID</label><input type="text" id="payUtr" placeholder="Last 4-12 digits"></div>
-          <div class="form-group">
-            <label>Payment Screenshot *</label>
-            <label class="upload-zone" for="payFile">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-              <span id="uploadFileName" style="font-size:12.5px;font-weight:700;color:var(--navy-900);margin-top:6px;">Tap to choose screenshot</span>
-              <span style="font-size:11px;color:var(--muted);margin-top:2px;">JPG / PNG supported</span>
-              <input type="file" id="payFile" accept="image/*" required onchange="previewCompressedImg(event)">
-            </label>
-            <img id="payPreview" style="display:none;width:100%;max-height:190px;object-fit:contain;margin-top:10px;border-radius:12px;border:1px solid var(--border);background:#f8fafc;">
-          </div>
-          <button type="submit" id="paySubmitBtn" class="btn btn-accent">Submit Payment Proof</button>
-        </form>
-      </div>
+        <label for="payUtr">UTR / Transaction ID</label>
+        <input id="payUtr" placeholder="Last 4-12 digits">
+        <label>Payment Screenshot *</label>
+        <label class="drop" for="payFile">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          <b id="uploadFileName">Tap to choose screenshot</b>
+          <small>JPG / PNG supported</small>
+          <input type="file" id="payFile" accept="image/*" required onchange="previewCompressedImg(event)" hidden>
+        </label>
+        <img id="payPreview" alt="Payment screenshot preview">
+        <button type="submit" id="paySubmitBtn" class="btn btn-solid">Submit Payment Proof</button>
+      </form>
 
-      <div class="card">
-        <div class="card-head"><div class="card-title">My Payment Requests</div></div>
-        <div id="myReqList"></div>
-      </div>
-    </div>
+      <div class="sec"><h3>My Payment Requests</h3></div>
+      <div id="myReqList"></div>
+    </section>
 
-    <!-- TAB 4: RECEIPTS -->
-    <div id="page-receipts" class="page">
-      <div class="card">
-        <div class="card-head">
-          <div class="card-title">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-            Official Fee Receipts (2027)
-          </div>
-        </div>
-        <div id="myReceiptsList"></div>
-      </div>
-    </div>
+    <section id="page-receipts" class="page">
+      <div class="sec"><h3>Official Fee Receipts (2027)</h3></div>
+      <div id="myReceiptsList"></div>
+    </section>
   </div>
-</div>
+</main>
 
-<!-- OFFICIAL BENGALI RECEIPT MODAL -->
-<div class="rcpt-modal-bg" id="rcptModal" onclick="if(event.target===this) closeReceipt()">
-  <div class="rcpt-card" id="receiptPrintArea">
-    <div class="rcpt-head">
-      <div style="font-size:20px;font-weight:800;color:var(--navy-900);">ইউ.সি.সি ইনস্টিটিউট</div>
-      <div style="font-size:11px;color:#475569;margin-top:2px;">পেঁচাকোলা, রায়পুর, বাঁকুড়া • ফোন: 8016972121 / 8159980707</div>
-      <div style="font-size:12px;font-weight:800;margin-top:6px;background:var(--accent-soft);color:#c2410c;border:1px solid var(--accent-border);display:inline-block;padding:3px 12px;border-radius:20px;">অফিশিয়াল ফি রসিদ (2027)</div>
+<div class="modal" id="rcptModal" onclick="if(event.target===this)closeReceipt()">
+  <div class="paper" id="receiptPrintArea">
+    <div class="hd">
+      <h2>ইউ.সি.সি ইনস্টিটিউট</h2>
+      <p>পেঁচাকোলা, রায়পুর, বাঁকুড়া · ফোন: 8016972121 / 8159980707</p>
+      <span class="ttl">অফিশিয়াল ফি রসিদ (2027)</span>
     </div>
-    <div class="rcpt-line"><span>রসিদ নং:</span><strong id="rNo"></strong></div>
-    <div class="rcpt-line"><span>তারিখ ও সময়:</span><strong id="rDate"></strong></div>
-    <div class="rcpt-line"><span>ছাত্র/ছাত্রীর নাম:</span><strong id="rName"></strong></div>
-    <div class="rcpt-line"><span>পিতার নাম:</span><strong id="rFather"></strong></div>
-    <div class="rcpt-line"><span>আইডি ও শ্রেণী:</span><strong id="rIdCls"></strong></div>
-    <div class="rcpt-line"><span>কোন মাসের ফি:</span><strong id="rMonth"></strong></div>
-    <div class="rcpt-line"><span>পেমেন্টের মাধ্যম:</span><strong id="rMode"></strong></div>
-    <div class="rcpt-line" style="font-size:15px;color:var(--navy-900);border-top:1px solid #cbd5e1;margin-top:6px;padding-top:9px;">
-      <span><strong>মোট জমা টাকা:</strong></span><strong id="rAmt"></strong>
+    <div class="ln"><span>রসিদ নং:</span><b id="rNo"></b></div>
+    <div class="ln"><span>তারিখ ও সময়:</span><b id="rDate"></b></div>
+    <div class="ln"><span>ছাত্র/ছাত্রীর নাম:</span><b id="rName"></b></div>
+    <div class="ln"><span>পিতার নাম:</span><b id="rFather"></b></div>
+    <div class="ln"><span>আইডি ও শ্রেণী:</span><b id="rIdCls"></b></div>
+    <div class="ln"><span>কোন মাসের ফি:</span><b id="rMonth"></b></div>
+    <div class="ln"><span>পেমেন্টের মাধ্যম:</span><b id="rMode"></b></div>
+    <div class="ln tot"><span><b>মোট জমা টাকা:</b></span><b id="rAmt"></b></div>
+    <div class="sig">
+      গ্রহণকারী / অনুমোদিত স্বাক্ষর:
+      <b id="rCollector"></b>
+      <small style="color:#64748b;font-size:10px">ইউ.সি.সি ইনস্টিটিউট, পেঁচাকোলা</small>
     </div>
-    <div class="rcpt-sign">
-      গ্রহণকারী / অনুমোদিত স্বাক্ষর:<br>
-      <strong id="rCollector" style="font-size:15px;color:var(--navy-900);"></strong><br>
-      <span style="color:var(--muted);font-size:10px;">ইউ.সি.সি ইনস্টিটিউট, পেঁচাকোলা</span>
-    </div>
-    <div style="display:grid;gap:8px;margin-top:16px;" class="no-print">
+    <div class="no-print" style="display:grid;gap:8px;margin-top:18px">
       <button class="btn" onclick="window.print()">Print / Save PDF</button>
-      <div class="row-2">
-        <button class="btn btn-accent" onclick="downloadReceiptImage()">Save PNG</button>
-        <button class="btn btn-sec" onclick="closeReceipt()">Close</button>
+      <div class="row2">
+        <button class="btn btn-solid" onclick="downloadReceiptImage()">Save PNG</button>
+        <button class="btn" onclick="closeReceipt()">Close</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- PREMIUM BOTTOM NAVIGATION -->
-<nav class="bottom-nav">
-  <button class="nav-btn active" onclick="openPage('home', this)">
-    <div class="nav-icon-wrap">
-      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-    </div>
+<nav>
+  <button class="nav on" onclick="openPage('home',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
     <span>Home</span>
   </button>
-  <button class="nav-btn" onclick="openPage('classes', this)">
-    <div class="nav-icon-wrap">
-      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
-    </div>
+  <button class="nav" onclick="openPage('classes',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
     <span>Classes</span>
   </button>
-  <button class="nav-btn" id="navPay" onclick="openPage('pay', this)">
-    <div class="nav-icon-wrap">
-      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-    </div>
+  <button class="nav" id="navPay" onclick="openPage('pay',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
     <span>Pay Fee</span>
   </button>
-  <button class="nav-btn" onclick="openPage('receipts', this)">
-    <div class="nav-icon-wrap">
-      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-    </div>
+  <button class="nav" onclick="openPage('receipts',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
     <span>Receipts</span>
   </button>
 </nav>
@@ -756,413 +389,367 @@
 <div id="toast" class="toast"></div>
 
 <script>
-  const API_URL = 'https://script.google.com/macros/s/AKfycbwAuSfDoikCc998pVuwz0HySky1fChn-Tj8p7OeuUAr_WPG7IFZkfGB5LUO6NlvkiKO/exec';
-  const MONTHS = [
-    ['Jan_2027','Jan','জানুয়ারি 2027'], ['Feb_2027','Feb','ফেব্রুয়ারি 2027'], ['Mar_2027','Mar','মার্চ 2027'], ['Apr_2027','Apr','এপ্রিল 2027'],
-    ['May_2027','May','মে 2027'], ['Jun_2027','Jun','জুন 2027'], ['Jul_2027','Jul','জুলাই 2027'], ['Aug_2027','Aug','আগস্ট 2027'],
-    ['Sep_2027','Sep','সেপ্টেম্বর 2027'], ['Oct_2027','Oct','অক্টোবর 2027'], ['Nov_2027','Nov','নভেম্বর 2027'], ['Dec_2027','Dec','ডিসেম্বর 2027']
-  ];
-  const BN_MONTH_NAMES = ['জানুয়ারি','ফেব্রুয়ারি','মার্চ','এপ্রিল','মে','জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'];
-  const CLASSES_BN = { Nursery:'নার্সারি', KG:'কেজি', 'Class 1':'ক্লাস 1', 'Class 2':'ক্লাস 2', 'Class 3':'ক্লাস 3', 'Class 4':'ক্লাস 4', 'Class 5':'ক্লাস 5', 'Class 6':'ক্লাস 6', 'Class 7':'ক্লাস 7', 'Class 8':'ক্লাস 8', 'Class 9':'ক্লাস 9', 'Class 10':'ক্লাস 10', 'Class 11':'ক্লাস 11', 'Class 12':'ক্লাস 12' };
+const $=id=>document.getElementById(id);
+const API_URL='https://script.google.com/macros/s/AKfycbwAuSfDoikCc998pVuwz0HySky1fChn-Tj8p7OeuUAr_WPG7IFZkfGB5LUO6NlvkiKO/exec';
+const MONTHS=[['Jan_2027','Jan','জানুয়ারি 2027'],['Feb_2027','Feb','ফেব্রুয়ারি 2027'],['Mar_2027','Mar','মার্চ 2027'],['Apr_2027','Apr','এপ্রিল 2027'],['May_2027','May','মে 2027'],['Jun_2027','Jun','জুন 2027'],['Jul_2027','Jul','জুলাই 2027'],['Aug_2027','Aug','আগস্ট 2027'],['Sep_2027','Sep','সেপ্টেম্বর 2027'],['Oct_2027','Oct','অক্টোবর 2027'],['Nov_2027','Nov','নভেম্বর 2027'],['Dec_2027','Dec','ডিসেম্বর 2027']];
+const BN_MONTHS=['জানুয়ারি','ফেব্রুয়ারি','মার্চ','এপ্রিল','মে','জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'];
+const CLASSES_BN={Nursery:'নার্সারি',KG:'কেজি'};
+for(let i=1;i<=12;i++)CLASSES_BN['Class '+i]='ক্লাস '+i;
+const bnClass=c=>CLASSES_BN[c]||c;
+const bnMonth=k=>{const f=MONTHS.find(x=>x[0]===k);return f?f[2]:k;};
+const bnCollector=c=>{const s=String(c||'');if(s.includes('Pralay'))return'প্রলয় ষন্নিগ্রহী';if(s.includes('Chiranjit'))return'চিরঞ্জিত ষন্নিগ্রহী';if(s.includes('Saikat'))return'সৈকত ষন্নিগ্রহী';return s||'অ্যাডমিন';};
+const bnMode=m=>(m||'').toLowerCase().includes('cash')?'নগদ (ক্যাশ)':'অনলাইন (UPI)';
+const formatBnDate=iso=>{if(!iso)return'-';const p=String(iso).split('-');return p.length===3?`${parseInt(p[2],10)} ${BN_MONTHS[parseInt(p[1],10)-1]||p[1]} ${p[0]}`:iso;};
+const stCls=s=>s==='Approved'?'ok':(s==='Rejected'?'rej':'pend');
+const ft=(b,s)=>`${b?'bold ':''}${s}px 'Hind Siliguri', sans-serif`;
 
-  function bnClass(c) { return CLASSES_BN[c] || c; }
-  function bnMonth(k) { const f = MONTHS.find(x => x[0] === k); return f ? f[2] : k; }
-  function bnCollector(c) { const s = String(c||''); if (s.includes('Pralay')) return 'প্রলয় ষন্নিগ্রহী'; if (s.includes('Chiranjit')) return 'চিরঞ্জিত ষন্নিগ্রহী'; if (s.includes('Saikat')) return 'সৈকত ষন্নিগ্রহী'; return s || 'অ্যাডমিন'; }
-  function bnMode(m) { return (m||'').toLowerCase().includes('cash') ? 'নগদ (ক্যাশ)' : 'অনলাইন (UPI)'; }
-  function formatBnDate(iso) { if (!iso) return '-'; const p = String(iso).split('-'); return p.length===3 ? `${parseInt(p[2],10)} ${BN_MONTH_NAMES[parseInt(p[1],10)-1]||p[1]} ${p[0]}` : iso; }
+let portalData=null,classFilter='Live',compressedBase64='',lastContentHash='',activeReceiptObj=null,lastBackPress=0,liveChatTimer=null,activeLiveIds=[];
 
-  let portalData = null, classFilter = 'Live', compressedBase64 = '', lastContentHash = '';
-  let activeReceiptObj = null, lastBackPress = 0, liveChatTimer = null, activeLiveIds = [];
+history.pushState({app:true},'');
+addEventListener('popstate',()=>{
+  if($('rcptModal').classList.contains('open')){closeReceipt();history.pushState({app:true},'');return;}
+  const now=Date.now();
+  if(now-lastBackPress<2000)history.back();
+  else{lastBackPress=now;toast('অ্যাপ থেকে বেরোতে আবার Back চাপুন');history.pushState({app:true},'');}
+});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&navigator.onLine)refreshPortal(true);});
+setInterval(()=>{if(!document.hidden&&navigator.onLine&&portalData)refreshPortal(true);},45000);
 
-  window.history.pushState({ app: true }, '');
-  window.addEventListener('popstate', () => {
-    if (document.getElementById('rcptModal').classList.contains('open')) { closeReceipt(); window.history.pushState({ app: true }, ''); return; }
-    const now = Date.now();
-    if (now - lastBackPress < 2000) window.history.back();
-    else { lastBackPress = now; toast('অ্যাপ থেকে বেরোতে আবার Back চাপুন'); window.history.pushState({ app: true }, ''); }
+function toast(m){const t=$('toast');t.textContent=m;t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',2600);}
+function copyUpi(){navigator.clipboard?.writeText('8016972121').catch(()=>{});toast('UPI নম্বর 8016972121 কপি হয়েছে');}
+function setLoading(on){$('skeletonView').hidden=!on;$('mainContent').hidden=on;}
+
+window.onload=()=>{
+  setTimeout(()=>{const sp=$('splash');sp.classList.add('hide');setTimeout(()=>sp.remove(),500);},1400);
+  const id=localStorage.getItem('ucc_st_id'),mob=localStorage.getItem('ucc_st_mob');
+  if(id&&mob){
+    $('loginScreen').hidden=true;
+    setLoading(true);
+    loadStudentData(id,mob,true).then(ok=>{if(!ok)$('loginScreen').hidden=false;});
+  }
+};
+
+async function handleStudentLogin(e){
+  e.preventDefault();
+  const id=$('lId').value.trim().toUpperCase(),mob=$('lMob').value.replace(/\D/g,'').slice(-10);
+  const btn=$('lBtn'),err=$('loginErr');
+  btn.disabled=true;btn.textContent='যাচাই করা হচ্ছে...';err.hidden=true;
+  const ok=await loadStudentData(id,mob,false);
+  if(ok){localStorage.setItem('ucc_st_id',id);localStorage.setItem('ucc_st_mob',mob);$('loginScreen').hidden=true;}
+  else err.hidden=false;
+  btn.disabled=false;btn.textContent='Login to Student App';
+}
+
+async function loadStudentData(id,mob,silent){
+  try{
+    const r=await fetch(`${API_URL}?mode=student&id=${encodeURIComponent(id)}&mobile=${encodeURIComponent(mob)}`);
+    const d=await r.json();
+    setLoading(false);
+    if(d.status==='ok'){portalData=d;renderPortal();return true;}
+    return false;
+  }catch(e){
+    setLoading(false);
+    if(!silent)toast('Network error! ইন্টারনেট চেক করুন।');
+    return false;
+  }
+}
+
+function refreshPortal(silent=false){
+  const id=localStorage.getItem('ucc_st_id'),mob=localStorage.getItem('ucc_st_mob');
+  if(id&&mob){if(!silent)toast('ডেটা আপডেট হচ্ছে...');loadStudentData(id,mob,silent);}
+}
+
+function logoutStudent(){
+  clearInterval(liveChatTimer);
+  localStorage.removeItem('ucc_st_id');localStorage.removeItem('ucc_st_mob');
+  portalData=null;lastContentHash='';
+  $('loginScreen').hidden=false;
+}
+
+function openPage(name,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.nav').forEach(b=>b.classList.remove('on'));
+  $('page-'+name).classList.add('on');
+  if(btn)btn.classList.add('on');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function renderPortal(){
+  if(!portalData)return;
+  const s=portalData.student,due=Number(s.totalDue)||0;
+  const pres=Number(portalData.presentDays)||0,abs=Number(portalData.absentDays)||0,tot=pres+abs;
+  const pct=tot>0?Math.round(pres/tot*100):100;
+
+  $('hdrSub').textContent=`${s.id} · ${s.studentClass}`;
+  $('sAvatar').textContent=(s.name||'U').trim().charAt(0).toUpperCase();
+  $('sName').textContent=s.name;
+  $('sIdChip').textContent=s.id;
+  $('sClassChip').textContent=s.studentClass;
+  $('sFather').textContent=s.fatherName||'-';
+  $('sPhone').textContent=s.mobile||'-';
+  $('sPresent').textContent=pres;
+  $('sAbsent').textContent=abs;
+  $('sDue').textContent='Rs. '+due;
+  $('sDue').style.color=due>0?'var(--bad)':'var(--ok)';
+  $('sAttPct').textContent=tot>0?`${pct}% (${pres}/${tot} দিন)`:'নতুন সেশন';
+  $('sAttBar').style.width=pct+'%';
+
+  $('noticeArea').innerHTML=(portalData.notices||[]).map(n=>`
+    <div class="notice">
+      <div class="notice-head"><h4><i class="dot"></i>${n.title}</h4><span class="muted">${n.date}</span></div>
+      <p>${n.message}</p>
+      ${n.link?`<a href="${n.link}" target="_blank" rel="noopener">Open link →</a>`:''}
+    </div>`).join('');
+
+  const prevMonth=$('payMonth').value;
+  let opts='',paid=0;
+  $('sMonths').innerHTML=MONTHS.map(([k,lbl])=>{
+    const v=Number(s.months?.[k])||0;
+    if(v>0)paid++;else opts+=`<option value="${k}">${k.replace('_',' ')}</option>`;
+    return `<div class="${v>0?'paid':''}"><small>${lbl}</small><strong>${v>0?'₹'+v+' ✓':'বাকি'}</strong></div>`;
+  }).join('');
+  $('paidCountPill').textContent=`${paid} / 12 পরিশোধিত`;
+  $('payMonth').innerHTML=opts||'<option value="">সব মাস পরিশোধিত ✓</option>';
+  if([...$('payMonth').options].some(o=>o.value===prevMonth))$('payMonth').value=prevMonth;
+  $('paySubmitBtn').disabled=!opts;
+
+  const locked=portalData.dueLock==='ON'&&due>0;
+  $('classesLockedView').hidden=!locked;
+  $('classesUnlockedView').hidden=locked;
+  $('lockDueAmt').textContent='Rs. '+due;
+  const h=JSON.stringify(portalData.classesContent||[])+'|'+locked+'|'+classFilter;
+  if(!locked&&h!==lastContentHash){lastContentHash=h;renderClassesList();}
+
+  const reqs=portalData.requests||[];
+  $('myReqList').innerHTML=reqs.length?reqs.map(r=>`
+    <div class="row">
+      <div><b>${r.month.replace('_',' ')}</b><small>${r.date} · UTR: ${r.utr||'-'}</small>${r.remarks?`<small style="color:var(--bad)">${r.remarks}</small>`:''}</div>
+      <div class="rr" style="flex-direction:column;align-items:flex-end;gap:0"><span class="amt">₹${r.amount}</span><span class="st ${stCls(r.status)}">${r.status}</span></div>
+    </div>`).join(''):'<div class="empty">এখনো কোনো অনলাইন পেমেন্ট রিকোয়েস্ট নেই।</div>';
+
+  const pays=portalData.payments||[];
+  $('myReceiptsList').innerHTML=pays.length?pays.map((p,i)=>`
+    <div class="row">
+      <div><b>${bnMonth(p.month)}</b><small>${formatBnDate(p.date)} · ${bnCollector(p.collector)}</small></div>
+      <div class="rr"><span class="amt">₹${p.amount}</span><button class="btn btn-sm" onclick="openReceipt(${i})">Receipt</button></div>
+    </div>`).join(''):'<div class="empty">এখনো কোনো ফি রসিদ নেই।</div>';
+}
+
+function setClassFilter(f){
+  classFilter=f;lastContentHash='';
+  $('cpLive').classList.toggle('on',f==='Live');
+  $('cpVideo').classList.toggle('on',f==='Video');
+  $('cpOther').classList.toggle('on',f==='OTHER');
+  renderClassesList();
+}
+
+function getEmbedUrl(url){
+  if(!url)return'';
+  const yt=url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|live\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);
+  if(yt)return `https://www.youtube.com/embed/${yt[1]}?rel=0`;
+  const gd=url.match(/drive\.google\.com\/file\/d\/([^\/]+)/);
+  if(gd)return `https://drive.google.com/file/d/${gd[1]}/preview`;
+  return'';
+}
+
+function renderClassesList(){
+  const all=(portalData&&portalData.classesContent)||[];
+  const box=$('classesList');
+  clearInterval(liveChatTimer);
+  activeLiveIds=[];
+
+  if(classFilter==='Live'){
+    const lives=all.filter(c=>c.type==='Live');
+    if(!lives.length){
+      box.innerHTML='<div class="empty"><b>এখন কোনো লাইভ ক্লাস চলছে না</b>পুরনো ক্লাস দেখতে Recorded ট্যাবে যাও।</div>';
+      return;
+    }
+    box.innerHTML=lives.map(c=>{
+      activeLiveIds.push(c.id);
+      const embed=getEmbedUrl(c.link);
+      return `<article class="item">
+        <div class="item-head"><span class="tag live"><i class="dot"></i>লাইভ · ${c.subject} (${c.chapter||'General'})</span><span class="muted">${c.date}</span></div>
+        <h5>${c.title}</h5>
+        ${embed?`<div class="video"><iframe src="${embed}" allow="autoplay; fullscreen" allowfullscreen></iframe></div>`:`<a class="btn btn-solid" href="${c.link}" target="_blank" rel="noopener" style="margin-top:12px">Join Live Class →</a>`}
+        <div class="chat">
+          <div class="chat-h">Live Question & Answer</div>
+          <div id="chat_${c.id}" class="chat-list"></div>
+          <form onsubmit="sendStudentChat(event,'${c.id}')">
+            <input id="cin_${c.id}" required placeholder="তোমার প্রশ্ন লেখো...">
+            <button class="btn btn-solid btn-sm" type="submit">Send</button>
+          </form>
+        </div>
+      </article>`;
+    }).join('');
+    refreshAllLiveChats();
+    liveChatTimer=setInterval(refreshAllLiveChats,6000);
+    return;
+  }
+
+  const items=all.filter(c=>classFilter==='Video'?c.type==='Video':(c.type==='PDF'||c.type==='Mock Test'));
+  if(!items.length){box.innerHTML='<div class="empty">এখানে এখনো কোনো কনটেন্ট আপলোড হয়নি।</div>';return;}
+
+  const tree={};
+  items.forEach(c=>{
+    const sub=c.subject||'General',ch=c.chapter||'General';
+    tree[sub]=tree[sub]||{};
+    tree[sub][ch]=tree[sub][ch]||[];
+    tree[sub][ch].push(c);
   });
 
-  document.addEventListener('visibilitychange', () => { if (!document.hidden && navigator.onLine) refreshPortal(true); });
-  setInterval(() => { if (!document.hidden && navigator.onLine && portalData) refreshPortal(true); }, 45000);
-
-  function toast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.style.display = 'block'; setTimeout(() => { t.style.display = 'none'; }, 2800); }
-  function copyUpi() { navigator.clipboard?.writeText('8016972121').catch(()=>{}); toast('UPI Number 8016972121 Copied'); }
-
-  function setLoading(show) {
-    document.getElementById('skeletonView').style.display = show ? 'block' : 'none';
-    document.getElementById('mainContent').style.display = show ? 'none' : 'block';
-  }
-
-  window.onload = function() {
-    setTimeout(() => { const sp = document.getElementById('splashScreen'); sp.classList.add('hide'); setTimeout(() => { sp.style.display = 'none'; }, 450); }, 1400);
-    const savedId = localStorage.getItem('ucc_st_id'), savedMob = localStorage.getItem('ucc_st_mob');
-    if (savedId && savedMob) {
-      document.getElementById('loginScreen').style.display = 'none';
-      setLoading(true);
-      loadStudentData(savedId, savedMob, true);
-    }
-  };
-
-  async function handleStudentLogin(e) {
-    e.preventDefault();
-    const id = document.getElementById('lId').value.trim().toUpperCase();
-    const mob = document.getElementById('lMob').value.replace(/\D/g,'').slice(-10);
-    const btn = document.getElementById('lBtn'), err = document.getElementById('loginErr');
-    btn.disabled = true; btn.innerHTML = '<span>Verifying...</span>'; err.style.display = 'none';
-    const ok = await loadStudentData(id, mob, false);
-    if (ok) {
-      localStorage.setItem('ucc_st_id', id);
-      localStorage.setItem('ucc_st_mob', mob);
-      document.getElementById('loginScreen').style.display = 'none';
-    } else {
-      err.style.display = 'block';
-    }
-    btn.disabled = false; btn.innerHTML = '<span>Login to Student App</span>';
-  }
-
-  async function loadStudentData(id, mob, silent) {
-    try {
-      const res = await fetch(`${API_URL}?mode=student&id=${encodeURIComponent(id)}&mobile=${encodeURIComponent(mob)}`);
-      const data = await res.json();
-      if (data.status === 'ok') {
-        portalData = data;
-        setLoading(false);
-        renderPortal();
-        return true;
-      }
-      setLoading(false);
-      return false;
-    } catch (e) {
-      setLoading(false);
-      if (!silent) toast('Network error! ইন্টারনেট চেক করুন।');
-      return false;
-    }
-  }
-
-  function refreshPortal(silent = false) {
-    const id = localStorage.getItem('ucc_st_id'), mob = localStorage.getItem('ucc_st_mob');
-    if (id && mob) { if (!silent) toast('Updating data...'); loadStudentData(id, mob, silent); }
-  }
-
-  function logoutStudent() {
-    if (liveChatTimer) clearInterval(liveChatTimer);
-    localStorage.removeItem('ucc_st_id'); localStorage.removeItem('ucc_st_mob');
-    portalData = null; lastContentHash = '';
-    document.getElementById('loginScreen').style.display = 'flex';
-  }
-
-  function openPage(name, btn) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById('page-' + name).classList.add('active');
-    if (btn) btn.classList.add('active');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  function renderPortal() {
-    if (!portalData) return;
-    const s = portalData.student;
-    document.getElementById('hdrSub').textContent = `${s.id} • ${s.studentClass}`;
-    document.getElementById('sAvatar').textContent = (s.name || 'U').trim().charAt(0).toUpperCase();
-    document.getElementById('sName').textContent = s.name;
-    document.getElementById('sIdChip').textContent = s.id;
-    document.getElementById('sClassChip').textContent = s.studentClass;
-    document.getElementById('sFather').textContent = `Father: ${s.fatherName || '-'}`;
-    document.getElementById('sPhone').textContent = s.mobile || '-';
-
-    const pres = Number(portalData.presentDays) || 0;
-    const abs = Number(portalData.absentDays) || 0;
-    const totalDays = pres + abs;
-    const pct = totalDays > 0 ? Math.round((pres / totalDays) * 100) : 100;
-
-    document.getElementById('sPresent').textContent = pres;
-    document.getElementById('sAbsent').textContent = abs;
-    document.getElementById('sDue').textContent = 'Rs. ' + (Number(s.totalDue) || 0);
-    document.getElementById('sDue').style.color = s.totalDue > 0 ? 'var(--danger)' : 'var(--success)';
-    document.getElementById('sAttPct').textContent = totalDays > 0 ? `${pct}% (${pres}/${totalDays} days)` : 'New Session';
-    document.getElementById('sAttBar').style.width = `${pct}%`;
-
-    // Sleek Notices
-    document.getElementById('noticeArea').innerHTML = (portalData.notices || []).map(n => `
-      <div class="notice-banner">
-        <div class="notice-top">
-          <span class="notice-badge"><span class="live-dot"></span> ${n.title}</span>
-          <span class="notice-date">${n.date}</span>
-        </div>
-        <div class="notice-body">${n.message}</div>
-        ${n.link ? `<a href="${n.link}" target="_blank" class="notice-link">Open Link →</a>` : ''}
-      </div>
-    `).join('');
-
-    // Monthly Fee Grid
-    let payOpts = '', paidCount = 0;
-    document.getElementById('sMonths').innerHTML = MONTHS.map(([k, lbl]) => {
-      const val = Number(s.months?.[k]) || 0;
-      if (val > 0) paidCount++;
-      else payOpts += `<option value="${k}">${k.replace('_',' ')}</option>`;
-      return `
-        <div class="m-cell ${val>0?'paid':''}">
-          <div class="m-name">${lbl}</div>
-          <div class="m-val">${val>0 ? `₹${val} ✓` : 'Due'}</div>
-        </div>
-      `;
-    }).join('');
-    document.getElementById('paidCountPill').textContent = `${paidCount} / 12 Paid`;
-    document.getElementById('payMonth').innerHTML = payOpts || '<option value="">All Paid ✓</option>';
-    document.getElementById('paySubmitBtn').disabled = !payOpts;
-
-    // Classes Due-Lock
-    const isLocked = (portalData.dueLock === 'ON' && Number(s.totalDue) > 0);
-    document.getElementById('classesLockedView').style.display = isLocked ? 'block' : 'none';
-    document.getElementById('classesUnlockedView').style.display = isLocked ? 'none' : 'block';
-    document.getElementById('lockDueAmt').textContent = 'Rs. ' + s.totalDue;
-
-    const newHash = JSON.stringify(portalData.classesContent || []) + '|' + isLocked + '|' + classFilter;
-    if (!isLocked && newHash !== lastContentHash) { lastContentHash = newHash; renderClassesList(); }
-
-    // Online Payment Requests
-    const reqs = portalData.requests || [];
-    document.getElementById('myReqList').innerHTML = reqs.length
-      ? reqs.map(r => `
-        <div class="info-item" style="font-size:12.5px;">
-          <div>
-            <strong style="color:var(--navy-900);">${r.month.replace('_',' ')}</strong> • ₹${r.amount}<br>
-            <span style="color:var(--muted);font-size:11.5px;">${r.date} • UTR: ${r.utr||'-'}</span>
-            ${r.remarks ? `<br><span style="color:var(--danger);font-size:11.5px;">${r.remarks}</span>` : ''}
-          </div>
-          <span class="${r.status==='Approved'?'badge-ok':(r.status==='Rejected'?'badge-rej':'badge-due')}">${r.status}</span>
-        </div>`).join('')
-      : '<div style="font-size:12.5px;color:var(--muted);text-align:center;padding:8px 0;">No online payment requests yet.</div>';
-
-    // Receipts
-    const pays = portalData.payments || [];
-    document.getElementById('myReceiptsList').innerHTML = pays.length
-      ? pays.map((p, i) => `
-        <div class="info-item">
-          <div>
-            <div style="font-size:13.5px;font-weight:800;color:var(--navy-900);">${bnMonth(p.month)} • ₹${p.amount}</div>
-            <div style="font-size:11.5px;color:var(--muted);margin-top:2px;">${formatBnDate(p.date)} • ${bnCollector(p.collector)}</div>
-          </div>
-          <button class="btn" style="width:auto;padding:8px 13px;font-size:12px;border-radius:10px;" onclick="openReceipt(${i})">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            Receipt
-          </button>
-        </div>`).join('')
-      : '<div style="font-size:12.5px;color:var(--muted);text-align:center;padding:12px 0;">No fee receipts available yet.</div>';
-  }
-
-  function setClassFilter(f) {
-    classFilter = f; lastContentHash = '';
-    document.getElementById('cpLive').classList.toggle('active', f==='Live');
-    document.getElementById('cpVideo').classList.toggle('active', f==='Video');
-    document.getElementById('cpOther').classList.toggle('active', f==='OTHER');
-    renderClassesList();
-  }
-
-  function getEmbedUrl(url) {
-    if (!url) return '';
-    const yt = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|live\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);
-    if (yt) return `https://www.youtube.com/embed/${yt[1]}?rel=0`;
-    const gd = url.match(/drive\.google\.com\/file\/d\/([^\/]+)/);
-    if (gd) return `https://drive.google.com/file/d/${gd[1]}/preview`;
-    return '';
-  }
-
-  function renderClassesList() {
-    const all = (portalData && portalData.classesContent) || [];
-    const box = document.getElementById('classesList');
-    if (liveChatTimer) clearInterval(liveChatTimer);
-    activeLiveIds = [];
-
-    if (classFilter === 'Live') {
-      const lives = all.filter(c => c.type === 'Live');
-      if (!lives.length) {
-        box.innerHTML = `<div class="card" style="text-align:center;padding:28px 16px;">
-          <div style="width:48px;height:48px;border-radius:50%;background:#f1f5f9;color:var(--muted);margin:0 auto 10px;display:flex;align-items:center;justify-content:center;">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
-          </div>
-          <div style="font-size:14px;font-weight:700;color:var(--navy-900);">এখন কোনো লাইভ ক্লাস চলছে না</div>
-          <div style="font-size:12.5px;color:var(--muted);margin-top:4px;">পুরনো ক্লাস দেখতে <strong>Recorded</strong> ট্যাবে যাও।</div>
-        </div>`;
-        return;
-      }
-      box.innerHTML = lives.map(c => {
-        activeLiveIds.push(c.id);
-        const embed = getEmbedUrl(c.link);
-        return `<div class="card" style="border-left:4px solid var(--danger);">
-          <div style="display:flex;justify-content:space-between;align-items:center;">
-            <span class="c-badge live"><span class="live-dot" style="width:6px;height:6px;"></span> LIVE • ${c.subject} (${c.chapter||'General'})</span>
-            <span style="font-size:11px;color:var(--muted);font-weight:600;">${c.date}</span>
-          </div>
-          <div style="font-size:16px;font-weight:800;color:var(--navy-900);margin-top:8px;">${c.title}</div>
-          ${embed ? `<div class="video-box"><iframe src="${embed}" allow="autoplay; fullscreen" allowfullscreen></iframe></div>` : `<a href="${c.link}" target="_blank" class="btn btn-accent" style="text-decoration:none;margin-top:10px;">Join Live Class →</a>`}
-          <div class="live-chat-wrap">
-            <div style="font-size:12.5px;font-weight:800;color:var(--navy-900);margin-bottom:8px;">Live Question & Answer</div>
-            <div id="chat_${c.id}" class="chat-list"><div style="font-size:11.5px;color:var(--muted);">Loading Q&A...</div></div>
-            <form onsubmit="sendStudentChat(event,'${c.id}')" style="display:flex;gap:7px;">
-              <input type="text" id="cin_${c.id}" required placeholder="তোমার প্রশ্ন লেখো..." style="padding:9px 12px;font-size:13px;">
-              <button type="submit" class="btn btn-accent" style="width:auto;padding:9px 15px;font-size:12.5px;">Send</button>
-            </form>
-          </div>
-        </div>`;
-      }).join('');
-      refreshAllLiveChats();
-      liveChatTimer = setInterval(refreshAllLiveChats, 6000);
-      return;
-    }
-
-    const items = all.filter(c => classFilter === 'Video' ? c.type === 'Video' : (c.type === 'PDF' || c.type === 'Mock Test'));
-    if (!items.length) {
-      box.innerHTML = '<div class="card" style="text-align:center;color:var(--muted);font-size:13px;padding:24px;">এখানে এখনো কোনো কনটেন্ট আপলোড হয়নি।</div>';
-      return;
-    }
-
-    const tree = {};
-    items.forEach(c => {
-      const sub = c.subject || 'General', chap = c.chapter || 'General';
-      if (!tree[sub]) tree[sub] = {};
-      if (!tree[sub][chap]) tree[sub][chap] = [];
-      tree[sub][chap].push(c);
-    });
-
-    box.innerHTML = Object.keys(tree).map((sub, sIdx) => {
-      const chapters = tree[sub];
-      const chapHtml = Object.keys(chapters).map((chap, cIdx) => {
-        const listHtml = chapters[chap].map(c => {
-          const embed = c.type === 'Video' ? getEmbedUrl(c.link) : '';
-          return `<div class="content-card">
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-              <span class="c-badge">${c.type}</span>
-              <span style="font-size:11px;color:var(--muted);font-weight:600;">${c.date}</span>
-            </div>
-            <div style="font-size:14.5px;font-weight:800;color:var(--navy-900);margin-top:6px;">${c.title}</div>
-            ${embed ? `<div class="video-box"><iframe src="${embed}" allow="autoplay; fullscreen" allowfullscreen></iframe></div>` : `<a href="${c.link}" target="_blank" class="btn btn-accent" style="text-decoration:none;margin-top:10px;padding:10px;font-size:13px;">Open ${c.type} →</a>`}
+  box.innerHTML=Object.keys(tree).map((sub,si)=>{
+    const chs=tree[sub];
+    const chHtml=Object.keys(chs).map((ch,ci)=>`
+      <details class="chap" ${si===0&&ci===0?'open':''}>
+        <summary><span>${ch}</span><span class="muted">${chs[ch].length} টি</span></summary>
+        ${chs[ch].map(c=>{
+          const embed=c.type==='Video'?getEmbedUrl(c.link):'';
+          return `<div class="item">
+            <div class="item-head"><span class="tag">${c.type}</span><span class="muted">${c.date}</span></div>
+            <h5>${c.title}</h5>
+            ${embed?`<div class="video"><iframe src="${embed}" allow="autoplay; fullscreen" allowfullscreen></iframe></div>`:`<a class="btn btn-sm" href="${c.link}" target="_blank" rel="noopener" style="margin-top:10px">Open ${c.type} →</a>`}
           </div>`;
-        }).join('');
-        return `<details class="chap-folder" ${sIdx===0 && cIdx===0 ? 'open' : ''}>
-          <summary><span>${chap}</span><span class="pill-mini">${chapters[chap].length} items ▾</span></summary>
-          <div class="chap-body">${listHtml}</div>
-        </details>`;
-      }).join('');
+        }).join('')}
+      </details>`).join('');
+    return `<details class="sub" ${si===0?'open':''}>
+      <summary><span>${sub}</span><span class="muted">${Object.keys(chs).length} টি অধ্যায়</span></summary>
+      ${chHtml}
+    </details>`;
+  }).join('');
+}
 
-      return `<details class="sub-folder" ${sIdx===0 ? 'open' : ''}>
-        <summary>
-          <span class="folder-left">
-            <span class="folder-ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></span>
-            ${sub}
-          </span>
-          <span style="font-size:11.5px;color:var(--accent-dark);font-weight:700;">${Object.keys(chapters).length} Chapters ▾</span>
-        </summary>
-        <div class="sub-body">${chapHtml}</div>
-      </details>`;
-    }).join('');
+async function refreshAllLiveChats(){
+  for(const cid of activeLiveIds){
+    try{
+      const r=await fetch(`${API_URL}?mode=chat&contentId=${encodeURIComponent(cid)}`);
+      const d=await r.json();
+      if(d.status==='ok')renderStudentChat(cid,d.messages||[]);
+    }catch(e){}
   }
+}
 
-  async function refreshAllLiveChats() {
-    for (const cid of activeLiveIds) {
-      try {
-        const res = await fetch(`${API_URL}?mode=chat&contentId=${encodeURIComponent(cid)}`);
-        const data = await res.json();
-        if (data.status === 'ok') renderStudentChat(cid, data.messages || []);
-      } catch (e) {}
-    }
-  }
-  function renderStudentChat(cid, msgs) {
-    const el = document.getElementById('chat_' + cid); if (!el) return;
-    el.innerHTML = msgs.length
-      ? msgs.map(m => `<div class="chat-msg ${m.role==='Admin'?'admin':''}"><strong>${m.senderName}</strong> <span style="font-size:10px;color:var(--muted);">${m.time}</span><div style="margin-top:2px;">${m.message}</div></div>`).join('')
-      : '<div style="font-size:11.5px;color:var(--muted);">কোনো প্রশ্ন থাকলে নিচে লিখে পাঠাও...</div>';
-    el.scrollTop = el.scrollHeight;
-  }
-  async function sendStudentChat(e, cid) {
-    e.preventDefault(); if (!portalData) return;
-    const inp = document.getElementById('cin_' + cid), msg = inp.value.trim(); if (!msg) return;
-    inp.value = '';
-    const s = portalData.student;
-    const res = await fetch(API_URL, {
-      method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify({ action: 'sendChat', contentId: cid, senderId: s.id, senderName: s.name, role: 'Student', message: msg })
-    });
-    const data = await res.json();
-    if (data.status === 'ok') renderStudentChat(cid, data.messages || []);
-  }
+function renderStudentChat(cid,msgs){
+  const el=$('chat_'+cid);if(!el)return;
+  el.innerHTML=msgs.length
+    ?msgs.map(m=>`<div class="msg ${m.role==='Admin'?'adm':''}"><b>${m.senderName}</b><small>${m.time}</small><div>${m.message}</div></div>`).join('')
+    :'<div class="muted">কোনো প্রশ্ন থাকলে নিচে লিখে পাঠাও...</div>';
+  el.scrollTop=el.scrollHeight;
+}
 
-  function previewCompressedImg(e) {
-    const file = e.target.files[0]; if (!file) return;
-    document.getElementById('uploadFileName').textContent = file.name;
-    const reader = new FileReader();
-    reader.onload = ev => {
-      const img = new Image();
-      img.onload = () => {
-        const c = document.createElement('canvas'), scale = Math.min(1, 480 / img.width);
-        c.width = img.width * scale; c.height = img.height * scale;
-        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
-        compressedBase64 = c.toDataURL('image/jpeg', 0.5);
-        const prev = document.getElementById('payPreview'); prev.src = compressedBase64; prev.style.display = 'block';
-      };
-      img.src = ev.target.result;
+async function sendStudentChat(e,cid){
+  e.preventDefault();
+  if(!portalData)return;
+  const inp=$('cin_'+cid),msg=inp.value.trim();
+  if(!msg)return;
+  inp.value='';
+  const s=portalData.student;
+  try{
+    const r=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'sendChat',contentId:cid,senderId:s.id,senderName:s.name,role:'Student',message:msg})});
+    const d=await r.json();
+    if(d.status==='ok')renderStudentChat(cid,d.messages||[]);
+  }catch(err){inp.value=msg;toast('বার্তা পাঠানো যায়নি। আবার চেষ্টা করো।');}
+}
+
+function previewCompressedImg(e){
+  const f=e.target.files[0];if(!f)return;
+  $('uploadFileName').textContent=f.name;
+  const rd=new FileReader();
+  rd.onload=ev=>{
+    const img=new Image();
+    img.onload=()=>{
+      const sc=Math.min(1,480/img.width),c=document.createElement('canvas');
+      c.width=img.width*sc;c.height=img.height*sc;
+      c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+      compressedBase64=c.toDataURL('image/jpeg',0.5);
+      const p=$('payPreview');p.src=compressedBase64;p.style.display='block';
     };
-    reader.readAsDataURL(file);
-  }
+    img.src=ev.target.result;
+  };
+  rd.readAsDataURL(f);
+}
 
-  async function submitOnlinePay(e) {
-    e.preventDefault(); if (!portalData || !compressedBase64) { toast('Please attach payment screenshot.'); return; }
-    const s = portalData.student, btn = document.getElementById('paySubmitBtn');
-    btn.disabled = true; btn.textContent = 'Uploading Proof...';
-    try {
-      const res = await fetch(API_URL, {
-        method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify({
-          action: 'submitOnlinePayment', studentId: s.id, studentName: s.name, studentClass: s.studentClass,
-          month: document.getElementById('payMonth').value, amount: Number(document.getElementById('payAmt').value)||300,
-          utr: document.getElementById('payUtr').value.trim(), screenshotData: compressedBase64
-        })
-      });
-      const data = await res.json();
-      if (data.status === 'ok') {
-        toast('Submitted! Admin will verify soon.');
-        e.target.reset();
-        document.getElementById('uploadFileName').textContent = 'Tap to choose screenshot';
-        document.getElementById('payPreview').style.display = 'none';
-        compressedBase64 = '';
-        refreshPortal(true);
-      } else toast('Failed to submit.');
-    } catch (err) { toast('Upload failed. Try again.'); }
-    finally { btn.disabled = false; btn.textContent = 'Submit Payment Proof'; }
-  }
+async function submitOnlinePay(e){
+  e.preventDefault();
+  if(!portalData||!compressedBase64){toast('Please attach payment screenshot.');return;}
+  const s=portalData.student,btn=$('paySubmitBtn');
+  btn.disabled=true;btn.textContent='Uploading Proof...';
+  try{
+    const r=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({
+      action:'submitOnlinePayment',studentId:s.id,studentName:s.name,studentClass:s.studentClass,
+      month:$('payMonth').value,amount:Number($('payAmt').value)||300,utr:$('payUtr').value.trim(),screenshotData:compressedBase64
+    })});
+    const d=await r.json();
+    if(d.status==='ok'){
+      toast('জমা হয়েছে! অ্যাডমিন শীঘ্রই যাচাই করবেন।');
+      e.target.reset();
+      $('uploadFileName').textContent='Tap to choose screenshot';
+      $('payPreview').style.display='none';
+      compressedBase64='';
+      refreshPortal(true);
+    }else toast('জমা দেওয়া যায়নি।');
+  }catch(err){toast('আপলোড ব্যর্থ। আবার চেষ্টা করো।');}
+  finally{btn.disabled=!$('payMonth').value;btn.textContent='Submit Payment Proof';}
+}
 
-  function openReceipt(idx) {
-    const p = portalData.payments[idx], s = portalData.student; if (!p) return;
-    activeReceiptObj = { p, fatherName: s.fatherName || '-' };
-    document.getElementById('rNo').textContent = p.receiptNo || '-';
-    document.getElementById('rDate').textContent = `${formatBnDate(p.date)}${p.time ? ', '+p.time : ''}`;
-    document.getElementById('rName').textContent = p.studentName;
-    document.getElementById('rFather').textContent = s.fatherName || '-';
-    document.getElementById('rIdCls').textContent = `${p.studentId} • ${bnClass(p.studentClass)}`;
-    document.getElementById('rMonth').textContent = bnMonth(p.month);
-    document.getElementById('rMode').textContent = bnMode(p.mode);
-    document.getElementById('rAmt').textContent = p.amount + ' টাকা';
-    document.getElementById('rCollector').textContent = bnCollector(p.collector);
-    document.getElementById('rcptModal').classList.add('open');
-  }
-  function closeReceipt() { document.getElementById('rcptModal').classList.remove('open'); }
+function openReceipt(i){
+  const p=portalData.payments[i],s=portalData.student;
+  if(!p)return;
+  activeReceiptObj={p,fatherName:s.fatherName||'-'};
+  $('rNo').textContent=p.receiptNo||'-';
+  $('rDate').textContent=formatBnDate(p.date)+(p.time?', '+p.time:'');
+  $('rName').textContent=p.studentName;
+  $('rFather').textContent=s.fatherName||'-';
+  $('rIdCls').textContent=`${p.studentId} · ${bnClass(p.studentClass)}`;
+  $('rMonth').textContent=bnMonth(p.month);
+  $('rMode').textContent=bnMode(p.mode);
+  $('rAmt').textContent=p.amount+' টাকা';
+  $('rCollector').textContent=bnCollector(p.collector);
+  $('rcptModal').classList.add('open');
+}
+function closeReceipt(){$('rcptModal').classList.remove('open');}
 
-  function downloadReceiptImage() {
-    if (!activeReceiptObj) return;
-    const { p, fatherName } = activeReceiptObj;
-    const c = document.createElement('canvas'); c.width = 720; c.height = 860; const ctx = c.getContext('2d');
-    ctx.fillStyle='#fff'; ctx.fillRect(0,0,720,860); ctx.strokeStyle='#091e3a'; ctx.lineWidth=8; ctx.strokeRect(18,18,684,824);
-    ctx.fillStyle='#091e3a'; ctx.fillRect(22,22,676,155); ctx.fillStyle='#f97316'; ctx.fillRect(22,173,676,6);
-    ctx.fillStyle='#fff'; ctx.textAlign='center'; ctx.font='bold 38px sans-serif'; ctx.fillText('ইউ.সি.সি ইনস্টিটিউট',360,82);
-    ctx.font='20px sans-serif'; ctx.fillText('পেঁচাকোলা, রায়পুর, বাঁকুড়া • ফোন: 8016972121 / 8159980707',360,120);
-    ctx.font='bold 22px sans-serif'; ctx.fillStyle='#fed7aa'; ctx.fillText('অফিশিয়াল টিউশন ফি রসিদ (2027)',360,156);
-    const rows=[['রসিদ নং:',p.receiptNo||'-'],['তারিখ ও সময়:',`${formatBnDate(p.date)}${p.time?', '+p.time:''}`],['ছাত্র/ছাত্রীর নাম:',p.studentName],['পিতার নাম:',fatherName],['আইডি ও শ্রেণী:',`${p.studentId} • ${bnClass(p.studentClass)}`],['কোন মাসের ফি:',bnMonth(p.month)],['পেমেন্টের মাধ্যম:',bnMode(p.mode)]];
-    let y=240; rows.forEach(([l,v])=>{ ctx.textAlign='left'; ctx.fillStyle='#475569'; ctx.font='22px sans-serif'; ctx.fillText(l,55,y); ctx.textAlign='right'; ctx.fillStyle='#0f172a'; ctx.font='bold 23px sans-serif'; ctx.fillText(String(v),665,y); ctx.strokeStyle='#e2e8f0'; ctx.lineWidth=1.5; ctx.beginPath(); ctx.moveTo(55,y+18); ctx.lineTo(665,y+18); ctx.stroke(); y+=62; });
-    ctx.fillStyle='#fff7ed'; ctx.fillRect(55,y-10,610,68); ctx.strokeStyle='#f97316'; ctx.lineWidth=2; ctx.strokeRect(55,y-10,610,68);
-    ctx.textAlign='left'; ctx.fillStyle='#091e3a'; ctx.font='bold 26px sans-serif'; ctx.fillText('মোট জমা টাকা:',75,y+33); ctx.textAlign='right'; ctx.font='bold 30px sans-serif'; ctx.fillText(`${p.amount} টাকা`,645,y+33);
-    y+=120; ctx.textAlign='right'; ctx.fillStyle='#475569'; ctx.font='19px sans-serif'; ctx.fillText('গ্রহণকারী / অনুমোদিত স্বাক্ষর:',665,y); ctx.fillStyle='#091e3a'; ctx.font='bold 26px sans-serif'; ctx.fillText(bnCollector(p.collector),665,y+36);
-    const a=document.createElement('a'); a.download=`UCC_Receipt_${p.studentId}_${p.month}.png`; a.href=c.toDataURL('image/png'); a.click();
-  }
+function downloadReceiptImage(){
+  if(!activeReceiptObj)return;
+  const {p,fatherName}=activeReceiptObj;
+  const c=document.createElement('canvas');c.width=720;c.height=860;
+  const x=c.getContext('2d');
+  x.fillStyle='#fff';x.fillRect(0,0,720,860);
+  x.strokeStyle='#0b1f3d';x.lineWidth=8;x.strokeRect(18,18,684,824);
+  x.strokeStyle='#c9a24a';x.lineWidth=3;x.strokeRect(28,28,664,804);
+  x.fillStyle='#0b1f3d';x.fillRect(22,22,676,150);
+  x.fillStyle='#c9a24a';x.fillRect(22,172,676,5);
+  x.textAlign='center';
+  x.fillStyle='#ebd28d';x.font=ft(true,38);x.fillText('ইউ.সি.সি ইনস্টিটিউট',360,82);
+  x.fillStyle='#e2e8f0';x.font=ft(false,19);x.fillText('পেঁচাকোলা, রায়পুর, বাঁকুড়া • ফোন: 8016972121 / 8159980707',360,120);
+  x.fillStyle='#c9a24a';x.font=ft(true,22);x.fillText('অফিশিয়াল টিউশন ফি রসিদ (2027)',360,156);
+  const rows=[
+    ['রসিদ নং:',p.receiptNo||'-'],
+    ['তারিখ ও সময়:',formatBnDate(p.date)+(p.time?', '+p.time:'')],
+    ['ছাত্র/ছাত্রীর নাম:',p.studentName],
+    ['পিতার নাম:',fatherName],
+    ['আইডি ও শ্রেণী:',`${p.studentId} • ${bnClass(p.studentClass)}`],
+    ['কোন মাসের ফি:',bnMonth(p.month)],
+    ['পেমেন্টের মাধ্যম:',bnMode(p.mode)]
+  ];
+  let y=240;
+  rows.forEach(([l,v])=>{
+    x.textAlign='left';x.fillStyle='#475569';x.font=ft(false,22);x.fillText(l,55,y);
+    x.textAlign='right';x.fillStyle='#0f172a';x.font=ft(true,23);x.fillText(String(v),665,y);
+    x.strokeStyle='#e2e8f0';x.lineWidth=1.5;x.beginPath();x.moveTo(55,y+18);x.lineTo(665,y+18);x.stroke();
+    y+=62;
+  });
+  x.fillStyle='#fbf5e6';x.fillRect(55,y-10,610,68);
+  x.strokeStyle='#c9a24a';x.lineWidth=2.5;x.strokeRect(55,y-10,610,68);
+  x.textAlign='left';x.fillStyle='#0b1f3d';x.font=ft(true,26);x.fillText('মোট জমা টাকা:',75,y+33);
+  x.textAlign='right';x.font=ft(true,30);x.fillText(`${p.amount} টাকা`,645,y+33);
+  y+=120;
+  x.textAlign='right';x.fillStyle='#475569';x.font=ft(false,19);x.fillText('গ্রহণকারী / অনুমোদিত স্বাক্ষর:',665,y);
+  x.fillStyle='#0b1f3d';x.font=ft(true,26);x.fillText(bnCollector(p.collector),665,y+36);
+  const a=document.createElement('a');
+  a.download=`UCC_Receipt_${p.studentId}_${p.month}.png`;
+  a.href=c.toDataURL('image/png');
+  a.click();
+}
 </script>
 </body>
 </html>
