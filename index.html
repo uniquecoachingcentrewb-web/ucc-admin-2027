@@ -5,261 +5,162 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <meta name="theme-color" content="#0b2545">
   <link rel="manifest" href="manifest.json">
-  <link rel="icon" type="image/png" href="logo.png">
+  <link rel="icon" type="image/png" href="logo.png?v=3">
   <title>U.C.C Institute - Admin Panel</title>
   <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
   <style>
     :root {
-      --primary: #0b2545;
-      --primary-mid: #133c6e;
-      --accent: #f97316;
-      --accent-soft: #fff7ed;
-      --accent-border: #fdba74;
-      --bg: #f4f7fb;
-      --card: #ffffff;
-      --text: #0f172a;
-      --muted: #64748b;
-      --border: #e2e8f0;
-      --danger: #dc2626;
-      --success: #16a34a;
+      --primary: #0b2545; --primary-mid: #133c6e;
+      --accent: #f97316; --accent-soft: #fff7ed; --accent-border: #fdba74;
+      --bg: #f4f7fb; --card: #ffffff; --text: #0f172a; --muted: #64748b;
+      --border: #e2e8f0; --danger: #dc2626; --success: #16a34a;
     }
-
-    * {
-      box-sizing: border-box;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans Bengali", sans-serif;
-      -webkit-tap-highlight-color: transparent;
-    }
-    html, body {
-      margin: 0; background: var(--bg); color: var(--text);
-      padding-bottom: 82px; overscroll-behavior-y: contain; user-select: none;
-    }
+    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans Bengali", sans-serif; -webkit-tap-highlight-color: transparent; }
+    html, body { margin: 0; background: var(--bg); color: var(--text); padding-bottom: 78px; overscroll-behavior-y: contain; user-select: none; }
     input, select, textarea { user-select: text; }
 
-    /* ===== ANIMATED SPLASH SCREEN ===== */
-    #splashScreen {
-      position: fixed; inset: 0; z-index: 999;
-      background: radial-gradient(circle at top right, #1b4d89 0%, #0b2545 60%, #061529 100%);
-      display: flex; flex-direction: column; justify-content: center; align-items: center;
-      text-align: center; padding: 24px;
-      transition: opacity 0.45s ease, transform 0.45s ease;
-    }
+    /* SPLASH */
+    #splashScreen { position: fixed; inset: 0; z-index: 999; background: radial-gradient(circle at top right, #1b4d89 0%, #0b2545 60%, #061529 100%); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 24px; transition: opacity 0.4s ease, transform 0.4s ease; }
     #splashScreen.hide { opacity: 0; transform: scale(1.06); pointer-events: none; }
-    .splash-logo-ring {
-      width: 118px; height: 118px; border-radius: 50%; padding: 6px;
-      background: linear-gradient(135deg, #ff9f43, #ffffff, #f97316);
-      box-shadow: 0 12px 35px rgba(249, 115, 22, 0.35);
-      animation: popIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-    }
+    .splash-logo-ring { width: 114px; height: 114px; border-radius: 50%; padding: 6px; background: linear-gradient(135deg, #ff9f43, #ffffff, #f97316); box-shadow: 0 12px 32px rgba(249, 115, 22, 0.35); animation: popIn 0.65s ease forwards; }
     .splash-logo-ring img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; background: #fff; display: block; }
-    .splash-title {
-      margin: 18px 0 4px; color: #ffffff; font-size: 26px; font-weight: 800; letter-spacing: 0.6px;
-      opacity: 0; animation: slideUpFade 0.6s ease 0.25s forwards;
-    }
-    .splash-tagline {
-      margin: 0; color: #ffedd5; font-size: 13px; font-weight: 700; letter-spacing: 2.2px; text-transform: uppercase;
-      padding: 5px 14px; border-radius: 20px; background: rgba(249, 115, 22, 0.22);
-      border: 1px solid rgba(253, 186, 116, 0.45);
-      opacity: 0; animation: slideUpFade 0.6s ease 0.45s forwards;
-    }
-    .splash-bar {
-      width: 140px; height: 4px; border-radius: 4px; background: rgba(255,255,255,0.18);
-      margin-top: 26px; overflow: hidden; opacity: 0; animation: fadeIn 0.4s ease 0.55s forwards;
-    }
-    .splash-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #ff9f43, #f97316); animation: loadBar 1.3s ease 0.5s forwards; }
-
-    @keyframes popIn { 0% { opacity: 0; transform: scale(0.55) rotate(-6deg); } 100% { opacity: 1; transform: scale(1) rotate(0deg); } }
-    @keyframes slideUpFade { 0% { opacity: 0; transform: translateY(16px); } 100% { opacity: 1; transform: translateY(0); } }
-    @keyframes fadeIn { to { opacity: 1; } }
+    .splash-title { margin: 16px 0 4px; color: #fff; font-size: 25px; font-weight: 800; opacity: 0; animation: slideUpFade 0.55s ease 0.2s forwards; }
+    .splash-tagline { margin: 0; color: #ffedd5; font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; padding: 5px 14px; border-radius: 20px; background: rgba(249,115,22,0.22); border: 1px solid rgba(253,186,116,0.45); opacity: 0; animation: slideUpFade 0.55s ease 0.35s forwards; }
+    .splash-bar { width: 130px; height: 4px; border-radius: 4px; background: rgba(255,255,255,0.2); margin-top: 22px; overflow: hidden; }
+    .splash-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #ff9f43, #f97316); animation: loadBar 1.2s ease 0.3s forwards; }
+    @keyframes popIn { 0% { opacity: 0; transform: scale(0.55); } 100% { opacity: 1; transform: scale(1); } }
+    @keyframes slideUpFade { 0% { opacity: 0; transform: translateY(14px); } 100% { opacity: 1; transform: translateY(0); } }
     @keyframes loadBar { to { width: 100%; } }
-    @keyframes pageEnter { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes pageEnter { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* ===== LOGIN GATE ===== */
-    #loginScreen {
-      position: fixed; inset: 0;
-      background: linear-gradient(160deg, #0b2545 0%, #133c6e 55%, #071930 100%);
-      z-index: 200; display: flex; justify-content: center; align-items: center; padding: 20px;
-    }
-    .login-card {
-      background: #fff; width: 100%; max-width: 360px; border-radius: 20px;
-      padding: 26px 22px; box-shadow: 0 18px 40px rgba(0,0,0,0.35);
-      border-top: 5px solid var(--accent); animation: slideUpFade 0.4s ease;
-    }
-    .login-logo {
-      width: 72px; height: 72px; border-radius: 50%; object-fit: cover;
-      border: 3px solid var(--accent); padding: 2px; background: #fff; display: block; margin: 0 auto 10px;
-    }
-    .login-title { text-align: center; margin-bottom: 18px; }
-    .login-title h2 { margin: 0; color: var(--primary); font-size: 22px; font-weight: 800; }
-    .login-title p { margin: 4px 0 0; font-size: 12px; color: var(--accent); font-weight: 700; letter-spacing: 0.8px; }
+    /* LOGIN */
+    #loginScreen { position: fixed; inset: 0; background: linear-gradient(160deg, #0b2545 0%, #133c6e 55%, #071930 100%); z-index: 200; display: flex; justify-content: center; align-items: center; padding: 20px; }
+    .login-card { background: #fff; width: 100%; max-width: 360px; border-radius: 20px; padding: 24px 20px; box-shadow: 0 18px 40px rgba(0,0,0,0.35); border-top: 5px solid var(--accent); }
+    .login-logo { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 3px solid var(--accent); padding: 2px; background: #fff; display: block; margin: 0 auto 10px; }
+    .login-title { text-align: center; margin-bottom: 16px; }
+    .login-title h2 { margin: 0; color: var(--primary); font-size: 21px; font-weight: 800; }
+    .login-title p { margin: 4px 0 0; font-size: 11px; color: var(--accent); font-weight: 700; letter-spacing: 1px; }
     .pass-wrap { position: relative; }
-    .pass-toggle {
-      position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
-      border: none; background: none; color: var(--primary-mid); font-size: 12px; font-weight: 700; cursor: pointer;
-    }
-    .login-err {
-      display: none; background: #fee2e2; color: #991b1b; padding: 9px 10px;
-      border-radius: 10px; font-size: 12px; font-weight: 700; margin-bottom: 10px; text-align: center; line-height: 1.4;
-    }
+    .pass-toggle { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); border: none; background: none; color: var(--primary-mid); font-size: 12px; font-weight: 700; cursor: pointer; }
+    .login-err { display: none; background: #fee2e2; color: #991b1b; padding: 9px; border-radius: 10px; font-size: 12px; font-weight: 700; margin-bottom: 10px; text-align: center; line-height: 1.4; }
 
-    /* ===== HEADER ===== */
-    header {
-      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-mid) 100%);
-      color: #fff; padding: 11px 14px; position: sticky; top: 0; z-index: 30;
-      display: flex; justify-content: space-between; align-items: center;
-      box-shadow: 0 3px 12px rgba(11, 37, 69, 0.25); border-bottom: 2px solid var(--accent);
-    }
-    .brand { display: flex; align-items: center; gap: 10px; }
-    .brand-logo { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent-border); background: #fff; }
-    .brand h1 { margin: 0; font-size: 16px; font-weight: 800; letter-spacing: 0.3px; }
-    .brand small { font-size: 11px; color: #ffedd5; display: block; font-weight: 600; }
-    .sync-wrap { display: flex; align-items: center; gap: 6px; }
+    /* HEADER & SIDEBAR */
+    header { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-mid) 100%); color: #fff; padding: 10px 12px; position: sticky; top: 0; z-index: 30; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 3px 12px rgba(11,37,69,0.25); border-bottom: 2px solid var(--accent); }
+    .brand { display: flex; align-items: center; gap: 8px; }
+    .menu-btn { background: rgba(255,255,255,0.14); color: #fff; border: 1px solid rgba(255,255,255,0.28); width: 36px; height: 36px; border-radius: 10px; font-size: 19px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .brand-logo { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent-border); background: #fff; }
+    .brand h1 { margin: 0; font-size: 15px; font-weight: 800; }
+    .brand small { font-size: 10.5px; color: #ffedd5; display: block; font-weight: 600; }
+    .sync-wrap { display: flex; align-items: center; gap: 5px; }
     .net-dot { width: 9px; height: 9px; border-radius: 50%; background: #4ade80; box-shadow: 0 0 6px #4ade80; }
     .net-dot.off { background: #f87171; box-shadow: none; }
-    .sync-btn, .lock-btn {
-      background: rgba(255,255,255,0.14); color: #fff; border: 1px solid rgba(255,255,255,0.28);
-      padding: 6px 10px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer;
-    }
-    .sync-btn:active, .lock-btn:active { transform: scale(0.94); }
+    .sync-btn, .lock-btn { background: rgba(255,255,255,0.14); color: #fff; border: 1px solid rgba(255,255,255,0.28); padding: 6px 9px; border-radius: 9px; font-size: 11.5px; font-weight: 700; cursor: pointer; }
 
+    #sideBackdrop { display: none; position: fixed; inset: 0; background: rgba(6,21,41,0.55); z-index: 80; backdrop-filter: blur(2px); }
+    #sideBackdrop.open { display: block; }
+    #sidebar { position: fixed; top: 0; bottom: 0; left: -290px; width: 278px; background: #fff; z-index: 85; transition: left 0.25s cubic-bezier(0.22,1,0.36,1); display: flex; flex-direction: column; box-shadow: 4px 0 24px rgba(0,0,0,0.25); }
+    #sidebar.open { left: 0; }
+    .side-head { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-mid) 100%); color: #fff; padding: 18px 16px; border-bottom: 3px solid var(--accent); display: flex; align-items: center; gap: 11px; }
+    .side-head img { width: 46px; height: 46px; border-radius: 50%; border: 2px solid var(--accent-border); background: #fff; object-fit: cover; }
+    .side-body { padding: 12px; overflow-y: auto; flex: 1; }
+    .side-item { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 12px; margin-bottom: 8px; border-radius: 12px; border: 1px solid var(--border); background: #f8fafc; color: var(--primary); font-size: 13.5px; font-weight: 800; cursor: pointer; text-align: left; }
+    .side-item:active { background: var(--accent-soft); border-color: var(--accent); }
+    .side-pill { background: var(--accent); color: #fff; font-size: 11px; padding: 2px 8px; border-radius: 10px; font-weight: 800; }
+
+    /* MAIN LAYOUT */
     .container { max-width: 640px; margin: 12px auto; padding: 0 12px; }
     .page { display: none; }
-    .page.active { display: block; animation: pageEnter 0.28s ease; }
-
-    .card {
-      background: var(--card); border-radius: 14px; padding: 14px;
-      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05); margin-bottom: 12px; border: 1px solid var(--border);
-    }
-    .locked-collector {
-      background: var(--accent-soft); color: var(--primary); padding: 10px 11px; border-radius: 10px;
-      font-size: 13px; font-weight: 800; border: 1px solid var(--accent-border);
-    }
+    .page.active { display: block; animation: pageEnter 0.24s ease; }
+    .card { background: var(--card); border-radius: 14px; padding: 14px; box-shadow: 0 2px 8px rgba(15,23,42,0.05); margin-bottom: 12px; border: 1px solid var(--border); }
+    .locked-collector { background: var(--accent-soft); color: var(--primary); padding: 10px 11px; border-radius: 10px; font-size: 13px; font-weight: 800; border: 1px solid var(--accent-border); }
 
     .class-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-    .class-card {
-      background: #fff; border: 1px solid var(--border); border-left: 4px solid var(--primary);
-      border-radius: 14px; padding: 14px 12px; cursor: pointer; transition: transform 0.14s ease;
-    }
-    .class-card:active { transform: scale(0.96); }
-    .cc-title { font-size: 16px; font-weight: 800; color: var(--primary); }
-    .cc-count { font-size: 12px; color: var(--muted); margin-top: 4px; font-weight: 600; }
-    .cc-due { font-size: 12px; font-weight: 700; color: var(--accent); margin-top: 5px; }
+    .class-card { background: #fff; border: 1px solid var(--border); border-left: 4px solid var(--primary); border-radius: 14px; padding: 13px 12px; cursor: pointer; }
+    .class-card.due-card { border-left-color: var(--danger); background: #fffafa; }
+    .class-card:active { transform: scale(0.97); }
+    .cc-title { font-size: 15.5px; font-weight: 800; color: var(--primary); }
+    .cc-count { font-size: 12px; color: var(--muted); margin-top: 3px; font-weight: 600; }
+    .cc-due { font-size: 12.5px; font-weight: 800; color: var(--accent); margin-top: 4px; }
     .cc-due.zero { color: var(--success); }
 
     .list-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-    .back-btn { background: #fff; border: 1px solid var(--primary-mid); color: var(--primary); padding: 7px 12px; border-radius: 10px; font-weight: 800; cursor: pointer; font-size: 13px; }
-    .student-row {
-      background: #fff; border: 1px solid var(--border); border-radius: 12px;
-      padding: 12px 14px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; cursor: pointer;
-    }
-    .student-row:active { transform: scale(0.98); background: #f8fafc; }
-    .st-name { font-weight: 800; font-size: 15px; color: var(--primary); }
+    .back-btn { background: #fff; border: 1.5px solid var(--primary-mid); color: var(--primary); padding: 7px 12px; border-radius: 10px; font-weight: 800; cursor: pointer; font-size: 13px; }
+    .student-row { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 12px 13px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+    .student-row:active { background: #f8fafc; }
+    .st-name { font-weight: 800; font-size: 14.5px; color: var(--primary); }
     .st-id { font-size: 11px; color: var(--muted); font-weight: 600; margin-top: 2px; }
     .badge-ok { background: #dcfce7; color: #166534; padding: 4px 10px; border-radius: 14px; font-size: 12px; font-weight: 700; }
     .badge-due { background: var(--accent-soft); color: #c2410c; border: 1px solid var(--accent-border); padding: 4px 10px; border-radius: 14px; font-size: 12px; font-weight: 800; }
 
     .form-group { margin-bottom: 11px; }
     label { display: block; font-size: 12px; font-weight: 700; color: var(--primary); margin-bottom: 4px; }
-    input, select, textarea {
-      width: 100%; padding: 10px 12px; border: 1.5px solid #cbd5e1;
-      border-radius: 10px; font-size: 14px; background: #fff;
-    }
+    input, select, textarea { width: 100%; padding: 10px 11px; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 14px; background: #fff; }
     input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); }
     .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .btn {
-      width: 100%; padding: 12px; border: none; border-radius: 11px;
-      font-size: 14px; font-weight: 800; cursor: pointer; color: #fff;
-      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-mid) 100%);
-      box-shadow: 0 3px 10px rgba(11, 37, 69, 0.22); transition: transform 0.12s ease;
-    }
-    .btn:active { transform: scale(0.97); }
-    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
-    .btn-accent { background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); box-shadow: 0 3px 10px rgba(249, 115, 22, 0.25); }
+    .btn { width: 100%; padding: 12px; border: none; border-radius: 11px; font-size: 14px; font-weight: 800; cursor: pointer; color: #fff; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-mid) 100%); }
+    .btn:active { transform: scale(0.98); }
+    .btn:disabled { opacity: 0.5; }
+    .btn-accent { background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); }
     .btn-sec { background: #334155; }
     .btn-red { background: var(--danger); }
-    .btn-sm-del { background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; padding: 5px 10px; border-radius: 8px; font-size: 11px; font-weight: 800; cursor: pointer; }
+    .btn-sm { border: none; padding: 6px 10px; border-radius: 8px; font-size: 11px; font-weight: 800; cursor: pointer; }
 
-    #reader { width: 100%; border-radius: 14px; overflow: hidden; background: #000; min-height: 250px; }
+    #reader { width: 100%; border-radius: 14px; overflow: hidden; background: #000; min-height: 240px; }
     .scan-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
-    .scan-popup {
-      display: none; position: fixed; top: 72px; left: 50%; transform: translateX(-50%);
-      width: 92%; max-width: 420px; z-index: 90; border-radius: 16px; padding: 18px;
-      color: #fff; text-align: center; box-shadow: 0 12px 30px rgba(0,0,0,0.32);
-    }
+    .scan-popup { display: none; position: fixed; top: 72px; left: 50%; transform: translateX(-50%); width: 92%; max-width: 420px; z-index: 95; border-radius: 16px; padding: 16px; color: #fff; text-align: center; box-shadow: 0 12px 30px rgba(0,0,0,0.32); }
     .scan-popup.ok { background: #15803d; display: block; }
     .scan-popup.warn { background: #c2410c; display: block; }
     .scan-popup.err { background: #b91c1c; display: block; }
-    .sp-name { font-size: 21px; font-weight: 800; margin: 4px 0; }
-    .sp-meta { font-size: 13px; opacity: 0.95; }
 
     .filter-pills { display: grid; grid-template-columns: 1fr 1fr 1.3fr; gap: 6px; margin-bottom: 12px; }
-    .pill {
-      padding: 9px 6px; border-radius: 10px; border: 1.5px solid #cbd5e1;
-      background: #fff; font-weight: 800; font-size: 12px; cursor: pointer; color: var(--primary);
-    }
+    .pill { padding: 9px 6px; border-radius: 10px; border: 1.5px solid #cbd5e1; background: #fff; font-weight: 800; font-size: 12px; cursor: pointer; color: var(--primary); }
     .pill.active { background: var(--primary); color: #fff; border-color: var(--primary); }
-    .hisab-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 10px; }
-    .hisab-box { background: var(--accent-soft); border: 1px solid var(--accent-border); border-radius: 12px; padding: 10px 5px; text-align: center; }
+    .hisab-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 8px; }
+    .hisab-box { background: var(--accent-soft); border: 1px solid var(--accent-border); border-radius: 12px; padding: 10px 4px; text-align: center; }
     .hisab-amt { font-size: 15px; font-weight: 800; color: var(--primary); }
     .hisab-lbl { font-size: 10px; color: #9a3412; margin-top: 3px; font-weight: 800; line-height: 1.2; }
 
     .req-card { background: var(--accent-soft); border: 1px solid var(--accent-border); border-radius: 12px; padding: 12px; margin-bottom: 10px; }
-    .req-img { width: 100%; max-height: 300px; object-fit: contain; background: #0f172a; border-radius: 8px; margin: 8px 0; display: block; }
-    .mini-rcpt-btn { background: var(--primary); color: #fff; border: none; padding: 5px 10px; border-radius: 7px; font-size: 11px; font-weight: 700; cursor: pointer; margin-top: 4px; }
-
-    .toggle-row {
-      display: flex; justify-content: space-between; align-items: center; gap: 10px;
-      background: var(--accent-soft); border: 1.5px solid var(--accent-border);
-      padding: 12px; border-radius: 12px;
-    }
-    .toggle-btn {
-      padding: 8px 16px; border-radius: 20px; border: none; font-weight: 800; font-size: 13px; cursor: pointer; color: #fff;
-    }
+    .req-img { width: 100%; max-height: 280px; object-fit: contain; background: #0f172a; border-radius: 8px; margin: 8px 0; display: block; }
+    .toggle-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; background: var(--accent-soft); border: 1.5px solid var(--accent-border); padding: 12px; border-radius: 12px; }
+    .toggle-btn { padding: 8px 16px; border-radius: 20px; border: none; font-weight: 800; font-size: 13px; cursor: pointer; color: #fff; }
     .toggle-btn.on { background: var(--success); }
     .toggle-btn.off { background: var(--danger); }
 
-    .modal-bg {
-      display: none; position: fixed; inset: 0; background: rgba(6, 21, 41, 0.65);
-      z-index: 60; justify-content: center; align-items: flex-end; backdrop-filter: blur(2px);
-    }
+    /* MODALS */
+    .modal-bg { display: none; position: fixed; inset: 0; background: rgba(6,21,41,0.65); z-index: 60; justify-content: center; align-items: flex-end; backdrop-filter: blur(2px); }
     .modal-bg.open { display: flex; }
-    .modal-sheet {
-      background: #fff; width: 100%; max-width: 540px; max-height: 92vh;
-      overflow-y: auto; border-radius: 22px 22px 0 0; padding: 16px;
-      animation: sheetUp 0.26s cubic-bezier(0.22, 1, 0.36, 1);
-    }
-    @keyframes sheetUp { from { transform: translateY(45px); opacity: 0.4; } to { transform: translateY(0); opacity: 1; } }
+    .modal-sheet { background: #fff; width: 100%; max-width: 540px; max-height: 92vh; overflow-y: auto; border-radius: 22px 22px 0 0; padding: 16px; }
     .modal-top { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 12px; }
     .close-btn { border: none; background: #f1f5f9; width: 34px; height: 34px; border-radius: 50%; font-weight: 800; font-size: 16px; cursor: pointer; color: var(--primary); }
     .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
     .stat-box { background: #f8fafc; border: 1px solid var(--border); border-radius: 12px; padding: 10px 6px; text-align: center; }
-    .stat-num { font-size: 18px; font-weight: 800; }
+    .stat-num { font-size: 17px; font-weight: 800; }
     .stat-lbl { font-size: 11px; color: var(--muted); margin-top: 2px; font-weight: 600; }
-
     .info-list { background: #f8fafc; border-radius: 12px; padding: 10px 12px; font-size: 13px; margin-bottom: 12px; }
     .info-item { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px dashed #e2e8f0; gap: 8px; }
     .info-item:last-child { border-bottom: none; }
-
     .months-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 10px; }
     .m-cell { border: 1px solid var(--border); border-radius: 10px; padding: 7px 4px; text-align: center; font-size: 11px; background: #f8fafc; cursor: pointer; }
     .m-cell.paid { background: #dcfce7; border-color: #86efac; color: #166534; font-weight: 700; }
     .m-cell.selected { outline: 2.5px solid var(--accent); background: var(--accent-soft); }
-
     .month-detail-box { display: none; background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 12px; padding: 11px 12px; margin-bottom: 12px; font-size: 12px; }
-    .md-title { font-weight: 800; font-size: 14px; color: var(--primary); margin-bottom: 6px; display: flex; justify-content: space-between; }
-    .md-row { padding: 3px 0; color: #1e293b; }
-
-    .pay-warn { display: none; background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; padding: 9px 11px; border-radius: 10px; font-size: 12px; font-weight: 700; margin-bottom: 10px; }
+    .pay-warn { display: none; background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; padding: 9px; border-radius: 10px; font-size: 12px; font-weight: 700; margin-bottom: 10px; }
     .pay-box { background: var(--accent-soft); border: 1px solid var(--accent-border); border-radius: 12px; padding: 12px; margin-bottom: 12px; }
     .receipt-bar { display: none; background: var(--primary); color: #fff; border-radius: 12px; padding: 12px; margin-bottom: 12px; border: 1px solid var(--accent); }
     .action-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 8px; }
     .act-link { text-align: center; text-decoration: none; padding: 10px 6px; border-radius: 10px; color: #fff; font-weight: 700; font-size: 12px; display: block; border: none; cursor: pointer; width: 100%; }
 
-    .rcpt-modal-bg { display: none; position: fixed; inset: 0; background: rgba(6, 21, 41, 0.75); z-index: 120; justify-content: center; align-items: center; padding: 14px; }
+    /* RECEIPT & CHAT MODALS */
+    .rcpt-modal-bg { display: none; position: fixed; inset: 0; background: rgba(6,21,41,0.75); z-index: 120; justify-content: center; align-items: center; padding: 14px; }
     .rcpt-modal-bg.open { display: flex; }
     .rcpt-card { background: #fff; width: 100%; max-width: 430px; border-radius: 14px; padding: 18px; border: 2px solid var(--primary); max-height: 92vh; overflow-y: auto; }
     .rcpt-head { text-align: center; border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-bottom: 12px; }
     .rcpt-line { display: flex; justify-content: space-between; font-size: 13px; padding: 5px 0; border-bottom: 1px dashed #e2e8f0; gap: 8px; }
     .rcpt-sign { margin-top: 16px; text-align: right; font-size: 12px; }
+    .chat-box { height: 280px; overflow-y: auto; background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; padding: 10px; margin-bottom: 10px; }
+    .chat-msg { margin-bottom: 8px; padding: 8px 10px; border-radius: 10px; font-size: 12.5px; background: #fff; border: 1px solid var(--border); }
+    .chat-msg.admin { background: var(--accent-soft); border-color: var(--accent-border); }
 
     @media print {
       body * { visibility: hidden; }
@@ -268,54 +169,33 @@
       .no-print { display: none !important; }
     }
 
-    .bottom-nav {
-      position: fixed; bottom: 0; left: 0; right: 0; background: #fff;
-      border-top: 1px solid var(--border); display: flex; z-index: 40;
-      box-shadow: 0 -4px 16px rgba(11, 37, 69, 0.08); padding-bottom: env(safe-area-inset-bottom);
-    }
-    .nav-btn {
-      flex: 1; padding: 10px 2px 11px; border: none; background: none; position: relative;
-      font-size: 11px; font-weight: 800; color: var(--muted); cursor: pointer;
-    }
+    /* CLEAN 4-TAB BOTTOM NAV */
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; border-top: 1px solid var(--border); display: flex; z-index: 40; box-shadow: 0 -4px 16px rgba(11,37,69,0.08); padding-bottom: env(safe-area-inset-bottom); }
+    .nav-btn { flex: 1; padding: 12px 4px; border: none; background: none; position: relative; font-size: 13px; font-weight: 800; color: var(--muted); cursor: pointer; }
     .nav-btn.active { color: var(--primary); border-top: 3px solid var(--accent); background: #fff7ed55; }
-    .nav-badge { display: none; position: absolute; top: 4px; right: 4px; background: var(--accent); color: #fff; font-size: 10px; font-weight: 800; padding: 1px 5px; border-radius: 10px; }
-
-    .toast {
-      position: fixed; bottom: 76px; left: 50%; transform: translateX(-50%);
-      background: var(--primary); color: #fff; padding: 10px 18px; border-radius: 24px;
-      font-size: 13px; font-weight: 600; display: none; z-index: 150; max-width: 92%;
-      text-align: center; border: 1px solid var(--accent); box-shadow: 0 6px 20px rgba(0,0,0,0.25);
-    }
+    .nav-badge { display: none; position: absolute; top: 5px; right: 10px; background: var(--accent); color: #fff; font-size: 10px; font-weight: 800; padding: 1px 6px; border-radius: 10px; }
+    .toast { position: fixed; bottom: 76px; left: 50%; transform: translateX(-50%); background: var(--primary); color: #fff; padding: 10px 18px; border-radius: 24px; font-size: 13px; font-weight: 600; display: none; z-index: 150; max-width: 92%; text-align: center; border: 1px solid var(--accent); }
   </style>
 </head>
 <body>
 
-<!-- ANIMATED SPLASH SCREEN -->
+<!-- SPLASH -->
 <div id="splashScreen">
-  <div class="splash-logo-ring">
-    <img src="logo.png" alt="U.C.C Institute Logo" onerror="this.style.display='none'">
-  </div>
+  <div class="splash-logo-ring"><img src="logo.png?v=3" alt="Logo" onerror="this.style.display='none'"></div>
   <h1 class="splash-title">U.C.C Institute</h1>
   <p class="splash-tagline">Learn • Grow • Succeed</p>
   <div class="splash-bar"><div class="splash-bar-fill"></div></div>
 </div>
 
-<!-- INDIVIDUAL ADMIN LOGIN GATE + DEVICE LOCK -->
+<!-- LOGIN -->
 <div id="loginScreen">
   <div class="login-card">
-    <img src="logo.png" alt="Logo" class="login-logo" onerror="this.style.display='none'">
-    <div class="login-title">
-      <h2>U.C.C Institute</h2>
-      <p>LEARN • GROW • SUCCEED</p>
-    </div>
+    <img src="logo.png?v=3" alt="Logo" class="login-logo" onerror="this.style.display='none'">
+    <div class="login-title"><h2>U.C.C Institute</h2><p>LEARN • GROW • SUCCEED</p></div>
     <div id="loginErr" class="login-err">Invalid User ID or Password!</div>
     <form onsubmit="handleLogin(event)">
-      <div class="form-group">
-        <label>Admin User ID</label>
-        <input type="text" id="loginUser" required placeholder="pralay / chiranjit / saikat" autocomplete="username">
-      </div>
-      <div class="form-group">
-        <label>Password</label>
+      <div class="form-group"><label>Admin User ID</label><input type="text" id="loginUser" required placeholder="pralay / chiranjit / saikat" autocomplete="username"></div>
+      <div class="form-group"><label>Password</label>
         <div class="pass-wrap">
           <input type="password" id="loginPass" required placeholder="Enter your password" autocomplete="current-password" style="padding-right:52px;">
           <button type="button" class="pass-toggle" onclick="togglePassView(this)">Show</button>
@@ -326,51 +206,61 @@
   </div>
 </div>
 
+<!-- SIDEBAR DRAWER -->
+<div id="sideBackdrop" onclick="closeSidebar()"></div>
+<div id="sidebar">
+  <div class="side-head">
+    <img src="logo.png?v=3" alt="Logo" onerror="this.style.display='none'">
+    <div>
+      <div style="font-weight:800;font-size:15px;">U.C.C Institute</div>
+      <div id="sideAdminName" style="font-size:11px;color:#ffedd5;margin-top:2px;">Admin Menu</div>
+    </div>
+  </div>
+  <div class="side-body">
+    <button class="side-item" onclick="openSidePage('duelist')"><span>⚠️ Due List (Class-wise)</span><span id="sideDuePill" class="side-pill">Rs. 0</span></button>
+    <button class="side-item" onclick="openSidePage('content')"><span>🎥 Live / Video / PDF / Test</span><span>→</span></button>
+    <button class="side-item" onclick="openSidePage('notices')"><span>📢 Notices & Due-Lock</span><span>→</span></button>
+    <button class="side-item" onclick="openSidePage('absent')"><span>📞 Absent Caller Report</span><span id="sideAbsPill" class="side-pill" style="background:var(--primary);">0</span></button>
+    <hr style="border:none;border-top:1px solid var(--border);margin:14px 0;">
+    <button class="side-item" style="background:#fef2f2;color:#b91c1c;border-color:#fecaca;" onclick="lockApp()"><span>🔒 Logout / Lock App</span><span>→</span></button>
+  </div>
+</div>
+
+<!-- HEADER -->
 <header>
   <div class="brand">
-    <img src="logo.png" alt="Logo" class="brand-logo" onerror="this.style.display='none'">
-    <div>
-      <h1>U.C.C Institute</h1>
-      <small id="hdrAdminLabel">Admin Panel • Session 2027</small>
-    </div>
+    <button class="menu-btn" onclick="openSidebar()">☰</button>
+    <img src="logo.png?v=3" alt="Logo" class="brand-logo" onerror="this.style.display='none'">
+    <div><h1>U.C.C Institute</h1><small id="hdrAdminLabel">Admin Panel • 2027</small></div>
   </div>
   <div class="sync-wrap">
     <div id="netDot" class="net-dot"></div>
-    <button id="syncBtn" class="sync-btn" onclick="syncNow()">Sync</button>
-    <button class="lock-btn" onclick="lockApp()" title="Logout / Lock">🔒</button>
+    <button id="syncBtn" class="sync-btn" onclick="syncNow(false)">Sync</button>
   </div>
 </header>
 
 <div id="scanPopup" class="scan-popup">
   <div id="spStatus" style="font-size:13px;font-weight:800;"></div>
-  <div id="spName" class="sp-name"></div>
-  <div id="spMeta" class="sp-meta"></div>
+  <div id="spName" style="font-size:20px;font-weight:800;margin:4px 0;"></div>
+  <div id="spMeta" style="font-size:13px;"></div>
 </div>
 
 <div class="container">
-  <!-- PAGE 1: CLASSES & PROFILES -->
+  <!-- TAB 1: CLASSES & PROFILES -->
   <div id="page-classes" class="page active">
     <div id="classGridView">
-      <div class="form-group">
-        <input type="text" id="globalSearch" placeholder="🔍 Search Name, UCC ID or Mobile..." oninput="renderGlobalSearch()">
-      </div>
+      <div class="form-group"><input type="text" id="globalSearch" placeholder="🔍 Search Name, UCC ID or Mobile..." oninput="renderGlobalSearch()"></div>
       <div id="globalSearchResults"></div>
       <div class="class-grid" id="classGrid"></div>
     </div>
-
     <div id="classListView" style="display:none;">
-      <div class="list-header">
-        <button class="back-btn" onclick="closeClassView()">← Classes</button>
-        <div style="font-weight:800;font-size:17px;color:var(--primary);" id="activeClassTitle"></div>
-      </div>
-      <div class="form-group">
-        <input type="text" id="classSearch" placeholder="Search in this class..." oninput="renderClassStudents()">
-      </div>
+      <div class="list-header"><button class="back-btn" onclick="closeClassView()">← Classes</button><div style="font-weight:800;font-size:17px;color:var(--primary);" id="activeClassTitle"></div></div>
+      <div class="form-group"><input type="text" id="classSearch" placeholder="Search in this class..." oninput="renderClassStudents()"></div>
       <div id="classStudentList"></div>
     </div>
   </div>
 
-  <!-- PAGE 2: NEW STUDENT ENTRY -->
+  <!-- TAB 2: NEW STUDENT ENTRY -->
   <div id="page-entry" class="page">
     <div class="card">
       <div style="background:var(--accent-soft);color:var(--primary);border:1px solid var(--accent-border);padding:9px 11px;border-radius:10px;font-size:12px;font-weight:800;margin-bottom:12px;">
@@ -401,7 +291,7 @@
     </div>
   </div>
 
-  <!-- PAGE 3: QR ATTENDANCE & ABSENT CALLER REPORT -->
+  <!-- TAB 3: QR SCAN -->
   <div id="page-scan" class="page">
     <div class="card">
       <div style="font-weight:800;font-size:15px;color:var(--primary);margin-bottom:8px;">Standby QR Attendance Scanner</div>
@@ -411,151 +301,169 @@
         <button class="btn btn-sec" onclick="switchCameraFacing()">Flip Camera</button>
       </div>
     </div>
-
     <div class="card">
-      <div style="font-weight:800;font-size:14px;color:var(--primary);margin-bottom:8px;">
-        Today's Present (<span id="todayCount">0</span>)
-      </div>
+      <div style="font-weight:800;font-size:14px;color:var(--primary);margin-bottom:8px;">Today's Present (<span id="todayCount">0</span>)</div>
       <div id="todayLog"></div>
-    </div>
-
-    <div class="card" style="border-left:4px solid var(--accent);">
-      <div style="font-weight:800;font-size:14px;color:#c2410c;margin-bottom:8px;">
-        📞 Today's Absent Caller Report (<span id="absentRepCount">0</span>)
-      </div>
-      <div id="absentReportList"></div>
     </div>
   </div>
 
-  <!-- PAGE 4: HISAB (TODAY / ALL / MONTH-WISE) & ONLINE VERIFICATION -->
+  <!-- TAB 4: HISAB -->
   <div id="page-hisab" class="page">
     <div id="approveNotifyBar" class="receipt-bar">
       <div style="font-size:13px;font-weight:700;margin-bottom:8px;" id="approveMsgText"></div>
-      <button type="button" class="act-link" style="background:var(--accent);color:#fff;margin-bottom:8px;" onclick="openLastReceipt()">
-        📄 Open / Download PDF Receipt (বাংলা)
-      </button>
+      <button type="button" class="act-link" style="background:var(--accent);margin-bottom:8px;" onclick="openLastReceipt()">📄 Open / Download PDF Receipt (বাংলা)</button>
       <div class="row-2">
         <a id="approveWaLink" href="#" target="_blank" class="act-link" style="background:#16a34a;">WhatsApp Receipt</a>
         <a id="approveSmsLink" href="#" class="act-link" style="background:#2563eb;">SMS Receipt</a>
       </div>
     </div>
-
     <div class="card" id="pendingBox" style="display:none;border-color:var(--accent);">
-      <div style="font-weight:800;font-size:15px;color:#c2410c;margin-bottom:10px;">
-        🔔 Pending Online Verification (<span id="pendingCountText">0</span>)
-      </div>
+      <div style="font-weight:800;font-size:15px;color:#c2410c;margin-bottom:10px;">🔔 Pending Online Verification (<span id="pendingCountText">0</span>)</div>
       <div id="pendingList"></div>
     </div>
-
     <div class="card">
-      <div style="font-weight:800;font-size:15px;color:var(--primary);margin-bottom:10px;">Collection Hisab (Payment Log)</div>
+      <div style="font-weight:800;font-size:15px;color:var(--primary);margin-bottom:10px;">Collection Hisab</div>
       <div class="filter-pills">
         <button class="pill active" id="pillToday" onclick="setHisabFilter('today')">Today</button>
         <button class="pill" id="pillAll" onclick="setHisabFilter('all')">All Time</button>
-        <select id="hisabMonthSel" onchange="setHisabMonth(this.value)" style="padding:7px;font-size:12px;font-weight:800;color:var(--primary);border-radius:10px;">
-          <option value="">Month-wise...</option>
-        </select>
+        <select id="hisabMonthSel" onchange="setHisabMonth(this.value)" style="padding:7px;font-size:12px;font-weight:800;color:var(--primary);border-radius:10px;"></select>
       </div>
-
-      <div style="background:linear-gradient(135deg, var(--primary) 0%, var(--primary-mid) 100%);color:#fff;padding:14px;border-radius:12px;text-align:center;margin-bottom:10px;border-bottom:3px solid var(--accent);">
+      <div style="background:linear-gradient(135deg,var(--primary) 0%,var(--primary-mid) 100%);color:#fff;padding:14px;border-radius:12px;text-align:center;margin-bottom:10px;border-bottom:3px solid var(--accent);">
         <div id="hLabelTitle" style="font-size:12px;opacity:0.85;">Today's Collection</div>
         <div id="hTotal" style="font-size:26px;font-weight:800;margin-top:2px;">Rs. 0</div>
         <div id="hModeSplit" style="font-size:12px;margin-top:4px;color:#ffedd5;">Cash: Rs. 0 • UPI: Rs. 0</div>
       </div>
-
       <div class="hisab-grid">
         <div class="hisab-box"><div id="hPralay" class="hisab-amt">Rs. 0</div><div class="hisab-lbl">Pralay<br>Sannigrahi</div></div>
         <div class="hisab-box"><div id="hChiranjit" class="hisab-amt">Rs. 0</div><div class="hisab-lbl">Chiranjit<br>Sannigrahi</div></div>
         <div class="hisab-box"><div id="hSaikat" class="hisab-amt">Rs. 0</div><div class="hisab-lbl">Saikat<br>Sannigrahi</div></div>
       </div>
     </div>
-
     <div class="card">
-      <div style="font-weight:800;font-size:14px;color:var(--primary);margin-bottom:8px;">Payment History (Click Receipt for PDF)</div>
+      <div style="font-weight:800;font-size:14px;color:var(--primary);margin-bottom:8px;">Payment History</div>
       <div id="paymentLogList"></div>
     </div>
   </div>
 
-  <!-- PAGE 5: NOTICE, VIDEO CLASS, PDF, MOCK TEST & DUE-LOCK -->
+  <!-- SIDEBAR PAGE A: CLASS-WISE DUE LIST (UNPAID ONLY) -->
+  <div id="page-duelist" class="page">
+    <div id="dueGridView">
+      <div style="background:linear-gradient(135deg,#991b1b 0%,#dc2626 100%);color:#fff;padding:16px;border-radius:14px;text-align:center;margin-bottom:12px;">
+        <div style="font-size:12px;opacity:0.9;">Total Institute Due (Only Unpaid Students)</div>
+        <div id="grandDueTotal" style="font-size:28px;font-weight:800;margin-top:2px;">Rs. 0</div>
+        <div id="grandDueCount" style="font-size:12px;margin-top:3px;color:#fecaca;">0 Students Have Due</div>
+      </div>
+      <div class="class-grid" id="dueClassGrid"></div>
+    </div>
+    <div id="dueClassListView" style="display:none;">
+      <div class="list-header">
+        <button class="back-btn" onclick="closeDueClassView()">← Due Classes</button>
+        <div style="font-weight:800;font-size:16px;color:#b91c1c;" id="activeDueClassTitle"></div>
+      </div>
+      <div id="dueStudentList"></div>
+    </div>
+  </div>
+
+  <!-- SIDEBAR PAGE B: LIVE / RECORDED / PDF / MOCK TEST UPLOAD -->
   <div id="page-content" class="page">
+    <div class="card">
+      <div style="font-weight:800;font-size:15px;color:var(--primary);margin-bottom:10px;">🎥 Upload Live / Video / PDF / Mock Test</div>
+      <form onsubmit="postContent(event)">
+        <div class="row-2">
+          <div class="form-group"><label>Target Class *</label><select id="cClass" required></select></div>
+          <div class="form-group">
+            <label>Type *</label>
+            <select id="cType">
+              <option value="Live">🔴 Live Class (YouTube Unlisted)</option>
+              <option value="Video">🎥 Recorded Video</option>
+              <option value="PDF">📄 PDF Notes</option>
+              <option value="Mock Test">📝 Mock Test</option>
+            </select>
+          </div>
+        </div>
+        <div class="row-2">
+          <div class="form-group"><label>Subject *</label><input type="text" id="cSub" required placeholder="e.g. Geography / Math"></div>
+          <div class="form-group"><label>Chapter Folder *</label><input type="text" id="cChap" required placeholder="e.g. ভূ-পরিচয় / শিলা"></div>
+        </div>
+        <div class="form-group"><label>Class / Topic Title *</label><input type="text" id="cTitle" required placeholder="e.g. Part 1 Explanation"></div>
+        <div class="form-group">
+          <label>Upload Method</label>
+          <select id="cUploadMode" onchange="toggleUploadMode()">
+            <option value="link">Paste Link (YouTube / Google Drive / Form)</option>
+            <option value="file">Direct File Upload (PDF / Small Video up to 15 MB)</option>
+          </select>
+        </div>
+        <div class="form-group" id="cLinkWrap">
+          <label>YouTube / Drive / Form Link *</label>
+          <input type="url" id="cLink" placeholder="https://...">
+        </div>
+        <div class="form-group" id="cFileWrap" style="display:none;">
+          <label>Select PDF or Video File (Max 15 MB) *</label>
+          <input type="file" id="cFile" accept=".pdf,video/*,image/*">
+          <div style="font-size:11px;color:var(--muted);margin-top:4px;">Google Drive-এ সেভ হবে; নিচে Delete করলেই Drive থেকেও মুছে স্টোরেজ খালি হয়ে যাবে।</div>
+        </div>
+        <button type="submit" id="cSubmitBtn" class="btn btn-accent">Publish to Student App</button>
+      </form>
+    </div>
+    <div class="card">
+      <div style="font-weight:800;font-size:14px;color:var(--primary);margin-bottom:8px;">Uploaded Classes & Materials (<span id="conCount">0</span>)</div>
+      <div id="adminContentList"></div>
+    </div>
+  </div>
+
+  <!-- SIDEBAR PAGE C: NOTICES & DUE-LOCK -->
+  <div id="page-notices" class="page">
     <div class="card">
       <div class="toggle-row">
         <div>
           <div style="font-weight:800;font-size:14px;color:var(--primary);">🔒 Fee-Due Class Lock</div>
-          <div style="font-size:11px;color:var(--muted);margin-top:2px;">ON থাকলে বাকি ফি-র স্টুডেন্টরা ভিডিও/PDF/টেস্ট দেখতে পাবে না</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px;">ON থাকলে বাকি ফি-র স্টুডেন্টরা ভিডিও/PDF/মক টেস্ট দেখতে পাবে না</div>
         </div>
         <button id="dueLockBtn" class="toggle-btn on" onclick="toggleDueLock()">ON</button>
       </div>
     </div>
-
     <div class="card">
-      <div style="font-weight:800;font-size:15px;color:var(--primary);margin-bottom:10px;">📢 Post Blinking Notice (Student App)</div>
+      <div style="font-weight:800;font-size:15px;color:var(--primary);margin-bottom:10px;">📢 Post Blinking Notice</div>
       <form onsubmit="postNotice(event)">
         <div class="row-2">
           <div class="form-group"><label>Target Class</label><select id="nClass"></select></div>
-          <div class="form-group"><label>Notice Title *</label><input type="text" id="nTitle" required placeholder="e.g. Mock Test / Holiday"></div>
+          <div class="form-group"><label>Notice Title *</label><input type="text" id="nTitle" required placeholder="e.g. Exam / Holiday"></div>
         </div>
-        <div class="form-group"><label>Notice Message *</label><textarea id="nMsg" rows="2" required placeholder="Write notice details..."></textarea></div>
-        <div class="form-group"><label>Optional Link (Form / PDF)</label><input type="url" id="nLink" placeholder="https://..."></div>
+        <div class="form-group"><label>Notice Message *</label><textarea id="nMsg" rows="2" required placeholder="Write notice..."></textarea></div>
+        <div class="form-group"><label>Optional Link</label><input type="url" id="nLink" placeholder="https://..."></div>
         <button type="submit" class="btn btn-accent">Publish Notice</button>
       </form>
       <div id="waNoticeShareBox" style="display:none;margin-top:10px;">
         <a id="waNoticeShareLink" href="#" target="_blank" class="act-link" style="background:#16a34a;">📲 1-Click Share Notice on WhatsApp Group</a>
       </div>
     </div>
-
-    <div class="card">
-      <div style="font-weight:800;font-size:15px;color:var(--primary);margin-bottom:10px;">🎥 Upload Video Class / PDF / Mock Test</div>
-      <form onsubmit="postContent(event)">
-        <div class="row-2">
-          <div class="form-group"><label>Target Class *</label><select id="cClass" required></select></div>
-          <div class="form-group">
-            <label>Content Type *</label>
-            <select id="cType">
-              <option value="Video">Video Class (YouTube / Drive)</option>
-              <option value="PDF">PDF Notes (Drive Link)</option>
-              <option value="Mock Test">Mock Test (Form Link)</option>
-            </select>
-          </div>
-        </div>
-        <div class="row-2">
-          <div class="form-group"><label>Subject *</label><input type="text" id="cSub" required placeholder="e.g. Math / Science"></div>
-          <div class="form-group"><label>Chapter / Title *</label><input type="text" id="cTitle" required placeholder="e.g. Trigonometry Part 1"></div>
-        </div>
-        <div class="form-group"><label>YouTube / Drive / Form Link *</label><input type="url" id="cLink" required placeholder="Paste link here..."></div>
-        <button type="submit" class="btn">Upload to Student App</button>
-      </form>
-    </div>
-
     <div class="card">
       <div style="font-weight:800;font-size:14px;color:var(--primary);margin-bottom:8px;">Active Notices (<span id="notCount">0</span>)</div>
       <div id="adminNoticesList"></div>
     </div>
+  </div>
 
-    <div class="card">
-      <div style="font-weight:800;font-size:14px;color:var(--primary);margin-bottom:8px;">Uploaded Classes & Materials (<span id="conCount">0</span>)</div>
-      <div id="adminContentList"></div>
+  <!-- SIDEBAR PAGE D: ABSENT CALLER REPORT -->
+  <div id="page-absent" class="page">
+    <div class="card" style="border-left:4px solid var(--accent);">
+      <div style="font-weight:800;font-size:15px;color:#c2410c;margin-bottom:10px;">📞 Today's Absent Caller Report (<span id="absentRepCount">0</span>)</div>
+      <div id="absentReportList"></div>
     </div>
   </div>
 </div>
 
-<!-- STUDENT FULL PORTAL MODAL -->
+<!-- STUDENT PROFILE MODAL -->
 <div class="modal-bg" id="profileModal" onclick="if(event.target===this) closeProfile()">
   <div class="modal-sheet">
     <div class="modal-top">
-      <div>
-        <div id="pName" style="font-size:19px;font-weight:800;color:var(--primary);"></div>
-        <div id="pSub" style="font-size:13px;color:var(--muted);font-weight:600;"></div>
-      </div>
+      <div><div id="pName" style="font-size:19px;font-weight:800;color:var(--primary);"></div><div id="pSub" style="font-size:13px;color:var(--muted);font-weight:600;"></div></div>
       <button class="close-btn" onclick="closeProfile()">✕</button>
     </div>
-
     <div class="stat-grid">
-      <div class="stat-box"><div id="pPresent" class="stat-num" style="color:var(--success);">0</div><div class="stat-lbl">Present Days</div></div>
-      <div class="stat-box"><div id="pAbsent" class="stat-num" style="color:var(--accent);">0</div><div class="stat-lbl">Absent Days</div></div>
+      <div class="stat-box"><div id="pPresent" class="stat-num" style="color:var(--success);">0</div><div class="stat-lbl">Present</div></div>
+      <div class="stat-box"><div id="pAbsent" class="stat-num" style="color:var(--accent);">0</div><div class="stat-lbl">Absent</div></div>
       <div class="stat-box"><div id="pDue" class="stat-num" style="color:var(--danger);">Rs. 0</div><div class="stat-lbl">Total Due</div></div>
     </div>
-
     <div class="info-list">
       <div class="info-item"><span>Father's Name</span><strong id="pFather">-</strong></div>
       <div class="info-item"><span>Mobile</span><strong id="pMobile">-</strong></div>
@@ -563,50 +471,31 @@
       <div class="info-item"><span>Admission Date</span><strong id="pAdm">-</strong></div>
       <div class="info-item"><span>First Payment</span><strong id="pFirst">-</strong></div>
     </div>
-
-    <div style="font-size:13px;font-weight:800;color:var(--primary);margin-bottom:6px;">2027 Monthly Fees (Tap any month for history & receipt)</div>
+    <div style="font-size:13px;font-weight:800;color:var(--primary);margin-bottom:6px;">2027 Monthly Fees (Tap month for details & receipt)</div>
     <div class="months-grid" id="pMonths"></div>
-
     <div id="monthDetailBox" class="month-detail-box">
-      <div class="md-title"><span id="mdTitleText">Month Details</span><span id="mdStatusBadge"></span></div>
+      <div style="font-weight:800;font-size:13.5px;color:var(--primary);margin-bottom:5px;display:flex;justify-content:space-between;"><span id="mdTitleText"></span><span id="mdStatusBadge"></span></div>
       <div id="mdBody"></div>
       <div id="mdActions" style="margin-top:8px;"></div>
     </div>
-
     <div id="payWarn" class="pay-warn"></div>
-
     <div class="pay-box">
-      <div style="font-size:13px;font-weight:800;color:var(--primary);margin-bottom:8px;">
-        Record Fee Payment • Collector: <span id="payCollectorDisplay" style="color:var(--accent);">-</span> 🔒
-      </div>
-      <div class="row-2" style="margin-bottom:8px;">
-        <select id="payMonth" onchange="hidePayWarn()"></select>
-        <input type="number" id="payAmount" value="300" min="1" placeholder="Amount">
-      </div>
-      <div class="form-group" style="margin-bottom:8px;">
-        <select id="payMode"><option value="Cash">Mode: Cash</option><option value="UPI">Mode: UPI</option></select>
-      </div>
+      <div style="font-size:13px;font-weight:800;color:var(--primary);margin-bottom:8px;">Record Fee Payment • <span id="payCollectorDisplay" style="color:var(--accent);">-</span> 🔒</div>
+      <div class="row-2" style="margin-bottom:8px;"><select id="payMonth" onchange="hidePayWarn()"></select><input type="number" id="payAmount" value="300" min="1"></div>
+      <div class="form-group" style="margin-bottom:8px;"><select id="payMode"><option value="Cash">Mode: Cash</option><option value="UPI">Mode: UPI</option></select></div>
       <button id="paySaveBtn" class="btn btn-accent" onclick="submitPayment()">Save Payment</button>
     </div>
-
     <div id="receiptBar" class="receipt-bar">
       <div style="font-size:13px;font-weight:700;margin-bottom:8px;" id="receiptMsgPreview"></div>
-      <button type="button" class="act-link" style="background:var(--accent);color:#fff;margin-bottom:8px;" onclick="openLastReceipt()">
-        📄 Open / Download PDF Receipt (বাংলা)
-      </button>
-      <div class="row-2">
-        <a id="receiptSmsLink" href="#" class="act-link" style="background:#2563eb;">Send SMS (বাংলা)</a>
-        <a id="receiptWaLink" href="#" target="_blank" class="act-link" style="background:#16a34a;">WhatsApp (বাংলা)</a>
-      </div>
+      <button type="button" class="act-link" style="background:var(--accent);margin-bottom:8px;" onclick="openLastReceipt()">📄 Open / Download PDF Receipt (বাংলা)</button>
+      <div class="row-2"><a id="receiptSmsLink" href="#" class="act-link" style="background:#2563eb;">SMS (বাংলা)</a><a id="receiptWaLink" href="#" target="_blank" class="act-link" style="background:#16a34a;">WhatsApp (বাংলা)</a></div>
     </div>
-
     <div class="action-3">
       <a id="btnCall" href="#" class="act-link" style="background:#0284c7;">Call</a>
       <a id="btnSmsDue" href="#" class="act-link" style="background:#7c3aed;">Due SMS</a>
       <a id="btnWaDue" href="#" target="_blank" class="act-link" style="background:#16a34a;">WhatsApp</a>
     </div>
-
-    <details style="margin-top:14px;background:#f8fafc;padding:10px;border-radius:10px;border:1px solid var(--border);">
+    <details style="margin-top:12px;background:#f8fafc;padding:10px;border-radius:10px;border:1px solid var(--border);">
       <summary style="font-size:13px;font-weight:700;cursor:pointer;color:var(--primary);">Edit Father / Mobile / Address</summary>
       <div style="margin-top:10px;">
         <div class="form-group"><label>Father's Name</label><input type="text" id="eFather"></div>
@@ -615,25 +504,36 @@
         <button class="btn btn-sec" onclick="saveEditedDetails()">Update Details</button>
       </div>
     </details>
-
-    <div style="text-align:center;margin-top:14px;">
-      <img id="pQr" src="" alt="QR" style="width:120px;height:120px;border:1px solid var(--border);border-radius:8px;padding:4px;" onerror="this.style.display='none'">
+    <div style="text-align:center;margin-top:12px;">
+      <img id="pQr" src="" alt="QR" style="width:115px;height:115px;border:1px solid var(--border);border-radius:8px;padding:4px;" onerror="this.style.display='none'">
       <div id="pQrText" style="font-size:11px;color:var(--muted);margin-top:3px;"></div>
     </div>
   </div>
 </div>
 
-<!-- OFFICIAL BENGALI PDF / PNG RECEIPT MODAL -->
+<!-- ADMIN LIVE Q&A CHAT MODAL -->
+<div class="rcpt-modal-bg" id="chatModal" onclick="if(event.target===this) closeAdminChat()">
+  <div class="rcpt-card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+      <div><strong style="color:var(--primary);" id="chatModalTitle">Live Q&A</strong><div style="font-size:11px;color:var(--muted);">Auto-refreshing every 6 sec</div></div>
+      <button class="close-btn" onclick="closeAdminChat()">✕</button>
+    </div>
+    <div id="adminChatBox" class="chat-box"></div>
+    <form onsubmit="sendAdminChat(event)" style="display:flex;gap:6px;">
+      <input type="text" id="adminChatInput" required placeholder="Type answer to students..." style="flex:1;">
+      <button type="submit" class="btn btn-accent" style="width:auto;padding:10px 14px;">Send</button>
+    </form>
+  </div>
+</div>
+
+<!-- BENGALI RECEIPT MODAL -->
 <div class="rcpt-modal-bg" id="rcptModal" onclick="if(event.target===this) closeReceipt()">
   <div class="rcpt-card" id="receiptPrintArea">
     <div class="rcpt-head">
       <div style="font-size:20px;font-weight:800;color:var(--primary);">ইউ.সি.সি ইনস্টিটিউট</div>
       <div style="font-size:11px;color:#475569;">পেঁচাকোলা, রায়পুর, বাঁকুড়া • ফোন: 8016972121 / 8159980707</div>
-      <div style="font-size:12px;font-weight:800;margin-top:4px;background:var(--accent-soft);color:#c2410c;border:1px solid var(--accent-border);display:inline-block;padding:2px 10px;border-radius:10px;">
-        অফিশিয়াল ফি রসিদ (2027)
-      </div>
+      <div style="font-size:12px;font-weight:800;margin-top:4px;background:var(--accent-soft);color:#c2410c;border:1px solid var(--accent-border);display:inline-block;padding:2px 10px;border-radius:10px;">অফিশিয়াল ফি রসিদ (2027)</div>
     </div>
-
     <div class="rcpt-line"><span>রসিদ নং:</span><strong id="rNo"></strong></div>
     <div class="rcpt-line"><span>তারিখ ও সময়:</span><strong id="rDate"></strong></div>
     <div class="rcpt-line"><span>ছাত্র/ছাত্রীর নাম:</span><strong id="rName"></strong></div>
@@ -641,103 +541,48 @@
     <div class="rcpt-line"><span>আইডি ও শ্রেণী:</span><strong id="rIdCls"></strong></div>
     <div class="rcpt-line"><span>কোন মাসের ফি:</span><strong id="rMonth"></strong></div>
     <div class="rcpt-line"><span>পেমেন্টের মাধ্যম:</span><strong id="rMode"></strong></div>
-    <div class="rcpt-line" style="font-size:15px;color:var(--primary);border-top:1px solid #cbd5e1;margin-top:4px;padding-top:8px;">
-      <span><strong>মোট জমা টাকা:</strong></span><strong id="rAmt"></strong>
-    </div>
-
-    <div class="rcpt-sign">
-      গ্রহণকারী / অনুমোদিত স্বাক্ষর:<br>
-      <strong id="rCollector" style="font-size:15px;color:var(--primary);"></strong><br>
-      <span style="color:var(--muted);font-size:10px;">ইউ.সি.সি ইনস্টিটিউট, পেঁচাকোলা</span>
-    </div>
-
-    <div style="display:grid;gap:8px;margin-top:16px;" class="no-print">
-      <button class="btn" onclick="window.print()">🖨️ Print / Save PDF Receipt</button>
-      <div class="row-2">
-        <button class="btn btn-accent" onclick="downloadReceiptImage()">⬇️ Save PNG</button>
-        <button class="btn btn-sec" onclick="closeReceipt()">Close</button>
-      </div>
+    <div class="rcpt-line" style="font-size:15px;color:var(--primary);border-top:1px solid #cbd5e1;margin-top:4px;padding-top:8px;"><span><strong>মোট জমা টাকা:</strong></span><strong id="rAmt"></strong></div>
+    <div class="rcpt-sign">গ্রহণকারী / অনুমোদিত স্বাক্ষর:<br><strong id="rCollector" style="font-size:15px;color:var(--primary);"></strong><br><span style="color:var(--muted);font-size:10px;">ইউ.সি.সি ইনস্টিটিউট, পেঁচাকোলা</span></div>
+    <div style="display:grid;gap:8px;margin-top:14px;" class="no-print">
+      <button class="btn" onclick="window.print()">🖨️ Print / Save PDF</button>
+      <div class="row-2"><button class="btn btn-accent" onclick="downloadReceiptImage()">⬇️ Save PNG</button><button class="btn btn-sec" onclick="closeReceipt()">Close</button></div>
     </div>
   </div>
 </div>
 
-<!-- BOTTOM NAV (5 TABS) -->
+<!-- CLEAN 4-TAB BOTTOM NAV -->
 <div class="bottom-nav">
-  <button class="nav-btn active" onclick="openPage('classes', this)">Classes</button>
-  <button class="nav-btn" onclick="openPage('entry', this)">+ Entry</button>
-  <button class="nav-btn" onclick="openPage('scan', this)">QR Scan</button>
-  <button class="nav-btn" onclick="openPage('hisab', this)">
-    Hisab
-    <span id="pendingBadge" class="nav-badge">0</span>
-  </button>
-  <button class="nav-btn" onclick="openPage('content', this)">Content</button>
+  <button class="nav-btn active" id="nav-classes" onclick="openPage('classes', this)">Classes</button>
+  <button class="nav-btn" id="nav-entry" onclick="openPage('entry', this)">+ Entry</button>
+  <button class="nav-btn" id="nav-scan" onclick="openPage('scan', this)">QR Scan</button>
+  <button class="nav-btn" id="nav-hisab" onclick="openPage('hisab', this)">Hisab <span id="pendingBadge" class="nav-badge">0</span></button>
 </div>
-
 <div id="toast" class="toast"></div>
 
 <script>
   const API_URL = 'https://script.google.com/macros/s/AKfycbwAuSfDoikCc998pVuwz0HySky1fChn-Tj8p7OeuUAr_WPG7IFZkfGB5LUO6NlvkiKO/exec';
-
   const ADMIN_ACCOUNTS = {
     'pralay':    { pass: 'ucc@2027',    name: 'Pralay Sannigrahi' },
     'chiranjit': { pass: 'chiro@2027',  name: 'Chiranjit Sannigrahi' },
     'saikat':    { pass: 'saikat@2027', name: 'Saikat Sannigrahi' }
   };
-
   const MONTHLY_FEE = 300;
-  const CLASSES = [
-    'Nursery', 'KG', 'Class 1', 'Class 2', 'Class 3', 'Class 4',
-    'Class 5', 'Class 6', 'Class 7', 'Class 8', 'Class 9', 'Class 10',
-    'Class 11', 'Class 12'
-  ];
+  const CLASSES = ['Nursery','KG','Class 1','Class 2','Class 3','Class 4','Class 5','Class 6','Class 7','Class 8','Class 9','Class 10','Class 11','Class 12'];
   const MONTHS = [
-    ['Jan_2027','Jan','জানুয়ারি 2027'], ['Feb_2027','Feb','ফেব্রুয়ারি 2027'],
-    ['Mar_2027','Mar','মার্চ 2027'], ['Apr_2027','Apr','এপ্রিল 2027'],
-    ['May_2027','May','মে 2027'], ['Jun_2027','Jun','জুন 2027'],
-    ['Jul_2027','Jul','জুলাই 2027'], ['Aug_2027','Aug','আগস্ট 2027'],
-    ['Sep_2027','Sep','সেপ্টেম্বর 2027'], ['Oct_2027','Oct','অক্টোবর 2027'],
-    ['Nov_2027','Nov','নভেম্বর 2027'], ['Dec_2027','Dec','ডিসেম্বর 2027']
+    ['Jan_2027','Jan','জানুয়ারি 2027'], ['Feb_2027','Feb','ফেব্রুয়ারি 2027'], ['Mar_2027','Mar','মার্চ 2027'], ['Apr_2027','Apr','এপ্রিল 2027'],
+    ['May_2027','May','মে 2027'], ['Jun_2027','Jun','জুন 2027'], ['Jul_2027','Jul','জুলাই 2027'], ['Aug_2027','Aug','আগস্ট 2027'],
+    ['Sep_2027','Sep','সেপ্টেম্বর 2027'], ['Oct_2027','Oct','অক্টোবর 2027'], ['Nov_2027','Nov','নভেম্বর 2027'], ['Dec_2027','Dec','ডিসেম্বর 2027']
   ];
   const BN_MONTH_NAMES = ['জানুয়ারি','ফেব্রুয়ারি','মার্চ','এপ্রিল','মে','জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'];
-  const CLASSES_BN = {
-    Nursery:'নার্সারি', KG:'কেজি', 'Class 1':'ক্লাস 1', 'Class 2':'ক্লাস 2',
-    'Class 3':'ক্লাস 3', 'Class 4':'ক্লাস 4', 'Class 5':'ক্লাস 5', 'Class 6':'ক্লাস 6',
-    'Class 7':'ক্লাস 7', 'Class 8':'ক্লাস 8', 'Class 9':'ক্লাস 9', 'Class 10':'ক্লাস 10',
-    'Class 11':'ক্লাস 11', 'Class 12':'ক্লাস 12'
-  };
+  const CLASSES_BN = { Nursery:'নার্সারি', KG:'কেজি', 'Class 1':'ক্লাস 1', 'Class 2':'ক্লাস 2', 'Class 3':'ক্লাস 3', 'Class 4':'ক্লাস 4', 'Class 5':'ক্লাস 5', 'Class 6':'ক্লাস 6', 'Class 7':'ক্লাস 7', 'Class 8':'ক্লাস 8', 'Class 9':'ক্লাস 9', 'Class 10':'ক্লাস 10', 'Class 11':'ক্লাস 11', 'Class 12':'ক্লাস 12' };
 
   function bnClass(c) { return CLASSES_BN[c] || c; }
   function bnMonth(k) { const f = MONTHS.find(x => x[0] === k); return f ? f[2] : k; }
-  function bnCollector(c) {
-    const s = String(c || '');
-    if (s.includes('Pralay')) return 'প্রলয় ষন্নিগ্রহী';
-    if (s.includes('Chiranjit')) return 'চিরঞ্জিত ষন্নিগ্রহী';
-    if (s.includes('Saikat')) return 'সৈকত ষন্নিগ্রহী';
-    return s || 'অ্যাডমিন';
-  }
+  function bnCollector(c) { const s = String(c || ''); if (s.includes('Pralay')) return 'প্রলয় ষন্নিগ্রহী'; if (s.includes('Chiranjit')) return 'চিরঞ্জিত ষন্নিগ্রহী'; if (s.includes('Saikat')) return 'সৈকত ষন্নিগ্রহী'; return s || 'অ্যাডমিন'; }
   function bnMode(m) { return (m || '').toLowerCase().includes('cash') ? 'নগদ (ক্যাশ)' : 'অনলাইন (UPI)'; }
-  function formatBnDate(iso) {
-    if (!iso) return '-';
-    const p = String(iso).split('-');
-    if (p.length !== 3) return iso;
-    return `${parseInt(p[2], 10)} ${BN_MONTH_NAMES[parseInt(p[1], 10) - 1] || p[1]} ${p[0]}`;
-  }
-  function bnNowTime() {
-    const d = new Date(), h = d.getHours(), m = String(d.getMinutes()).padStart(2, '0'), h12 = h % 12 || 12;
-    let part = 'রাত';
-    if (h >= 4 && h < 12) part = 'সকাল'; else if (h >= 12 && h < 16) part = 'দুপুর';
-    else if (h >= 16 && h < 18) part = 'বিকেল'; else if (h >= 18 && h < 20) part = 'সন্ধ্যা';
-    return `${part} ${h12}:${m}`;
-  }
-
-  function getDeviceId() {
-    let id = localStorage.getItem('ucc_device_id');
-    if (!id) {
-      id = 'DEV-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 8).toUpperCase();
-      localStorage.setItem('ucc_device_id', id);
-    }
-    return id;
-  }
+  function formatBnDate(iso) { if (!iso) return '-'; const p = String(iso).split('-'); return p.length === 3 ? `${parseInt(p[2],10)} ${BN_MONTH_NAMES[parseInt(p[1],10)-1]||p[1]} ${p[0]}` : iso; }
+  function bnNowTime() { const d = new Date(), h = d.getHours(), m = String(d.getMinutes()).padStart(2,'0'), h12 = h % 12 || 12; let part = 'রাত'; if (h>=4&&h<12) part='সকাল'; else if (h>=12&&h<16) part='দুপুর'; else if (h>=16&&h<18) part='বিকেল'; else if (h>=18&&h<20) part='সন্ধ্যা'; return `${part} ${h12}:${m}`; }
+  function getDeviceId() { let id = localStorage.getItem('ucc_device_id'); if (!id) { id = 'DEV-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2,8).toUpperCase(); localStorage.setItem('ucc_device_id', id); } return id; }
 
   let students = JSON.parse(localStorage.getItem('ucc_students') || '[]');
   let attendance = JSON.parse(localStorage.getItem('ucc_attendance') || '[]');
@@ -749,132 +594,99 @@
   let dueLock = localStorage.getItem('ucc_due_lock') || 'ON';
   let queue = JSON.parse(localStorage.getItem('ucc_queue') || '[]');
 
-  let activeClass = null, activeStudentId = null, selectedMonthKey = null;
-  let activeReceiptData = null, lastReceiptData = null;
-  let hisabFilter = 'today', hisabMonthKey = '';
-  let html5Qr = null, scannerRunning = false, facingMode = 'environment', scanCooldown = false, lastBackPress = 0;
+  let activeClass = null, activeDueClass = null, activeStudentId = null, selectedMonthKey = null;
+  let activeReceiptData = null, lastReceiptData = null, hisabFilter = 'today', hisabMonthKey = '';
+  let html5Qr = null, scannerRunning = false, facingMode = 'environment', scanCooldown = false;
+  let isSyncing = false, lastBackPress = 0, activeChatId = null, chatTimer = null;
 
-  if ('serviceWorker' in navigator) { navigator.serviceWorker.register('./sw.js').catch(() => {}); }
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(() => {});
 
+  // Smart Back Button
   window.history.pushState({ app: true }, '');
   window.addEventListener('popstate', () => {
+    if (document.getElementById('sidebar').classList.contains('open')) { closeSidebar(); window.history.pushState({ app: true }, ''); return; }
+    if (document.getElementById('chatModal').classList.contains('open')) { closeAdminChat(); window.history.pushState({ app: true }, ''); return; }
     if (document.getElementById('rcptModal').classList.contains('open')) { closeReceipt(); window.history.pushState({ app: true }, ''); return; }
     if (document.getElementById('profileModal').classList.contains('open')) { closeProfile(); window.history.pushState({ app: true }, ''); return; }
+    if (activeDueClass) { closeDueClassView(); window.history.pushState({ app: true }, ''); return; }
     if (activeClass) { closeClassView(); window.history.pushState({ app: true }, ''); return; }
     const now = Date.now();
     if (now - lastBackPress < 2000) window.history.back();
     else { lastBackPress = now; toast('অ্যাপ থেকে বেরোতে আবার Back চাপুন'); window.history.pushState({ app: true }, ''); }
   });
 
-  window.addEventListener('online', () => { updateNetUI(); if (getCurrentAdmin()) syncNow(); });
+  // Super-Fast Auto-Sync triggers
+  window.addEventListener('online', () => { updateNetUI(); if (getCurrentAdmin()) syncNow(true); });
   window.addEventListener('offline', updateNetUI);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden && navigator.onLine && getCurrentAdmin()) syncNow(true); });
+  setInterval(() => { if (!document.hidden && navigator.onLine && getCurrentAdmin()) syncNow(true); }, 45000);
 
   function getCurrentAdmin() { return localStorage.getItem('ucc_admin_user_v3') || ''; }
-
   function applyAdminUI() {
     const admin = getCurrentAdmin();
-    document.getElementById('hdrAdminLabel').textContent = admin ? `${admin} • 2027` : 'Admin Panel • Session 2027';
+    document.getElementById('hdrAdminLabel').textContent = admin ? `${admin} • 2027` : 'Admin Panel • 2027';
+    document.getElementById('sideAdminName').textContent = admin || 'Admin Menu';
     document.getElementById('entryCollectorDisplay').textContent = admin ? `${admin} 🔒` : '-';
     document.getElementById('payCollectorDisplay').textContent = admin || '-';
   }
 
-  function togglePassView(btn) {
-    const inp = document.getElementById('loginPass');
-    inp.type = inp.type === 'password' ? 'text' : 'password';
-    btn.textContent = inp.type === 'password' ? 'Show' : 'Hide';
+  function openSidebar() { document.getElementById('sidebar').classList.add('open'); document.getElementById('sideBackdrop').classList.add('open'); }
+  function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sideBackdrop').classList.remove('open'); }
+  function openSidePage(name) {
+    closeSidebar();
+    if (scannerRunning) stopScanner();
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    if (name === 'duelist') { closeDueClassView(); renderDueList(); }
+    if (name === 'content' || name === 'notices') renderContentTab();
+    if (name === 'absent') renderTodayAttendance();
   }
+
+  function togglePassView(btn) { const inp = document.getElementById('loginPass'); inp.type = inp.type === 'password' ? 'text' : 'password'; btn.textContent = inp.type === 'password' ? 'Show' : 'Hide'; }
 
   async function handleLogin(e) {
     e.preventDefault();
-    const u = document.getElementById('loginUser').value.trim().toLowerCase();
-    const p = document.getElementById('loginPass').value.trim();
-    const acc = ADMIN_ACCOUNTS[u];
-    const errEl = document.getElementById('loginErr');
-    const btn = document.getElementById('loginSubmitBtn');
-
-    if (!acc || acc.pass !== p) {
-      errEl.textContent = 'Invalid User ID or Password!';
-      errEl.style.display = 'block';
-      return;
-    }
-
-    if (!navigator.onLine) {
-      errEl.textContent = 'প্রথমবার ডিভাইস ভেরিফাই করতে ইন্টারনেট অন রাখুন।';
-      errEl.style.display = 'block';
-      return;
-    }
-
-    btn.disabled = true;
-    btn.textContent = 'Verifying Device...';
-    errEl.style.display = 'none';
-
+    const u = document.getElementById('loginUser').value.trim().toLowerCase(), p = document.getElementById('loginPass').value.trim();
+    const acc = ADMIN_ACCOUNTS[u], errEl = document.getElementById('loginErr'), btn = document.getElementById('loginSubmitBtn');
+    if (!acc || acc.pass !== p) { errEl.textContent = 'Invalid User ID or Password!'; errEl.style.display = 'block'; return; }
+    if (!navigator.onLine) { errEl.textContent = 'প্রথমবার ডিভাইস ভেরিফাই করতে ইন্টারনেট অন রাখুন।'; errEl.style.display = 'block'; return; }
+    btn.disabled = true; btn.textContent = 'Verifying Device...'; errEl.style.display = 'none';
     try {
-      const res = await fetch(API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify({ action: 'verifyDevice', adminUser: u, deviceId: getDeviceId() })
-      });
+      const res = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: 'verifyDevice', adminUser: u, deviceId: getDeviceId() }) });
       const data = await res.json();
       if (data.status === 'ok' && data.verified) {
         localStorage.setItem('ucc_admin_user_v3', acc.name);
         document.getElementById('loginScreen').style.display = 'none';
         document.getElementById('loginPass').value = '';
-        applyAdminUI();
-        renderAll();
-        syncNow();
-        toast(`Welcome, ${acc.name}!`);
-      } else {
-        errEl.textContent = data.message || 'Device verification failed!';
-        errEl.style.display = 'block';
-      }
-    } catch (err) {
-      errEl.textContent = 'Network error! আবার চেষ্টা করুন।';
-      errEl.style.display = 'block';
-    } finally {
-      btn.disabled = false;
-      btn.textContent = 'Verify Device & Login';
-    }
+        applyAdminUI(); renderAll(); syncNow(true); toast(`Welcome, ${acc.name}!`);
+      } else { errEl.textContent = data.message || 'Device verification failed!'; errEl.style.display = 'block'; }
+    } catch (err) { errEl.textContent = 'Network error! আবার চেষ্টা করুন।'; errEl.style.display = 'block'; }
+    finally { btn.disabled = false; btn.textContent = 'Verify Device & Login'; }
   }
 
   function lockApp() {
-    if (scannerRunning) stopScanner();
-    closeProfile(); closeReceipt();
+    closeSidebar(); if (scannerRunning) stopScanner(); closeProfile(); closeReceipt(); closeAdminChat();
     localStorage.removeItem('ucc_admin_user_v3');
-    document.getElementById('loginUser').value = '';
-    document.getElementById('loginPass').value = '';
+    document.getElementById('loginUser').value = ''; document.getElementById('loginPass').value = '';
     document.getElementById('loginScreen').style.display = 'flex';
   }
 
   window.onload = function() {
-    setTimeout(() => {
-      const sp = document.getElementById('splashScreen');
-      sp.classList.add('hide');
-      setTimeout(() => { sp.style.display = 'none'; }, 480);
-    }, 1800);
-
+    setTimeout(() => { const sp = document.getElementById('splashScreen'); sp.classList.add('hide'); setTimeout(() => { sp.style.display = 'none'; }, 420); }, 1500);
     const clsOpts = CLASSES.map(c => `<option value="${c}">${c}</option>`).join('');
     document.getElementById('fClass').innerHTML = '<option value="">Select Class</option>' + clsOpts;
     document.getElementById('nClass').innerHTML = '<option value="ALL">All Classes</option>' + clsOpts;
     document.getElementById('cClass').innerHTML = '<option value="ALL">All Classes</option>' + clsOpts;
     document.getElementById('fMonth').innerHTML = '<option value="">None</option>' + MONTHS.map(([k]) => `<option value="${k}">${k}</option>`).join('');
     document.getElementById('hisabMonthSel').innerHTML = '<option value="">Month-wise...</option>' + MONTHS.map(([k, lbl]) => `<option value="${k}">${lbl} 2027</option>`).join('');
-
     document.getElementById('fAdmDate').value = todayStr();
     updateNetUI(); applyAdminUI(); renderAll();
-
-    if (getCurrentAdmin()) {
-      document.getElementById('loginScreen').style.display = 'none';
-      if (navigator.onLine) syncNow();
-    } else {
-      document.getElementById('loginScreen').style.display = 'flex';
-    }
+    if (getCurrentAdmin()) { document.getElementById('loginScreen').style.display = 'none'; if (navigator.onLine) syncNow(true); }
+    else document.getElementById('loginScreen').style.display = 'flex';
   };
 
-  function todayStr() {
-    const d = new Date();
-    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
-  }
-
+  function todayStr() { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); }
   function saveLocal() {
     localStorage.setItem('ucc_students', JSON.stringify(students));
     localStorage.setItem('ucc_attendance', JSON.stringify(attendance));
@@ -887,101 +699,118 @@
     localStorage.setItem('ucc_queue', JSON.stringify(queue));
     updateNetUI();
   }
-
   function updateNetUI() {
     const dot = document.getElementById('netDot'), btn = document.getElementById('syncBtn');
-    if (navigator.onLine) {
-      dot.classList.remove('off');
-      btn.textContent = queue.length > 0 ? `Sync (${queue.length})` : 'Sync ✓';
-    } else {
-      dot.classList.add('off');
-      btn.textContent = `Offline (${queue.length})`;
-    }
+    if (navigator.onLine) { dot.classList.remove('off'); btn.textContent = queue.length > 0 ? `Sync (${queue.length})` : 'Auto ✓'; }
+    else { dot.classList.add('off'); btn.textContent = `Offline (${queue.length})`; }
   }
-
-  function toast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg; t.style.display = 'block';
-    setTimeout(() => { t.style.display = 'none'; }, 3200);
-  }
+  function toast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.style.display = 'block'; setTimeout(() => { t.style.display = 'none'; }, 3000); }
 
   function calcDueLocal(s) {
-    const now = new Date();
-    if (now < new Date(2027, 0, 1) || !s.admissionDate) return 0;
+    const now = new Date(); if (now < new Date(2027, 0, 1) || !s.admissionDate) return 0;
     const end = now > new Date(2027, 11, 31) ? new Date(2027, 11, 31) : now;
     const adm = new Date(s.admissionDate + 'T00:00:00');
     const start = adm < new Date(2027, 0, 1) ? new Date(2027, 0, 1) : new Date(adm.getFullYear(), adm.getMonth(), 1);
     const monthsPassed = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth()) + 1;
-    let totalPaid = 0;
-    MONTHS.forEach(([k]) => { totalPaid += Number(s.months?.[k]) || 0; });
+    let totalPaid = 0; MONTHS.forEach(([k]) => { totalPaid += Number(s.months?.[k]) || 0; });
     return Math.max(0, monthsPassed * MONTHLY_FEE - totalPaid);
   }
-
   function getNextStudentId() {
-    let maxNum = 0;
-    students.forEach(s => { const m = String(s.id).match(/^UCC(\d+)$/i); if (m) maxNum = Math.max(maxNum, parseInt(m[1], 10)); });
+    let maxNum = 0; students.forEach(s => { const m = String(s.id).match(/^UCC(\d+)$/i); if (m) maxNum = Math.max(maxNum, parseInt(m[1], 10)); });
     return 'UCC' + String(maxNum + 1).padStart(3, '0');
   }
 
   function applyServerPayload(data) {
-    students = data.students || [];
-    attendance = data.attendance || [];
-    paymentLog = data.paymentLog || [];
-    onlineRequests = data.onlineRequests || [];
-    absentLog = data.absentLog || [];
-    notices = data.notices || [];
-    classesContent = data.classesContent || [];
-    dueLock = data.dueLock || 'ON';
-    saveLocal();
-    renderAll(true);
+    students = data.students || []; attendance = data.attendance || []; paymentLog = data.paymentLog || [];
+    onlineRequests = data.onlineRequests || []; absentLog = data.absentLog || [];
+    notices = data.notices || []; classesContent = data.classesContent || []; dueLock = data.dueLock || 'ON';
+    saveLocal(); renderAll(true);
   }
 
-  async function syncNow() {
-    if (!navigator.onLine) { toast('Offline mode — data saved locally.'); return; }
+  async function syncNow(silent = false) {
+    if (!navigator.onLine) { if (!silent) toast('Offline mode — saved locally.'); return; }
+    if (isSyncing) return;
+    isSyncing = true;
     document.getElementById('syncBtn').textContent = 'Syncing...';
     try {
       let data;
       if (queue.length > 0) {
-        const res = await fetch(API_URL, {
-          method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify({ queue: queue })
-        });
+        const res = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ queue }) });
         data = await res.json();
         if (data.status === 'ok') queue = [];
       } else {
         const res = await fetch(API_URL);
         data = await res.json();
       }
-      if (data.status === 'ok') { applyServerPayload(data); toast('Synced with Google Sheet!'); }
-      else toast('Sync Error: ' + (data.message || 'Unknown'));
-    } catch (e) { toast('Sync failed — try again.'); }
-    finally { updateNetUI(); }
+      if (data.status === 'ok') { applyServerPayload(data); if (!silent) toast('Synced!'); }
+      else if (!silent) toast('Sync Error');
+    } catch (e) { if (!silent) toast('Sync failed — will auto-retry.'); }
+    finally { isSyncing = false; updateNetUI(); }
   }
 
   function openPage(name, btn) {
-    if (name !== 'scan' && scannerRunning) stopScanner();
+    closeSidebar(); if (name !== 'scan' && scannerRunning) stopScanner();
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
     document.getElementById('page-' + name).classList.add('active');
-    btn.classList.add('active');
+    if (btn) btn.classList.add('active');
     if (name === 'entry') { document.getElementById('nextIdPreview').textContent = getNextStudentId(); applyAdminUI(); }
     if (name === 'scan') renderTodayAttendance();
     if (name === 'hisab') renderHisab();
-    if (name === 'content') renderContentTab();
   }
 
   function renderAll(keepReceipt = false) {
     document.getElementById('nextIdPreview').textContent = getNextStudentId();
-    applyAdminUI();
-    renderClassGrid();
+    applyAdminUI(); renderClassGrid(); renderDueList(); renderTodayAttendance(); renderHisab(); renderContentTab();
     if (activeClass) renderClassStudents();
-    renderTodayAttendance();
-    renderHisab();
-    renderContentTab();
+    if (activeDueClass) renderDueClassStudents();
     if (activeStudentId) openProfile(activeStudentId, keepReceipt);
   }
 
-  // ===== CONTENT TAB: DUE-LOCK, NOTICES, VIDEO/PDF/MOCK TEST =====
+  // ===== SIDEBAR DUE LIST (UNPAID ONLY) =====
+  function renderDueList() {
+    const unpaidAll = students.filter(s => (Number(s.totalDue) || 0) > 0);
+    const grandTotal = unpaidAll.reduce((sum, s) => sum + (Number(s.totalDue) || 0), 0);
+    document.getElementById('grandDueTotal').textContent = 'Rs. ' + grandTotal;
+    document.getElementById('grandDueCount').textContent = `${unpaidAll.length} Students Have Pending Fee`;
+    document.getElementById('sideDuePill').textContent = 'Rs. ' + grandTotal;
+
+    document.getElementById('dueClassGrid').innerHTML = CLASSES.map(cls => {
+      const dueSt = unpaidAll.filter(s => s.studentClass === cls);
+      const clsDue = dueSt.reduce((sum, s) => sum + (Number(s.totalDue) || 0), 0);
+      return `<div class="class-card ${clsDue > 0 ? 'due-card' : ''}" onclick="openDueClassView('${cls}')">
+        <div class="cc-title">${cls}</div>
+        <div class="cc-count">${dueSt.length} Unpaid Students</div>
+        <div class="cc-due ${clsDue === 0 ? 'zero' : ''}">${clsDue > 0 ? 'Due: Rs. ' + clsDue : 'No Due ✓'}</div>
+      </div>`;
+    }).join('');
+  }
+  function openDueClassView(cls) {
+    activeDueClass = cls;
+    document.getElementById('dueGridView').style.display = 'none';
+    document.getElementById('dueClassListView').style.display = 'block';
+    document.getElementById('activeDueClassTitle').textContent = cls + ' — Due List';
+    renderDueClassStudents();
+  }
+  function closeDueClassView() {
+    activeDueClass = null;
+    document.getElementById('dueClassListView').style.display = 'none';
+    document.getElementById('dueGridView').style.display = 'block';
+  }
+  function renderDueClassStudents() {
+    const list = students.filter(s => s.studentClass === activeDueClass && (Number(s.totalDue) || 0) > 0);
+    document.getElementById('dueStudentList').innerHTML = list.length
+      ? list.map(studentRowHtml).join('')
+      : '<div class="card" style="text-align:center;color:var(--success);font-weight:700;">এই ক্লাসে কারোর কোনো ফি বাকি নেই ✓</div>';
+  }
+
+  // ===== CONTENT & LIVE CLASS UPLOAD + CHAT =====
+  function toggleUploadMode() {
+    const m = document.getElementById('cUploadMode').value;
+    document.getElementById('cLinkWrap').style.display = m === 'link' ? 'block' : 'none';
+    document.getElementById('cFileWrap').style.display = m === 'file' ? 'block' : 'none';
+  }
+
   function renderContentTab() {
     const btn = document.getElementById('dueLockBtn');
     btn.textContent = dueLock === 'OFF' ? 'OFF' : 'ON';
@@ -990,625 +819,402 @@
     document.getElementById('notCount').textContent = notices.length;
     document.getElementById('adminNoticesList').innerHTML = notices.length
       ? notices.slice().reverse().map(n => `
-        <div class="info-item">
-          <div style="font-size:12px;">
-            <strong>${n.title}</strong> <span style="color:var(--accent);font-weight:700;">[${n.targetClass}]</span><br>
-            <span style="color:#475569;">${n.message}</span><br>
-            <span style="color:var(--muted);font-size:11px;">${n.date}</span>
-          </div>
-          <button class="btn-sm-del" onclick="deleteNotice('${n.id}')">Delete</button>
-        </div>
-      `).join('')
+        <div class="info-item"><div style="font-size:12px;"><strong>${n.title}</strong> <span style="color:var(--accent);font-weight:700;">[${n.targetClass}]</span><br><span style="color:#475569;">${n.message}</span><br><span style="color:var(--muted);font-size:11px;">${n.date}</span></div>
+        <button class="btn-sm" style="background:#fee2e2;color:#b91c1c;" onclick="deleteNotice('${n.id}')">Delete</button></div>`).join('')
       : '<div style="font-size:12px;color:var(--muted);">No notices posted yet.</div>';
 
     document.getElementById('conCount').textContent = classesContent.length;
     document.getElementById('adminContentList').innerHTML = classesContent.length
       ? classesContent.slice().reverse().map(c => `
-        <div class="info-item">
+        <div class="info-item" style="align-items:flex-start;">
           <div style="font-size:12px;">
-            <strong>${c.title}</strong> <span style="color:var(--primary);font-weight:700;">(${c.type})</span><br>
-            <span style="color:var(--accent);font-weight:700;">${c.targetClass}</span> • ${c.subject} • ${c.date}
+            <strong>${c.title}</strong> <span style="color:${c.type==='Live'?'#dc2626':'var(--primary)'};font-weight:800;">(${c.type})</span><br>
+            <span style="color:var(--accent);font-weight:700;">${c.targetClass}</span> • ${c.subject} → <strong>${c.chapter || 'General'}</strong><br>
+            <span style="color:var(--muted);font-size:11px;">${c.date}${c.driveFileId ? ' • Saved in Drive' : ''}</span>
+            ${c.type === 'Live' ? `<div style="display:flex;gap:6px;margin-top:6px;">
+              <button class="btn-sm" style="background:var(--primary);color:#fff;" onclick="openAdminChat('${c.id}')">💬 Live Q&A</button>
+              <button class="btn-sm" style="background:#16a34a;color:#fff;" onclick="moveLiveToRecorded('${c.id}')">✓ Save Recorded</button>
+            </div>` : ''}
           </div>
-          <button class="btn-sm-del" onclick="deleteContent('${c.id}')">Delete</button>
-        </div>
-      `).join('')
+          <button class="btn-sm" style="background:#fee2e2;color:#b91c1c;" onclick="deleteContent('${c.id}')">Delete</button>
+        </div>`).join('')
       : '<div style="font-size:12px;color:var(--muted);">No classes/materials uploaded yet.</div>';
-  }
-
-  async function toggleDueLock() {
-    if (!navigator.onLine) { toast('Internet required to change setting.'); return; }
-    const nextVal = dueLock === 'ON' ? 'OFF' : 'ON';
-    dueLock = nextVal; renderContentTab();
-    try {
-      const res = await fetch(API_URL, {
-        method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify({ action: 'setDueLock', value: nextVal })
-      });
-      const data = await res.json();
-      if (data.status === 'ok') { applyServerPayload(data); toast(`Fee-Due Class Lock: ${nextVal}`); }
-    } catch (e) { toast('Failed to update setting.'); }
-  }
-
-  async function postNotice(e) {
-    e.preventDefault();
-    if (!navigator.onLine) { toast('Internet required to post notice.'); return; }
-    const targetClass = document.getElementById('nClass').value;
-    const title = document.getElementById('nTitle').value.trim();
-    const message = document.getElementById('nMsg').value.trim();
-    const link = document.getElementById('nLink').value.trim();
-
-    toast('Publishing Notice...');
-    try {
-      const res = await fetch(API_URL, {
-        method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify({ action: 'addNotice', targetClass, title, message, link })
-      });
-      const data = await res.json();
-      if (data.status === 'ok') {
-        applyServerPayload(data);
-        const waText = `📢 *U.C.C Institute Notice (${targetClass})*\n*${title}*\n${message}${link ? '\n🔗 ' + link : ''}\n\n— U.C.C Institute (Learn • Grow • Succeed)`;
-        document.getElementById('waNoticeShareLink').href = 'https://wa.me/?text=' + encodeURIComponent(waText);
-        document.getElementById('waNoticeShareBox').style.display = 'block';
-        e.target.reset();
-        toast('Notice Published on Student App!');
-      }
-    } catch (err) { toast('Failed to publish notice.'); }
-  }
-
-  async function deleteNotice(id) {
-    if (!confirm('Delete this notice?')) return;
-    try {
-      const res = await fetch(API_URL, {
-        method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify({ action: 'deleteNotice', id })
-      });
-      const data = await res.json();
-      if (data.status === 'ok') { applyServerPayload(data); toast('Notice Deleted.'); }
-    } catch (err) { toast('Delete failed.'); }
   }
 
   async function postContent(e) {
     e.preventDefault();
     if (!navigator.onLine) { toast('Internet required to upload.'); return; }
-    const targetClass = document.getElementById('cClass').value;
-    const type = document.getElementById('cType').value;
-    const subject = document.getElementById('cSub').value.trim();
-    const title = document.getElementById('cTitle').value.trim();
-    const link = document.getElementById('cLink').value.trim();
+    const targetClass = document.getElementById('cClass').value, type = document.getElementById('cType').value;
+    const subject = document.getElementById('cSub').value.trim(), chapter = document.getElementById('cChap').value.trim();
+    const title = document.getElementById('cTitle').value.trim(), mode = document.getElementById('cUploadMode').value;
+    const btn = document.getElementById('cSubmitBtn');
 
-    toast('Uploading...');
-    try {
-      const res = await fetch(API_URL, {
-        method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify({ action: 'addContent', targetClass, type, subject, title, link })
-      });
-      const data = await res.json();
-      if (data.status === 'ok') {
-        applyServerPayload(data);
-        e.target.reset();
-        toast(`${type} Uploaded for ${targetClass}!`);
-      }
-    } catch (err) { toast('Upload failed.'); }
+    if (mode === 'file') {
+      const file = document.getElementById('cFile').files[0];
+      if (!file) { toast('Please select a file.'); return; }
+      if (file.size > 15 * 1024 * 1024) { toast('15 MB-এর বড় ভিডিও YouTube Unlisted লিংক দিয়ে আপলোড করুন!'); return; }
+      btn.disabled = true; btn.textContent = 'Uploading to Drive...';
+      const reader = new FileReader();
+      reader.onload = async function(ev) {
+        try {
+          const res = await fetch(API_URL, {
+            method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({ action: 'uploadContentFile', targetClass, type, subject, chapter, title, fileName: file.name, mimeType: file.type || 'application/pdf', base64Data: ev.target.result })
+          });
+          const data = await res.json();
+          if (data.status === 'ok') { applyServerPayload(data); e.target.reset(); toggleUploadMode(); toast('File Uploaded to Drive & App!'); }
+          else toast('Error: ' + (data.message || 'Upload failed'));
+        } catch (err) { toast('Upload failed.'); }
+        finally { btn.disabled = false; btn.textContent = 'Publish to Student App'; }
+      };
+      reader.readAsDataURL(file);
+    } else {
+      const link = document.getElementById('cLink').value.trim();
+      if (!link) { toast('Please paste link.'); return; }
+      btn.disabled = true; btn.textContent = 'Publishing...';
+      try {
+        const res = await fetch(API_URL, {
+          method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ action: 'addContent', targetClass, type, subject, chapter, title, link })
+        });
+        const data = await res.json();
+        if (data.status === 'ok') { applyServerPayload(data); e.target.reset(); toast(`${type} Published!`); }
+      } catch (err) { toast('Failed.'); }
+      finally { btn.disabled = false; btn.textContent = 'Publish to Student App'; }
+    }
+  }
+
+  async function moveLiveToRecorded(id) {
+    if (!confirm('লাইভ শেষ হয়েছে? এটাকে Recorded Video-তে সেভ করবে?')) return;
+    const res = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: 'convertLiveToRecorded', id }) });
+    const data = await res.json();
+    if (data.status === 'ok') { applyServerPayload(data); toast('Moved to Recorded Videos!'); }
   }
 
   async function deleteContent(id) {
-    if (!confirm('Delete this item?')) return;
-    try {
-      const res = await fetch(API_URL, {
-        method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify({ action: 'deleteContent', id })
-      });
-      const data = await res.json();
-      if (data.status === 'ok') { applyServerPayload(data); toast('Deleted.'); }
-    } catch (err) { toast('Delete failed.'); }
+    if (!confirm('Delete this item? (Drive file will also be removed to free storage)')) return;
+    const res = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: 'deleteContent', id }) });
+    const data = await res.json();
+    if (data.status === 'ok') { applyServerPayload(data); toast('Deleted & storage cleared!'); }
   }
 
-  // ===== CLASSES & STUDENTS =====
+  // Admin Live Q&A Chat
+  function openAdminChat(cid) {
+    activeChatId = cid;
+    const item = classesContent.find(x => x.id === cid);
+    document.getElementById('chatModalTitle').textContent = '💬 ' + (item ? item.title : 'Live Q&A');
+    document.getElementById('chatModal').classList.add('open');
+    loadAdminChat();
+    if (chatTimer) clearInterval(chatTimer);
+    chatTimer = setInterval(loadAdminChat, 6000);
+  }
+  function closeAdminChat() {
+    activeChatId = null; if (chatTimer) clearInterval(chatTimer);
+    document.getElementById('chatModal').classList.remove('open');
+  }
+  async function loadAdminChat() {
+    if (!activeChatId) return;
+    try {
+      const res = await fetch(`${API_URL}?mode=chat&contentId=${encodeURIComponent(activeChatId)}`);
+      const data = await res.json();
+      if (data.status === 'ok') renderAdminChatMsgs(data.messages || []);
+    } catch (e) {}
+  }
+  function renderAdminChatMsgs(msgs) {
+    const box = document.getElementById('adminChatBox');
+    box.innerHTML = msgs.length
+      ? msgs.map(m => `<div class="chat-msg ${m.role==='Admin'?'admin':''}"><strong>${m.senderName}</strong> <span style="font-size:10px;color:var(--muted);">${m.time}</span><div style="margin-top:2px;">${m.message}</div></div>`).join('')
+      : '<div style="font-size:12px;color:var(--muted);text-align:center;margin-top:40px;">No student questions yet.</div>';
+    box.scrollTop = box.scrollHeight;
+  }
+  async function sendAdminChat(e) {
+    e.preventDefault();
+    const inp = document.getElementById('adminChatInput'), msg = inp.value.trim();
+    if (!msg || !activeChatId) return;
+    inp.value = '';
+    const res = await fetch(API_URL, {
+      method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action: 'sendChat', contentId: activeChatId, senderId: 'ADMIN', senderName: getCurrentAdmin() + ' (Sir)', role: 'Admin', message: msg })
+    });
+    const data = await res.json();
+    if (data.status === 'ok') renderAdminChatMsgs(data.messages || []);
+  }
+
+  async function toggleDueLock() {
+    if (!navigator.onLine) { toast('Internet required.'); return; }
+    const nextVal = dueLock === 'ON' ? 'OFF' : 'ON'; dueLock = nextVal; renderContentTab();
+    const res = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: 'setDueLock', value: nextVal }) });
+    const data = await res.json();
+    if (data.status === 'ok') { applyServerPayload(data); toast(`Fee-Due Lock: ${nextVal}`); }
+  }
+  async function postNotice(e) {
+    e.preventDefault();
+    if (!navigator.onLine) { toast('Internet required.'); return; }
+    const targetClass = document.getElementById('nClass').value, title = document.getElementById('nTitle').value.trim(), message = document.getElementById('nMsg').value.trim(), link = document.getElementById('nLink').value.trim();
+    const res = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: 'addNotice', targetClass, title, message, link }) });
+    const data = await res.json();
+    if (data.status === 'ok') {
+      applyServerPayload(data);
+      const waText = `📢 *U.C.C Institute Notice (${targetClass})*\n*${title}*\n${message}${link ? '\n🔗 ' + link : ''}\n\n— U.C.C Institute (Learn • Grow • Succeed)`;
+      document.getElementById('waNoticeShareLink').href = 'https://wa.me/?text=' + encodeURIComponent(waText);
+      document.getElementById('waNoticeShareBox').style.display = 'block';
+      e.target.reset(); toast('Notice Published!');
+    }
+  }
+  async function deleteNotice(id) {
+    if (!confirm('Delete notice?')) return;
+    const res = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: 'deleteNotice', id }) });
+    const data = await res.json();
+    if (data.status === 'ok') { applyServerPayload(data); toast('Notice Deleted.'); }
+  }
+
+  // ===== CLASSES, ENTRY, PROFILE, HISAB, QR =====
   function renderClassGrid() {
     document.getElementById('classGrid').innerHTML = CLASSES.map(cls => {
       const list = students.filter(s => s.studentClass === cls);
       const totalDue = list.reduce((sum, s) => sum + (Number(s.totalDue) || 0), 0);
-      return `
-        <div class="class-card" onclick="openClassView('${cls}')">
-          <div class="cc-title">${cls}</div>
-          <div class="cc-count">${list.length} Students</div>
-          <div class="cc-due ${totalDue === 0 ? 'zero' : ''}">${totalDue > 0 ? 'Due: Rs. ' + totalDue : 'All Clear ✓'}</div>
-        </div>
-      `;
+      return `<div class="class-card" onclick="openClassView('${cls}')"><div class="cc-title">${cls}</div><div class="cc-count">${list.length} Students</div><div class="cc-due ${totalDue === 0 ? 'zero' : ''}">${totalDue > 0 ? 'Due: Rs. ' + totalDue : 'All Clear ✓'}</div></div>`;
     }).join('');
   }
-
   function renderGlobalSearch() {
-    const q = document.getElementById('globalSearch').value.toLowerCase().trim();
-    const resBox = document.getElementById('globalSearchResults'), grid = document.getElementById('classGrid');
+    const q = document.getElementById('globalSearch').value.toLowerCase().trim(), resBox = document.getElementById('globalSearchResults'), grid = document.getElementById('classGrid');
     if (!q) { resBox.innerHTML = ''; grid.style.display = 'grid'; return; }
     grid.style.display = 'none';
     const matches = students.filter(s => s.name.toLowerCase().includes(q) || s.id.toLowerCase().includes(q) || (s.mobile || '').includes(q));
     resBox.innerHTML = matches.length ? matches.map(studentRowHtml).join('') : '<div class="card" style="text-align:center;color:var(--muted);">No student found.</div>';
   }
-
   function studentRowHtml(s) {
     const due = Number(s.totalDue) || 0;
-    return `
-      <div class="student-row" onclick="openProfile('${s.id}')">
-        <div>
-          <div class="st-name">${s.name}</div>
-          <div class="st-id">${s.id} • ${s.studentClass}${s.mobile ? ' • ' + s.mobile : ''}</div>
-        </div>
-        <div class="${due > 0 ? 'badge-due' : 'badge-ok'}">${due > 0 ? 'Due Rs.' + due : 'Paid'}</div>
-      </div>
-    `;
+    return `<div class="student-row" onclick="openProfile('${s.id}')"><div><div class="st-name">${s.name}</div><div class="st-id">${s.id} • ${s.studentClass}${s.mobile ? ' • ' + s.mobile : ''}</div></div><div class="${due > 0 ? 'badge-due' : 'badge-ok'}">${due > 0 ? 'Due Rs.' + due : 'Paid'}</div></div>`;
   }
-
-  function openClassView(cls) {
-    activeClass = cls;
-    document.getElementById('classGridView').style.display = 'none';
-    document.getElementById('classListView').style.display = 'block';
-    document.getElementById('activeClassTitle').textContent = cls;
-    document.getElementById('classSearch').value = '';
-    renderClassStudents();
-  }
-  function closeClassView() {
-    activeClass = null;
-    document.getElementById('classListView').style.display = 'none';
-    document.getElementById('classGridView').style.display = 'block';
-  }
+  function openClassView(cls) { activeClass = cls; document.getElementById('classGridView').style.display = 'none'; document.getElementById('classListView').style.display = 'block'; document.getElementById('activeClassTitle').textContent = cls; document.getElementById('classSearch').value = ''; renderClassStudents(); }
+  function closeClassView() { activeClass = null; document.getElementById('classListView').style.display = 'none'; document.getElementById('classGridView').style.display = 'block'; }
   function renderClassStudents() {
     const q = document.getElementById('classSearch').value.toLowerCase().trim();
     const list = students.filter(s => s.studentClass === activeClass && (!q || s.name.toLowerCase().includes(q) || s.id.toLowerCase().includes(q)));
-    document.getElementById('classStudentList').innerHTML = list.length ? list.map(studentRowHtml).join('') : '<div class="card" style="text-align:center;color:var(--muted);">No students in this class yet.</div>';
+    document.getElementById('classStudentList').innerHTML = list.length ? list.map(studentRowHtml).join('') : '<div class="card" style="text-align:center;color:var(--muted);">No students yet.</div>';
   }
 
   function saveNewStudent(e) {
-    e.preventDefault();
-    const collector = getCurrentAdmin();
-    if (!collector) { lockApp(); return; }
-
-    const newId = getNextStudentId();
-    const months = {}; MONTHS.forEach(([k]) => { months[k] = ''; });
-    const fMonth = document.getElementById('fMonth').value;
-    const fAmt = Number(document.getElementById('fAmt').value) || 0;
-    const fMode = document.getElementById('fMode').value;
+    e.preventDefault(); const collector = getCurrentAdmin(); if (!collector) { lockApp(); return; }
+    const newId = getNextStudentId(), months = {}; MONTHS.forEach(([k]) => { months[k] = ''; });
+    const fMonth = document.getElementById('fMonth').value, fAmt = Number(document.getElementById('fAmt').value) || 0, fMode = document.getElementById('fMode').value;
     if (fMonth && fAmt > 0) months[fMonth] = fAmt;
-
-    const studentObj = {
-      id: newId, name: document.getElementById('fName').value.trim(),
-      studentClass: document.getElementById('fClass').value, mobile: document.getElementById('fMobile').value.trim(),
-      fatherName: document.getElementById('fFather').value.trim(), address: document.getElementById('fAddress').value.trim(),
-      admissionDate: document.getElementById('fAdmDate').value, firstPayment: document.getElementById('fFirstPay').value,
-      months: months, totalDue: 0
-    };
-    studentObj.totalDue = calcDueLocal(studentObj);
-    students.push(studentObj);
-
-    if (fMonth && fAmt > 0) {
-      paymentLog.push({
-        receiptNo: 'UCC-R27' + String(paymentLog.length + 1).padStart(4, '0'),
-        date: studentObj.firstPayment || studentObj.admissionDate || todayStr(),
-        time: bnNowTime(), studentId: newId, studentName: studentObj.name,
-        studentClass: studentObj.studentClass, month: fMonth, amount: fAmt, collector: collector, mode: fMode
-      });
-    }
-
-    queue.push({ type: 'addStudent', data: { ...studentObj, firstFeeMonth: fMonth, firstFeeAmount: fAmt, collector: collector, mode: fMode } });
-    saveLocal(); renderAll();
-    document.getElementById('entryForm').reset();
-    document.getElementById('fAdmDate').value = todayStr();
-    toast(`Saved by ${collector}! Auto ID: ${newId}`);
-    if (navigator.onLine) syncNow();
+    const studentObj = { id: newId, name: document.getElementById('fName').value.trim(), studentClass: document.getElementById('fClass').value, mobile: document.getElementById('fMobile').value.trim(), fatherName: document.getElementById('fFather').value.trim(), address: document.getElementById('fAddress').value.trim(), admissionDate: document.getElementById('fAdmDate').value, firstPayment: document.getElementById('fFirstPay').value, months, totalDue: 0 };
+    studentObj.totalDue = calcDueLocal(studentObj); students.push(studentObj);
+    if (fMonth && fAmt > 0) paymentLog.push({ receiptNo: 'UCC-R27' + String(paymentLog.length+1).padStart(4,'0'), date: studentObj.firstPayment || studentObj.admissionDate || todayStr(), time: bnNowTime(), studentId: newId, studentName: studentObj.name, studentClass: studentObj.studentClass, month: fMonth, amount: fAmt, collector, mode: fMode });
+    queue.push({ type: 'addStudent', data: { ...studentObj, firstFeeMonth: fMonth, firstFeeAmount: fAmt, collector, mode: fMode } });
+    saveLocal(); renderAll(); document.getElementById('entryForm').reset(); document.getElementById('fAdmDate').value = todayStr();
+    toast(`Saved! Auto ID: ${newId}`); if (navigator.onLine) syncNow(true);
   }
 
   function showPayWarn(msg) { const w = document.getElementById('payWarn'); w.textContent = '⚠️ ' + msg; w.style.display = 'block'; toast(msg); }
   function hidePayWarn() { document.getElementById('payWarn').style.display = 'none'; }
 
   function openProfile(id, keepReceipt = false) {
-    const s = students.find(x => x.id === id);
-    if (!s) return;
+    const s = students.find(x => x.id === id); if (!s) return;
     activeStudentId = id; hidePayWarn(); applyAdminUI();
-
     const classDays = new Set(attendance.filter(a => a.studentClass === s.studentClass && (!s.admissionDate || a.date >= s.admissionDate)).map(a => a.date));
     const presentDays = new Set(attendance.filter(a => a.studentId === s.id).map(a => a.date)).size;
-    const absentDays = Math.max(0, classDays.size - presentDays);
-
-    document.getElementById('pName').textContent = s.name;
-    document.getElementById('pSub').textContent = `${s.id} • ${s.studentClass}`;
-    document.getElementById('pPresent').textContent = presentDays;
-    document.getElementById('pAbsent').textContent = absentDays;
-    document.getElementById('pDue').textContent = 'Rs. ' + (Number(s.totalDue) || 0);
-    document.getElementById('pDue').style.color = s.totalDue > 0 ? '#dc2626' : '#16a34a';
-
-    document.getElementById('pFather').textContent = s.fatherName || '-';
-    document.getElementById('pMobile').textContent = s.mobile || '-';
-    document.getElementById('pAddress').textContent = s.address || '-';
-    document.getElementById('pAdm').textContent = s.admissionDate || '-';
-    document.getElementById('pFirst').textContent = s.firstPayment || '-';
-
-    document.getElementById('eFather').value = s.fatherName || '';
-    document.getElementById('eMobile').value = s.mobile || '';
-    document.getElementById('eAddress').value = s.address || '';
+    document.getElementById('pName').textContent = s.name; document.getElementById('pSub').textContent = `${s.id} • ${s.studentClass}`;
+    document.getElementById('pPresent').textContent = presentDays; document.getElementById('pAbsent').textContent = Math.max(0, classDays.size - presentDays);
+    document.getElementById('pDue').textContent = 'Rs. ' + (Number(s.totalDue) || 0); document.getElementById('pDue').style.color = s.totalDue > 0 ? '#dc2626' : '#16a34a';
+    document.getElementById('pFather').textContent = s.fatherName || '-'; document.getElementById('pMobile').textContent = s.mobile || '-';
+    document.getElementById('pAddress').textContent = s.address || '-'; document.getElementById('pAdm').textContent = s.admissionDate || '-'; document.getElementById('pFirst').textContent = s.firstPayment || '-';
+    document.getElementById('eFather').value = s.fatherName || ''; document.getElementById('eMobile').value = s.mobile || ''; document.getElementById('eAddress').value = s.address || '';
 
     let firstUnpaidKey = '', selectHtml = '';
-    const paySelect = document.getElementById('payMonth');
-
     document.getElementById('pMonths').innerHTML = MONTHS.map(([key, lbl]) => {
       const val = Number(s.months?.[key]) || 0, paid = val > 0;
       if (!paid && !firstUnpaidKey) firstUnpaidKey = key;
-      selectHtml += paid ? `<option value="${key}" disabled>${key} (Already Paid: Rs.${val} ✓)</option>` : `<option value="${key}">${key}</option>`;
-      const selClass = selectedMonthKey === key ? 'selected' : '';
-      return `<div class="m-cell ${paid ? 'paid' : ''} ${selClass}" onclick="onMonthCellClick('${key}')">${lbl}<br>${paid ? 'Rs.' + val + ' ✓' : 'Due'}</div>`;
+      selectHtml += paid ? `<option value="${key}" disabled>${key} (Paid: Rs.${val} ✓)</option>` : `<option value="${key}">${key}</option>`;
+      return `<div class="m-cell ${paid ? 'paid' : ''} ${selectedMonthKey === key ? 'selected' : ''}" onclick="onMonthCellClick('${key}')">${lbl}<br>${paid ? 'Rs.' + val + ' ✓' : 'Due'}</div>`;
     }).join('');
-
+    const paySelect = document.getElementById('payMonth'), saveBtn = document.getElementById('paySaveBtn');
     paySelect.innerHTML = selectHtml;
-    const saveBtn = document.getElementById('paySaveBtn');
-    if (firstUnpaidKey) {
-      paySelect.value = firstUnpaidKey; paySelect.disabled = false; saveBtn.disabled = false;
-      saveBtn.textContent = `Save Payment`;
-    } else {
-      paySelect.disabled = true; saveBtn.disabled = true; saveBtn.textContent = 'All 12 Months Paid ✓';
-    }
+    if (firstUnpaidKey) { paySelect.value = firstUnpaidKey; paySelect.disabled = false; saveBtn.disabled = false; saveBtn.textContent = 'Save Payment'; }
+    else { paySelect.disabled = true; saveBtn.disabled = true; saveBtn.textContent = 'All 12 Months Paid ✓'; }
 
-    if (selectedMonthKey) renderMonthDetailCard(s, selectedMonthKey);
-    else document.getElementById('monthDetailBox').style.display = 'none';
-
-    const qrImg = document.getElementById('pQr');
-    qrImg.style.display = 'inline-block';
-    qrImg.src = 'https://quickchart.io/qr?size=140&text=' + encodeURIComponent(s.id);
+    if (selectedMonthKey) renderMonthDetailCard(s, selectedMonthKey); else document.getElementById('monthDetailBox').style.display = 'none';
+    const qrImg = document.getElementById('pQr'); qrImg.style.display = 'inline-block'; qrImg.src = 'https://quickchart.io/qr?size=140&text=' + encodeURIComponent(s.id);
     document.getElementById('pQrText').textContent = 'ID Card QR: ' + s.id;
-
     const mob = (s.mobile || '').replace(/\D/g, '');
     const dueMsg = `ইউ.সি.সি ইনস্টিটিউট: সম্মানীয় অভিভাবক, ${s.name} (${s.id}, ${bnClass(s.studentClass)})-এর বর্তমানে মোট ${s.totalDue} টাকা টিউশন ফি বাকি রয়েছে। মোট উপস্থিতি: ${presentDays} দিন। অনুগ্রহ করে শীঘ্রই ফি পরিশোধ করুন।`;
     document.getElementById('btnCall').href = mob ? `tel:${mob}` : '#';
     document.getElementById('btnSmsDue').href = mob ? `sms:${mob}?body=${encodeURIComponent(dueMsg)}` : '#';
     document.getElementById('btnWaDue').href = mob ? `https://wa.me/91${mob}?text=${encodeURIComponent(dueMsg)}` : '#';
-
     if (!keepReceipt) document.getElementById('receiptBar').style.display = 'none';
     document.getElementById('profileModal').classList.add('open');
   }
-
-  function closeProfile() {
-    activeStudentId = null; selectedMonthKey = null; hidePayWarn();
-    document.getElementById('monthDetailBox').style.display = 'none';
-    document.getElementById('receiptBar').style.display = 'none';
-    document.getElementById('profileModal').classList.remove('open');
-  }
-
+  function closeProfile() { activeStudentId = null; selectedMonthKey = null; hidePayWarn(); document.getElementById('monthDetailBox').style.display = 'none'; document.getElementById('receiptBar').style.display = 'none'; document.getElementById('profileModal').classList.remove('open'); }
   function onMonthCellClick(monthKey) {
-    const s = students.find(x => x.id === activeStudentId);
-    if (!s) return;
+    const s = students.find(x => x.id === activeStudentId); if (!s) return;
     selectedMonthKey = monthKey;
-    if ((Number(s.months?.[monthKey]) || 0) === 0 && !document.getElementById('payMonth').disabled) {
-      document.getElementById('payMonth').value = monthKey;
-      document.getElementById('payAmount').value = 300;
-    }
+    if ((Number(s.months?.[monthKey]) || 0) === 0 && !document.getElementById('payMonth').disabled) { document.getElementById('payMonth').value = monthKey; document.getElementById('payAmount').value = 300; }
     openProfile(s.id, document.getElementById('receiptBar').style.display === 'block');
   }
-
+  function openReceiptByMonth(sid, monthKey) {
+    const s = students.find(x => x.id === sid); if (!s) return;
+    const logEntry = paymentLog.slice().reverse().find(p => p.studentId === sid && p.month === monthKey);
+    openReceiptModal(logEntry || { receiptNo: 'UCC-R27', date: s.firstPayment || todayStr(), time: '', studentId: s.id, studentName: s.name, studentClass: s.studentClass, month: monthKey, amount: Number(s.months?.[monthKey]) || 300, collector: 'Pralay Sannigrahi', mode: 'Cash' });
+  }
   function renderMonthDetailCard(s, monthKey) {
-    const box = document.getElementById('monthDetailBox'), titleEl = document.getElementById('mdTitleText');
-    const badgeEl = document.getElementById('mdStatusBadge'), bodyEl = document.getElementById('mdBody'), actEl = document.getElementById('mdActions');
-    titleEl.textContent = `${bnMonth(monthKey)} (${monthKey.replace('_', ' ')})`;
-
+    const box = document.getElementById('monthDetailBox');
+    document.getElementById('mdTitleText').textContent = `${bnMonth(monthKey)} (${monthKey.replace('_',' ')})`;
     const logEntry = paymentLog.slice().reverse().find(p => p.studentId === s.id && p.month === monthKey);
     const paidAmt = Number(s.months?.[monthKey]) || 0;
-
     if (logEntry || paidAmt > 0) {
-      const amt = logEntry ? logEntry.amount : paidAmt;
-      const dt = logEntry ? formatBnDate(logEntry.date) : (s.firstPayment ? formatBnDate(s.firstPayment) : 'তারিখ লিপিবদ্ধ নেই');
-      const tm = logEntry && logEntry.time ? ` (${logEntry.time})` : '';
-      const col = logEntry ? bnCollector(logEntry.collector) : 'অ্যাডমিন';
-      const md = logEntry ? bnMode(logEntry.mode) : 'নগদ (ক্যাশ)';
-      const rNo = logEntry && logEntry.receiptNo ? logEntry.receiptNo : 'UCC-R27';
-
-      badgeEl.className = 'badge-ok'; badgeEl.textContent = 'Paid ✓';
-      bodyEl.innerHTML = `<div class="md-row"><strong>জমা টাকা:</strong> ${amt} টাকা (${md})</div><div class="md-row"><strong>কবে দিয়েছে:</strong> ${dt}${tm}</div><div class="md-row"><strong>কাকে দিয়েছে:</strong> ${col}</div><div class="md-row"><strong>রসিদ নং:</strong> ${rNo}</div>`;
-
-      const recObj = logEntry || { receiptNo: rNo, date: s.firstPayment || todayStr(), time: '', studentId: s.id, studentName: s.name, studentClass: s.studentClass, month: monthKey, amount: amt, collector: 'Pralay Sannigrahi', mode: 'Cash' };
+      const amt = logEntry ? logEntry.amount : paidAmt, dt = logEntry ? formatBnDate(logEntry.date) : (s.firstPayment ? formatBnDate(s.firstPayment) : '-');
+      const tm = logEntry && logEntry.time ? ` (${logEntry.time})` : '', col = logEntry ? bnCollector(logEntry.collector) : 'অ্যাডমিন', md = logEntry ? bnMode(logEntry.mode) : 'নগদ (ক্যাশ)';
+      document.getElementById('mdStatusBadge').className = 'badge-ok'; document.getElementById('mdStatusBadge').textContent = 'Paid ✓';
+      document.getElementById('mdBody').innerHTML = `<div><strong>জমা:</strong> ${amt} টাকা (${md})</div><div><strong>তারিখ:</strong> ${dt}${tm}</div><div><strong>গ্রহণকারী:</strong> ${col}</div>`;
       const mob = (s.mobile || '').replace(/\D/g, '');
       const rcptMsg = `ইউ.সি.সি ইনস্টিটিউট (রসিদ): ${s.name} (${s.id}, ${bnClass(s.studentClass)})-এর ${bnMonth(monthKey)} মাসের ফি বাবদ ${amt} টাকা (${md}) জমা হয়েছে। গ্রহণকারী: ${col}। তারিখ: ${dt}${tm}। বর্তমান বাকি: ${s.totalDue} টাকা। ধন্যবাদ।`;
-
-      actEl.innerHTML = `<button type="button" class="btn" style="padding:9px;font-size:13px;margin-bottom:6px;" onclick='openReceiptFromObj(${JSON.stringify(recObj)})'>📄 এই মাসের রসিদ দেখুন / ডাউনলোড করুন (PDF / PNG)</button><div class="row-2"><a href="${mob ? `https://wa.me/91${mob}?text=${encodeURIComponent(rcptMsg)}` : '#'}" target="_blank" class="act-link" style="background:#16a34a;">WhatsApp রসিদ</a><a href="${mob ? `sms:${mob}?body=${encodeURIComponent(rcptMsg)}` : '#'}" class="act-link" style="background:#2563eb;">SMS রসিদ</a></div>`;
+      document.getElementById('mdActions').innerHTML = `<button type="button" class="btn" style="padding:9px;font-size:12.5px;margin-bottom:6px;" onclick="openReceiptByMonth('${s.id}','${monthKey}')">📄 রসিদ দেখুন / ডাউনলোড (PDF/PNG)</button><div class="row-2"><a href="${mob?`https://wa.me/91${mob}?text=${encodeURIComponent(rcptMsg)}`:'#'}" target="_blank" class="act-link" style="background:#16a34a;">WhatsApp</a><a href="${mob?`sms:${mob}?body=${encodeURIComponent(rcptMsg)}`:'#'}" class="act-link" style="background:#2563eb;">SMS</a></div>`;
     } else {
-      badgeEl.className = 'badge-due'; badgeEl.textContent = 'Due';
-      bodyEl.innerHTML = `<div class="md-row" style="color:#991b1b;font-weight:700;">এই মাসের টাকা এখনো জমা হয়নি (বাকি: 300 টাকা)।</div>`;
-      actEl.innerHTML = '';
+      document.getElementById('mdStatusBadge').className = 'badge-due'; document.getElementById('mdStatusBadge').textContent = 'Due';
+      document.getElementById('mdBody').innerHTML = `<div style="color:#991b1b;font-weight:700;">এই মাসের টাকা এখনো জমা হয়নি (বাকি: 300 টাকা)।</div>`;
+      document.getElementById('mdActions').innerHTML = '';
     }
     box.style.display = 'block';
   }
 
   function submitPayment() {
-    const collector = getCurrentAdmin();
-    if (!collector) { lockApp(); return; }
-    const s = students.find(x => x.id === activeStudentId);
-    if (!s) return;
-    const month = document.getElementById('payMonth').value;
-    const amount = Number(document.getElementById('payAmount').value) || 0;
-    const mode = document.getElementById('payMode').value;
-    const niceMonth = month.replace('_', ' ');
-
-    if ((Number(s.months?.[month]) || 0) > 0) { showPayWarn(`${niceMonth} মাসে অলরেডি পেমেন্ট ডান!`); return; }
-    if (amount <= 0) { showPayWarn('Enter a valid amount.'); return; }
-
-    hidePayWarn();
-    const payDate = todayStr(), payTime = bnNowTime();
-    if (!s.months) s.months = {};
-    s.months[month] = amount;
-    if (!s.firstPayment) s.firstPayment = payDate;
-    s.totalDue = calcDueLocal(s);
-    selectedMonthKey = month;
-
-    const newLog = {
-      receiptNo: 'UCC-R27' + String(paymentLog.length + 1).padStart(4, '0'),
-      date: payDate, time: payTime, studentId: s.id, studentName: s.name,
-      studentClass: s.studentClass, month: month, amount: amount, collector: collector, mode: mode
-    };
-    paymentLog.push(newLog);
-    lastReceiptData = newLog;
-
+    const collector = getCurrentAdmin(); if (!collector) { lockApp(); return; }
+    const s = students.find(x => x.id === activeStudentId); if (!s) return;
+    const month = document.getElementById('payMonth').value, amount = Number(document.getElementById('payAmount').value) || 0, mode = document.getElementById('payMode').value;
+    if ((Number(s.months?.[month]) || 0) > 0) { showPayWarn('এই মাসে অলরেডি পেমেন্ট ডান!'); return; }
+    if (amount <= 0) { showPayWarn('Enter valid amount.'); return; }
+    hidePayWarn(); const payDate = todayStr(), payTime = bnNowTime();
+    if (!s.months) s.months = {}; s.months[month] = amount; if (!s.firstPayment) s.firstPayment = payDate; s.totalDue = calcDueLocal(s); selectedMonthKey = month;
+    const newLog = { receiptNo: 'UCC-R27' + String(paymentLog.length+1).padStart(4,'0'), date: payDate, time: payTime, studentId: s.id, studentName: s.name, studentClass: s.studentClass, month, amount, collector, mode };
+    paymentLog.push(newLog); lastReceiptData = newLog;
     queue.push({ type: 'recordPayment', data: { studentId: s.id, month, amount, payDate, payTime, collector, mode } });
-    saveLocal(); openProfile(s.id, true); renderClassGrid(); renderHisab();
-    if (activeClass) renderClassStudents();
-
+    saveLocal(); renderAll(true);
     const mob = (s.mobile || '').replace(/\D/g, '');
     const rcptMsg = `ইউ.সি.সি ইনস্টিটিউট (রসিদ): ${s.name} (${s.id}, ${bnClass(s.studentClass)})-এর ${bnMonth(month)} মাসের ফি বাবদ ${amount} টাকা (${bnMode(mode)}) জমা হলো। গ্রহণকারী: ${bnCollector(collector)}। তারিখ: ${formatBnDate(payDate)}, ${payTime}। বর্তমান বাকি: ${s.totalDue} টাকা। ধন্যবাদ।`;
-    document.getElementById('receiptMsgPreview').textContent = `✓ Saved Rs.${amount} (${niceMonth} • ${collector})!`;
+    document.getElementById('receiptMsgPreview').textContent = `✓ Saved Rs.${amount} (${month.replace('_',' ')})!`;
     document.getElementById('receiptSmsLink').href = mob ? `sms:${mob}?body=${encodeURIComponent(rcptMsg)}` : '#';
     document.getElementById('receiptWaLink').href = mob ? `https://wa.me/91${mob}?text=${encodeURIComponent(rcptMsg)}` : '#';
     document.getElementById('receiptBar').style.display = 'block';
-    if (navigator.onLine) syncNow();
+    if (navigator.onLine) syncNow(true);
   }
-
   function saveEditedDetails() {
-    const s = students.find(x => x.id === activeStudentId);
-    if (!s) return;
-    s.fatherName = document.getElementById('eFather').value.trim();
-    s.mobile = document.getElementById('eMobile').value.trim();
-    s.address = document.getElementById('eAddress').value.trim();
+    const s = students.find(x => x.id === activeStudentId); if (!s) return;
+    s.fatherName = document.getElementById('eFather').value.trim(); s.mobile = document.getElementById('eMobile').value.trim(); s.address = document.getElementById('eAddress').value.trim();
     queue.push({ type: 'updateDetails', data: { studentId: s.id, fatherName: s.fatherName, mobile: s.mobile, address: s.address } });
-    saveLocal(); openProfile(s.id, true); toast('Details Updated!');
-    if (navigator.onLine) syncNow();
+    saveLocal(); openProfile(s.id, true); toast('Updated!'); if (navigator.onLine) syncNow(true);
   }
 
-  // ===== HISAB (TODAY / ALL / MONTH-WISE) =====
-  function setHisabFilter(mode) {
-    hisabFilter = mode; hisabMonthKey = '';
-    document.getElementById('hisabMonthSel').value = '';
-    document.getElementById('pillToday').classList.toggle('active', mode === 'today');
-    document.getElementById('pillAll').classList.toggle('active', mode === 'all');
-    renderHisab();
-  }
-  function setHisabMonth(mKey) {
-    if (!mKey) { setHisabFilter('today'); return; }
-    hisabFilter = 'month'; hisabMonthKey = mKey;
-    document.getElementById('pillToday').classList.remove('active');
-    document.getElementById('pillAll').classList.remove('active');
-    renderHisab();
-  }
-
+  function setHisabFilter(mode) { hisabFilter = mode; hisabMonthKey = ''; document.getElementById('hisabMonthSel').value = ''; document.getElementById('pillToday').classList.toggle('active', mode==='today'); document.getElementById('pillAll').classList.toggle('active', mode==='all'); renderHisab(); }
+  function setHisabMonth(mKey) { if (!mKey) { setHisabFilter('today'); return; } hisabFilter = 'month'; hisabMonthKey = mKey; document.getElementById('pillToday').classList.remove('active'); document.getElementById('pillAll').classList.remove('active'); renderHisab(); }
   function renderHisab() {
-    const currentAdmin = getCurrentAdmin();
-    const pending = onlineRequests.filter(r => r.status === 'Pending');
-    const badge = document.getElementById('pendingBadge');
+    const currentAdmin = getCurrentAdmin(), pending = onlineRequests.filter(r => r.status === 'Pending'), badge = document.getElementById('pendingBadge');
     if (pending.length > 0) {
       badge.textContent = pending.length; badge.style.display = 'inline-block';
-      document.getElementById('pendingBox').style.display = 'block';
-      document.getElementById('pendingCountText').textContent = pending.length;
-      document.getElementById('pendingList').innerHTML = pending.map(r => `
-        <div class="req-card">
-          <div style="display:flex;justify-content:space-between;align-items:center;"><strong>${r.studentName} (${r.studentId})</strong><span class="badge-due">Rs. ${r.amount}</span></div>
-          <div style="font-size:12px;color:#475569;margin-top:4px;">${r.studentClass} • Month: <strong>${r.month.replace('_', ' ')}</strong> • UTR: ${r.utr || '-'}<br>Uploaded: ${r.date} ${r.time}</div>
-          ${r.screenshotData ? `<img class="req-img" src="${r.screenshotData}" alt="Payment Screenshot">` : '<div style="font-size:12px;color:#991b1b;margin:6px 0;">Screenshot not attached</div>'}
-          <div style="font-size:12px;font-weight:700;color:var(--primary);margin:6px 0 8px;">Verifying as: ${currentAdmin} 🔒</div>
-          <div class="row-2"><button class="btn" onclick="approveReq('${r.requestId}')">✓ Approve</button><button class="btn btn-red" onclick="rejectReq('${r.requestId}')">✕ Reject</button></div>
-        </div>
-      `).join('');
+      document.getElementById('pendingBox').style.display = 'block'; document.getElementById('pendingCountText').textContent = pending.length;
+      document.getElementById('pendingList').innerHTML = pending.map(r => `<div class="req-card"><div style="display:flex;justify-content:space-between;"><strong>${r.studentName} (${r.studentId})</strong><span class="badge-due">Rs. ${r.amount}</span></div><div style="font-size:12px;color:#475569;margin-top:4px;">${r.studentClass} • <strong>${r.month.replace('_',' ')}</strong> • UTR: ${r.utr || '-'}</div>${r.screenshotData ? `<img class="req-img" src="${r.screenshotData}">` : ''}<div style="font-size:12px;font-weight:700;color:var(--primary);margin:6px 0;">Verifying: ${currentAdmin} 🔒</div><div class="row-2"><button class="btn" onclick="approveReq('${r.requestId}')">✓ Approve</button><button class="btn btn-red" onclick="rejectReq('${r.requestId}')">✕ Reject</button></div></div>`).join('');
     } else { badge.style.display = 'none'; document.getElementById('pendingBox').style.display = 'none'; }
 
-    const today = todayStr();
-    const indexed = paymentLog.map((p, i) => ({ ...p, _idx: i }));
+    const today = todayStr(), indexed = paymentLog.map((p, i) => ({ ...p, _idx: i }));
     let list = indexed;
-    if (hisabFilter === 'today') {
-      list = indexed.filter(p => p.date === today);
-      document.getElementById('hLabelTitle').textContent = "Today's Collection";
-    } else if (hisabFilter === 'month' && hisabMonthKey) {
-      list = indexed.filter(p => p.month === hisabMonthKey);
-      document.getElementById('hLabelTitle').textContent = `${hisabMonthKey.replace('_', ' ')} Fee Collection`;
-    } else {
-      document.getElementById('hLabelTitle').textContent = 'All Time Collection';
-    }
+    if (hisabFilter === 'today') { list = indexed.filter(p => p.date === today); document.getElementById('hLabelTitle').textContent = "Today's Collection"; }
+    else if (hisabFilter === 'month' && hisabMonthKey) { list = indexed.filter(p => p.month === hisabMonthKey); document.getElementById('hLabelTitle').textContent = `${hisabMonthKey.replace('_',' ')} Collection`; }
+    else document.getElementById('hLabelTitle').textContent = 'All Time Collection';
     list = list.slice().reverse();
 
-    let total = 0, cash = 0, upi = 0, pralay = 0, chiranjit = 0, saikat = 0;
+    let total=0, cash=0, upi=0, pralay=0, chiranjit=0, saikat=0;
     list.forEach(p => {
       const a = Number(p.amount) || 0; total += a;
-      if ((p.mode || '').toLowerCase().includes('cash')) cash += a; else upi += a;
-      const c = String(p.collector || '');
-      if (c.includes('Pralay')) pralay += a;
-      else if (c.includes('Chiranjit')) chiranjit += a;
-      else if (c.includes('Saikat')) saikat += a;
+      if ((p.mode||'').toLowerCase().includes('cash')) cash += a; else upi += a;
+      const c = String(p.collector||''); if (c.includes('Pralay')) pralay += a; else if (c.includes('Chiranjit')) chiranjit += a; else if (c.includes('Saikat')) saikat += a;
     });
-
-    document.getElementById('hTotal').textContent = 'Rs. ' + total;
-    document.getElementById('hModeSplit').textContent = `Cash: Rs. ${cash} • Online/UPI: Rs. ${upi}`;
-    document.getElementById('hPralay').textContent = 'Rs. ' + pralay;
-    document.getElementById('hChiranjit').textContent = 'Rs. ' + chiranjit;
-    document.getElementById('hSaikat').textContent = 'Rs. ' + saikat;
-
+    document.getElementById('hTotal').textContent = 'Rs. ' + total; document.getElementById('hModeSplit').textContent = `Cash: Rs. ${cash} • UPI: Rs. ${upi}`;
+    document.getElementById('hPralay').textContent = 'Rs. ' + pralay; document.getElementById('hChiranjit').textContent = 'Rs. ' + chiranjit; document.getElementById('hSaikat').textContent = 'Rs. ' + saikat;
     document.getElementById('paymentLogList').innerHTML = list.length
-      ? list.map(p => `
-        <div class="info-item" style="font-size:12px;">
-          <div><strong>${p.studentName}</strong> (${p.studentId})<br><span style="color:var(--muted);">${p.date} (${p.time}) • ${p.month.replace('_', ' ')} • ${p.collector} (${p.mode})</span></div>
-          <div style="text-align:right;white-space:nowrap;"><div style="font-weight:800;color:var(--primary);">Rs. ${p.amount}</div><button class="mini-rcpt-btn" onclick="openReceiptByIndex(${p._idx})">📄 Receipt</button></div>
-        </div>
-      `).join('')
-      : '<div style="font-size:13px;color:var(--muted);text-align:center;">No payment records found.</div>';
+      ? list.map(p => `<div class="info-item" style="font-size:12px;"><div><strong>${p.studentName}</strong> (${p.studentId})<br><span style="color:var(--muted);">${p.date} • ${p.month.replace('_',' ')} • ${p.collector}</span></div><div style="text-align:right;"><div style="font-weight:800;color:var(--primary);">Rs. ${p.amount}</div><button class="btn-sm" style="background:var(--primary);color:#fff;margin-top:3px;" onclick="openReceiptByIndex(${p._idx})">📄 Receipt</button></div></div>`).join('')
+      : '<div style="font-size:13px;color:var(--muted);text-align:center;">No payment records.</div>';
   }
 
   function approveReq(reqId) {
-    const verifiedBy = getCurrentAdmin();
-    if (!verifiedBy) { lockApp(); return; }
-    const r = onlineRequests.find(x => x.requestId === reqId);
-    if (!r) return;
+    const verifiedBy = getCurrentAdmin(); if (!verifiedBy) { lockApp(); return; }
+    const r = onlineRequests.find(x => x.requestId === reqId); if (!r) return;
     r.status = 'Approved'; r.verifiedBy = verifiedBy; r.screenshotData = '';
-
-    const s = students.find(x => x.id === r.studentId);
-    let mob = '', newDue = 0;
-    if (s) {
-      mob = (s.mobile || '').replace(/\D/g, '');
-      if (!s.months) s.months = {};
-      if ((Number(s.months[r.month]) || 0) === 0) { s.months[r.month] = r.amount; s.totalDue = calcDueLocal(s); }
-      newDue = s.totalDue;
-    }
-
-    const newLog = {
-      receiptNo: 'UCC-R27' + String(paymentLog.length + 1).padStart(4, '0'),
-      date: todayStr(), time: bnNowTime(), studentId: r.studentId, studentName: r.studentName,
-      studentClass: r.studentClass, month: r.month, amount: r.amount, collector: verifiedBy, mode: 'Online (UPI)'
-    };
+    const s = students.find(x => x.id === r.studentId); let mob = '', newDue = 0;
+    if (s) { mob = (s.mobile||'').replace(/\D/g,''); if (!s.months) s.months = {}; if ((Number(s.months[r.month])||0)===0) { s.months[r.month]=r.amount; s.totalDue=calcDueLocal(s); } newDue = s.totalDue; }
+    const newLog = { receiptNo: 'UCC-R27'+String(paymentLog.length+1).padStart(4,'0'), date: todayStr(), time: bnNowTime(), studentId: r.studentId, studentName: r.studentName, studentClass: r.studentClass, month: r.month, amount: r.amount, collector: verifiedBy, mode: 'Online (UPI)' };
     paymentLog.push(newLog); lastReceiptData = newLog;
-    queue.push({ type: 'approveOnline', data: { requestId: reqId, verifiedBy } });
-    saveLocal(); renderAll();
-
+    queue.push({ type: 'approveOnline', data: { requestId: reqId, verifiedBy } }); saveLocal(); renderAll();
     const msg = `ইউ.সি.সি ইনস্টিটিউট (অনলাইন রসিদ): ${r.studentName} (${r.studentId}, ${bnClass(r.studentClass)})-এর ${bnMonth(r.month)} মাসের অনলাইন পেমেন্ট (${r.amount} টাকা) গ্রহণ করা হয়েছে। গ্রহণকারী: ${bnCollector(verifiedBy)}। বর্তমান বাকি: ${newDue} টাকা। ধন্যবাদ।`;
     document.getElementById('approveMsgText').textContent = `✓ Approved Rs.${r.amount} for ${r.studentName}!`;
     document.getElementById('approveWaLink').href = mob ? `https://wa.me/91${mob}?text=${encodeURIComponent(msg)}` : '#';
     document.getElementById('approveSmsLink').href = mob ? `sms:${mob}?body=${encodeURIComponent(msg)}` : '#';
     document.getElementById('approveNotifyBar').style.display = 'block';
-    toast(`Approved by ${verifiedBy}!`);
-    if (navigator.onLine) syncNow();
+    toast('Approved!'); if (navigator.onLine) syncNow(true);
   }
-
   function rejectReq(reqId) {
-    const verifiedBy = getCurrentAdmin();
-    if (!verifiedBy) { lockApp(); return; }
-    const reason = prompt('Reason for rejection:', 'Payment not received');
-    if (reason === null) return;
-    const r = onlineRequests.find(x => x.requestId === reqId);
-    if (!r) return;
+    const verifiedBy = getCurrentAdmin(); if (!verifiedBy) { lockApp(); return; }
+    const reason = prompt('Reason:', 'Payment not received'); if (reason === null) return;
+    const r = onlineRequests.find(x => x.requestId === reqId); if (!r) return;
     r.status = 'Rejected'; r.remarks = reason; r.screenshotData = '';
-    queue.push({ type: 'rejectOnline', data: { requestId: reqId, verifiedBy, remarks: reason } });
-    saveLocal(); renderHisab(); toast('Request Rejected.');
-    if (navigator.onLine) syncNow();
+    queue.push({ type: 'rejectOnline', data: { requestId: reqId, verifiedBy, remarks: reason } }); saveLocal(); renderHisab(); toast('Rejected.'); if (navigator.onLine) syncNow(true);
   }
 
-  // ===== BENGALI RECEIPT =====
   function openLastReceipt() { if (lastReceiptData) openReceiptModal(lastReceiptData); }
   function openReceiptByIndex(idx) { if (paymentLog[idx]) openReceiptModal(paymentLog[idx]); }
-  function openReceiptFromObj(p) { openReceiptModal(p); }
   function openReceiptModal(p) {
-    const s = students.find(x => x.id === p.studentId) || {};
-    activeReceiptData = { p, fatherName: s.fatherName || '-' };
-    document.getElementById('rNo').textContent = p.receiptNo || '-';
-    document.getElementById('rDate').textContent = `${formatBnDate(p.date)}${p.time ? ', ' + p.time : ''}`;
-    document.getElementById('rName').textContent = p.studentName;
-    document.getElementById('rFather').textContent = s.fatherName || '-';
-    document.getElementById('rIdCls').textContent = `${p.studentId} • ${bnClass(p.studentClass)}`;
-    document.getElementById('rMonth').textContent = bnMonth(p.month);
-    document.getElementById('rMode').textContent = bnMode(p.mode);
-    document.getElementById('rAmt').textContent = p.amount + ' টাকা';
+    const s = students.find(x => x.id === p.studentId) || {}; activeReceiptData = { p, fatherName: s.fatherName || '-' };
+    document.getElementById('rNo').textContent = p.receiptNo || '-'; document.getElementById('rDate').textContent = `${formatBnDate(p.date)}${p.time ? ', '+p.time : ''}`;
+    document.getElementById('rName').textContent = p.studentName; document.getElementById('rFather').textContent = s.fatherName || '-';
+    document.getElementById('rIdCls').textContent = `${p.studentId} • ${bnClass(p.studentClass)}`; document.getElementById('rMonth').textContent = bnMonth(p.month);
+    document.getElementById('rMode').textContent = bnMode(p.mode); document.getElementById('rAmt').textContent = p.amount + ' টাকা';
     document.getElementById('rCollector').textContent = bnCollector(p.collector);
     document.getElementById('rcptModal').classList.add('open');
   }
   function closeReceipt() { document.getElementById('rcptModal').classList.remove('open'); }
-
   function downloadReceiptImage() {
-    if (!activeReceiptData) return;
-    const { p, fatherName } = activeReceiptData;
-    const c = document.createElement('canvas'); c.width = 720; c.height = 860;
-    const ctx = c.getContext('2d');
-    ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, c.width, c.height);
-    ctx.strokeStyle = '#0b2545'; ctx.lineWidth = 8; ctx.strokeRect(18, 18, c.width - 36, c.height - 36);
-    ctx.fillStyle = '#0b2545'; ctx.fillRect(22, 22, c.width - 44, 155);
-    ctx.fillStyle = '#f97316'; ctx.fillRect(22, 173, c.width - 44, 6);
-    ctx.fillStyle = '#ffffff'; ctx.textAlign = 'center'; ctx.font = 'bold 38px sans-serif';
-    ctx.fillText('ইউ.সি.সি ইনস্টিটিউট', c.width / 2, 82);
-    ctx.font = '20px sans-serif'; ctx.fillText('পেঁচাকোলা, রায়পুর, বাঁকুড়া • ফোন: 8016972121 / 8159980707', c.width / 2, 120);
-    ctx.font = 'bold 22px sans-serif'; ctx.fillStyle = '#fed7aa'; ctx.fillText('অফিশিয়াল টিউশন ফি রসিদ (2027)', c.width / 2, 156);
-
-    const rows = [
-      ['রসিদ নং:', p.receiptNo || '-'], ['তারিখ ও সময়:', `${formatBnDate(p.date)}${p.time ? ', ' + p.time : ''}`],
-      ['ছাত্র/ছাত্রীর নাম:', p.studentName], ['পিতার নাম:', fatherName],
-      ['আইডি ও শ্রেণী:', `${p.studentId} • ${bnClass(p.studentClass)}`], ['কোন মাসের ফি:', bnMonth(p.month)], ['পেমেন্টের মাধ্যম:', bnMode(p.mode)]
-    ];
-    let y = 240;
-    rows.forEach(([lbl, val]) => {
-      ctx.textAlign = 'left'; ctx.fillStyle = '#475569'; ctx.font = '22px sans-serif'; ctx.fillText(lbl, 55, y);
-      ctx.textAlign = 'right'; ctx.fillStyle = '#0f172a'; ctx.font = 'bold 23px sans-serif'; ctx.fillText(String(val), c.width - 55, y);
-      ctx.strokeStyle = '#e2e8f0'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(55, y + 18); ctx.lineTo(c.width - 55, y + 18); ctx.stroke();
-      y += 62;
-    });
-    ctx.fillStyle = '#fff7ed'; ctx.fillRect(55, y - 10, c.width - 110, 68);
-    ctx.strokeStyle = '#f97316'; ctx.lineWidth = 2; ctx.strokeRect(55, y - 10, c.width - 110, 68);
-    ctx.textAlign = 'left'; ctx.fillStyle = '#0b2545'; ctx.font = 'bold 26px sans-serif'; ctx.fillText('মোট জমা টাকা:', 75, y + 33);
-    ctx.textAlign = 'right'; ctx.font = 'bold 30px sans-serif'; ctx.fillText(`${p.amount} টাকা`, c.width - 75, y + 33);
-
-    y += 120;
-    ctx.textAlign = 'right'; ctx.fillStyle = '#475569'; ctx.font = '19px sans-serif'; ctx.fillText('গ্রহণকারী / অনুমোদিত স্বাক্ষর:', c.width - 55, y);
-    ctx.fillStyle = '#0b2545'; ctx.font = 'bold 26px sans-serif'; ctx.fillText(bnCollector(p.collector), c.width - 55, y + 36);
-    ctx.fillStyle = '#64748b'; ctx.font = '16px sans-serif'; ctx.fillText('ইউ.সি.সি ইনস্টিটিউট, পেঁচাকোলা, বাঁকুড়া', c.width - 55, y + 64);
-
+    if (!activeReceiptData) return; const { p, fatherName } = activeReceiptData;
+    const c = document.createElement('canvas'); c.width = 720; c.height = 860; const ctx = c.getContext('2d');
+    ctx.fillStyle = '#fff'; ctx.fillRect(0,0,720,860); ctx.strokeStyle = '#0b2545'; ctx.lineWidth = 8; ctx.strokeRect(18,18,684,824);
+    ctx.fillStyle = '#0b2545'; ctx.fillRect(22,22,676,155); ctx.fillStyle = '#f97316'; ctx.fillRect(22,173,676,6);
+    ctx.fillStyle = '#fff'; ctx.textAlign = 'center'; ctx.font = 'bold 38px sans-serif'; ctx.fillText('ইউ.সি.সি ইনস্টিটিউট', 360, 82);
+    ctx.font = '20px sans-serif'; ctx.fillText('পেঁচাকোলা, রায়পুর, বাঁকুড়া • ফোন: 8016972121 / 8159980707', 360, 120);
+    ctx.font = 'bold 22px sans-serif'; ctx.fillStyle = '#fed7aa'; ctx.fillText('অফিশিয়াল টিউশন ফি রসিদ (2027)', 360, 156);
+    const rows = [['রসিদ নং:', p.receiptNo||'-'], ['তারিখ ও সময়:', `${formatBnDate(p.date)}${p.time?', '+p.time:''}`], ['ছাত্র/ছাত্রীর নাম:', p.studentName], ['পিতার নাম:', fatherName], ['আইডি ও শ্রেণী:', `${p.studentId} • ${bnClass(p.studentClass)}`], ['কোন মাসের ফি:', bnMonth(p.month)], ['পেমেন্টের মাধ্যম:', bnMode(p.mode)]];
+    let y = 240; rows.forEach(([l,v]) => { ctx.textAlign='left'; ctx.fillStyle='#475569'; ctx.font='22px sans-serif'; ctx.fillText(l,55,y); ctx.textAlign='right'; ctx.fillStyle='#0f172a'; ctx.font='bold 23px sans-serif'; ctx.fillText(String(v),665,y); ctx.strokeStyle='#e2e8f0'; ctx.lineWidth=1.5; ctx.beginPath(); ctx.moveTo(55,y+18); ctx.lineTo(665,y+18); ctx.stroke(); y+=62; });
+    ctx.fillStyle='#fff7ed'; ctx.fillRect(55,y-10,610,68); ctx.strokeStyle='#f97316'; ctx.lineWidth=2; ctx.strokeRect(55,y-10,610,68);
+    ctx.textAlign='left'; ctx.fillStyle='#0b2545'; ctx.font='bold 26px sans-serif'; ctx.fillText('মোট জমা টাকা:',75,y+33); ctx.textAlign='right'; ctx.font='bold 30px sans-serif'; ctx.fillText(`${p.amount} টাকা`,645,y+33);
+    y+=120; ctx.textAlign='right'; ctx.fillStyle='#475569'; ctx.font='19px sans-serif'; ctx.fillText('গ্রহণকারী / অনুমোদিত স্বাক্ষর:',665,y); ctx.fillStyle='#0b2545'; ctx.font='bold 26px sans-serif'; ctx.fillText(bnCollector(p.collector),665,y+36);
     const a = document.createElement('a'); a.download = `UCC_Receipt_${p.studentId}_${p.month}.png`; a.href = c.toDataURL('image/png'); a.click();
   }
 
-  // ===== QR SCANNER & ABSENT REPORT =====
-  function playBeep(freq, duration) {
-    try { const ctx = new (window.AudioContext || window.webkitAudioContext)(); const osc = ctx.createOscillator(); osc.frequency.value = freq; osc.connect(ctx.destination); osc.start(); setTimeout(() => { osc.stop(); ctx.close(); }, duration); } catch (e) {}
-  }
-  function showScanPopup(type, statusText, nameText, metaText) {
-    const box = document.getElementById('scanPopup'); box.className = 'scan-popup ' + type;
-    document.getElementById('spStatus').textContent = statusText; document.getElementById('spName').textContent = nameText; document.getElementById('spMeta').textContent = metaText;
-    setTimeout(() => { box.className = 'scan-popup'; }, 2500);
-  }
+  function playBeep(f, d) { try { const ctx = new (window.AudioContext||window.webkitAudioContext)(), o = ctx.createOscillator(); o.frequency.value = f; o.connect(ctx.destination); o.start(); setTimeout(() => { o.stop(); ctx.close(); }, d); } catch(e){} }
+  function showScanPopup(type, st, nm, mt) { const b = document.getElementById('scanPopup'); b.className = 'scan-popup '+type; document.getElementById('spStatus').textContent=st; document.getElementById('spName').textContent=nm; document.getElementById('spMeta').textContent=mt; setTimeout(()=>{ b.className='scan-popup'; }, 2400); }
   async function toggleScanner() { if (scannerRunning) await stopScanner(); else await startScanner(); }
   async function startScanner() {
-    if (!window.Html5Qrcode) { toast('QR scanner not loaded — refresh online once.'); return; }
-    try {
-      html5Qr = new Html5Qrcode('reader');
-      await html5Qr.start({ facingMode: facingMode }, { fps: 10, qrbox: { width: 220, height: 220 } }, onQrScanned);
-      scannerRunning = true;
-      document.getElementById('camToggleBtn').textContent = 'Stop Camera'; document.getElementById('camToggleBtn').classList.add('btn-red');
-    } catch (err) { toast('Please allow camera permission.'); }
+    if (!window.Html5Qrcode) { toast('Refresh online once.'); return; }
+    try { html5Qr = new Html5Qrcode('reader'); await html5Qr.start({ facingMode }, { fps: 10, qrbox: { width: 220, height: 220 } }, onQrScanned); scannerRunning = true; document.getElementById('camToggleBtn').textContent = 'Stop Camera'; document.getElementById('camToggleBtn').classList.add('btn-red'); } catch (e) { toast('Allow camera permission.'); }
   }
-  async function stopScanner() {
-    if (html5Qr && scannerRunning) {
-      try { await html5Qr.stop(); } catch (e) {}
-      scannerRunning = false;
-      document.getElementById('camToggleBtn').textContent = 'Start Camera'; document.getElementById('camToggleBtn').classList.remove('btn-red');
-    }
-  }
-  async function switchCameraFacing() { facingMode = (facingMode === 'environment') ? 'user' : 'environment'; if (scannerRunning) { await stopScanner(); await startScanner(); } }
-
-  function onQrScanned(decodedText) {
-    if (scanCooldown) return;
-    scanCooldown = true; setTimeout(() => { scanCooldown = false; }, 2500);
-    const sid = decodedText.trim().toUpperCase();
-    const s = students.find(x => x.id.toUpperCase() === sid);
-    if (!s) { playBeep(260, 280); showScanPopup('err', 'Invalid QR Code', sid, 'Student ID not found'); return; }
-
-    const today = todayStr();
-    const exists = attendance.some(a => a.date === today && a.studentId.toUpperCase() === s.id.toUpperCase()) ||
-                   queue.some(q => q.type === 'markAttendance' && q.data.date === today && q.data.studentId.toUpperCase() === s.id.toUpperCase());
-    if (exists) { playBeep(380, 220); showScanPopup('warn', 'Already Present Today!', s.name, `${s.id} • ${s.studentClass}`); return; }
-
+  async function stopScanner() { if (html5Qr && scannerRunning) { try { await html5Qr.stop(); } catch(e){} scannerRunning = false; document.getElementById('camToggleBtn').textContent = 'Start Camera'; document.getElementById('camToggleBtn').classList.remove('btn-red'); } }
+  async function switchCameraFacing() { facingMode = facingMode==='environment'?'user':'environment'; if (scannerRunning) { await stopScanner(); await startScanner(); } }
+  function onQrScanned(txt) {
+    if (scanCooldown) return; scanCooldown = true; setTimeout(()=>{ scanCooldown=false; }, 2400);
+    const sid = txt.trim().toUpperCase(), s = students.find(x => x.id.toUpperCase() === sid);
+    if (!s) { playBeep(260,260); showScanPopup('err','Invalid QR',sid,'Not found'); return; }
+    const today = todayStr(), exists = attendance.some(a => a.date===today && a.studentId.toUpperCase()===s.id.toUpperCase()) || queue.some(q => q.type==='markAttendance' && q.data.date===today && q.data.studentId.toUpperCase()===s.id.toUpperCase());
+    if (exists) { playBeep(380,200); showScanPopup('warn','Already Present!',s.name,`${s.id} • ${s.studentClass}`); return; }
     const rec = { date: today, time: bnNowTime(), studentId: s.id, name: s.name, studentClass: s.studentClass, status: 'Present' };
     attendance.push(rec); queue.push({ type: 'markAttendance', data: rec }); saveLocal(); renderTodayAttendance();
-    playBeep(900, 140);
-    showScanPopup('ok', '✓ Present Marked', s.name, `${s.id} • ${s.studentClass}${s.totalDue > 0 ? ' • Due: Rs.' + s.totalDue : ' • Fees Clear'}`);
-    if (navigator.onLine) syncNow();
+    playBeep(900,140); showScanPopup('ok','✓ Present Marked',s.name,`${s.id} • ${s.studentClass}${s.totalDue>0?' • Due: Rs.'+s.totalDue:' • Clear'}`);
+    if (navigator.onLine) syncNow(true);
   }
-
   function renderTodayAttendance() {
-    const today = todayStr();
-    const list = attendance.filter(a => a.date === today).reverse();
+    const today = todayStr(), list = attendance.filter(a => a.date === today).reverse();
     document.getElementById('todayCount').textContent = list.length;
-    document.getElementById('todayLog').innerHTML = list.length
-      ? list.map(a => `<div class="info-item" style="font-size:13px;"><span><strong>${a.name}</strong> (${a.studentId} • ${a.studentClass})</span><span style="color:var(--success);font-weight:700;">${a.time}</span></div>`).join('')
-      : '<div style="font-size:13px;color:var(--muted);">No attendance scanned today.</div>';
-
+    document.getElementById('todayLog').innerHTML = list.length ? list.map(a => `<div class="info-item" style="font-size:13px;"><span><strong>${a.name}</strong> (${a.studentId} • ${a.studentClass})</span><span style="color:var(--success);font-weight:700;">${a.time}</span></div>`).join('') : '<div style="font-size:13px;color:var(--muted);">No attendance scanned today.</div>';
     const absToday = absentLog.filter(a => a.date === today).reverse();
-    document.getElementById('absentRepCount').textContent = absToday.length;
-    document.getElementById('absentReportList').innerHTML = absToday.length
-      ? absToday.map(a => `<div class="info-item" style="font-size:12px;"><div><strong>${a.studentName}</strong> (${a.studentId} • ${a.studentClass})<br><span style="color:#c2410c;font-weight:700;">কারণ: ${a.reason}</span></div><span style="color:var(--muted);font-size:11px;">${a.time}<br>${a.callerName}</span></div>`).join('')
-      : '<div style="font-size:12px;color:var(--muted);">No absent calls logged today.</div>';
+    document.getElementById('absentRepCount').textContent = absToday.length; document.getElementById('sideAbsPill').textContent = absToday.length;
+    document.getElementById('absentReportList').innerHTML = absToday.length ? absToday.map(a => `<div class="info-item" style="font-size:12px;"><div><strong>${a.studentName}</strong> (${a.studentId} • ${a.studentClass})<br><span style="color:#c2410c;font-weight:700;">কারণ: ${a.reason}</span></div><span style="color:var(--muted);font-size:11px;">${a.time}<br>${a.callerName}</span></div>`).join('') : '<div style="font-size:12px;color:var(--muted);">No absent calls logged today.</div>';
   }
 </script>
 </body>
