@@ -57,32 +57,30 @@
     svg { flex-shrink: 0; }
     option { background: var(--bg-input); color: var(--text); }
 
-    /* ===== ULTRA-FAST SPLASH ===== */
     #splashScreen {
       position: fixed; inset: 0; z-index: 999;
       background: var(--bg-page); background-color: var(--bg-solid);
       display: flex; flex-direction: column; justify-content: center; align-items: center;
       text-align: center; padding: 24px;
-      transition: opacity 0.22s ease, transform 0.22s ease;
+      transition: opacity 0.2s ease, transform 0.2s ease;
     }
     #splashScreen.hide { opacity: 0; transform: scale(1.04); pointer-events: none; }
     .splash-ring {
-      width: 104px; height: 104px; border-radius: 50%; padding: 4px;
+      width: 102px; height: 102px; border-radius: 50%; padding: 4px;
       background: var(--accent-grad);
-      box-shadow: 0 0 0 8px var(--accent-soft), 0 0 32px var(--accent-soft);
-      animation: popIn 0.32s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      box-shadow: 0 0 0 8px var(--accent-soft), 0 0 30px var(--accent-soft);
+      animation: popIn 0.28s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
     .splash-ring img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; background: #fff; display: block; }
-    .splash-title { margin: 16px 0 5px; font-size: 25px; font-weight: 800; color: var(--accent-light); }
+    .splash-title { margin: 15px 0 5px; font-size: 25px; font-weight: 800; color: var(--accent-light); }
     .splash-tag { margin: 0; color: var(--text-2); font-size: 11px; font-weight: 700; letter-spacing: 2.2px; text-transform: uppercase; padding: 4px 14px; border-radius: 30px; background: var(--accent-soft); border: 1px solid var(--accent-border); }
 
-    @keyframes popIn { 0% { opacity: 0; transform: scale(0.7); } 100% { opacity: 1; transform: scale(1); } }
+    @keyframes popIn { 0% { opacity: 0; transform: scale(0.72); } 100% { opacity: 1; transform: scale(1); } }
     @keyframes slideUp { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 1; transform: translateY(0); } }
     @keyframes pageFade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes pulseDot { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.35); opacity: 0.4; } }
     @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
 
-    /* ===== LOGIN SCREEN ===== */
     #loginScreen {
       position: fixed; inset: 0; z-index: 200;
       background: var(--bg-page); background-color: var(--bg-solid);
@@ -99,12 +97,8 @@
     .login-title { text-align: center; margin-bottom: 20px; }
     .login-title h2 { margin: 0; font-size: 22px; font-weight: 800; color: var(--accent-light); }
     .login-title p { margin: 5px 0 0; font-size: 11px; color: var(--muted); font-weight: 700; letter-spacing: 1.8px; }
-    .login-err {
-      display: none; background: var(--danger-soft); color: var(--danger); border: 1px solid var(--danger);
-      padding: 10px 12px; border-radius: 12px; font-size: 12.5px; font-weight: 600; margin-bottom: 14px; text-align: center;
-    }
+    .login-err { display: none; background: var(--danger-soft); color: var(--danger); border: 1px solid var(--danger); padding: 10px 12px; border-radius: 12px; font-size: 12.5px; font-weight: 600; margin-bottom: 14px; text-align: center; }
 
-    /* ===== HEADER & SIDEBAR ===== */
     header {
       background: var(--bg-header); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
       color: var(--text); padding: 11px 14px; position: sticky; top: 0; z-index: 30;
@@ -133,10 +127,7 @@
       display: flex; flex-direction: column; box-shadow: 8px 0 32px rgba(0, 0, 0, 0.5);
     }
     #sidebar.open { left: 0; }
-    .side-head {
-      background: var(--bg-hero); color: #fff; padding: 18px 15px;
-      border-bottom: 1.5px solid var(--accent-border); display: flex; align-items: center; justify-content: space-between; gap: 10px;
-    }
+    .side-head { background: var(--bg-hero); color: #fff; padding: 18px 15px; border-bottom: 1.5px solid var(--accent-border); display: flex; align-items: center; justify-content: space-between; gap: 10px; }
     .side-head-left { display: flex; align-items: center; gap: 10px; min-width: 0; }
     .side-head img { width: 42px; height: 42px; border-radius: 50%; border: 2px solid var(--accent); background: #fff; object-fit: cover; }
     .side-body { padding: 14px 12px 24px; overflow-y: auto; flex: 1; }
@@ -148,77 +139,39 @@
     .switch-pill.off { background: var(--border); color: var(--text); }
 
     .theme-list { display: grid; grid-template-columns: 1fr; gap: 7px; margin-bottom: 14px; }
-    .theme-opt {
-      display: flex; align-items: center; justify-content: space-between; padding: 9px 11px; border-radius: 12px;
-      border: 1.5px solid var(--border); background: var(--bg-card); cursor: pointer;
-      color: var(--text); font-size: 12.5px; font-weight: 700; transition: transform 0.12s ease;
-    }
-    .theme-opt:active { transform: scale(0.97); }
+    .theme-opt { display: flex; align-items: center; justify-content: space-between; padding: 9px 11px; border-radius: 12px; border: 1.5px solid var(--border); background: var(--bg-card); cursor: pointer; color: var(--text); font-size: 12.5px; font-weight: 700; }
     .theme-opt.active { border-color: var(--accent); background: var(--accent-soft); }
     .theme-opt-left { display: flex; align-items: center; gap: 9px; }
     .swatch { width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0; border: 2px solid rgba(255,255,255,0.45); }
-
     .color-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 9px; }
     .color-box { background: var(--bg-subcard); border: 1px solid var(--border); border-radius: 10px; padding: 6px; text-align: center; }
     .color-box input[type="color"] { width: 100%; height: 28px; border: none; background: none; padding: 0; cursor: pointer; }
 
-    /* ===== CONTAINER & CARDS ===== */
     .container { max-width: 580px; margin: 14px auto; padding: 0 14px; }
     .page { display: none; }
-    .page.active { display: block; animation: pageFade 0.18s ease; }
+    .page.active { display: block; animation: pageFade 0.16s ease; }
 
-    .card {
-      background: var(--bg-card); border-radius: var(--radius); padding: 16px;
-      box-shadow: var(--shadow-card); margin-bottom: 14px; border: 1px solid var(--border);
-    }
+    .card { background: var(--bg-card); border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow-card); margin-bottom: 14px; border: 1px solid var(--border); }
     .card-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
     .card-title { font-size: 14.5px; font-weight: 800; color: var(--accent-light); display: flex; align-items: center; gap: 7px; }
-    .pill-mini {
-      font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px;
-      background: var(--accent-soft); color: var(--accent-light); border: 1px solid var(--accent-border);
-    }
+    .pill-mini { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; background: var(--accent-soft); color: var(--accent-light); border: 1px solid var(--accent-border); }
 
-    /* ===== NOTICE BANNER ===== */
-    .notice-banner {
-      background: var(--bg-card); border: 1px solid var(--accent-border); border-left: 4px solid var(--accent);
-      border-radius: 16px; padding: 13px 14px; margin-bottom: 14px; box-shadow: var(--shadow-card);
-    }
+    .notice-banner { background: var(--bg-card); border: 1px solid var(--accent-border); border-left: 4px solid var(--accent); border-radius: 16px; padding: 13px 14px; margin-bottom: 14px; box-shadow: var(--shadow-card); }
     .notice-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 5px; }
     .notice-badge { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 800; color: var(--accent-light); }
     .live-dot { width: 8px; height: 8px; border-radius: 50%; background: #ef4444; box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.25); animation: pulseDot 1.3s infinite; }
     .notice-date { font-size: 11px; font-weight: 600; color: var(--accent-light); background: var(--accent-soft); padding: 2px 9px; border-radius: 20px; border: 1px solid var(--accent-border); }
     .notice-body { font-size: 13.5px; color: var(--text); line-height: 1.5; font-weight: 500; }
-    .notice-link {
-      display: inline-flex; align-items: center; gap: 5px; margin-top: 9px;
-      background: var(--accent-grad); color: var(--accent-text); text-decoration: none;
-      font-size: 12px; font-weight: 800; padding: 6px 13px; border-radius: 9px;
-    }
+    .notice-link { display: inline-flex; align-items: center; gap: 5px; margin-top: 9px; background: var(--accent-grad); color: var(--accent-text); text-decoration: none; font-size: 12px; font-weight: 800; padding: 6px 13px; border-radius: 9px; }
 
-    /* ===== HERO CARD ===== */
-    .hero-card {
-      position: relative; overflow: hidden; background: var(--bg-hero);
-      border: 1.5px solid var(--accent-border); color: #fff;
-      border-radius: 22px; padding: 18px; margin-bottom: 14px; box-shadow: var(--shadow-card);
-    }
+    .hero-card { position: relative; overflow: hidden; background: var(--bg-hero); border: 1.5px solid var(--accent-border); color: #fff; border-radius: 22px; padding: 18px; margin-bottom: 14px; box-shadow: var(--shadow-card); }
     .hero-row { position: relative; display: flex; align-items: center; gap: 14px; }
-    .avatar-circle {
-      width: 54px; height: 54px; border-radius: 16px;
-      background: var(--accent-grad); color: var(--accent-text); font-size: 22px; font-weight: 800;
-      display: flex; align-items: center; justify-content: center; border: 2px solid rgba(255,255,255,0.35);
-    }
+    .avatar-circle { width: 54px; height: 54px; border-radius: 16px; background: var(--accent-grad); color: var(--accent-text); font-size: 22px; font-weight: 800; display: flex; align-items: center; justify-content: center; border: 2px solid rgba(255,255,255,0.35); }
     .hero-name { font-size: 19.5px; font-weight: 800; color: #fff; line-height: 1.2; }
     .hero-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
-    .hero-chip {
-      font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px;
-      background: rgba(255,255,255,0.16); border: 1px solid rgba(255,255,255,0.22); color: #fff;
-    }
-    .hero-footer {
-      position: relative; margin-top: 14px; padding-top: 12px;
-      border-top: 1px solid rgba(255,255,255,0.18);
-      display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: rgba(255,255,255,0.85);
-    }
+    .hero-chip { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; background: rgba(255,255,255,0.16); border: 1px solid rgba(255,255,255,0.22); color: #fff; }
+    .hero-footer { position: relative; margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.18); display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: rgba(255,255,255,0.85); }
 
-    /* ===== STATS & PROGRESS ===== */
     .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px; }
     .stat-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 13px 8px; text-align: center; box-shadow: var(--shadow-card); }
     .stat-icon { width: 32px; height: 32px; border-radius: 10px; margin: 0 auto 7px; display: flex; align-items: center; justify-content: center; }
@@ -227,11 +180,9 @@
     .si-red { background: var(--danger-soft); color: var(--danger); }
     .stat-num { font-size: 17px; font-weight: 800; }
     .stat-lbl { font-size: 11px; color: var(--muted); margin-top: 2px; font-weight: 600; }
-
     .prog-track { width: 100%; height: 7px; background: var(--border); border-radius: 99px; overflow: hidden; margin-top: 9px; }
-    .prog-fill { height: 100%; border-radius: 99px; background: var(--accent-grad); transition: width 0.4s ease; }
+    .prog-fill { height: 100%; border-radius: 99px; background: var(--accent-grad); transition: width 0.35s ease; }
 
-    /* ===== MONTHS GRID ===== */
     .months-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
     .m-cell { border: 1px solid var(--border); border-radius: 13px; padding: 9px 4px; text-align: center; background: var(--bg-subcard); }
     .m-cell .m-name { font-size: 11.5px; font-weight: 700; color: var(--text-2); }
@@ -239,7 +190,6 @@
     .m-cell.paid { background: var(--success-soft); border-color: var(--success); }
     .m-cell.paid .m-name, .m-cell.paid .m-val { color: var(--success); }
 
-    /* ===== SEGMENTED PILLS & FOLDERS ===== */
     .seg-bar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; background: var(--bg-subcard); border: 1px solid var(--border); padding: 5px; border-radius: 14px; margin-bottom: 14px; }
     .seg-btn { padding: 9px 4px; border-radius: 10px; border: none; background: transparent; font-weight: 700; font-size: 12.5px; cursor: pointer; color: var(--muted); display: flex; align-items: center; justify-content: center; gap: 5px; }
     .seg-btn.active { background: var(--accent-grad); color: var(--accent-text); font-weight: 800; }
@@ -257,18 +207,20 @@
     details.chap-folder > summary { padding: 11px 12px; font-size: 13.5px; font-weight: 700; color: var(--accent-light); cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; }
     details.chap-folder > summary::-webkit-details-marker { display: none; }
     .chap-body { padding: 0 10px 10px; }
+
     .content-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 13px; margin-top: 8px; }
     .c-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; background: var(--accent-soft); color: var(--accent-light); border: 1px solid var(--accent-border); }
     .c-badge.live { background: var(--danger-soft); color: var(--danger); border-color: var(--danger); }
     .video-box { margin-top: 10px; border-radius: 12px; overflow: hidden; background: #000; aspect-ratio: 16 / 9; width: 100%; border: 1px solid var(--accent-border); }
-    .video-box iframe { width: 100%; height: 100%; border: none; }
+    .video-box iframe { width: 100%; height: 100%; border: none; display: block; }
+    .vid-actions { display: flex; gap: 8px; margin-top: 9px; }
+    .vid-btn { flex: 1; padding: 8px 10px; border-radius: 10px; font-size: 12px; font-weight: 800; cursor: pointer; text-align: center; text-decoration: none; border: 1px solid var(--accent-border); background: var(--accent-soft); color: var(--accent-light); }
 
-    .live-chat-wrap { margin-top: 12px; background: var(--bg-subcard); border: 1px solid var(--border); border-radius: 14px; padding: 12px; }
-    .chat-list { max-height: 210px; overflow-y: auto; margin-bottom: 10px; }
-    .chat-msg { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 8px 11px; font-size: 12.5px; margin-bottom: 7px; color: var(--text); }
+    .live-chat-wrap { margin-top: 10px; background: var(--bg-subcard); border: 1px solid var(--border); border-radius: 13px; padding: 11px; }
+    .chat-list { max-height: 200px; overflow-y: auto; margin-bottom: 9px; }
+    .chat-msg { background: var(--bg-card); border: 1px solid var(--border); border-radius: 11px; padding: 8px 10px; font-size: 12.5px; margin-bottom: 6px; color: var(--text); }
     .chat-msg.admin { background: var(--accent-soft); border-color: var(--accent-border); }
 
-    /* ===== UPI CARD & FORMS ===== */
     .upi-card { position: relative; overflow: hidden; background: var(--bg-hero); border: 1.5px solid var(--accent-border); color: #fff; border-radius: 20px; padding: 18px; margin-bottom: 16px; box-shadow: var(--shadow-card); }
     .upi-top { display: flex; justify-content: space-between; align-items: center; }
     .upi-tag { font-size: 10.5px; font-weight: 700; letter-spacing: 1.2px; color: rgba(255,255,255,0.85); text-transform: uppercase; }
@@ -298,7 +250,6 @@
 
     .skel { background: linear-gradient(90deg, var(--bg-subcard) 25%, var(--accent-soft) 50%, var(--bg-subcard) 75%); background-size: 200% 100%; animation: shimmer 1.2s infinite; border-radius: 16px; }
 
-    /* ===== RECEIPT MODAL ===== */
     .rcpt-modal-bg { display: none; position: fixed; inset: 0; background: rgba(2, 8, 18, 0.82); backdrop-filter: blur(5px); z-index: 130; justify-content: center; align-items: center; padding: 14px; }
     .rcpt-modal-bg.open { display: flex; }
     .rcpt-card { background: #ffffff; color: #0f172a; width: 100%; max-width: 430px; border-radius: 20px; padding: 20px; border: 2.5px solid #d4af37; max-height: 92vh; overflow-y: auto; }
@@ -313,7 +264,6 @@
       .no-print { display: none !important; }
     }
 
-    /* ===== BOTTOM NAV ===== */
     .bottom-nav {
       position: fixed; bottom: 0; left: 0; right: 0;
       background: var(--bg-nav); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
@@ -336,14 +286,12 @@
 </head>
 <body>
 
-<!-- ULTRA-FAST SPLASH -->
 <div id="splashScreen">
   <div class="splash-ring"><img src="logo.png?v=3" alt="Logo" onerror="this.style.display='none'"></div>
   <h1 class="splash-title">U.C.C Institute</h1>
   <p class="splash-tag">Learn • Grow • Succeed</p>
 </div>
 
-<!-- LOGIN -->
 <div id="loginScreen">
   <div class="login-card">
     <div class="login-logo-wrap"><img src="logo.png?v=3" alt="Logo" onerror="this.style.display='none'"></div>
@@ -370,23 +318,13 @@
     </div>
     <button onclick="closeSidebar()" style="border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.12);color:#fff;width:30px;height:30px;border-radius:50%;font-weight:800;cursor:pointer;">✕</button>
   </div>
-
   <div class="side-body">
-    <div class="side-sec-title">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>
-      App Theme Studio
-    </div>
-
+    <div class="side-sec-title">App Theme Studio</div>
     <div class="auto-row">
-      <div>
-        <div style="font-size:12.5px;font-weight:800;color:var(--text);">Auto-Change Theme</div>
-        <div style="font-size:10.5px;color:var(--muted);">প্রতিবার অ্যাপ খুললে নতুন থিম</div>
-      </div>
+      <div><div style="font-size:12.5px;font-weight:800;color:var(--text);">Auto-Change Theme</div><div style="font-size:10.5px;color:var(--muted);">প্রতিবার অ্যাপ খুললে নতুন থিম</div></div>
       <button id="autoThemeBtn" class="switch-pill off" onclick="toggleAutoTheme()">OFF</button>
     </div>
-
     <div class="theme-list" id="themeGrid"></div>
-
     <div style="border-top:1px solid var(--border);padding-top:12px;margin-top:4px;">
       <div class="side-sec-title">Custom Theme</div>
       <div class="color-row">
@@ -395,24 +333,16 @@
         <div class="color-box"><div style="font-size:10px;color:var(--muted);margin-bottom:3px;">Accent</div><input type="color" id="custAcc" value="#f59e0b"></div>
       </div>
       <div class="row-2" style="margin-bottom:14px;">
-        <select id="custMode" style="padding:8px;font-size:12px;">
-          <option value="dark">Dark Text</option>
-          <option value="light">Light Text</option>
-        </select>
+        <select id="custMode" style="padding:8px;font-size:12px;"><option value="dark">Dark Text</option><option value="light">Light Text</option></select>
         <button type="button" class="btn btn-accent" style="padding:8px;font-size:12px;" onclick="applyCustomTheme()">Apply</button>
       </div>
     </div>
-
     <div style="border-top:1px solid var(--border);padding-top:12px;">
-      <button class="btn" style="background:var(--danger-soft);color:var(--danger);border-color:var(--danger);padding:10px;font-size:13px;" onclick="logoutStudent()">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-        Logout
-      </button>
+      <button class="btn" style="background:var(--danger-soft);color:var(--danger);border-color:var(--danger);padding:10px;font-size:13px;" onclick="logoutStudent()">Logout</button>
     </div>
   </div>
 </aside>
 
-<!-- CLEAN HEADER -->
 <header>
   <div class="brand">
     <button class="icon-btn" onclick="openSidebar()" title="Menu & Themes">
@@ -445,16 +375,10 @@
           <div class="avatar-circle" id="sAvatar">U</div>
           <div style="min-width:0;">
             <div class="hero-name" id="sName">-</div>
-            <div class="hero-chips">
-              <span class="hero-chip" id="sIdChip">UCC</span>
-              <span class="hero-chip" id="sClassChip">Class</span>
-            </div>
+            <div class="hero-chips"><span class="hero-chip" id="sIdChip">UCC</span><span class="hero-chip" id="sClassChip">Class</span></div>
           </div>
         </div>
-        <div class="hero-footer">
-          <span id="sFather">Father: -</span>
-          <span id="sPhone" style="font-weight:700;">-</span>
-        </div>
+        <div class="hero-footer"><span id="sFather">Father: -</span><span id="sPhone" style="font-weight:700;">-</span></div>
       </div>
 
       <div class="stat-grid">
@@ -477,17 +401,13 @@
 
       <div class="card" style="padding:14px 16px;">
         <div style="display:flex;justify-content:space-between;align-items:center;font-size:12.5px;font-weight:700;">
-          <span>Attendance Performance</span>
-          <span id="sAttPct" style="color:var(--accent-light);">0%</span>
+          <span>Attendance Performance</span><span id="sAttPct" style="color:var(--accent-light);">0%</span>
         </div>
         <div class="prog-track"><div id="sAttBar" class="prog-fill" style="width:0%;"></div></div>
       </div>
 
       <div class="card">
-        <div class="card-head">
-          <div class="card-title">2027 Monthly Fee Status</div>
-          <span id="paidCountPill" class="pill-mini">0 / 12 Paid</span>
-        </div>
+        <div class="card-head"><div class="card-title">2027 Monthly Fee Status</div><span id="paidCountPill" class="pill-mini">0 / 12 Paid</span></div>
         <div class="months-grid" id="sMonths"></div>
       </div>
     </div>
@@ -576,7 +496,6 @@
   </div>
 </div>
 
-<!-- BOTTOM NAV -->
 <nav class="bottom-nav">
   <button class="nav-btn active" onclick="openPage('home', this)">
     <div class="nav-icon-wrap"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
@@ -607,172 +526,42 @@
   const BN_MONTH_NAMES = ['জানুয়ারি','ফেব্রুয়ারি','মার্চ','এপ্রিল','মে','জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'];
   const CLASSES_BN = { Nursery:'নার্সারি', KG:'কেজি', 'Class 1':'ক্লাস 1', 'Class 2':'ক্লাস 2', 'Class 3':'ক্লাস 3', 'Class 4':'ক্লাস 4', 'Class 5':'ক্লাস 5', 'Class 6':'ক্লাস 6', 'Class 7':'ক্লাস 7', 'Class 8':'ক্লাস 8', 'Class 9':'ক্লাস 9', 'Class 10':'ক্লাস 10', 'Class 11':'ক্লাস 11', 'Class 12':'ক্লাস 12' };
 
-  // ===== 7 PREMIUM THEMES ENGINE =====
   const THEMES = {
-    royal_gold: {
-      name: 'Royal Navy & Gold', swatch: 'linear-gradient(135deg,#061121 50%,#d4af37 50%)',
-      vars: {
-        '--bg-page': 'radial-gradient(circle at 85% 0%, #12294d 0%, #061121 48%, #040b16 100%)', '--bg-solid': '#061121',
-        '--bg-header': 'rgba(6, 17, 33, 0.92)', '--bg-card': 'linear-gradient(180deg, rgba(16,34,62,0.94), rgba(11,25,47,0.97))',
-        '--bg-subcard': 'rgba(6, 17, 33, 0.55)', '--bg-input': '#081529', '--bg-hero': 'linear-gradient(135deg,#132a4f,#0b1c36)',
-        '--bg-nav': 'rgba(7, 18, 35, 0.95)', '--accent': '#d4af37', '--accent-light': '#fae094',
-        '--accent-grad': 'linear-gradient(135deg,#f8df8c,#d4af37,#b08218)', '--accent-text': '#061121',
-        '--accent-soft': 'rgba(212,175,55,0.14)', '--accent-border': 'rgba(212,175,55,0.32)',
-        '--text': '#f8fafc', '--text-2': '#cbd5e1', '--muted': '#8fa3bf', '--border': 'rgba(148,163,184,0.16)',
-        '--shadow-card': '0 10px 28px rgba(0,0,0,0.34)'
-      }
-    },
-    saffron_white: {
-      name: 'Saffron & White', swatch: 'linear-gradient(135deg,#f97316 50%,#ffffff 50%)',
-      vars: {
-        '--bg-page': 'linear-gradient(180deg, #fff7ed 0%, #ffffff 45%, #fffaf5 100%)', '--bg-solid': '#fff7ed',
-        '--bg-header': 'rgba(255, 255, 255, 0.95)', '--bg-card': '#ffffff',
-        '--bg-subcard': '#fff7ed', '--bg-input': '#ffffff', '--bg-hero': 'linear-gradient(135deg,#ea580c,#f97316,#fb923c)',
-        '--bg-nav': 'rgba(255, 255, 255, 0.96)', '--accent': '#ea580c', '--accent-light': '#c2410c',
-        '--accent-grad': 'linear-gradient(135deg,#f97316,#ea580c)', '--accent-text': '#ffffff',
-        '--accent-soft': 'rgba(249,115,22,0.12)', '--accent-border': 'rgba(234,88,12,0.32)',
-        '--text': '#1e293b', '--text-2': '#475569', '--muted': '#64748b', '--border': '#fed7aa',
-        '--shadow-card': '0 6px 20px rgba(234,88,12,0.08)'
-      }
-    },
-    midnight_black: {
-      name: 'Midnight Black', swatch: 'linear-gradient(135deg,#000000 50%,#f59e0b 50%)',
-      vars: {
-        '--bg-page': 'radial-gradient(circle at 80% 0%, #1c1917 0%, #09090b 55%, #000000 100%)', '--bg-solid': '#000000',
-        '--bg-header': 'rgba(9, 9, 11, 0.94)', '--bg-card': 'linear-gradient(180deg,#18181b,#111113)',
-        '--bg-subcard': '#09090b', '--bg-input': '#09090b', '--bg-hero': 'linear-gradient(135deg,#27272a,#09090b)',
-        '--bg-nav': 'rgba(9, 9, 11, 0.96)', '--accent': '#f59e0b', '--accent-light': '#fcd34d',
-        '--accent-grad': 'linear-gradient(135deg,#fcd34d,#f59e0b,#d97706)', '--accent-text': '#09090b',
-        '--accent-soft': 'rgba(245,158,11,0.14)', '--accent-border': 'rgba(245,158,11,0.32)',
-        '--text': '#fafafa', '--text-2': '#d4d4d8', '--muted': '#a1a1aa', '--border': 'rgba(255,255,255,0.1)',
-        '--shadow-card': '0 10px 28px rgba(0,0,0,0.6)'
-      }
-    },
-    emerald_gold: {
-      name: 'Emerald & Gold', swatch: 'linear-gradient(135deg,#064e3b 50%,#d4af37 50%)',
-      vars: {
-        '--bg-page': 'radial-gradient(circle at 80% 0%, #065f46 0%, #022c22 55%, #011c16 100%)', '--bg-solid': '#022c22',
-        '--bg-header': 'rgba(2, 44, 34, 0.92)', '--bg-card': 'linear-gradient(180deg,#064e3b,#04392c)',
-        '--bg-subcard': 'rgba(2, 44, 34, 0.65)', '--bg-input': '#022c22', '--bg-hero': 'linear-gradient(135deg,#065f46,#022c22)',
-        '--bg-nav': 'rgba(2, 44, 34, 0.95)', '--accent': '#d4af37', '--accent-light': '#fde68a',
-        '--accent-grad': 'linear-gradient(135deg,#fde68a,#d4af37)', '--accent-text': '#022c22',
-        '--accent-soft': 'rgba(212,175,55,0.15)', '--accent-border': 'rgba(212,175,55,0.34)',
-        '--text': '#ecfdf5', '--text-2': '#a7f3d0', '--muted': '#6ee7b7', '--border': 'rgba(110,231,183,0.18)',
-        '--shadow-card': '0 10px 26px rgba(0,0,0,0.35)'
-      }
-    },
-    royal_purple: {
-      name: 'Royal Purple', swatch: 'linear-gradient(135deg,#3b0764 50%,#e879f9 50%)',
-      vars: {
-        '--bg-page': 'radial-gradient(circle at 85% 0%, #4c1d95 0%, #1e1035 55%, #120822 100%)', '--bg-solid': '#1e1035',
-        '--bg-header': 'rgba(30, 16, 53, 0.92)', '--bg-card': 'linear-gradient(180deg,#2e1852,#22113d)',
-        '--bg-subcard': 'rgba(18, 8, 34, 0.6)', '--bg-input': '#170c2b', '--bg-hero': 'linear-gradient(135deg,#5b21b6,#2e1065)',
-        '--bg-nav': 'rgba(23, 12, 43, 0.95)', '--accent': '#e879f9', '--accent-light': '#f5d0fe',
-        '--accent-grad': 'linear-gradient(135deg,#f5d0fe,#e879f9,#c026d3)', '--accent-text': '#1e1035',
-        '--accent-soft': 'rgba(232,121,249,0.14)', '--accent-border': 'rgba(232,121,249,0.32)',
-        '--text': '#faf5ff', '--text-2': '#e9d5ff', '--muted': '#c4b5fd', '--border': 'rgba(196,181,253,0.18)',
-        '--shadow-card': '0 10px 28px rgba(0,0,0,0.4)'
-      }
-    },
-    crimson_cream: {
-      name: 'Crimson & Cream', swatch: 'linear-gradient(135deg,#9f1239 50%,#fff1f2 50%)',
-      vars: {
-        '--bg-page': 'linear-gradient(180deg, #fff1f2 0%, #ffffff 50%, #fff5f5 100%)', '--bg-solid': '#fff1f2',
-        '--bg-header': 'rgba(255, 255, 255, 0.95)', '--bg-card': '#ffffff',
-        '--bg-subcard': '#fff1f2', '--bg-input': '#ffffff', '--bg-hero': 'linear-gradient(135deg,#881337,#be123c)',
-        '--bg-nav': 'rgba(255, 255, 255, 0.96)', '--accent': '#be123c', '--accent-light': '#9f1239',
-        '--accent-grad': 'linear-gradient(135deg,#e11d48,#9f1239)', '--accent-text': '#ffffff',
-        '--accent-soft': 'rgba(190,18,60,0.1)', '--accent-border': 'rgba(190,18,60,0.28)',
-        '--text': '#1e293b', '--text-2': '#475569', '--muted': '#64748b', '--border': '#fecdd3',
-        '--shadow-card': '0 6px 20px rgba(159,18,57,0.08)'
-      }
-    },
-    ocean_white: {
-      name: 'Ocean Blue & White', swatch: 'linear-gradient(135deg,#0284c7 50%,#ffffff 50%)',
-      vars: {
-        '--bg-page': 'linear-gradient(180deg, #f0f9ff 0%, #ffffff 50%, #f8fafc 100%)', '--bg-solid': '#f0f9ff',
-        '--bg-header': 'rgba(255, 255, 255, 0.95)', '--bg-card': '#ffffff',
-        '--bg-subcard': '#f0f9ff', '--bg-input': '#ffffff', '--bg-hero': 'linear-gradient(135deg,#0369a1,#0284c7,#0ea5e9)',
-        '--bg-nav': 'rgba(255, 255, 255, 0.96)', '--accent': '#0284c7', '--accent-light': '#0369a1',
-        '--accent-grad': 'linear-gradient(135deg,#0ea5e9,#0284c7)', '--accent-text': '#ffffff',
-        '--accent-soft': 'rgba(2,132,199,0.1)', '--accent-border': 'rgba(2,132,199,0.28)',
-        '--text': '#0f172a', '--text-2': '#475569', '--muted': '#64748b', '--border': '#bae6fd',
-        '--shadow-card': '0 6px 20px rgba(2,132,199,0.08)'
-      }
-    }
+    royal_gold: { name: 'Royal Navy & Gold', swatch: 'linear-gradient(135deg,#061121 50%,#d4af37 50%)', vars: { '--bg-page':'radial-gradient(circle at 85% 0%,#12294d 0%,#061121 48%,#040b16 100%)','--bg-solid':'#061121','--bg-header':'rgba(6,17,33,0.92)','--bg-card':'linear-gradient(180deg,rgba(16,34,62,0.94),rgba(11,25,47,0.97))','--bg-subcard':'rgba(6,17,33,0.55)','--bg-input':'#081529','--bg-hero':'linear-gradient(135deg,#132a4f,#0b1c36)','--bg-nav':'rgba(7,18,35,0.95)','--accent':'#d4af37','--accent-light':'#fae094','--accent-grad':'linear-gradient(135deg,#f8df8c,#d4af37,#b08218)','--accent-text':'#061121','--accent-soft':'rgba(212,175,55,0.14)','--accent-border':'rgba(212,175,55,0.32)','--text':'#f8fafc','--text-2':'#cbd5e1','--muted':'#8fa3bf','--border':'rgba(148,163,184,0.16)','--shadow-card':'0 10px 28px rgba(0,0,0,0.34)' } },
+    saffron_white: { name: 'Saffron & White', swatch: 'linear-gradient(135deg,#f97316 50%,#ffffff 50%)', vars: { '--bg-page':'linear-gradient(180deg,#fff7ed 0%,#ffffff 45%,#fffaf5 100%)','--bg-solid':'#fff7ed','--bg-header':'rgba(255,255,255,0.95)','--bg-card':'#ffffff','--bg-subcard':'#fff7ed','--bg-input':'#ffffff','--bg-hero':'linear-gradient(135deg,#ea580c,#f97316,#fb923c)','--bg-nav':'rgba(255,255,255,0.96)','--accent':'#ea580c','--accent-light':'#c2410c','--accent-grad':'linear-gradient(135deg,#f97316,#ea580c)','--accent-text':'#ffffff','--accent-soft':'rgba(249,115,22,0.12)','--accent-border':'rgba(234,88,12,0.32)','--text':'#1e293b','--text-2':'#475569','--muted':'#64748b','--border':'#fed7aa','--shadow-card':'0 6px 20px rgba(234,88,12,0.08)' } },
+    midnight_black: { name: 'Midnight Black', swatch: 'linear-gradient(135deg,#000000 50%,#f59e0b 50%)', vars: { '--bg-page':'radial-gradient(circle at 80% 0%,#1c1917 0%,#09090b 55%,#000000 100%)','--bg-solid':'#000000','--bg-header':'rgba(9,9,11,0.94)','--bg-card':'linear-gradient(180deg,#18181b,#111113)','--bg-subcard':'#09090b','--bg-input':'#09090b','--bg-hero':'linear-gradient(135deg,#27272a,#09090b)','--bg-nav':'rgba(9,9,11,0.96)','--accent':'#f59e0b','--accent-light':'#fcd34d','--accent-grad':'linear-gradient(135deg,#fcd34d,#f59e0b,#d97706)','--accent-text':'#09090b','--accent-soft':'rgba(245,158,11,0.14)','--accent-border':'rgba(245,158,11,0.32)','--text':'#fafafa','--text-2':'#d4d4d8','--muted':'#a1a1aa','--border':'rgba(255,255,255,0.1)','--shadow-card':'0 10px 28px rgba(0,0,0,0.6)' } },
+    emerald_gold: { name: 'Emerald & Gold', swatch: 'linear-gradient(135deg,#064e3b 50%,#d4af37 50%)', vars: { '--bg-page':'radial-gradient(circle at 80% 0%,#065f46 0%,#022c22 55%,#011c16 100%)','--bg-solid':'#022c22','--bg-header':'rgba(2,44,34,0.92)','--bg-card':'linear-gradient(180deg,#064e3b,#04392c)','--bg-subcard':'rgba(2,44,34,0.65)','--bg-input':'#022c22','--bg-hero':'linear-gradient(135deg,#065f46,#022c22)','--bg-nav':'rgba(2,44,34,0.95)','--accent':'#d4af37','--accent-light':'#fde68a','--accent-grad':'linear-gradient(135deg,#fde68a,#d4af37)','--accent-text':'#022c22','--accent-soft':'rgba(212,175,55,0.15)','--accent-border':'rgba(212,175,55,0.34)','--text':'#ecfdf5','--text-2':'#a7f3d0','--muted':'#6ee7b7','--border':'rgba(110,231,183,0.18)','--shadow-card':'0 10px 26px rgba(0,0,0,0.35)' } },
+    royal_purple: { name: 'Royal Purple', swatch: 'linear-gradient(135deg,#3b0764 50%,#e879f9 50%)', vars: { '--bg-page':'radial-gradient(circle at 85% 0%,#4c1d95 0%,#1e1035 55%,#120822 100%)','--bg-solid':'#1e1035','--bg-header':'rgba(30,16,53,0.92)','--bg-card':'linear-gradient(180deg,#2e1852,#22113d)','--bg-subcard':'rgba(18,8,34,0.6)','--bg-input':'#170c2b','--bg-hero':'linear-gradient(135deg,#5b21b6,#2e1065)','--bg-nav':'rgba(23,12,43,0.95)','--accent':'#e879f9','--accent-light':'#f5d0fe','--accent-grad':'linear-gradient(135deg,#f5d0fe,#e879f9,#c026d3)','--accent-text':'#1e1035','--accent-soft':'rgba(232,121,249,0.14)','--accent-border':'rgba(232,121,249,0.32)','--text':'#faf5ff','--text-2':'#e9d5ff','--muted':'#c4b5fd','--border':'rgba(196,181,253,0.18)','--shadow-card':'0 10px 28px rgba(0,0,0,0.4)' } },
+    crimson_cream: { name: 'Crimson & Cream', swatch: 'linear-gradient(135deg,#9f1239 50%,#fff1f2 50%)', vars: { '--bg-page':'linear-gradient(180deg,#fff1f2 0%,#ffffff 50%,#fff5f5 100%)','--bg-solid':'#fff1f2','--bg-header':'rgba(255,255,255,0.95)','--bg-card':'#ffffff','--bg-subcard':'#fff1f2','--bg-input':'#ffffff','--bg-hero':'linear-gradient(135deg,#881337,#be123c)','--bg-nav':'rgba(255,255,255,0.96)','--accent':'#be123c','--accent-light':'#9f1239','--accent-grad':'linear-gradient(135deg,#e11d48,#9f1239)','--accent-text':'#ffffff','--accent-soft':'rgba(190,18,60,0.1)','--accent-border':'rgba(190,18,60,0.28)','--text':'#1e293b','--text-2':'#475569','--muted':'#64748b','--border':'#fecdd3','--shadow-card':'0 6px 20px rgba(159,18,57,0.08)' } },
+    ocean_white: { name: 'Ocean Blue & White', swatch: 'linear-gradient(135deg,#0284c7 50%,#ffffff 50%)', vars: { '--bg-page':'linear-gradient(180deg,#f0f9ff 0%,#ffffff 50%,#f8fafc 100%)','--bg-solid':'#f0f9ff','--bg-header':'rgba(255,255,255,0.95)','--bg-card':'#ffffff','--bg-subcard':'#f0f9ff','--bg-input':'#ffffff','--bg-hero':'linear-gradient(135deg,#0369a1,#0284c7,#0ea5e9)','--bg-nav':'rgba(255,255,255,0.96)','--accent':'#0284c7','--accent-light':'#0369a1','--accent-grad':'linear-gradient(135deg,#0ea5e9,#0284c7)','--accent-text':'#ffffff','--accent-soft':'rgba(2,132,199,0.1)','--accent-border':'rgba(2,132,199,0.28)','--text':'#0f172a','--text-2':'#475569','--muted':'#64748b','--border':'#bae6fd','--shadow-card':'0 6px 20px rgba(2,132,199,0.08)' } }
   };
   const THEME_KEYS = Object.keys(THEMES);
 
   function openSidebar() { renderThemeGrid(); document.getElementById('sidebar').classList.add('open'); document.getElementById('sideBackdrop').classList.add('open'); }
   function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sideBackdrop').classList.remove('open'); }
-
-  function applyThemeVars(vars) {
-    const root = document.documentElement;
-    Object.keys(vars).forEach(k => root.style.setProperty(k, vars[k]));
-    if (vars['--bg-solid']) document.getElementById('metaThemeColor').setAttribute('content', vars['--bg-solid']);
-  }
-  function selectPresetTheme(key, showMsg = true) {
-    if (!THEMES[key]) key = 'royal_gold';
-    applyThemeVars(THEMES[key].vars);
-    localStorage.setItem('ucc_st_theme', key);
-    renderThemeGrid();
-    if (showMsg) toast(`Theme: ${THEMES[key].name}`);
-  }
+  function applyThemeVars(vars) { const root = document.documentElement; Object.keys(vars).forEach(k => root.style.setProperty(k, vars[k])); if (vars['--bg-solid']) document.getElementById('metaThemeColor').setAttribute('content', vars['--bg-solid']); }
+  function selectPresetTheme(key, showMsg = true) { if (!THEMES[key]) key = 'royal_gold'; applyThemeVars(THEMES[key].vars); localStorage.setItem('ucc_st_theme', key); renderThemeGrid(); if (showMsg) toast(`Theme: ${THEMES[key].name}`); }
   function applyCustomTheme() {
     const bg = document.getElementById('custBg').value, card = document.getElementById('custCard').value, acc = document.getElementById('custAcc').value;
     const isLight = document.getElementById('custMode').value === 'light';
-    const customVars = {
-      '--bg-page': bg, '--bg-solid': bg, '--bg-header': card, '--bg-card': card,
-      '--bg-subcard': bg, '--bg-input': bg, '--bg-hero': `linear-gradient(135deg,${acc},${card})`,
-      '--bg-nav': card, '--accent': acc, '--accent-light': acc,
-      '--accent-grad': `linear-gradient(135deg,${acc},${acc})`, '--accent-text': isLight ? '#ffffff' : '#061121',
-      '--accent-soft': isLight ? 'rgba(0,0,0,0.06)' : 'rgba(255,255,255,0.1)', '--accent-border': acc,
-      '--text': isLight ? '#0f172a' : '#f8fafc', '--text-2': isLight ? '#334155' : '#cbd5e1',
-      '--muted': isLight ? '#64748b' : '#94a3b8', '--border': isLight ? 'rgba(15,23,42,0.14)' : 'rgba(255,255,255,0.16)',
-      '--shadow-card': '0 8px 24px rgba(0,0,0,0.18)'
-    };
-    applyThemeVars(customVars);
-    localStorage.setItem('ucc_st_theme', 'custom');
-    localStorage.setItem('ucc_st_custom_vars', JSON.stringify(customVars));
-    renderThemeGrid(); toast('Custom Theme Applied!');
+    const customVars = { '--bg-page':bg,'--bg-solid':bg,'--bg-header':card,'--bg-card':card,'--bg-subcard':bg,'--bg-input':bg,'--bg-hero':`linear-gradient(135deg,${acc},${card})`,'--bg-nav':card,'--accent':acc,'--accent-light':acc,'--accent-grad':`linear-gradient(135deg,${acc},${acc})`,'--accent-text':isLight?'#ffffff':'#061121','--accent-soft':isLight?'rgba(0,0,0,0.06)':'rgba(255,255,255,0.1)','--accent-border':acc,'--text':isLight?'#0f172a':'#f8fafc','--text-2':isLight?'#334155':'#cbd5e1','--muted':isLight?'#64748b':'#94a3b8','--border':isLight?'rgba(15,23,42,0.14)':'rgba(255,255,255,0.16)','--shadow-card':'0 8px 24px rgba(0,0,0,0.18)' };
+    applyThemeVars(customVars); localStorage.setItem('ucc_st_theme', 'custom'); localStorage.setItem('ucc_st_custom_vars', JSON.stringify(customVars)); renderThemeGrid(); toast('Custom Theme Applied!');
   }
-  function toggleAutoTheme() {
-    const next = localStorage.getItem('ucc_st_auto_theme') === 'ON' ? 'OFF' : 'ON';
-    localStorage.setItem('ucc_st_auto_theme', next);
-    updateAutoThemeUI(); toast(`Auto-Change Theme: ${next}`);
-  }
-  function updateAutoThemeUI() {
-    const isOn = localStorage.getItem('ucc_st_auto_theme') === 'ON';
-    const btn = document.getElementById('autoThemeBtn');
-    btn.textContent = isOn ? 'ON' : 'OFF';
-    btn.className = 'switch-pill ' + (isOn ? 'on' : 'off');
-  }
+  function toggleAutoTheme() { const next = localStorage.getItem('ucc_st_auto_theme') === 'ON' ? 'OFF' : 'ON'; localStorage.setItem('ucc_st_auto_theme', next); updateAutoThemeUI(); toast(`Auto-Change Theme: ${next}`); }
+  function updateAutoThemeUI() { const isOn = localStorage.getItem('ucc_st_auto_theme') === 'ON'; const btn = document.getElementById('autoThemeBtn'); btn.textContent = isOn ? 'ON' : 'OFF'; btn.className = 'switch-pill ' + (isOn ? 'on' : 'off'); }
   function renderThemeGrid() {
     const active = localStorage.getItem('ucc_st_theme') || 'royal_gold';
-    document.getElementById('themeGrid').innerHTML = THEME_KEYS.map(k => `
-      <button type="button" class="theme-opt ${active===k?'active':''}" onclick="selectPresetTheme('${k}')">
-        <span class="theme-opt-left"><span class="swatch" style="background:${THEMES[k].swatch};"></span><span>${THEMES[k].name}</span></span>
-        ${active===k ? '<span style="color:var(--accent-light);font-weight:800;">✓</span>' : ''}
-      </button>
-    `).join('');
+    document.getElementById('themeGrid').innerHTML = THEME_KEYS.map(k => `<button type="button" class="theme-opt ${active===k?'active':''}" onclick="selectPresetTheme('${k}')"><span class="theme-opt-left"><span class="swatch" style="background:${THEMES[k].swatch};"></span><span>${THEMES[k].name}</span></span>${active===k?'<span style="color:var(--accent-light);font-weight:800;">✓</span>':''}</button>`).join('');
     updateAutoThemeUI();
   }
   function initTheme() {
-    if (localStorage.getItem('ucc_st_auto_theme') === 'ON') {
-      let idx = Number(localStorage.getItem('ucc_st_auto_idx') || 0);
-      const nextKey = THEME_KEYS[idx % THEME_KEYS.length];
-      localStorage.setItem('ucc_st_auto_idx', String((idx + 1) % THEME_KEYS.length));
-      selectPresetTheme(nextKey, false); return;
-    }
+    if (localStorage.getItem('ucc_st_auto_theme') === 'ON') { let idx = Number(localStorage.getItem('ucc_st_auto_idx') || 0); const nextKey = THEME_KEYS[idx % THEME_KEYS.length]; localStorage.setItem('ucc_st_auto_idx', String((idx + 1) % THEME_KEYS.length)); selectPresetTheme(nextKey, false); return; }
     const saved = localStorage.getItem('ucc_st_theme') || 'royal_gold';
-    if (saved === 'custom') {
-      try { applyThemeVars(JSON.parse(localStorage.getItem('ucc_st_custom_vars') || '{}')); return; } catch(e){}
-    }
+    if (saved === 'custom') { try { applyThemeVars(JSON.parse(localStorage.getItem('ucc_st_custom_vars') || '{}')); return; } catch(e){} }
     selectPresetTheme(saved, false);
   }
   initTheme();
 
-  // ===== APP LOGIC WITH INSTANT CACHE =====
   function bnClass(c) { return CLASSES_BN[c] || c; }
   function bnMonth(k) { const f = MONTHS.find(x => x[0] === k); return f ? f[2] : k; }
   function bnCollector(c) { const s = String(c||''); if (s.includes('Pralay')) return 'প্রলয় ষন্নিগ্রহী'; if (s.includes('Chiranjit')) return 'চিরঞ্জিত ষন্নিগ্রহী'; if (s.includes('Saikat')) return 'সৈকত ষন্নিগ্রহী'; return s || 'অ্যাডমিন'; }
@@ -781,6 +570,7 @@
 
   let portalData = null, classFilter = 'Live', compressedBase64 = '', lastContentHash = '';
   let activeReceiptObj = null, lastBackPress = 0, liveChatTimer = null, activeLiveIds = [];
+  let chatCache = {};
 
   window.history.pushState({ app: true }, '');
   window.addEventListener('popstate', () => {
@@ -791,34 +581,31 @@
     else { lastBackPress = now; toast('অ্যাপ থেকে বেরোতে আবার Back চাপুন'); window.history.pushState({ app: true }, ''); }
   });
 
+  // Fast Background Sync (15s + instant on online/focus)
+  window.addEventListener('online', () => refreshPortal(true));
   document.addEventListener('visibilitychange', () => { if (!document.hidden && navigator.onLine) refreshPortal(true); });
-  setInterval(() => { if (!document.hidden && navigator.onLine && portalData) refreshPortal(true); }, 45000);
+  setInterval(() => { if (!document.hidden && navigator.onLine && portalData) refreshPortal(true); }, 15000);
 
   function toast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.style.display = 'block'; setTimeout(() => { t.style.display = 'none'; }, 2400); }
   function copyUpi() { navigator.clipboard?.writeText('8016972121').catch(()=>{}); toast('UPI Number 8016972121 Copied'); }
   function setLoading(show) { document.getElementById('skeletonView').style.display = show ? 'block' : 'none'; document.getElementById('mainContent').style.display = show ? 'none' : 'block'; }
 
-  // Instant Boot from Local Cache (0ms load) + Silent Background Sync
+  // Instant 0ms Boot
   (function bootInstant() {
     setTimeout(() => {
       const sp = document.getElementById('splashScreen');
       sp.classList.add('hide');
-      setTimeout(() => { sp.style.display = 'none'; }, 240);
-    }, 450);
+      setTimeout(() => { sp.style.display = 'none'; }, 220);
+    }, 380);
 
     const savedId = localStorage.getItem('ucc_st_id'), savedMob = localStorage.getItem('ucc_st_mob');
     if (savedId && savedMob) {
       document.getElementById('loginScreen').style.display = 'none';
       const cached = localStorage.getItem('ucc_st_cache_' + savedId);
       if (cached) {
-        try {
-          portalData = JSON.parse(cached);
-          setLoading(false);
-          renderPortal();
-        } catch (e) { setLoading(true); }
-      } else {
-        setLoading(true);
-      }
+        try { portalData = JSON.parse(cached); setLoading(false); renderPortal(); }
+        catch (e) { setLoading(true); }
+      } else setLoading(true);
       if (navigator.onLine) loadStudentData(savedId, savedMob, true);
     }
   })();
@@ -841,16 +628,10 @@
       if (data.status === 'ok') {
         portalData = data;
         try { localStorage.setItem('ucc_st_cache_' + id, JSON.stringify(data)); } catch (e) {}
-        setLoading(false);
-        renderPortal();
-        return true;
+        setLoading(false); renderPortal(); return true;
       }
       setLoading(false); return false;
-    } catch (e) {
-      setLoading(false);
-      if (!silent) toast('Network error!');
-      return false;
-    }
+    } catch (e) { setLoading(false); if (!silent) toast('Network error!'); return false; }
   }
 
   function refreshPortal(silent = false) {
@@ -858,8 +639,7 @@
     if (id && mob) { if (!silent) toast('Updating...'); loadStudentData(id, mob, silent); }
   }
   function logoutStudent() {
-    closeSidebar();
-    if (liveChatTimer) clearInterval(liveChatTimer);
+    closeSidebar(); if (liveChatTimer) clearInterval(liveChatTimer);
     const id = localStorage.getItem('ucc_st_id');
     if (id) localStorage.removeItem('ucc_st_cache_' + id);
     localStorage.removeItem('ucc_st_id'); localStorage.removeItem('ucc_st_mob');
@@ -940,7 +720,7 @@
   function getEmbedUrl(url) {
     if (!url) return '';
     const yt = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|live\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);
-    if (yt) return `https://www.youtube.com/embed/${yt[1]}?rel=0`;
+    if (yt) return `https://www.youtube.com/embed/${yt[1]}?rel=0&playsinline=1`;
     const gd = url.match(/drive\.google\.com\/file\/d\/([^\/]+)/);
     if (gd) return `https://drive.google.com/file/d/${gd[1]}/preview`;
     return '';
@@ -960,7 +740,7 @@
         return `<div class="card" style="border-left:4px solid var(--danger);">
           <div style="display:flex;justify-content:space-between;"><span class="c-badge live">LIVE • ${c.subject} (${c.chapter||'General'})</span><span style="font-size:11px;color:var(--muted);">${c.date}</span></div>
           <div style="font-size:16px;font-weight:800;margin-top:8px;">${c.title}</div>
-          ${embed ? `<div class="video-box"><iframe src="${embed}" allow="autoplay; fullscreen" allowfullscreen></iframe></div>` : `<a href="${c.link}" target="_blank" class="btn btn-accent" style="text-decoration:none;margin-top:10px;">Join Live Class →</a>`}
+          ${embed ? `<div class="video-box"><iframe src="${embed}" allow="autoplay; fullscreen; encrypted-media" allowfullscreen></iframe></div>` : `<a href="${c.link}" target="_blank" class="btn btn-accent" style="text-decoration:none;margin-top:10px;">Join Live Class →</a>`}
           <div class="live-chat-wrap">
             <div style="font-size:12.5px;font-weight:800;color:var(--accent-light);margin-bottom:8px;">Live Question & Answer</div>
             <div id="chat_${c.id}" class="chat-list"><div style="font-size:11.5px;color:var(--muted);">Loading Q&A...</div></div>
@@ -968,7 +748,7 @@
           </div>
         </div>`;
       }).join('');
-      refreshAllLiveChats(); liveChatTimer = setInterval(refreshAllLiveChats, 6000); return;
+      refreshAllLiveChats(); liveChatTimer = setInterval(refreshAllLiveChats, 5000); return;
     }
 
     const items = all.filter(c => classFilter === 'Video' ? c.type === 'Video' : (c.type === 'PDF' || c.type === 'Mock Test'));
@@ -981,7 +761,25 @@
       const chapHtml = Object.keys(chapters).map((chap, cIdx) => {
         const listHtml = chapters[chap].map(c => {
           const embed = c.type === 'Video' ? getEmbedUrl(c.link) : '';
-          return `<div class="content-card"><div style="display:flex;justify-content:space-between;"><span class="c-badge">${c.type}</span><span style="font-size:11px;color:var(--muted);">${c.date}</span></div><div style="font-size:14.5px;font-weight:800;margin-top:6px;">${c.title}</div>${embed ? `<div class="video-box"><iframe src="${embed}" allow="autoplay; fullscreen" allowfullscreen></iframe></div>` : `<a href="${c.link}" target="_blank" class="btn btn-accent" style="text-decoration:none;margin-top:10px;padding:10px;font-size:13px;">Open ${c.type} →</a>`}</div>`;
+          return `<div class="content-card">
+            <div style="display:flex;justify-content:space-between;"><span class="c-badge">${c.type}</span><span style="font-size:11px;color:var(--muted);">${c.date}</span></div>
+            <div style="font-size:14.5px;font-weight:800;margin-top:6px;">${c.title}</div>
+            ${embed ? `
+              <div class="video-box"><iframe src="${embed}" allow="autoplay; fullscreen; encrypted-media" allowfullscreen></iframe></div>
+              <div class="vid-actions">
+                <a href="${c.link}" target="_blank" class="vid-btn">📺 ফুল-স্ক্রিনে দেখো</a>
+                <button type="button" class="vid-btn" onclick="toggleVideoComments('${c.id}')">💬 প্রশ্ন / কমেন্ট</button>
+              </div>
+              <div id="cwrap_${c.id}" class="live-chat-wrap" style="display:none;">
+                <div style="font-size:12px;font-weight:800;color:var(--accent-light);margin-bottom:7px;">ভিডিও নিয়ে কোনো প্রশ্ন বা কমেন্ট লেখো:</div>
+                <div id="chat_${c.id}" class="chat-list"><div style="font-size:11.5px;color:var(--muted);">Loading comments...</div></div>
+                <form onsubmit="sendStudentChat(event,'${c.id}')" style="display:flex;gap:7px;">
+                  <input type="text" id="cin_${c.id}" required placeholder="তোমার প্রশ্ন বা কমেন্ট..." style="padding:8px 11px;font-size:13px;">
+                  <button type="submit" class="btn btn-accent" style="width:auto;padding:8px 14px;font-size:12px;">Send</button>
+                </form>
+              </div>
+            ` : `<a href="${c.link}" target="_blank" class="btn btn-accent" style="text-decoration:none;margin-top:10px;padding:10px;font-size:13px;">Open ${c.type} →</a>`}
+          </div>`;
         }).join('');
         return `<details class="chap-folder" ${sIdx===0 && cIdx===0 ? 'open' : ''}><summary><span>${chap}</span><span class="pill-mini">${chapters[chap].length} items ▾</span></summary><div class="chap-body">${listHtml}</div></details>`;
       }).join('');
@@ -989,22 +787,52 @@
     }).join('');
   }
 
+  function toggleVideoComments(cid) {
+    const w = document.getElementById('cwrap_' + cid);
+    if (!w) return;
+    const isOpen = w.style.display === 'block';
+    w.style.display = isOpen ? 'none' : 'block';
+    if (!isOpen) loadSingleChat(cid);
+  }
+
+  async function loadSingleChat(cid) {
+    if (chatCache[cid]) renderStudentChat(cid, chatCache[cid]);
+    try {
+      const res = await fetch(`${API_URL}?mode=chat&contentId=${encodeURIComponent(cid)}`);
+      const data = await res.json();
+      if (data.status === 'ok') { chatCache[cid] = data.messages || []; renderStudentChat(cid, chatCache[cid]); }
+    } catch (e) {}
+  }
+
   async function refreshAllLiveChats() {
-    for (const cid of activeLiveIds) {
-      try { const res = await fetch(`${API_URL}?mode=chat&contentId=${encodeURIComponent(cid)}`); const data = await res.json(); if (data.status === 'ok') renderStudentChat(cid, data.messages || []); } catch (e) {}
-    }
+    for (const cid of activeLiveIds) { loadSingleChat(cid); }
   }
   function renderStudentChat(cid, msgs) {
     const el = document.getElementById('chat_' + cid); if (!el) return;
-    el.innerHTML = msgs.length ? msgs.map(m => `<div class="chat-msg ${m.role==='Admin'?'admin':''}"><strong style="color:var(--accent-light);">${m.senderName}</strong> <span style="font-size:10px;color:var(--muted);">${m.time}</span><div style="margin-top:2px;">${m.message}</div></div>`).join('') : '<div style="font-size:11.5px;color:var(--muted);">কোনো প্রশ্ন থাকলে নিচে লিখে পাঠাও...</div>';
+    el.innerHTML = msgs.length
+      ? msgs.map(m => `<div class="chat-msg ${m.role==='Admin'?'admin':''}"><strong style="color:var(--accent-light);">${m.senderName}</strong> <span style="font-size:10px;color:var(--muted);">${m.time}</span><div style="margin-top:2px;">${m.message}</div></div>`).join('')
+      : '<div style="font-size:11.5px;color:var(--muted);">কোনো প্রশ্ন বা কমেন্ট থাকলে নিচে লিখে পাঠাও...</div>';
     el.scrollTop = el.scrollHeight;
   }
+
+  // Instant Optimistic UI Send (0ms wait)
   async function sendStudentChat(e, cid) {
     e.preventDefault(); if (!portalData) return;
-    const inp = document.getElementById('cin_' + cid), msg = inp.value.trim(); if (!msg) return; inp.value = '';
+    const inp = document.getElementById('cin_' + cid), msg = inp.value.trim(); if (!msg) return;
+    inp.value = '';
     const s = portalData.student;
-    const res = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: 'sendChat', contentId: cid, senderId: s.id, senderName: s.name, role: 'Student', message: msg }) });
-    const data = await res.json(); if (data.status === 'ok') renderStudentChat(cid, data.messages || []);
+    if (!chatCache[cid]) chatCache[cid] = [];
+    chatCache[cid].push({ senderName: s.name, role: 'Student', time: 'Just now', message: msg });
+    renderStudentChat(cid, chatCache[cid]);
+
+    try {
+      const res = await fetch(API_URL, {
+        method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ action: 'sendChat', contentId: cid, senderId: s.id, senderName: s.name, role: 'Student', message: msg })
+      });
+      const data = await res.json();
+      if (data.status === 'ok') { chatCache[cid] = data.messages || []; renderStudentChat(cid, chatCache[cid]); }
+    } catch (err) { toast('Comment saved locally — check internet.'); }
   }
 
   function previewCompressedImg(e) {
