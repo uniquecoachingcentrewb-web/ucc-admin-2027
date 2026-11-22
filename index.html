@@ -1308,10 +1308,15 @@
 
   function saveNewStudent(e) {
     e.preventDefault(); const collector = getCurrentAdmin(); if (!collector) { lockApp(); return; }
-    const newId = getNextStudentId(), months = {}; MONTHS.forEach(([k]) => { months[k] = ''; });
     const fMonth = document.getElementById('fMonth').value, fAmt = Number(document.getElementById('fAmt').value) || 0, fMode = document.getElementById('fMode').value;
+    const stName = document.getElementById('fName').value.trim();
+    if (fMonth && fAmt > 0) {
+      const ok = confirm(`Are you confirmed?\n\nStudent: ${stName}\nMonth: ${fMonth.replace('_',' ')}\nAmount: Rs. ${fAmt} (${fMode})\n\nOK চাপলে পেমেন্টসহ এন্ট্রি সেভ হবে।`);
+      if (!ok) return;
+    }
+    const newId = getNextStudentId(), months = {}; MONTHS.forEach(([k]) => { months[k] = ''; });
     if (fMonth && fAmt > 0) months[fMonth] = fAmt;
-    const studentObj = { id: newId, name: document.getElementById('fName').value.trim(), studentClass: document.getElementById('fClass').value, mobile: document.getElementById('fMobile').value.trim(), fatherName: document.getElementById('fFather').value.trim(), address: document.getElementById('fAddress').value.trim(), admissionDate: document.getElementById('fAdmDate').value, firstPayment: document.getElementById('fFirstPay').value, months, totalDue: 0 };
+    const studentObj = { id: newId, name: stName, studentClass: document.getElementById('fClass').value, mobile: document.getElementById('fMobile').value.trim(), fatherName: document.getElementById('fFather').value.trim(), address: document.getElementById('fAddress').value.trim(), admissionDate: document.getElementById('fAdmDate').value, firstPayment: document.getElementById('fFirstPay').value, months, totalDue: 0 };
     studentObj.totalDue = calcDueLocal(studentObj); students.push(studentObj);
     if (fMonth && fAmt > 0) paymentLog.push({ receiptNo: 'UCC-R27' + String(paymentLog.length+1).padStart(4,'0'), date: studentObj.firstPayment || studentObj.admissionDate || todayStr(), time: bnNowTime(), studentId: newId, studentName: studentObj.name, studentClass: studentObj.studentClass, month: fMonth, amount: fAmt, collector, mode: fMode });
     queue.push({ type: 'addStudent', data: { ...studentObj, firstFeeMonth: fMonth, firstFeeAmount: fAmt, collector, mode: fMode } });
@@ -1396,6 +1401,8 @@
     const month = document.getElementById('payMonth').value, amount = Number(document.getElementById('payAmount').value) || 0, mode = document.getElementById('payMode').value;
     if ((Number(s.months?.[month]) || 0) > 0) { showPayWarn('এই মাসে অলরেডি পেমেন্ট ডান!'); return; }
     if (amount <= 0) { showPayWarn('Enter valid amount.'); return; }
+    const ok = confirm(`Are you confirmed?\n\nStudent: ${s.name} (${s.id})\nMonth: ${month.replace('_',' ')}\nAmount: Rs. ${amount} (${mode})\n\nOK চাপলে পেমেন্ট সেভ হয়ে যাবে।`);
+    if (!ok) return;
     hidePayWarn(); const payDate = todayStr(), payTime = bnNowTime();
     if (!s.months) s.months = {}; s.months[month] = amount; if (!s.firstPayment) s.firstPayment = payDate; s.totalDue = calcDueLocal(s); selectedMonthKey = month;
     const newLog = { receiptNo: 'UCC-R27' + String(paymentLog.length+1).padStart(4,'0'), date: payDate, time: payTime, studentId: s.id, studentName: s.name, studentClass: s.studentClass, month, amount, collector, mode };
