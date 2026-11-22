@@ -51,44 +51,34 @@
       overscroll-behavior-y: contain;
       user-select: none;
       -webkit-font-smoothing: antialiased;
-      transition: background 0.35s ease, color 0.25s ease;
+      transition: background 0.3s ease, color 0.2s ease;
     }
     input, select { user-select: text; }
     svg { flex-shrink: 0; }
     option { background: var(--bg-input); color: var(--text); }
 
-    /* ===== SPLASH SCREEN ===== */
+    /* ===== ULTRA-FAST SPLASH ===== */
     #splashScreen {
       position: fixed; inset: 0; z-index: 999;
       background: var(--bg-page); background-color: var(--bg-solid);
       display: flex; flex-direction: column; justify-content: center; align-items: center;
       text-align: center; padding: 24px;
-      transition: opacity 0.35s ease, transform 0.35s ease;
+      transition: opacity 0.22s ease, transform 0.22s ease;
     }
-    #splashScreen.hide { opacity: 0; transform: scale(1.05); pointer-events: none; }
+    #splashScreen.hide { opacity: 0; transform: scale(1.04); pointer-events: none; }
     .splash-ring {
-      width: 112px; height: 112px; border-radius: 50%; padding: 4px;
+      width: 104px; height: 104px; border-radius: 50%; padding: 4px;
       background: var(--accent-grad);
-      box-shadow: 0 0 0 10px var(--accent-soft), 0 0 36px var(--accent-soft);
-      animation: popIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      box-shadow: 0 0 0 8px var(--accent-soft), 0 0 32px var(--accent-soft);
+      animation: popIn 0.32s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
     .splash-ring img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; background: #fff; display: block; }
-    .splash-title {
-      margin: 18px 0 6px; font-size: 26px; font-weight: 800; color: var(--accent-light);
-      opacity: 0; animation: slideUp 0.45s ease 0.15s forwards;
-    }
-    .splash-tag {
-      margin: 0; color: var(--text-2); font-size: 11px; font-weight: 700; letter-spacing: 2.3px; text-transform: uppercase;
-      padding: 5px 15px; border-radius: 30px; background: var(--accent-soft); border: 1px solid var(--accent-border);
-      opacity: 0; animation: slideUp 0.45s ease 0.25s forwards;
-    }
-    .splash-bar { width: 124px; height: 3.5px; border-radius: 99px; background: var(--border); margin-top: 24px; overflow: hidden; }
-    .splash-fill { height: 100%; width: 0%; border-radius: 99px; background: var(--accent-grad); animation: loadBar 0.9s ease 0.15s forwards; }
+    .splash-title { margin: 16px 0 5px; font-size: 25px; font-weight: 800; color: var(--accent-light); }
+    .splash-tag { margin: 0; color: var(--text-2); font-size: 11px; font-weight: 700; letter-spacing: 2.2px; text-transform: uppercase; padding: 4px 14px; border-radius: 30px; background: var(--accent-soft); border: 1px solid var(--accent-border); }
 
-    @keyframes popIn { 0% { opacity: 0; transform: scale(0.65); } 100% { opacity: 1; transform: scale(1); } }
-    @keyframes slideUp { 0% { opacity: 0; transform: translateY(12px); } 100% { opacity: 1; transform: translateY(0); } }
-    @keyframes loadBar { to { width: 100%; } }
-    @keyframes pageFade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes popIn { 0% { opacity: 0; transform: scale(0.7); } 100% { opacity: 1; transform: scale(1); } }
+    @keyframes slideUp { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 1; transform: translateY(0); } }
+    @keyframes pageFade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes pulseDot { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.35); opacity: 0.4; } }
     @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
 
@@ -102,7 +92,7 @@
       position: relative; width: 100%; max-width: 375px;
       background: var(--bg-card); border: 1px solid var(--accent-border);
       border-radius: 26px; padding: 28px 24px 24px; box-shadow: var(--shadow-card);
-      animation: slideUp 0.35s ease;
+      animation: slideUp 0.25s ease;
     }
     .login-logo-wrap { width: 76px; height: 76px; border-radius: 50%; padding: 3px; background: var(--accent-grad); margin: 0 auto 12px; }
     .login-logo-wrap img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; background: #fff; display: block; }
@@ -121,10 +111,7 @@
       display: flex; justify-content: space-between; align-items: center;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.14);
     }
-    header::after {
-      content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 2px;
-      background: var(--accent-grad); opacity: 0.8;
-    }
+    header::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--accent-grad); opacity: 0.8; }
     .brand { display: flex; align-items: center; gap: 9px; }
     .brand-logo { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); background: #fff; }
     .brand h1 { margin: 0; font-size: 15.5px; font-weight: 800; color: var(--accent-light); }
@@ -133,7 +120,7 @@
     .icon-btn {
       width: 36px; height: 36px; border-radius: 11px; border: 1px solid var(--accent-border);
       background: var(--accent-soft); color: var(--accent-light); cursor: pointer;
-      display: flex; align-items: center; justify-content: center; transition: transform 0.14s ease;
+      display: flex; align-items: center; justify-content: center; transition: transform 0.12s ease;
     }
     .icon-btn:active { transform: scale(0.9); }
 
@@ -142,7 +129,7 @@
     #sidebar {
       position: fixed; top: 0; bottom: 0; left: -310px; width: 296px;
       background: var(--bg-solid); border-right: 1.5px solid var(--accent-border);
-      z-index: 85; transition: left 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+      z-index: 85; transition: left 0.2s cubic-bezier(0.22, 1, 0.36, 1);
       display: flex; flex-direction: column; box-shadow: 8px 0 32px rgba(0, 0, 0, 0.5);
     }
     #sidebar.open { left: 0; }
@@ -178,7 +165,7 @@
     /* ===== CONTAINER & CARDS ===== */
     .container { max-width: 580px; margin: 14px auto; padding: 0 14px; }
     .page { display: none; }
-    .page.active { display: block; animation: pageFade 0.22s ease; }
+    .page.active { display: block; animation: pageFade 0.18s ease; }
 
     .card {
       background: var(--bg-card); border-radius: var(--radius); padding: 16px;
@@ -242,7 +229,7 @@
     .stat-lbl { font-size: 11px; color: var(--muted); margin-top: 2px; font-weight: 600; }
 
     .prog-track { width: 100%; height: 7px; background: var(--border); border-radius: 99px; overflow: hidden; margin-top: 9px; }
-    .prog-fill { height: 100%; border-radius: 99px; background: var(--accent-grad); transition: width 0.5s ease; }
+    .prog-fill { height: 100%; border-radius: 99px; background: var(--accent-grad); transition: width 0.4s ease; }
 
     /* ===== MONTHS GRID ===== */
     .months-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
@@ -297,7 +284,7 @@
     .upload-zone { display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1.5px dashed var(--accent-border); border-radius: 14px; padding: 18px 12px; background: var(--bg-subcard); cursor: pointer; text-align: center; }
     .upload-zone input { display: none; }
 
-    .btn { width: 100%; padding: 13px 16px; border: 1px solid var(--accent-border); border-radius: 13px; font-size: 14px; font-weight: 800; cursor: pointer; color: var(--accent-light); background: var(--bg-card); display: inline-flex; align-items: center; justify-content: center; gap: 7px; transition: transform 0.14s ease; }
+    .btn { width: 100%; padding: 13px 16px; border: 1px solid var(--accent-border); border-radius: 13px; font-size: 14px; font-weight: 800; cursor: pointer; color: var(--accent-light); background: var(--bg-card); display: inline-flex; align-items: center; justify-content: center; gap: 7px; transition: transform 0.12s ease; }
     .btn:active { transform: scale(0.97); }
     .btn:disabled { opacity: 0.5; cursor: not-allowed; }
     .btn-accent { background: var(--accent-grad); color: var(--accent-text); border: none; }
@@ -309,7 +296,7 @@
     .badge-due { background: var(--accent-soft); color: var(--accent-light); padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
     .badge-rej { background: var(--danger-soft); color: var(--danger); padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
 
-    .skel { background: linear-gradient(90deg, var(--bg-subcard) 25%, var(--accent-soft) 50%, var(--bg-subcard) 75%); background-size: 200% 100%; animation: shimmer 1.3s infinite; border-radius: 16px; }
+    .skel { background: linear-gradient(90deg, var(--bg-subcard) 25%, var(--accent-soft) 50%, var(--bg-subcard) 75%); background-size: 200% 100%; animation: shimmer 1.2s infinite; border-radius: 16px; }
 
     /* ===== RECEIPT MODAL ===== */
     .rcpt-modal-bg { display: none; position: fixed; inset: 0; background: rgba(2, 8, 18, 0.82); backdrop-filter: blur(5px); z-index: 130; justify-content: center; align-items: center; padding: 14px; }
@@ -335,7 +322,7 @@
       padding: 7px 8px calc(9px + env(safe-area-inset-bottom));
     }
     .nav-btn { flex: 1; padding: 5px 4px; border: none; background: none; display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 11px; font-weight: 700; color: var(--muted); cursor: pointer; }
-    .nav-icon-wrap { width: 44px; height: 28px; border-radius: 20px; display: flex; align-items: center; justify-content: center; transition: 0.18s ease; }
+    .nav-icon-wrap { width: 44px; height: 28px; border-radius: 20px; display: flex; align-items: center; justify-content: center; transition: 0.16s ease; }
     .nav-btn.active { color: var(--accent-light); }
     .nav-btn.active .nav-icon-wrap { background: var(--accent-grad); color: var(--accent-text); }
 
@@ -349,12 +336,11 @@
 </head>
 <body>
 
-<!-- SPLASH -->
+<!-- ULTRA-FAST SPLASH -->
 <div id="splashScreen">
   <div class="splash-ring"><img src="logo.png?v=3" alt="Logo" onerror="this.style.display='none'"></div>
   <h1 class="splash-title">U.C.C Institute</h1>
   <p class="splash-tag">Learn • Grow • Succeed</p>
-  <div class="splash-bar"><div class="splash-fill"></div></div>
 </div>
 
 <!-- LOGIN -->
@@ -458,7 +444,7 @@
         <div class="hero-row">
           <div class="avatar-circle" id="sAvatar">U</div>
           <div style="min-width:0;">
-            <div class="hero-name" id="sName">Loading...</div>
+            <div class="hero-name" id="sName">-</div>
             <div class="hero-chips">
               <span class="hero-chip" id="sIdChip">UCC</span>
               <span class="hero-chip" id="sClassChip">Class</span>
@@ -725,7 +711,6 @@
     Object.keys(vars).forEach(k => root.style.setProperty(k, vars[k]));
     if (vars['--bg-solid']) document.getElementById('metaThemeColor').setAttribute('content', vars['--bg-solid']);
   }
-
   function selectPresetTheme(key, showMsg = true) {
     if (!THEMES[key]) key = 'royal_gold';
     applyThemeVars(THEMES[key].vars);
@@ -733,11 +718,8 @@
     renderThemeGrid();
     if (showMsg) toast(`Theme: ${THEMES[key].name}`);
   }
-
   function applyCustomTheme() {
-    const bg = document.getElementById('custBg').value;
-    const card = document.getElementById('custCard').value;
-    const acc = document.getElementById('custAcc').value;
+    const bg = document.getElementById('custBg').value, card = document.getElementById('custCard').value, acc = document.getElementById('custAcc').value;
     const isLight = document.getElementById('custMode').value === 'light';
     const customVars = {
       '--bg-page': bg, '--bg-solid': bg, '--bg-header': card, '--bg-card': card,
@@ -752,15 +734,12 @@
     applyThemeVars(customVars);
     localStorage.setItem('ucc_st_theme', 'custom');
     localStorage.setItem('ucc_st_custom_vars', JSON.stringify(customVars));
-    renderThemeGrid();
-    toast('Custom Theme Applied!');
+    renderThemeGrid(); toast('Custom Theme Applied!');
   }
-
   function toggleAutoTheme() {
     const next = localStorage.getItem('ucc_st_auto_theme') === 'ON' ? 'OFF' : 'ON';
     localStorage.setItem('ucc_st_auto_theme', next);
-    updateAutoThemeUI();
-    toast(`Auto-Change Theme: ${next}`);
+    updateAutoThemeUI(); toast(`Auto-Change Theme: ${next}`);
   }
   function updateAutoThemeUI() {
     const isOn = localStorage.getItem('ucc_st_auto_theme') === 'ON';
@@ -778,14 +757,12 @@
     `).join('');
     updateAutoThemeUI();
   }
-
   function initTheme() {
     if (localStorage.getItem('ucc_st_auto_theme') === 'ON') {
       let idx = Number(localStorage.getItem('ucc_st_auto_idx') || 0);
       const nextKey = THEME_KEYS[idx % THEME_KEYS.length];
       localStorage.setItem('ucc_st_auto_idx', String((idx + 1) % THEME_KEYS.length));
-      selectPresetTheme(nextKey, false);
-      return;
+      selectPresetTheme(nextKey, false); return;
     }
     const saved = localStorage.getItem('ucc_st_theme') || 'royal_gold';
     if (saved === 'custom') {
@@ -795,7 +772,7 @@
   }
   initTheme();
 
-  // ===== APP LOGIC =====
+  // ===== APP LOGIC WITH INSTANT CACHE =====
   function bnClass(c) { return CLASSES_BN[c] || c; }
   function bnMonth(k) { const f = MONTHS.find(x => x[0] === k); return f ? f[2] : k; }
   function bnCollector(c) { const s = String(c||''); if (s.includes('Pralay')) return 'প্রলয় ষন্নিগ্রহী'; if (s.includes('Chiranjit')) return 'চিরঞ্জিত ষন্নিগ্রহী'; if (s.includes('Saikat')) return 'সৈকত ষন্নিগ্রহী'; return s || 'অ্যাডমিন'; }
@@ -817,15 +794,34 @@
   document.addEventListener('visibilitychange', () => { if (!document.hidden && navigator.onLine) refreshPortal(true); });
   setInterval(() => { if (!document.hidden && navigator.onLine && portalData) refreshPortal(true); }, 45000);
 
-  function toast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.style.display = 'block'; setTimeout(() => { t.style.display = 'none'; }, 2600); }
+  function toast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.style.display = 'block'; setTimeout(() => { t.style.display = 'none'; }, 2400); }
   function copyUpi() { navigator.clipboard?.writeText('8016972121').catch(()=>{}); toast('UPI Number 8016972121 Copied'); }
   function setLoading(show) { document.getElementById('skeletonView').style.display = show ? 'block' : 'none'; document.getElementById('mainContent').style.display = show ? 'none' : 'block'; }
 
-  window.onload = function() {
-    setTimeout(() => { const sp = document.getElementById('splashScreen'); sp.classList.add('hide'); setTimeout(() => { sp.style.display = 'none'; }, 360); }, 1100);
+  // Instant Boot from Local Cache (0ms load) + Silent Background Sync
+  (function bootInstant() {
+    setTimeout(() => {
+      const sp = document.getElementById('splashScreen');
+      sp.classList.add('hide');
+      setTimeout(() => { sp.style.display = 'none'; }, 240);
+    }, 450);
+
     const savedId = localStorage.getItem('ucc_st_id'), savedMob = localStorage.getItem('ucc_st_mob');
-    if (savedId && savedMob) { document.getElementById('loginScreen').style.display = 'none'; setLoading(true); loadStudentData(savedId, savedMob, true); }
-  };
+    if (savedId && savedMob) {
+      document.getElementById('loginScreen').style.display = 'none';
+      const cached = localStorage.getItem('ucc_st_cache_' + savedId);
+      if (cached) {
+        try {
+          portalData = JSON.parse(cached);
+          setLoading(false);
+          renderPortal();
+        } catch (e) { setLoading(true); }
+      } else {
+        setLoading(true);
+      }
+      if (navigator.onLine) loadStudentData(savedId, savedMob, true);
+    }
+  })();
 
   async function handleStudentLogin(e) {
     e.preventDefault();
@@ -842,9 +838,19 @@
     try {
       const res = await fetch(`${API_URL}?mode=student&id=${encodeURIComponent(id)}&mobile=${encodeURIComponent(mob)}`);
       const data = await res.json();
-      if (data.status === 'ok') { portalData = data; setLoading(false); renderPortal(); return true; }
+      if (data.status === 'ok') {
+        portalData = data;
+        try { localStorage.setItem('ucc_st_cache_' + id, JSON.stringify(data)); } catch (e) {}
+        setLoading(false);
+        renderPortal();
+        return true;
+      }
       setLoading(false); return false;
-    } catch (e) { setLoading(false); if (!silent) toast('Network error!'); return false; }
+    } catch (e) {
+      setLoading(false);
+      if (!silent) toast('Network error!');
+      return false;
+    }
   }
 
   function refreshPortal(silent = false) {
@@ -854,7 +860,10 @@
   function logoutStudent() {
     closeSidebar();
     if (liveChatTimer) clearInterval(liveChatTimer);
-    localStorage.removeItem('ucc_st_id'); localStorage.removeItem('ucc_st_mob'); portalData = null; lastContentHash = '';
+    const id = localStorage.getItem('ucc_st_id');
+    if (id) localStorage.removeItem('ucc_st_cache_' + id);
+    localStorage.removeItem('ucc_st_id'); localStorage.removeItem('ucc_st_mob');
+    portalData = null; lastContentHash = '';
     document.getElementById('loginScreen').style.display = 'flex';
   }
   function openPage(name, btn) {
