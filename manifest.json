@@ -1,26 +1,31 @@
 {
-  "id": "/ucc-admin-2027/",
-  "name": "U.C.C Institute Admin",
-  "short_name": "U.C.C Admin",
-  "description": "U.C.C Institute 2027 Student Management, Fee Collection and Attendance System",
-  "start_url": "/ucc-admin-2027/",
-  "scope": "/ucc-admin-2027/",
+  "name": "U.C.C Institute Teacher Panel",
+  "short_name": "U.C.C Teacher",
+  "description": "U.C.C Institute 2027 Teacher, Attendance & Management Panel",
+  "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
+  "background_color": "#061121",
+  "theme_color": "#061121",
   "orientation": "portrait",
-  "background_color": "#0f5132",
-  "theme_color": "#0f5132",
   "icons": [
     {
-      "src": "https://ui-avatars.com/api/?name=UCC&size=192&background=0f5132&color=ffffff&format=png&bold=true",
+      "src": "logo.png?v=4",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "https://ui-avatars.com/api/?name=UCC&size=512&background=0f5132&color=ffffff&format=png&bold=true",
+      "src": "logo.png?v=4",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
+    },
+    {
+      "src": "logo.png?v=4",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }
