@@ -60,6 +60,7 @@
       content: ''; position: fixed; top: -120px; right: -100px; width: 320px; height: 320px;
       border-radius: 50%; background: var(--accent); opacity: 0.11; filter: blur(90px);
       pointer-events: none; z-index: 0; animation: floatGlow 9s ease-in-out infinite alternate;
+      will-change: transform;
     }
     @keyframes floatGlow {
       0% { transform: translate(0, 0) scale(1); }
@@ -157,7 +158,7 @@
       position: fixed; top: 0; bottom: 0; left: -310px; width: 296px;
       background: var(--bg-solid); border-right: 1.5px solid var(--accent-border); z-index: 85;
       transition: left 0.2s var(--ease-fast); display: flex; flex-direction: column;
-      box-shadow: 8px 0 32px rgba(0, 0, 0, 0.55);
+      box-shadow: 8px 0 32px rgba(0, 0, 0, 0.55); will-change: left;
     }
     #sidebar.open { left: 0; }
     .side-head {
@@ -212,6 +213,7 @@
     .card {
       background: var(--bg-card); border-radius: var(--radius); padding: 16px;
       box-shadow: var(--shadow-card); margin-bottom: 14px; border: 1px solid var(--border);
+      contain: layout style;
     }
     .card-title { font-size: 14.5px; font-weight: 800; color: var(--accent-light); margin-bottom: 11px; display: flex; align-items: center; gap: 7px; }
     .locked-collector { background: var(--accent-soft); color: var(--accent-light); padding: 11px 12px; border-radius: 12px; font-size: 13px; font-weight: 800; border: 1px solid var(--accent-border); }
@@ -429,6 +431,10 @@
       <span class="side-left"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-light)" stroke-width="2.2"><path d="M12 2l3 7h7l-5.5 4.5L18.5 21 12 16.5 5.5 21l2-7.5L2 9h7l3-7z"/></svg>Super Admin &amp; Salary</span>
       <span style="color:var(--accent-light);font-weight:800;">👑</span>
     </button>
+    <button id="sideMySalaryBtn" class="side-item" style="display:none;" onclick="openSidePage('mysalary')">
+      <span class="side-left"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>My Salary &amp; Receipts</span>
+      <span id="sideMySalPill" class="side-pill">0</span>
+    </button>
 
     <!-- THEME STUDIO INSIDE SIDEBAR -->
     <details class="theme-accordion">
@@ -461,6 +467,11 @@
       </div>
     </details>
 
+    <button id="sideNotifBtn" class="side-item" onclick="requestNotifPerm(true)">
+      <span class="side-left"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-light)" stroke-width="2.2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>Phone Notifications</span>
+      <span id="sideNotifPill" class="side-pill">Enable</span>
+    </button>
+
     <button class="side-item" style="background:var(--danger-soft);color:var(--danger);border-color:var(--danger);" onclick="lockApp()">
       <span class="side-left"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Logout / Lock App</span>
       <span>→</span>
@@ -490,16 +501,19 @@
 </div>
 
 <div class="container">
+  <!-- IN-APP SALARY NOTIFICATION BANNER (ACCEPT / গ্রহণ) -->
+  <div id="salaryNotifBanner"></div>
+
   <!-- TAB 1: CLASSES -->
-  <div id="page-classes" class="page active">
+  <div id="page-classes" class="page">
     <div id="classGridView">
-      <div class="form-group"><input type="text" id="globalSearch" placeholder="Search Name, UCC ID or Mobile..." oninput="renderGlobalSearch()"></div>
+      <div class="form-group"><input type="text" id="globalSearch" placeholder="Search Name, UCC ID or Mobile..." oninput="debouncedGlobalSearch()"></div>
       <div id="globalSearchResults"></div>
       <div class="class-grid" id="classGrid"></div>
     </div>
     <div id="classListView" style="display:none;">
       <div class="list-header"><button class="back-btn" onclick="closeClassView()">← Classes</button><div style="font-weight:800;font-size:17px;color:var(--accent-light);" id="activeClassTitle"></div></div>
-      <div class="form-group"><input type="text" id="classSearch" placeholder="Search in this class..." oninput="renderClassStudents()"></div>
+      <div class="form-group"><input type="text" id="classSearch" placeholder="Search in this class..." oninput="debouncedClassSearch()"></div>
       <div id="classStudentList"></div>
     </div>
   </div>
@@ -592,6 +606,32 @@
     </div>
   </div>
 
+  <!-- TAB 5: ABSENT CALLER (BOTTOM NAV / HOMEPAGE) -->
+  <div id="page-caller" class="page">
+    <div class="hisab-hero" style="margin-bottom:12px;">
+      <div style="font-size:12px;opacity:0.85;font-weight:600;">Absent Student Calling Desk • <span id="callerTodayDate">-</span></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;">
+        <div class="hisab-box"><div id="callerPendCount" class="hisab-amt" style="color:var(--danger);">0</div><div class="hisab-lbl">Pending Calls</div></div>
+        <div class="hisab-box"><div id="callerDoneCount" class="hisab-amt" style="color:var(--success);">0</div><div class="hisab-lbl">Called Today ✓</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📞 Pending Absent List</div>
+      <div class="filter-pills" style="grid-template-columns:1fr 1fr 1.2fr;">
+        <button class="pill active" id="cPillActive" onclick="setCallerFilter('active')">Active Classes</button>
+        <button class="pill" id="cPillAll" onclick="setCallerFilter('all')">All Classes</button>
+        <select id="callerClassSel" onchange="renderCallerPage()" style="padding:7px;font-size:12px;font-weight:700;border-radius:11px;"></select>
+      </div>
+      <div id="callerPendingList"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">✅ Called Today (<span id="callerDoneTitleCount">0</span>)</div>
+      <div id="callerDoneList"></div>
+    </div>
+  </div>
+
   <!-- SIDEBAR PAGE A: DUE LIST -->
   <div id="page-duelist" class="page">
     <div id="dueGridView">
@@ -633,7 +673,7 @@
 
   <!-- SIDEBAR PAGE C: NOTICES & DUE-LOCK -->
   <div id="page-notices" class="page">
-    <div class="card">
+    <div class="card" id="dueLockCard">
       <div class="toggle-row">
         <div><div style="font-weight:800;font-size:14px;color:var(--accent-light);">Fee-Due Class Lock</div><div style="font-size:11.5px;color:var(--muted);margin-top:2px;">ON থাকলে বাকি ফি-র স্টুডেন্টরা ভিডিও/PDF/মক টেস্ট দেখতে পাবে না</div></div>
         <button id="dueLockBtn" class="toggle-btn on" onclick="toggleDueLock()">ON</button>
@@ -689,7 +729,8 @@
           <label style="display:flex;align-items:center;gap:5px;margin:0;color:var(--text);cursor:pointer;"><input type="checkbox" id="ntVid" checked style="width:16px;height:16px;"> Video/PDF</label>
           <label style="display:flex;align-items:center;gap:5px;margin:0;color:var(--text);cursor:pointer;"><input type="checkbox" id="ntQa" checked style="width:16px;height:16px;"> Q&amp;A</label>
           <label style="display:flex;align-items:center;gap:5px;margin:0;color:var(--text);cursor:pointer;"><input type="checkbox" id="ntNot" style="width:16px;height:16px;"> Notice</label>
-          <label style="display:flex;align-items:center;gap:5px;margin:0;color:var(--text);cursor:pointer;"><input type="checkbox" id="ntFee" style="width:16px;height:16px;"> Fees/Hisab</label>
+          <label style="display:flex;align-items:center;gap:5px;margin:0;color:var(--text);cursor:pointer;"><input type="checkbox" id="ntFee" style="width:16px;height:16px;"> Admin/Fees (Full View)</label>
+          <label style="display:flex;align-items:center;gap:5px;margin:0;color:var(--text);cursor:pointer;"><input type="checkbox" id="ntCaller" style="width:16px;height:16px;"> Caller</label>
         </div>
         <button type="submit" id="ntSaveBtn" class="btn btn-accent">Save New Teacher</button>
       </form>
@@ -705,6 +746,28 @@
       <div id="saSalaryLogList"></div>
     </div>
   </div>
+
+  <!-- SIDEBAR PAGE F: TEACHER MY SALARY HISTORY -->
+  <div id="page-mysalary" class="page">
+    <div class="hisab-hero">
+      <div style="font-size:12px;opacity:0.85;font-weight:600;">My Salary Summary</div>
+      <div id="mySalTotal" style="font-size:28px;font-weight:800;margin-top:3px;">Rs. 0</div>
+      <div id="mySalMeta" style="font-size:12px;margin-top:4px;opacity:0.9;">Fixed Monthly: Rs. 0</div>
+    </div>
+    <div class="card">
+      <div class="card-title">💰 My Salary Payments (<span id="mySalCount">0</span>)</div>
+      <div id="mySalaryList"></div>
+    </div>
+  </div>
+
+  <!-- FALLBACK PAGE WHEN NO PERMISSION ASSIGNED -->
+  <div id="page-noperm" class="page">
+    <div class="card" style="text-align:center;padding:30px 18px;">
+      <div style="font-size:36px;margin-bottom:10px;">🔒</div>
+      <div style="font-size:16px;font-weight:800;color:var(--accent-light);margin-bottom:6px;">কোনো অপশন চালু করা নেই</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.5;">সুপার অ্যাডমিন এখনো আপনার আইডিতে কোনো মেনুর পারমিশন অন করেননি। অনুগ্রহ করে অ্যাডমিনের সাথে যোগাযোগ করুন।</div>
+    </div>
+  </div>
 </div>
 
 <!-- STUDENT PROFILE MODAL -->
@@ -714,43 +777,45 @@
       <div><div id="pName" style="font-size:19px;font-weight:800;color:var(--accent-light);"></div><div id="pSub" style="font-size:12.5px;color:var(--muted);font-weight:600;"></div></div>
       <button class="close-btn" onclick="closeProfile()">✕</button>
     </div>
-    <div class="stat-grid">
+    <div class="stat-grid" id="pStatGrid">
       <div class="stat-box"><div id="pPresent" class="stat-num" style="color:var(--success);">0</div><div class="stat-lbl">Present</div></div>
       <div class="stat-box"><div id="pAbsent" class="stat-num" style="color:var(--accent-light);">0</div><div class="stat-lbl">Absent</div></div>
-      <div class="stat-box"><div id="pDue" class="stat-num" style="color:var(--danger);">Rs. 0</div><div class="stat-lbl">Total Due</div></div>
+      <div class="stat-box" id="pDueStatBox"><div id="pDue" class="stat-num" style="color:var(--danger);">Rs. 0</div><div class="stat-lbl">Total Due</div></div>
     </div>
     <div class="info-list">
       <div class="info-item"><span style="color:var(--muted);">Father's Name</span><strong id="pFather">-</strong></div>
       <div class="info-item"><span style="color:var(--muted);">Mobile</span><strong id="pMobile">-</strong></div>
       <div class="info-item"><span style="color:var(--muted);">Address</span><strong id="pAddress">-</strong></div>
       <div class="info-item"><span style="color:var(--muted);">Admission Date</span><strong id="pAdm">-</strong></div>
-      <div class="info-item"><span style="color:var(--muted);">First Payment</span><strong id="pFirst">-</strong></div>
+      <div class="info-item" id="pFirstPayRow"><span style="color:var(--muted);">First Payment</span><strong id="pFirst">-</strong></div>
     </div>
-    <div style="font-size:12.5px;font-weight:800;color:var(--accent-light);margin-bottom:7px;">2027 Monthly Fees (Tap month for details & receipt)</div>
-    <div class="months-grid" id="pMonths"></div>
-    <div id="monthDetailBox" class="month-detail-box">
-      <div style="font-weight:800;font-size:13.5px;color:var(--accent-light);margin-bottom:6px;display:flex;justify-content:space-between;"><span id="mdTitleText"></span><span id="mdStatusBadge"></span></div>
-      <div id="mdBody"></div>
-      <div id="mdActions" style="margin-top:8px;"></div>
+    <div id="profileFeesSection">
+      <div style="font-size:12.5px;font-weight:800;color:var(--accent-light);margin-bottom:7px;">2027 Monthly Fees (Tap month for details &amp; receipt)</div>
+      <div class="months-grid" id="pMonths"></div>
+      <div id="monthDetailBox" class="month-detail-box">
+        <div style="font-weight:800;font-size:13.5px;color:var(--accent-light);margin-bottom:6px;display:flex;justify-content:space-between;"><span id="mdTitleText"></span><span id="mdStatusBadge"></span></div>
+        <div id="mdBody"></div>
+        <div id="mdActions" style="margin-top:8px;"></div>
+      </div>
+      <div id="payWarn" class="pay-warn"></div>
+      <div class="pay-box" id="profilePayBox">
+        <div style="font-size:12.5px;font-weight:800;color:var(--accent-light);margin-bottom:9px;">Record Fee Payment • <span id="payCollectorDisplay">-</span></div>
+        <div class="row-2" style="margin-bottom:8px;"><select id="payMonth" onchange="hidePayWarn()"></select><input type="number" id="payAmount" value="300" min="1"></div>
+        <div class="form-group" style="margin-bottom:9px;"><select id="payMode"><option value="Cash">Mode: Cash</option><option value="UPI">Mode: UPI</option></select></div>
+        <button id="paySaveBtn" class="btn btn-accent" onclick="submitPayment()">Save Payment</button>
+      </div>
+      <div id="receiptBar" class="receipt-bar">
+        <div style="font-size:13px;font-weight:700;margin-bottom:8px;" id="receiptMsgPreview"></div>
+        <button type="button" class="btn btn-accent" style="margin-bottom:8px;padding:10px;" onclick="openLastReceipt()">Open / Download PDF Receipt (বাংলা)</button>
+        <div class="row-2"><a id="receiptSmsLink" href="#" class="act-link" style="background:#2563eb;">SMS (বাংলা)</a><a id="receiptWaLink" href="#" target="_blank" class="act-link" style="background:#059669;">WhatsApp (বাংলা)</a></div>
+      </div>
     </div>
-    <div id="payWarn" class="pay-warn"></div>
-    <div class="pay-box" id="profilePayBox">
-      <div style="font-size:12.5px;font-weight:800;color:var(--accent-light);margin-bottom:9px;">Record Fee Payment • <span id="payCollectorDisplay">-</span></div>
-      <div class="row-2" style="margin-bottom:8px;"><select id="payMonth" onchange="hidePayWarn()"></select><input type="number" id="payAmount" value="300" min="1"></div>
-      <div class="form-group" style="margin-bottom:9px;"><select id="payMode"><option value="Cash">Mode: Cash</option><option value="UPI">Mode: UPI</option></select></div>
-      <button id="paySaveBtn" class="btn btn-accent" onclick="submitPayment()">Save Payment</button>
-    </div>
-    <div id="receiptBar" class="receipt-bar">
-      <div style="font-size:13px;font-weight:700;margin-bottom:8px;" id="receiptMsgPreview"></div>
-      <button type="button" class="btn btn-accent" style="margin-bottom:8px;padding:10px;" onclick="openLastReceipt()">Open / Download PDF Receipt (বাংলা)</button>
-      <div class="row-2"><a id="receiptSmsLink" href="#" class="act-link" style="background:#2563eb;">SMS (বাংলা)</a><a id="receiptWaLink" href="#" target="_blank" class="act-link" style="background:#059669;">WhatsApp (বাংলা)</a></div>
-    </div>
-    <div class="action-3">
+    <div class="action-3" id="profileActionRow">
       <a id="btnCall" href="#" class="act-link" style="background:#0284c7;">Call</a>
       <a id="btnSmsDue" href="#" class="act-link" style="background:#7c3aed;">Due SMS</a>
       <a id="btnWaDue" href="#" target="_blank" class="act-link" style="background:#059669;">WhatsApp</a>
     </div>
-    <details style="margin-top:12px;background:var(--bg-card);padding:11px;border-radius:12px;border:1px solid var(--border);">
+    <details id="profileEditBox" style="margin-top:12px;background:var(--bg-card);padding:11px;border-radius:12px;border:1px solid var(--border);">
       <summary style="font-size:13px;font-weight:700;cursor:pointer;color:var(--accent-light);">Edit Father / Mobile / Address</summary>
       <div style="margin-top:10px;">
         <div class="form-group"><label>Father's Name</label><input type="text" id="eFather"></div>
@@ -820,6 +885,19 @@
     <div class="nav-icon-wrap"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
     <span>Hisab</span>
     <span id="pendingBadge" class="nav-badge">0</span>
+  </button>
+  <button class="nav-btn" id="nav-content" style="display:none;" onclick="openPage('content', this)">
+    <div class="nav-icon-wrap"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div>
+    <span id="navContentLbl">Video/PDF</span>
+  </button>
+  <button class="nav-btn" id="nav-notices" style="display:none;" onclick="openPage('notices', this)">
+    <div class="nav-icon-wrap"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+    <span>Notices</span>
+  </button>
+  <button class="nav-btn" id="nav-caller" style="display:none;" onclick="openPage('caller', this)">
+    <div class="nav-icon-wrap"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+    <span>Caller</span>
+    <span id="callerPendingBadge" class="nav-badge">0</span>
   </button>
 </nav>
 <div id="toast" class="toast"></div>
@@ -1067,30 +1145,223 @@
     return u ? u.name : '';
   }
 
+  function canAccessPage(name) {
+    const u = getCurrentUserObj();
+    if (!u) return false;
+    if (u.role === 'SUPER_ADMIN') return true;
+    const p = u.perms || {};
+    if (name === 'classes' || name === 'entry' || name === 'hisab' || name === 'duelist') return !!p.fees;
+    if (name === 'scan') return !!p.qr;
+    if (name === 'content') return !!(p.video || p.qa);
+    if (name === 'notices') return !!p.notice;
+    if (name === 'caller') return !!p.caller;
+    if (name === 'absent') return !!(p.fees || p.qr || p.caller);
+    if (name === 'superadmin') return false;
+    if (name === 'mysalary' || name === 'noperm') return true;
+    return false;
+  }
+
+  function openDefaultAllowedPage() {
+    const u = getCurrentUserObj();
+    if (!u) return;
+    // যদি Fees/Full Admin ভিউ থাকে (Super Admin / চিরদা / সৈকত), তাহলে Classes খুলবে
+    // আর সাধারণ টিচার হলে (Fees OFF), তার প্রথম অনুমোদিত অপশনটাই সরাসরি খুলবে (Classes বা Due খুলবেই না!)
+    const order = ['classes', 'scan', 'content', 'notices', 'caller'];
+    for (const pg of order) {
+      if (canAccessPage(pg)) {
+        openPage(pg, document.getElementById('nav-' + pg));
+        return;
+      }
+    }
+    openPage('noperm', null);
+  }
+
   function applyRolePermissions() {
     const u = getCurrentUserObj();
     if (!u) return;
     const superFlag = u.role === 'SUPER_ADMIN';
     const p = u.perms || {};
+    const canFees = superFlag || !!p.fees;
+    const canQr = superFlag || !!p.qr;
+    const canContent = superFlag || !!p.video || !!p.qa;
+    const canNotice = superFlag || !!p.notice;
+    const canCaller = superFlag || !!p.caller;
+
+    // Full Admin View = Super Admin (Prolay) + Co-Admins with Fees perm (Chiranjit, Saikat)
+    // Regular Teacher View = Fees OFF -> NO admin menus in sidebar, ALL allowed tools directly on Homepage Bottom Nav!
+    const isAdminView = superFlag || canFees;
 
     const showFlex = (id, cond) => { const el = document.getElementById(id); if (el) el.style.display = cond ? 'flex' : 'none'; };
     const showBlock = (id, cond) => { const el = document.getElementById(id); if (el) el.style.display = cond ? 'block' : 'none'; };
 
-    // Sidebar items
+    // Sidebar items: Full Admins get full sidebar; Regular Teachers do NOT need sidebar menus (only Theme, Notif, Logout)
     showFlex('sideSuperBtn', superFlag);
-    showFlex('sideDueBtn', superFlag || !!p.fees);
-    showFlex('sideContentBtn', superFlag || !!p.video || !!p.qa);
-    showBlock('uploadContentCard', superFlag || !!p.video);
-    showFlex('sideNoticesBtn', superFlag || !!p.notice);
-    showFlex('sideAbsentBtn', superFlag || !!p.qr);
+    showFlex('sideMySalaryBtn', !superFlag);
+    showFlex('sideDueBtn', isAdminView);
+    showFlex('sideContentBtn', isAdminView && canContent);
+    showFlex('sideNoticesBtn', isAdminView && canNotice);
+    showFlex('sideAbsentBtn', isAdminView && (canQr || canCaller));
 
     // Bottom navigation tabs
-    showFlex('nav-scan', superFlag || !!p.qr);
-    showFlex('nav-hisab', superFlag || !!p.fees);
-    showFlex('nav-entry', superFlag || !!p.fees);
+    showFlex('nav-classes', isAdminView);
+    showFlex('nav-entry', isAdminView);
+    showFlex('nav-hisab', isAdminView);
+    showFlex('nav-scan', canQr);
+    showFlex('nav-caller', canCaller);
+    // Regular teachers get Video/PDF and Notices directly on Homepage Bottom Bar (not hidden in sidebar)
+    showFlex('nav-content', !isAdminView && canContent);
+    showFlex('nav-notices', !isAdminView && canNotice);
+    const ncLbl = document.getElementById('navContentLbl');
+    if (ncLbl) ncLbl.textContent = (superFlag || !!p.video) ? 'Video/PDF' : 'Live Q&A';
 
-    // Profile fee payment box
-    showBlock('profilePayBox', superFlag || !!p.fees);
+    // Content upload card & Fee-Due Lock card protection
+    showBlock('uploadContentCard', superFlag || !!p.video);
+    showBlock('dueLockCard', isAdminView);
+
+    // Strict Fee Privacy inside Student Profile Modal
+    showBlock('pDueStatBox', canFees);
+    const statGrid = document.getElementById('pStatGrid');
+    if (statGrid) statGrid.style.gridTemplateColumns = canFees ? 'repeat(3, 1fr)' : 'repeat(2, 1fr)';
+    showFlex('pFirstPayRow', canFees);
+    showBlock('profileFeesSection', canFees);
+    showBlock('profilePayBox', canFees);
+    showBlock('btnSmsDue', canFees);
+    showBlock('btnWaDue', canFees);
+    const actRow = document.getElementById('profileActionRow');
+    if (actRow) actRow.style.gridTemplateColumns = canFees ? 'repeat(3, 1fr)' : '1fr';
+    showBlock('profileEditBox', canFees);
+    updateNotifPillUI();
+
+    // যদি বর্তমানে খোলা পেজটির পারমিশন তুলে নেওয়া হয়ে থাকে, তবে সাথে সাথে অনুমোদিত পেজে পাঠিয়ে দাও
+    const activePg = document.querySelector('.page.active');
+    if (activePg) {
+      const activeName = activePg.id.replace('page-', '');
+      if (!canAccessPage(activeName)) openDefaultAllowedPage();
+    }
+  }
+
+  function updateNotifPillUI() {
+    const pill = document.getElementById('sideNotifPill'); if (!pill) return;
+    if (!('Notification' in window)) { pill.textContent = 'N/A'; return; }
+    if (Notification.permission === 'granted') pill.textContent = 'ON ✓';
+    else if (Notification.permission === 'denied') pill.textContent = 'Blocked';
+    else pill.textContent = 'Enable';
+  }
+
+  async function requestNotifPerm(showToastMsg = false) {
+    if (!('Notification' in window)) { if (showToastMsg) toast('এই ব্রাউজারে নোটিফিকেশন সাপোর্ট নেই।'); return; }
+    try {
+      const perm = await Notification.requestPermission();
+      updateNotifPillUI();
+      if (showToastMsg) toast(perm === 'granted' ? '🔔 ফোন নোটিফিকেশন চালু হয়েছে!' : 'নোটিফিকেশন অনুমতি দেওয়া হয়নি।');
+    } catch (e) {}
+  }
+
+  function pushLocalPhoneNotif(title, bodyText) {
+    if (!('Notification' in window) || Notification.permission !== 'granted') return;
+    try {
+      if ('serviceWorker' in navigator && navigator.serviceWorker.ready) {
+        navigator.serviceWorker.ready.then(reg => {
+          if (reg && reg.showNotification) {
+            reg.showNotification(title, { body: bodyText, icon: 'logo.png?v=3', badge: 'logo.png?v=3', vibrate: [200, 100, 200] });
+          } else {
+            new Notification(title, { body: bodyText, icon: 'logo.png?v=3' });
+          }
+        }).catch(() => { try { new Notification(title, { body: bodyText }); } catch(e){} });
+      } else {
+        new Notification(title, { body: bodyText, icon: 'logo.png?v=3' });
+      }
+    } catch (e) {}
+  }
+
+  function renderSalaryNotifications() {
+    const box = document.getElementById('salaryNotifBanner'); if (!box) return;
+    const u = getCurrentUserObj();
+    if (!u) { box.innerHTML = ''; return; }
+    const myPending = (salaryLog || []).filter(l =>
+      String(l.teacherId || '').toUpperCase() === String(u.id || '').toUpperCase() &&
+      String(l.status || 'PENDING').toUpperCase() !== 'ACCEPTED'
+    );
+    if (!myPending.length) { box.innerHTML = ''; return; }
+
+    // ফোনের টপ-বারে নোটিফিকেশন পাঠানো (প্রতি স্যালারির জন্য একবার)
+    let seen = [];
+    try { seen = JSON.parse(localStorage.getItem('ucc_notified_sals') || '[]'); } catch(e) {}
+    let changed = false;
+    myPending.forEach(s => {
+      if (!seen.includes(s.salaryId)) {
+        pushLocalPhoneNotif('💰 U.C.C Salary Received!', `আপনার ${s.month} মাসের ₹${s.amount} স্যালারি পাঠানো হয়েছে। অ্যাপে ঢুকে Accept করুন।`);
+        seen.push(s.salaryId);
+        changed = true;
+      }
+    });
+    if (changed) localStorage.setItem('ucc_notified_sals', JSON.stringify(seen.slice(-50)));
+
+    box.innerHTML = myPending.map(s => `
+      <div class="card" style="background:linear-gradient(135deg,#064e3b 0%,#065f46 100%);border:2px solid var(--success);margin-bottom:14px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+          <strong style="color:#a7f3d0;font-size:14px;">🔔 নতুন স্যালারি এসেছে!</strong>
+          <span class="badge-ok" style="background:#34d399;color:#061121;">₹${s.amount}</span>
+        </div>
+        <div style="font-size:13px;color:#ecfdf5;margin:6px 0 10px;line-height:1.45;">
+          আপনার <strong>${s.month}</strong> মাসের স্যালারি বাবদ <strong>₹${s.amount}</strong> পাঠানো হয়েছে।<br>
+          <span style="font-size:11.5px;opacity:0.9;">তারিখ: ${s.date} ${s.time || ''} • প্রেরক: ${s.paidBy || 'Super Admin'}</span>
+        </div>
+        <button class="btn btn-accent" style="padding:10px;" onclick="acceptSalaryUI('${s.salaryId}', this)">✅ Accept / গ্রহণ করুন</button>
+      </div>
+    `).join('');
+  }
+
+  function renderMySalary() {
+    const u = getCurrentUserObj();
+    const listBox = document.getElementById('mySalaryList');
+    if (!u || !listBox) return;
+    const myLogs = (salaryLog || []).filter(l => String(l.teacherId || '').toUpperCase() === String(u.id || '').toUpperCase());
+    const tot = myLogs.reduce((sum, x) => sum + (Number(x.amount) || 0), 0);
+    document.getElementById('mySalTotal').textContent = 'Rs. ' + tot;
+    document.getElementById('mySalMeta').textContent = `Fixed Monthly: Rs. ${u.salary || 0} • ${u.subjects || 'Teacher'}`;
+    document.getElementById('mySalCount').textContent = myLogs.length;
+    listBox.innerHTML = myLogs.length ? myLogs.slice().reverse().map(l => {
+      const acc = String(l.status || '').toUpperCase() === 'ACCEPTED';
+      return `
+      <div class="info-item" style="font-size:12.5px;align-items:flex-start;">
+        <div>
+          <strong>${l.month}</strong> • <span style="color:var(--success);font-weight:800;">₹${l.amount}</span><br>
+          <span style="color:var(--muted);font-size:11px;">${l.date} ${l.time || ''} • Paid by ${l.paidBy || 'Admin'}</span><br>
+          <span class="${acc ? 'badge-ok' : 'badge-due'}" style="display:inline-block;margin-top:4px;font-size:10px;padding:2px 8px;">${acc ? '✅ Accepted' + (l.acceptedAt ? ' (' + l.acceptedAt + ')' : '') : '⏳ Pending Accept'}</span>
+        </div>
+        ${!acc ? `<button class="btn-sm" style="background:var(--accent-grad);color:var(--accent-text);" onclick="acceptSalaryUI('${l.salaryId}', this)">Accept</button>` : ''}
+      </div>`;
+    }).join('') : '<div style="font-size:12.5px;color:var(--muted);text-align:center;">এখনো কোনো স্যালারি রেকর্ড নেই।</div>';
+  }
+
+  async function acceptSalaryUI(salaryId, btn) {
+    if (!navigator.onLine) { toast('Accept করতে ইন্টারনেট অন রাখুন।'); return; }
+    // ইনস্ট্যান্ট UI আপডেট (০ms ল্যাগ)
+    const item = (salaryLog || []).find(x => x.salaryId === salaryId);
+    const prevStatus = item ? item.status : 'PENDING';
+    if (item) {
+      item.status = 'ACCEPTED';
+      item.acceptedAt = todayStr() + ' ' + bnNowTime();
+      localStorage.setItem('ucc_salary_log', JSON.stringify(salaryLog));
+    }
+    renderSalaryNotifications();
+    renderMySalary();
+    toast('✅ স্যালারি Accept (গ্রহণ) কনফার্ম হয়েছে!');
+    try {
+      const u = getCurrentUserObj();
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ action: 'acceptTeacherSalary', salaryId, teacherId: u ? u.id : '' })
+      });
+      const data = await res.json();
+      if (data.status === 'ok') applyServerPayload(data);
+      else if (item) { item.status = prevStatus; renderSalaryNotifications(); renderMySalary(); toast(data.message || 'Error!'); }
+    } catch (e) {
+      if (item) { item.status = prevStatus; renderSalaryNotifications(); renderMySalary(); }
+      toast('Network error! আবার চেষ্টা করুন।');
+    }
   }
 
   function applyAdminUI() {
@@ -1107,7 +1378,7 @@
   function openSidebar() { renderThemeGrid(); applyRolePermissions(); document.getElementById('sidebar').classList.add('open'); document.getElementById('sideBackdrop').classList.add('open'); }
   function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sideBackdrop').classList.remove('open'); }
   function openSidePage(name) {
-    if (name === 'superadmin' && !isSuperAdmin()) { toast('শুধুমাত্র Super Admin-এর জন্য!'); return; }
+    if (!canAccessPage(name)) { toast('আপনার এই অপশনের পারমিশন নেই!'); return; }
     closeSidebar(); if (scannerRunning) stopScanner();
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -1117,6 +1388,7 @@
     if (name === 'content' || name === 'notices') renderContentTab();
     if (name === 'absent') renderTodayAttendance();
     if (name === 'superadmin') renderSuperAdmin();
+    if (name === 'mysalary') renderMySalary();
   }
 
   function togglePassView(btn) { const inp = document.getElementById('loginPass'); inp.type = inp.type === 'password' ? 'text' : 'password'; btn.textContent = inp.type === 'password' ? 'Show' : 'Hide'; }
@@ -1142,10 +1414,11 @@
         document.getElementById('loginScreen').style.display = 'none';
         document.getElementById('loginPass').value = '';
         applyAdminUI();
-        openPage('classes', document.getElementById('nav-classes'));
+        openDefaultAllowedPage();
         renderAll();
         syncNow(true);
         toast(`Welcome, ${data.user.name}!`);
+        if ('Notification' in window && Notification.permission === 'default') requestNotifPerm(false);
       } else {
         errEl.textContent = data.message || 'ভুল টিচার আইডি বা পিন!';
         errEl.style.display = 'block';
@@ -1171,11 +1444,13 @@
     document.getElementById('fClass').innerHTML = '<option value="">Select Class</option>' + clsOpts;
     document.getElementById('nClass').innerHTML = '<option value="ALL">All Classes</option>' + clsOpts;
     document.getElementById('cClass').innerHTML = '<option value="ALL">All Classes</option>' + clsOpts;
+    const cSel = document.getElementById('callerClassSel');
+    if (cSel) cSel.innerHTML = '<option value="ALL">All Classes</option>' + clsOpts;
     document.getElementById('fMonth').innerHTML = '<option value="">None</option>' + MONTHS.map(([k]) => `<option value="${k}">${k}</option>`).join('');
     document.getElementById('hisabMonthSel').innerHTML = '<option value="">Month-wise...</option>' + MONTHS.map(([k, lbl]) => `<option value="${k}">${lbl} 2027</option>`).join('');
     document.getElementById('fAdmDate').value = todayStr();
     updateNetUI(); applyAdminUI(); renderAll();
-    if (getCurrentAdmin()) { document.getElementById('loginScreen').style.display = 'none'; if (navigator.onLine) syncNow(true); }
+    if (getCurrentAdmin()) { document.getElementById('loginScreen').style.display = 'none'; openDefaultAllowedPage(); if (navigator.onLine) syncNow(true); }
     else document.getElementById('loginScreen').style.display = 'flex';
   };
 
@@ -1243,7 +1518,7 @@
       saTotals = { col: Number(data.totalCollection) || 0, sal: Number(data.totalSalaryPaid) || 0, net: Number(data.netBalance) || 0 };
       localStorage.setItem('ucc_sa_totals', JSON.stringify(saTotals));
     }
-    saveLocal(); renderAll(true); renderSuperAdmin();
+    saveLocal(); renderAll(true);
   }
 
   // ===== SUPER ADMIN PANEL LOGIC =====
@@ -1286,7 +1561,8 @@
           <label style="display:flex;align-items:center;gap:4px;margin:0;color:var(--text);"><input type="checkbox" id="p_vid_${t.id}" ${p.video?'checked':''} style="width:15px;height:15px;"> Video</label>
           <label style="display:flex;align-items:center;gap:4px;margin:0;color:var(--text);"><input type="checkbox" id="p_qa_${t.id}" ${p.qa?'checked':''} style="width:15px;height:15px;"> Q&amp;A</label>
           <label style="display:flex;align-items:center;gap:4px;margin:0;color:var(--text);"><input type="checkbox" id="p_not_${t.id}" ${p.notice?'checked':''} style="width:15px;height:15px;"> Notice</label>
-          <label style="display:flex;align-items:center;gap:4px;margin:0;color:var(--text);"><input type="checkbox" id="p_fee_${t.id}" ${p.fees?'checked':''} style="width:15px;height:15px;"> Fees</label>
+          <label style="display:flex;align-items:center;gap:4px;margin:0;color:var(--text);"><input type="checkbox" id="p_fee_${t.id}" ${p.fees?'checked':''} style="width:15px;height:15px;"> Admin/Fees</label>
+          <label style="display:flex;align-items:center;gap:4px;margin:0;color:var(--text);"><input type="checkbox" id="p_cal_${t.id}" ${p.caller?'checked':''} style="width:15px;height:15px;"> Caller</label>
         </div>` : ''}
         <div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:8px;">
           <button class="btn-sm" style="background:var(--accent-grad);color:var(--accent-text);" onclick="saveTeacherChanges('${t.id}', ${isSA})">💾 Save</button>
@@ -1300,15 +1576,18 @@
 
     document.getElementById('saSalLogCount').textContent = salaryLog.length;
     const logBox = document.getElementById('saSalaryLogList');
-    logBox.innerHTML = salaryLog.length ? salaryLog.slice().reverse().slice(0, 30).map(l => `
+    logBox.innerHTML = salaryLog.length ? salaryLog.slice().reverse().slice(0, 30).map(l => {
+      const acc = String(l.status || '').toUpperCase() === 'ACCEPTED';
+      return `
       <div class="info-item" style="font-size:12.5px;">
         <div>
           <strong>${l.teacherName}</strong> <span style="color:var(--muted);">(${l.teacherId})</span><br>
-          <span style="color:var(--muted);font-size:11px;">${l.month} • ${l.date} ${l.time || ''}</span>
+          <span style="color:var(--muted);font-size:11px;">${l.month} • ${l.date} ${l.time || ''}</span><br>
+          <span class="${acc ? 'badge-ok' : 'badge-due'}" style="display:inline-block;margin-top:4px;font-size:10px;padding:2px 8px;">${acc ? '✅ Accepted' + (l.acceptedAt ? ' (' + l.acceptedAt + ')' : '') : '⏳ Pending Accept • ব্যালেন্স থেকে কাটা'}</span>
         </div>
         <div style="font-weight:800;color:var(--danger);">- ₹${l.amount}</div>
-      </div>
-    `).join('') : '<div style="font-size:12.5px;color:var(--muted);text-align:center;">No salary paid yet.</div>';
+      </div>`;
+    }).join('') : '<div style="font-size:12.5px;color:var(--muted);text-align:center;">No salary paid yet.</div>';
   }
 
   async function addNewTeacher(e) {
@@ -1329,7 +1608,8 @@
         video: document.getElementById('ntVid').checked,
         qa: document.getElementById('ntQa').checked,
         notice: document.getElementById('ntNot').checked,
-        fees: document.getElementById('ntFee').checked
+        fees: document.getElementById('ntFee').checked,
+        caller: document.getElementById('ntCaller').checked
       };
       const res = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) });
       const data = await res.json();
@@ -1353,7 +1633,8 @@
         video: document.getElementById('p_vid_' + id).checked,
         qa: document.getElementById('p_qa_' + id).checked,
         notice: document.getElementById('p_not_' + id).checked,
-        fees: document.getElementById('p_fee_' + id).checked
+        fees: document.getElementById('p_fee_' + id).checked,
+        caller: document.getElementById('p_cal_' + id).checked
       };
     }
     toast('Updating...');
@@ -1407,9 +1688,9 @@
     const data = await res.json();
     if (data.status === 'ok') {
       applyServerPayload(data);
-      toast('স্যালারি পেইড ও মেইন ব্যালেন্স থেকে ডিডাক্ট হয়েছে!');
+      toast('স্যালারি পেইড! টিচারের অ্যাপে Accept নোটিফিকেশন চলে গেছে।');
       const mob = String(mobile || '').replace(/\D/g, '');
-      if (mob && confirm('WhatsApp-এ স্যালারি রিসিপ্ট পাঠাবেন?')) {
+      if (mob && confirm('টিচারের অ্যাপে নোটিফিকেশন চলে গেছে!\n\nএছাড়াও কি WhatsApp-এ রিসিপ্ট পাঠাতে চান? (Cancel চাপলে শুধু অ্যাপ নোটিফিকেশনই থাকবে)')) {
         const msg = encodeURIComponent(`ইউ.সি.সি ইনস্টিটিউট: নমস্কার ${teacherName}, আপনার ${month} মাসের স্যালারি বাবদ ${amount} টাকা পাঠানো হয়েছে। তারিখ: ${formatBnDate(todayStr())}। ধন্যবাদ।`);
         window.open(`https://wa.me/91${mob}?text=${msg}`, '_blank');
       }
@@ -1439,23 +1720,81 @@
   }
 
   function openPage(name, btn) {
+    if (!canAccessPage(name)) { toast('আপনার এই অপশনের পারমিশন নেই!'); return; }
     closeSidebar(); if (name !== 'scan' && scannerRunning) stopScanner();
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById('page-' + name).classList.add('active');
+    const pgEl = document.getElementById('page-' + name);
+    if (pgEl) pgEl.classList.add('active');
     if (btn) btn.classList.add('active');
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (name === 'classes') { renderClassGrid(); if (activeClass) renderClassStudents(); }
     if (name === 'entry') { document.getElementById('nextIdPreview').textContent = getNextStudentId(); applyAdminUI(); }
     if (name === 'scan') renderTodayAttendance();
     if (name === 'hisab') renderHisab();
+    if (name === 'caller') renderCallerPage();
+    if (name === 'content' || name === 'notices') renderContentTab();
+  }
+
+  let _gSearchTimer = null, _cSearchTimer = null;
+  function debouncedGlobalSearch() { clearTimeout(_gSearchTimer); _gSearchTimer = setTimeout(renderGlobalSearch, 90); }
+  function debouncedClassSearch() { clearTimeout(_cSearchTimer); _cSearchTimer = setTimeout(renderClassStudents, 90); }
+
+  function updateBadgesOnly() {
+    document.getElementById('nextIdPreview').textContent = getNextStudentId();
+    const today = todayStr();
+    // Due pill
+    if (hasPerm('fees')) {
+      const grandTotal = students.reduce((sum, s) => sum + (Number(s.totalDue) || 0), 0);
+      const sd = document.getElementById('sideDuePill'); if (sd) sd.textContent = 'Rs. ' + grandTotal;
+      const pendOnline = onlineRequests.filter(r => r.status === 'Pending').length;
+      const pb = document.getElementById('pendingBadge');
+      if (pb) { pb.textContent = pendOnline; pb.style.display = pendOnline > 0 ? 'inline-block' : 'none'; }
+    }
+    // Absent & Caller badges
+    const absTodayCount = absentLog.filter(a => a.date === today).length;
+    const sa = document.getElementById('sideAbsPill'); if (sa) sa.textContent = absTodayCount;
+    if (hasPerm('caller')) {
+      const presentToday = attendance.filter(a => a.date === today);
+      const presentIds = new Set(presentToday.map(a => String(a.studentId || '').toUpperCase()));
+      const activeClasses = new Set(presentToday.map(a => a.studentClass));
+      const calledIds = new Set(absentLog.filter(a => a.date === today).map(a => String(a.studentId || '').toUpperCase()));
+      let cPend = 0;
+      students.forEach(s => {
+        const idU = String(s.id || '').toUpperCase();
+        if (!presentIds.has(idU) && !calledIds.has(idU) && (activeClasses.size === 0 || activeClasses.has(s.studentClass))) cPend++;
+      });
+      const cb = document.getElementById('callerPendingBadge');
+      if (cb) { cb.textContent = cPend; cb.style.display = cPend > 0 ? 'inline-block' : 'none'; }
+    }
+    // My Salary badge for teachers
+    const u = getCurrentUserObj();
+    const msp = document.getElementById('sideMySalPill');
+    if (u && msp && u.role !== 'SUPER_ADMIN') {
+      const myCount = (salaryLog || []).filter(l => String(l.teacherId || '').toUpperCase() === String(u.id || '').toUpperCase()).length;
+      msp.textContent = myCount;
+    }
+    renderSalaryNotifications();
+  }
+
+  function renderActivePage(keepReceipt = false) {
+    const activePg = document.querySelector('.page.active');
+    const name = activePg ? activePg.id.replace('page-', '') : '';
+    if (name === 'classes') { renderClassGrid(); if (activeClass) renderClassStudents(); }
+    else if (name === 'duelist') { renderDueList(); if (activeDueClass) renderDueClassStudents(); }
+    else if (name === 'scan' || name === 'absent') renderTodayAttendance();
+    else if (name === 'hisab') renderHisab();
+    else if (name === 'content' || name === 'notices') renderContentTab();
+    else if (name === 'caller') renderCallerPage();
+    else if (name === 'superadmin') renderSuperAdmin();
+    else if (name === 'mysalary') renderMySalary();
+    if (activeStudentId) openProfile(activeStudentId, keepReceipt);
   }
 
   function renderAll(keepReceipt = false) {
-    document.getElementById('nextIdPreview').textContent = getNextStudentId();
-    applyAdminUI(); renderClassGrid(); renderDueList(); renderTodayAttendance(); renderHisab(); renderContentTab();
-    if (activeClass) renderClassStudents();
-    if (activeDueClass) renderDueClassStudents();
-    if (activeStudentId) openProfile(activeStudentId, keepReceipt);
+    applyAdminUI();
+    updateBadgesOnly();
+    renderActivePage(keepReceipt);
   }
 
   function renderDueList() {
@@ -1595,10 +1934,11 @@
   }
 
   function renderClassGrid() {
+    const canFees = hasPerm('fees');
     document.getElementById('classGrid').innerHTML = CLASSES.map(cls => {
       const list = students.filter(s => s.studentClass === cls);
       const totalDue = list.reduce((sum, s) => sum + (Number(s.totalDue) || 0), 0);
-      return `<div class="class-card" onclick="openClassView('${cls}')"><div class="cc-title">${cls}</div><div class="cc-count">${list.length} Students</div><div class="cc-due ${totalDue === 0 ? 'zero' : ''}">${totalDue > 0 ? 'Due: Rs. ' + totalDue : 'All Clear ✓'}</div></div>`;
+      return `<div class="class-card" onclick="openClassView('${cls}')"><div class="cc-title">${cls}</div><div class="cc-count">${list.length} Students</div>${canFees ? `<div class="cc-due ${totalDue === 0 ? 'zero' : ''}">${totalDue > 0 ? 'Due: Rs. ' + totalDue : 'All Clear ✓'}</div>` : ''}</div>`;
     }).join('');
   }
   function renderGlobalSearch() {
@@ -1609,8 +1949,9 @@
     resBox.innerHTML = matches.length ? matches.map(studentRowHtml).join('') : '<div class="card" style="text-align:center;color:var(--muted);">No student found.</div>';
   }
   function studentRowHtml(s) {
+    const canFees = hasPerm('fees');
     const due = Number(s.totalDue) || 0;
-    return `<div class="student-row" onclick="openProfile('${s.id}')"><div><div class="st-name">${s.name}</div><div class="st-id">${s.id} • ${s.studentClass}${s.mobile ? ' • ' + s.mobile : ''}</div></div><div class="${due > 0 ? 'badge-due' : 'badge-ok'}">${due > 0 ? 'Due ₹' + due : 'Paid'}</div></div>`;
+    return `<div class="student-row" onclick="openProfile('${s.id}')"><div><div class="st-name">${s.name}</div><div class="st-id">${s.id} • ${s.studentClass}${s.mobile ? ' • ' + s.mobile : ''}</div></div>${canFees ? `<div class="${due > 0 ? 'badge-due' : 'badge-ok'}">${due > 0 ? 'Due ₹' + due : 'Paid'}</div>` : '<span style="color:var(--accent-light);font-weight:800;">→</span>'}</div>`;
   }
   function openClassView(cls) { activeClass = cls; document.getElementById('classGridView').style.display = 'none'; document.getElementById('classListView').style.display = 'block'; document.getElementById('activeClassTitle').textContent = cls; document.getElementById('classSearch').value = ''; renderClassStudents(); }
   function closeClassView() { activeClass = null; document.getElementById('classListView').style.display = 'none'; document.getElementById('classGridView').style.display = 'block'; }
@@ -1642,6 +1983,7 @@
   function hidePayWarn() { document.getElementById('payWarn').style.display = 'none'; }
 
   function openProfile(id, keepReceipt = false) {
+    if (!hasPerm('fees')) { toast('স্টুডেন্ট ফি ও প্রোফাইল দেখার পারমিশন নেই!'); return; }
     const s = students.find(x => x.id === id); if (!s) return;
     activeStudentId = id; hidePayWarn(); applyAdminUI();
     const classDays = new Set(attendance.filter(a => a.studentClass === s.studentClass && (!s.admissionDate || a.date >= s.admissionDate)).map(a => a.date));
@@ -1857,7 +2199,7 @@
     if (exists) { playBeep(380,200); showScanPopup('warn','Already Present!',s.name,`${s.id} • ${s.studentClass}`); return; }
     const rec = { date: today, time: bnNowTime(), studentId: s.id, name: s.name, studentClass: s.studentClass, status: 'Present' };
     attendance.push(rec); queue.push({ type: 'markAttendance', data: rec }); saveLocal(); renderTodayAttendance();
-    playBeep(900,140); showScanPopup('ok','✓ Present Marked',s.name,`${s.id} • ${s.studentClass}${s.totalDue>0?' • Due: Rs.'+s.totalDue:' • Clear'}`);
+    playBeep(900,140); const dueInfo = hasPerm('fees') ? (s.totalDue>0?' • Due: Rs.'+s.totalDue:' • Clear') : ''; showScanPopup('ok','✓ Present Marked',s.name,`${s.id} • ${s.studentClass}${dueInfo}`);
     if (navigator.onLine) syncNow(true);
   }
   function renderTodayAttendance() {
@@ -1868,6 +2210,119 @@
     document.getElementById('absentRepCount').textContent = absToday.length; document.getElementById('sideAbsPill').textContent = absToday.length;
     document.getElementById('absentReportList').innerHTML = absToday.length ? absToday.map(a => `<div class="info-item" style="font-size:12.5px;"><div><strong>${a.studentName}</strong> <span style="color:var(--muted);">(${a.studentId} • ${a.studentClass})</span><br><span style="color:var(--accent-light);font-weight:700;">কারণ: ${a.reason}</span></div><span style="color:var(--muted);font-size:11px;text-align:right;">${a.time}<br>${a.callerName}</span></div>`).join('') : '<div style="font-size:12.5px;color:var(--muted);">No absent calls logged today.</div>';
   }
+
+  // ===== ABSENT CALLER DESK (HOMEPAGE BOTTOM NAV) =====
+  let callerFilterMode = 'active';
+  function setCallerFilter(mode) {
+    callerFilterMode = mode;
+    const pa = document.getElementById('cPillActive'), pall = document.getElementById('cPillAll');
+    if (pa) pa.classList.toggle('active', mode === 'active');
+    if (pall) pall.classList.toggle('active', mode === 'all');
+    renderCallerPage();
+  }
+
+  function renderCallerPage() {
+    const pendBox = document.getElementById('callerPendingList');
+    if (!pendBox) return;
+    const today = todayStr();
+    const dtEl = document.getElementById('callerTodayDate');
+    if (dtEl) dtEl.textContent = formatBnDate(today);
+
+    const presentToday = attendance.filter(a => a.date === today);
+    const presentIds = new Set(presentToday.map(a => String(a.studentId || '').toUpperCase()));
+    const activeClasses = new Set(presentToday.map(a => a.studentClass));
+
+    const calledToday = absentLog.filter(a => a.date === today);
+    const calledIds = new Set(calledToday.map(a => String(a.studentId || '').toUpperCase()));
+
+    const allAbsent = students.filter(s => !presentIds.has(String(s.id || '').toUpperCase()) && !calledIds.has(String(s.id || '').toUpperCase()));
+    const activeAbsent = activeClasses.size > 0 ? allAbsent.filter(s => activeClasses.has(s.studentClass)) : allAbsent;
+
+    const badge = document.getElementById('callerPendingBadge');
+    if (badge) {
+      if (activeAbsent.length > 0) { badge.textContent = activeAbsent.length; badge.style.display = 'inline-block'; }
+      else badge.style.display = 'none';
+    }
+
+    let list = callerFilterMode === 'active' ? activeAbsent : allAbsent;
+    const selCls = document.getElementById('callerClassSel') ? document.getElementById('callerClassSel').value : 'ALL';
+    if (selCls && selCls !== 'ALL') list = list.filter(s => s.studentClass === selCls);
+
+    document.getElementById('callerPendCount').textContent = list.length;
+    document.getElementById('callerDoneCount').textContent = calledToday.length;
+    document.getElementById('callerDoneTitleCount').textContent = calledToday.length;
+
+    pendBox.innerHTML = list.length ? list.map(s => {
+      const mob = String(s.mobile || '').replace(/\D/g, '');
+      return `
+      <div class="req-card" style="margin-bottom:11px;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+          <div>
+            <strong style="font-size:14.5px;color:var(--accent-light);">${s.name}</strong>
+            <div style="font-size:11.5px;color:var(--text-2);margin-top:2px;">${s.id} • ${s.studentClass}${s.fatherName ? ' • পিতা: ' + s.fatherName : ''}</div>
+            <div style="font-size:12px;color:var(--muted);margin-top:2px;">📱 ${mob || 'নম্বর নেই'}</div>
+          </div>
+          ${mob ? `<a href="tel:${mob}" class="btn-sm" style="background:#059669;color:#fff;text-decoration:none;padding:9px 13px;font-size:12px;">📞 Call</a>` : ''}
+        </div>
+        <div class="row-2" style="margin-top:9px;grid-template-columns:1fr 1fr;">
+          <select id="crSel_${s.id}" onchange="onCallerQuickReason('${s.id}', this.value)" style="padding:8px;font-size:12px;">
+            <option value="">কারণ বেছে নিন...</option>
+            <option value="জ্বর / শরীর খারাপ">জ্বর / শরীর খারাপ</option>
+            <option value="বাড়িতে কাজ আছে">বাড়িতে কাজ আছে</option>
+            <option value="বেড়াতে গেছে">বেড়াতে গেছে</option>
+            <option value="ফোন ধরেনি / বন্ধ">ফোন ধরেনি / বন্ধ</option>
+            <option value="পড়া তৈরি হয়নি">পড়া তৈরি হয়নি</option>
+          </select>
+          <input type="text" id="crTxt_${s.id}" placeholder="বা নিজে কারণ লিখুন..." style="padding:8px;font-size:12px;">
+        </div>
+        <button class="btn btn-accent" style="margin-top:8px;padding:9px;font-size:12.5px;" onclick="saveCallerReason('${s.id}')">✓ কারণ সেভ করুন (লিস্ট থেকে সরবে)</button>
+      </div>`;
+    }).join('') : `<div style="font-size:12.5px;color:var(--success);text-align:center;padding:12px 0;font-weight:700;">${activeClasses.size === 0 && callerFilterMode === 'active' ? 'আজকের কোনো ক্লাসের অ্যাটেন্ডেন্স এখনো স্ক্যান হয়নি। সব স্টুডেন্ট দেখতে "All Classes" চাপুন।' : 'কোনো পেন্ডিং অ্যাবসেন্ট কল বাকি নেই ✓'}</div>`;
+
+    const doneBox = document.getElementById('callerDoneList');
+    doneBox.innerHTML = calledToday.length ? calledToday.slice().reverse().map(a => `
+      <div class="info-item" style="font-size:12.5px;">
+        <div>
+          <strong>${a.studentName}</strong> <span style="color:var(--muted);">(${a.studentId} • ${a.studentClass})</span><br>
+          <span style="color:var(--accent-light);font-weight:700;">কারণ: ${a.reason}</span>
+        </div>
+        <span style="color:var(--muted);font-size:11px;text-align:right;">${a.time}<br>${a.callerName}</span>
+      </div>
+    `).join('') : '<div style="font-size:12.5px;color:var(--muted);text-align:center;">আজকে এখনো কোনো কল লগ হয়নি।</div>';
+  }
+
+  function onCallerQuickReason(sid, val) {
+    if (val) {
+      const inp = document.getElementById('crTxt_' + sid);
+      if (inp) inp.value = val;
+    }
+  }
+
+  function saveCallerReason(sid) {
+    const s = students.find(x => x.id === sid); if (!s) return;
+    const txtEl = document.getElementById('crTxt_' + sid);
+    const selEl = document.getElementById('crSel_' + sid);
+    const reason = ((txtEl && txtEl.value.trim()) || (selEl && selEl.value.trim()) || '').trim();
+    if (!reason) { toast('অনুগ্রহ করে অনুপস্থিত থাকার কারণ লিখুন বা সিলেক্ট করুন!'); return; }
+    const rec = {
+      date: todayStr(),
+      time: bnNowTime(),
+      studentId: s.id,
+      studentName: s.name,
+      studentClass: s.studentClass,
+      mobile: s.mobile || '',
+      reason: reason,
+      callerName: getCurrentAdmin() || 'Caller'
+    };
+    absentLog.push(rec);
+    queue.push({ type: 'logAbsentCall', data: rec });
+    saveLocal();
+    renderCallerPage();
+    renderTodayAttendance();
+    toast(`✓ ${s.name}-এর কারণ সেভ হয়েছে!`);
+    if (navigator.onLine) syncNow(true);
+  }
+
 </script>
 </body>
 </html>
