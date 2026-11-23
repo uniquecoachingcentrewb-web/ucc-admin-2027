@@ -4,11 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <meta name="theme-color" id="metaThemeColor" content="#061121">
-  <link rel="manifest" href="manifest.json">
-  <link rel="icon" type="image/png" href="logo.png?v=3">
-  <title>U.C.C Institute - Admin Panel</title>
+  <link rel="manifest" href="manifest.json?v=4">
+  <link rel="icon" type="image/png" href="logo.png?v=4">
+  <title>U.C.C Institute Teacher Panel</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://script.google.com" crossorigin>
+  <link rel="preconnect" href="https://script.googleusercontent.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
   <style>
@@ -370,7 +372,7 @@
 
 <!-- SPLASH -->
 <div id="splashScreen">
-  <div class="splash-ring"><img src="logo.png?v=3" alt="Logo" onerror="this.style.display='none'"></div>
+  <div class="splash-ring"><img src="logo.png?v=4" alt="Logo" onerror="this.style.display='none'"></div>
   <h1 class="splash-title">U.C.C Institute</h1>
   <p class="splash-tag">Learn • Grow • Succeed</p>
   <div class="splash-bar"><div class="splash-fill"></div></div>
@@ -379,8 +381,8 @@
 <!-- LOGIN GATE -->
 <div id="loginScreen">
   <div class="login-card">
-    <img src="logo.png?v=3" alt="Logo" class="login-logo" onerror="this.style.display='none'">
-    <div class="login-title"><h2>U.C.C Admin Panel</h2><p>LEARN • GROW • SUCCEED</p></div>
+    <img src="logo.png?v=4" alt="Logo" class="login-logo" onerror="this.style.display='none'">
+    <div class="login-title"><h2>U.C.C Institute Teacher Panel</h2><p>LEARN • GROW • SUCCEED</p></div>
     <div id="loginErr" class="login-err">Invalid User ID or Password!</div>
     <form onsubmit="handleLogin(event)">
       <div class="form-group"><label>Teacher / Admin ID</label><input type="text" id="loginUser" required placeholder="T01 / T02..." autocomplete="username"></div>
@@ -400,7 +402,7 @@
 <div id="sidebar">
   <div class="side-head">
     <div style="display:flex;align-items:center;gap:10px;min-width:0;">
-      <img src="logo.png?v=3" alt="Logo" onerror="this.style.display='none'">
+      <img src="logo.png?v=4" alt="Logo" onerror="this.style.display='none'">
       <div style="min-width:0;">
         <div style="font-weight:800;font-size:15px;">U.C.C Institute</div>
         <div id="sideAdminName" style="font-size:11px;opacity:0.85;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Admin Menu</div>
@@ -485,8 +487,8 @@
     <button class="menu-btn" onclick="openSidebar()" title="Menu">
       <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
     </button>
-    <img src="logo.png?v=3" alt="Logo" class="brand-logo" onerror="this.style.display='none'">
-    <div><h1>U.C.C Institute</h1><small id="hdrAdminLabel">Admin Panel • 2027</small></div>
+    <img src="logo.png?v=4" alt="Logo" class="brand-logo" onerror="this.style.display='none'">
+    <div><h1>U.C.C Institute</h1><small id="hdrAdminLabel">Teacher Panel • 2027</small></div>
   </div>
   <div class="sync-wrap">
     <div id="netDot" class="net-dot"></div>
@@ -1118,10 +1120,21 @@
     else { lastBackPress = now; toast('অ্যাপ থেকে বেরোতে আবার Back চাপুন'); window.history.pushState({ app: true }, ''); }
   });
 
+  let syncPending = false, _syncDebounceTimer = null;
+  let lastServerVer = localStorage.getItem('ucc_server_ver') || '';
+  let lastPayloadSig = '';
+
+  function scheduleSync(delayMs = 250) {
+    if (!navigator.onLine || !getCurrentAdmin()) return;
+    if (isSyncing) { syncPending = true; return; }
+    clearTimeout(_syncDebounceTimer);
+    _syncDebounceTimer = setTimeout(() => { syncNow(true); }, delayMs);
+  }
+
   window.addEventListener('online', () => { updateNetUI(); if (getCurrentAdmin()) syncNow(true); });
   window.addEventListener('offline', updateNetUI);
   document.addEventListener('visibilitychange', () => { if (!document.hidden && navigator.onLine && getCurrentAdmin()) syncNow(true); });
-  setInterval(() => { if (!document.hidden && navigator.onLine && getCurrentAdmin()) syncNow(true); }, 45000);
+  setInterval(() => { if (!document.hidden && navigator.onLine && getCurrentAdmin()) syncNow(true); }, 12000);
 
   let teachersList = JSON.parse(localStorage.getItem('ucc_teachers') || '[]');
   let salaryLog = JSON.parse(localStorage.getItem('ucc_salary_log') || '[]');
@@ -1263,13 +1276,13 @@
       if ('serviceWorker' in navigator && navigator.serviceWorker.ready) {
         navigator.serviceWorker.ready.then(reg => {
           if (reg && reg.showNotification) {
-            reg.showNotification(title, { body: bodyText, icon: 'logo.png?v=3', badge: 'logo.png?v=3', vibrate: [200, 100, 200] });
+            reg.showNotification(title, { body: bodyText, icon: 'logo.png?v=4', badge: 'logo.png?v=4', vibrate: [200, 100, 200] });
           } else {
-            new Notification(title, { body: bodyText, icon: 'logo.png?v=3' });
+            new Notification(title, { body: bodyText, icon: 'logo.png?v=4' });
           }
         }).catch(() => { try { new Notification(title, { body: bodyText }); } catch(e){} });
       } else {
-        new Notification(title, { body: bodyText, icon: 'logo.png?v=3' });
+        new Notification(title, { body: bodyText, icon: 'logo.png?v=4' });
       }
     } catch (e) {}
   }
@@ -1367,8 +1380,8 @@
   function applyAdminUI() {
     const u = getCurrentUserObj();
     const admin = u ? u.name : '';
-    const roleTag = u ? (u.role === 'SUPER_ADMIN' ? '👑 Super Admin' : 'Teacher') : 'Admin Panel';
-    document.getElementById('hdrAdminLabel').textContent = admin ? `${admin} • ${roleTag}` : 'Admin Panel • 2027';
+    const roleTag = u ? (u.role === 'SUPER_ADMIN' ? '👑 Super Admin' : 'Teacher') : 'Teacher Panel';
+    document.getElementById('hdrAdminLabel').textContent = admin ? `${admin} • ${roleTag}` : 'Teacher Panel • 2027';
     document.getElementById('sideAdminName').textContent = admin ? `${admin} (${u.id})` : 'Admin Menu';
     document.getElementById('entryCollectorDisplay').textContent = admin || '-';
     document.getElementById('payCollectorDisplay').textContent = admin || '-';
@@ -1433,7 +1446,7 @@
   function lockApp() {
     closeSidebar(); if (scannerRunning) stopScanner(); closeProfile(); closeReceipt(); closeAdminChat();
     localStorage.removeItem('ucc_admin_user_v3');
-    localStorage.removeItem('ucc_user_v4');
+    localStorage.removeItem('ucc_user_v4'); lastPayloadSig = ''; lastServerVer = ''; localStorage.removeItem('ucc_server_ver');
     document.getElementById('loginUser').value = ''; document.getElementById('loginPass').value = '';
     document.getElementById('loginScreen').style.display = 'flex';
   }
@@ -1488,7 +1501,39 @@
     return 'UCC' + String(maxNum + 1).padStart(3, '0');
   }
 
-  function applyServerPayload(data) {
+  function computePayloadSig(d) {
+    const tList = Array.isArray(d.teachers) ? d.teachers : [];
+    const sLog = Array.isArray(d.salaryLog) ? d.salaryLog : [];
+    const lastSal = sLog.length ? (sLog[sLog.length - 1].salaryId + ':' + sLog[sLog.length - 1].status) : '';
+    const lastPay = (d.paymentLog && d.paymentLog.length) ? d.paymentLog[d.paymentLog.length - 1].receiptNo : '';
+    const tSig = tList.map(t => `${t.id}:${t.status}:${t.salary}:${t.deviceLocked?1:0}:${JSON.stringify(t.perms||{})}`).join('|');
+    return [
+      (d.students || []).length,
+      (d.attendance || []).length,
+      (d.paymentLog || []).length, lastPay,
+      (d.onlineRequests || []).filter(r => r.status === 'Pending').length,
+      (d.absentLog || []).length,
+      (d.notices || []).length,
+      (d.classesContent || []).length,
+      d.dueLock || 'ON',
+      d.totalCollection || 0,
+      d.totalSalaryPaid || 0,
+      sLog.length, lastSal,
+      tSig
+    ].join('#');
+  }
+
+  function applyServerPayload(data, forceRender = false) {
+    if (data.ver) {
+      lastServerVer = String(data.ver);
+      localStorage.setItem('ucc_server_ver', lastServerVer);
+    }
+    const newSig = computePayloadSig(data);
+    if (!forceRender && newSig === lastPayloadSig && queue.length === 0) {
+      return; // ডেটা একদম সেম — অযথা রেন্ডার ও স্টোরেজ রাইট স্কিপ (সুপার ফাস্ট!)
+    }
+    lastPayloadSig = newSig;
+
     students = data.students || []; attendance = data.attendance || []; paymentLog = data.paymentLog || [];
     onlineRequests = data.onlineRequests || []; absentLog = data.absentLog || [];
     notices = data.notices || []; classesContent = data.classesContent || []; dueLock = data.dueLock || 'ON';
@@ -1583,7 +1628,7 @@
         <div>
           <strong>${l.teacherName}</strong> <span style="color:var(--muted);">(${l.teacherId})</span><br>
           <span style="color:var(--muted);font-size:11px;">${l.month} • ${l.date} ${l.time || ''}</span><br>
-          <span class="${acc ? 'badge-ok' : 'badge-due'}" style="display:inline-block;margin-top:4px;font-size:10px;padding:2px 8px;">${acc ? '✅ Accepted' + (l.acceptedAt ? ' (' + l.acceptedAt + ')' : '') : '⏳ Pending Accept • ব্যালেন্স থেকে কাটা'}</span>
+          <span class="${acc ? 'badge-ok' : 'badge-due'}" style="display:inline-block;margin-top:4px;font-size:10px;padding:2px 8px;">${acc ? '✅ Accepted' + (l.acceptedAt ? ' (' + l.acceptedAt + ')' : '') : '⏳ Pending Accept'}</span>
         </div>
         <div style="font-weight:800;color:var(--danger);">- ₹${l.amount}</div>
       </div>`;
@@ -1699,24 +1744,65 @@
     }
   }
 
+  async function fetchFastJson(url, options = {}, timeoutMs = 12000) {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), timeoutMs);
+    try {
+      const res = await fetch(url, { ...options, signal: ctrl.signal, cache: 'no-store' });
+      return await res.json();
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
   async function syncNow(silent = false) {
     if (!navigator.onLine) { if (!silent) toast('Offline mode — saved locally.'); return; }
-    if (isSyncing) return;
-    isSyncing = true; document.getElementById('syncBtn').textContent = 'Syncing...';
+    if (isSyncing) {
+      if (queue.length > 0 || !silent) syncPending = true;
+      return;
+    }
+    isSyncing = true;
+    const syncBtn = document.getElementById('syncBtn');
+    if (syncBtn && (!silent || queue.length > 0)) syncBtn.textContent = queue.length > 0 ? `Syncing (${queue.length})...` : 'Syncing...';
     try {
       let data;
       if (queue.length > 0) {
-        const res = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ queue }) });
-        data = await res.json();
-        if (data.status === 'ok') queue = [];
+        // স্ন্যাপশট নিয়ে পাঠাচ্ছি যাতে সিঙ্ক চলার সময় নতুন স্ক্যান/কল হারিয়ে না যায়
+        const batchCount = queue.length;
+        const batchToSend = queue.slice(0, batchCount);
+        data = await fetchFastJson(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ queue: batchToSend })
+        }, 15000);
+        if (data && data.status === 'ok') {
+          queue.splice(0, batchCount);
+          localStorage.setItem('ucc_queue', JSON.stringify(queue));
+        }
       } else {
-        const res = await fetch(API_URL);
-        data = await res.json();
+        const qs = !silent ? '?force=1' : (lastServerVer ? `?ver=${encodeURIComponent(lastServerVer)}` : '');
+        data = await fetchFastJson(API_URL + qs, {}, 12000);
       }
-      if (data.status === 'ok') { applyServerPayload(data); if (!silent) toast('Synced!'); }
-      else if (!silent) toast('Sync Error');
-    } catch (e) { if (!silent) toast('Sync failed — will auto-retry.'); }
-    finally { isSyncing = false; updateNetUI(); }
+
+      if (data && data.status === 'unchanged') {
+        if (data.ver) { lastServerVer = String(data.ver); localStorage.setItem('ucc_server_ver', lastServerVer); }
+        if (!silent) toast('Already up to date ✓');
+      } else if (data && data.status === 'ok') {
+        applyServerPayload(data, !silent);
+        if (!silent) toast('Synced ✓');
+      } else if (!silent) {
+        toast('Sync Error');
+      }
+    } catch (e) {
+      if (!silent) toast('Network slow — auto-retry হচ্ছে...');
+    } finally {
+      isSyncing = false;
+      updateNetUI();
+      if (syncPending || queue.length > 0) {
+        syncPending = false;
+        setTimeout(() => { if (navigator.onLine && getCurrentAdmin()) syncNow(true); }, 300);
+      }
+    }
   }
 
   function openPage(name, btn) {
@@ -1976,7 +2062,7 @@
     if (fMonth && fAmt > 0) paymentLog.push({ receiptNo: 'UCC-R27' + String(paymentLog.length+1).padStart(4,'0'), date: studentObj.firstPayment || studentObj.admissionDate || todayStr(), time: bnNowTime(), studentId: newId, studentName: studentObj.name, studentClass: studentObj.studentClass, month: fMonth, amount: fAmt, collector, mode: fMode });
     queue.push({ type: 'addStudent', data: { ...studentObj, firstFeeMonth: fMonth, firstFeeAmount: fAmt, collector, mode: fMode } });
     saveLocal(); renderAll(); document.getElementById('entryForm').reset(); document.getElementById('fAdmDate').value = todayStr();
-    toast(`Saved! Auto ID: ${newId}`); if (navigator.onLine) syncNow(true);
+    toast(`Saved! Auto ID: ${newId}`); scheduleSync(250);
   }
 
   function showPayWarn(msg) { const w = document.getElementById('payWarn'); w.textContent = msg; w.style.display = 'block'; toast(msg); }
@@ -2071,13 +2157,13 @@
     document.getElementById('receiptSmsLink').href = mob ? `sms:${mob}?body=${encodeURIComponent(rcptMsg)}` : '#';
     document.getElementById('receiptWaLink').href = mob ? `https://wa.me/91${mob}?text=${encodeURIComponent(rcptMsg)}` : '#';
     document.getElementById('receiptBar').style.display = 'block';
-    if (navigator.onLine) syncNow(true);
+    scheduleSync(250);
   }
   function saveEditedDetails() {
     const s = students.find(x => x.id === activeStudentId); if (!s) return;
     s.fatherName = document.getElementById('eFather').value.trim(); s.mobile = document.getElementById('eMobile').value.trim(); s.address = document.getElementById('eAddress').value.trim();
     queue.push({ type: 'updateDetails', data: { studentId: s.id, fatherName: s.fatherName, mobile: s.mobile, address: s.address } });
-    saveLocal(); openProfile(s.id, true); toast('Updated!'); if (navigator.onLine) syncNow(true);
+    saveLocal(); openProfile(s.id, true); toast('Updated!'); scheduleSync(250);
   }
 
   function setHisabFilter(mode) { hisabFilter = mode; hisabMonthKey = ''; document.getElementById('hisabMonthSel').value = ''; document.getElementById('pillToday').classList.toggle('active', mode==='today'); document.getElementById('pillAll').classList.toggle('active', mode==='all'); renderHisab(); }
@@ -2124,14 +2210,14 @@
     document.getElementById('approveWaLink').href = mob ? `https://wa.me/91${mob}?text=${encodeURIComponent(msg)}` : '#';
     document.getElementById('approveSmsLink').href = mob ? `sms:${mob}?body=${encodeURIComponent(msg)}` : '#';
     document.getElementById('approveNotifyBar').style.display = 'block';
-    toast('Approved!'); if (navigator.onLine) syncNow(true);
+    toast('Approved!'); scheduleSync(250);
   }
   function rejectReq(reqId) {
     const verifiedBy = getCurrentAdmin(); if (!verifiedBy) { lockApp(); return; }
     const reason = prompt('Reason:', 'Payment not received'); if (reason === null) return;
     const r = onlineRequests.find(x => x.requestId === reqId); if (!r) return;
     r.status = 'Rejected'; r.remarks = reason; r.screenshotData = '';
-    queue.push({ type: 'rejectOnline', data: { requestId: reqId, verifiedBy, remarks: reason } }); saveLocal(); renderHisab(); toast('Rejected.'); if (navigator.onLine) syncNow(true);
+    queue.push({ type: 'rejectOnline', data: { requestId: reqId, verifiedBy, remarks: reason } }); saveLocal(); renderHisab(); toast('Rejected.'); scheduleSync(250);
   }
 
   function openLastReceipt() { if (lastReceiptData) openReceiptModal(lastReceiptData); }
@@ -2200,7 +2286,7 @@
     const rec = { date: today, time: bnNowTime(), studentId: s.id, name: s.name, studentClass: s.studentClass, status: 'Present' };
     attendance.push(rec); queue.push({ type: 'markAttendance', data: rec }); saveLocal(); renderTodayAttendance();
     playBeep(900,140); const dueInfo = hasPerm('fees') ? (s.totalDue>0?' • Due: Rs.'+s.totalDue:' • Clear') : ''; showScanPopup('ok','✓ Present Marked',s.name,`${s.id} • ${s.studentClass}${dueInfo}`);
-    if (navigator.onLine) syncNow(true);
+    scheduleSync(250);
   }
   function renderTodayAttendance() {
     const today = todayStr(), list = attendance.filter(a => a.date === today).reverse();
@@ -2320,7 +2406,7 @@
     renderCallerPage();
     renderTodayAttendance();
     toast(`✓ ${s.name}-এর কারণ সেভ হয়েছে!`);
-    if (navigator.onLine) syncNow(true);
+    scheduleSync(250);
   }
 
 </script>
