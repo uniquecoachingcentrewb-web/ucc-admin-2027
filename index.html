@@ -367,6 +367,218 @@
       font-size: 12.5px; font-weight: 700; display: none; z-index: 150; max-width: 90%;
       text-align: center; box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45); border: 1.5px solid var(--accent);
     }
+
+    /* ===== MODERN ANIMATED DASHBOARD UI (CANVIEE-INSPIRED) ===== */
+    body { padding-bottom: 28px; }
+    .bottom-nav { display: none !important; }
+
+    header.app-topbar {
+      background: var(--dash-hero-top, var(--bg-header));
+      border-bottom: none;
+      box-shadow: none;
+      padding: 12px 15px 10px;
+    }
+    header.app-topbar::after { display: none; }
+    .top-icon-group { display: flex; align-items: center; gap: 6px; }
+    .top-ic-btn {
+      position: relative;
+      width: 35px; height: 35px; border-radius: 11px;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.12);
+      color: var(--dash-hero-fg, var(--text));
+      display: inline-flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: transform 0.14s var(--ease-fast), background 0.15s ease;
+    }
+    .top-ic-btn:active { transform: scale(0.88); background: rgba(255,255,255,0.22); }
+    .top-ic-btn .mini-dot {
+      position: absolute; top: 5px; right: 5px; width: 7px; height: 7px;
+      border-radius: 50%; background: var(--success); border: 1.5px solid #04392c;
+    }
+    .top-ic-btn .mini-dot.off { background: var(--danger); }
+    .top-ic-btn.spin svg { animation: spin360 0.8s linear infinite; }
+    @keyframes spin360 { to { transform: rotate(360deg); } }
+
+    /* Curved Greeting Hero on Home */
+    .dash-hero {
+      background: var(--dash-hero-grad, var(--bg-hero));
+      color: var(--dash-hero-fg, #ffffff);
+      padding: 6px 18px 54px;
+      border-radius: 0 0 30px 30px;
+      margin: -14px -14px 0;
+      position: relative;
+      box-shadow: 0 10px 26px rgba(0,0,0,0.14);
+      animation: heroDrop 0.35s var(--ease-fast);
+    }
+    @keyframes heroDrop {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .dash-hello {
+      font-size: 13.5px; font-weight: 600; opacity: 0.92;
+      letter-spacing: 0.4px; text-transform: uppercase;
+    }
+    .dash-welcome {
+      font-size: 26px; font-weight: 800; font-style: italic;
+      margin-top: 2px; letter-spacing: -0.3px;
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    }
+    .dash-role-chip {
+      font-style: normal; font-size: 10.5px; font-weight: 800;
+      padding: 4px 10px; border-radius: 20px;
+      background: rgba(255,255,255,0.18); color: #fff;
+      border: 1px solid rgba(255,255,255,0.28);
+      white-space: nowrap;
+    }
+
+    /* Overlapping 2-Card Live Summary Strip */
+    .dash-stats-row {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 11px;
+      margin-top: -38px; margin-bottom: 18px; position: relative; z-index: 3;
+    }
+    .dash-stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 12px 13px;
+      box-shadow: var(--shadow-card);
+      cursor: pointer;
+      transition: transform 0.14s var(--ease-fast);
+      animation: tilePop 0.36s var(--ease-fast) both;
+    }
+    .dash-stat-card:active { transform: scale(0.96); }
+    .dsc-line {
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: 12px; font-weight: 700; color: var(--text-2);
+      padding: 4px 0;
+    }
+    .dsc-line + .dsc-line { border-top: 1px dashed var(--border); }
+    .dsc-pill {
+      font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 99px;
+      background: var(--accent-soft); color: var(--accent-light);
+    }
+    .dsc-pill.ok { background: var(--success-soft); color: var(--success); }
+    .dsc-pill.due { background: var(--danger-soft); color: var(--danger); }
+
+    /* 3-Column Animated Icon Tiles Grid */
+    .dash-tiles-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .dash-tile {
+      position: relative;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 16px 8px 14px;
+      text-align: center;
+      cursor: pointer;
+      box-shadow: var(--shadow-card);
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 9px;
+      transition: transform 0.16s var(--ease-fast), box-shadow 0.16s ease, border-color 0.16s ease;
+      animation: tilePop 0.38s var(--ease-fast) both;
+      will-change: transform;
+    }
+    .dash-tile:active {
+      transform: scale(0.92);
+      border-color: var(--accent);
+    }
+    @keyframes tilePop {
+      from { opacity: 0; transform: translateY(14px) scale(0.94); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .dash-tile-circle {
+      width: 54px; height: 54px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+      transition: transform 0.18s var(--ease-fast);
+    }
+    .dash-tile:active .dash-tile-circle { transform: scale(1.08); }
+    .dash-tile-label {
+      font-size: 11.8px; font-weight: 800; color: var(--text);
+      line-height: 1.2; letter-spacing: -0.1px;
+    }
+    .dash-tile-badge {
+      position: absolute; top: 8px; right: 8px;
+      background: var(--danger); color: #fff;
+      font-size: 10px; font-weight: 800;
+      padding: 2px 6.5px; border-radius: 99px;
+      box-shadow: 0 3px 8px rgba(220,38,38,0.35);
+    }
+    .dash-tile-badge.ok { background: var(--success); color: #061121; }
+
+    /* Quick Actions Pills (like Quick Links in screenshot) */
+    .quick-sec-title {
+      font-size: 13px; font-weight: 800; color: var(--text);
+      margin: 4px 2px 9px; display: flex; align-items: center; gap: 6px;
+    }
+    .quick-chips {
+      display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px;
+    }
+    .quick-chip {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 8px 13px; border-radius: 13px;
+      font-size: 11.5px; font-weight: 800; letter-spacing: 0.2px;
+      cursor: pointer; border: 1.5px solid var(--border);
+      background: var(--bg-card); color: var(--accent-light);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      transition: transform 0.14s var(--ease-fast);
+    }
+    .quick-chip:active { transform: scale(0.94); }
+    .quick-chip.c-pink { background: rgba(236,72,153,0.1); border-color: rgba(236,72,153,0.32); color: #db2777; }
+    .quick-chip.c-purple { background: rgba(139,92,246,0.1); border-color: rgba(139,92,246,0.32); color: #7c3aed; }
+    .quick-chip.c-rose { background: rgba(244,63,94,0.1); border-color: rgba(244,63,94,0.32); color: #e11d48; }
+    .quick-chip.c-teal { background: rgba(13,148,136,0.1); border-color: rgba(13,148,136,0.32); color: #0f766e; }
+
+    /* Bottom Warm Highlight Banner (like WORKING HOURS card) */
+    .dash-highlight-banner {
+      background: linear-gradient(135deg, #fde047 0%, #facc15 55%, #f59e0b 100%);
+      color: #1c1917;
+      border-radius: 20px;
+      padding: 15px 16px;
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      box-shadow: 0 10px 24px rgba(245, 158, 11, 0.24);
+      cursor: pointer;
+      transition: transform 0.15s var(--ease-fast);
+      animation: tilePop 0.45s var(--ease-fast) both;
+    }
+    .dash-highlight-banner:active { transform: scale(0.97); }
+    .dhb-title { font-size: 15px; font-weight: 800; letter-spacing: 0.4px; text-transform: uppercase; color: #1c1917; }
+    .dhb-sub { font-size: 12px; font-weight: 600; color: #44403c; margin-top: 2px; }
+    .dhb-icon {
+      width: 42px; height: 42px; border-radius: 50%;
+      background: rgba(28, 25, 23, 0.14);
+      display: flex; align-items: center; justify-content: center;
+      color: #1c1917; flex-shrink: 0;
+    }
+
+    /* Sub-page Top Back Bar */
+    .subpage-bar {
+      display: none;
+      align-items: center; justify-content: space-between; gap: 10px;
+      margin-bottom: 13px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      padding: 9px 12px;
+      border-radius: 15px;
+      box-shadow: var(--shadow-card);
+      animation: pageEnter 0.18s var(--ease-fast);
+    }
+    .subpage-bar.show { display: flex; }
+    .subpage-back-btn {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: var(--accent-soft); color: var(--accent-light);
+      border: 1px solid var(--accent-border);
+      padding: 6px 12px; border-radius: 10px;
+      font-size: 12.5px; font-weight: 800; cursor: pointer;
+    }
+    .subpage-back-btn:active { transform: scale(0.94); }
+    .subpage-title {
+      font-size: 14.5px; font-weight: 800; color: var(--text);
+      flex: 1; text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+
   </style>
 </head>
 <body>
@@ -483,17 +695,26 @@
 </div>
 
 <!-- HEADER -->
-<header>
-  <div class="brand">
-    <button class="menu-btn" onclick="openSidebar()" title="Menu">
-      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-    </button>
+<header class="app-topbar">
+  <div class="brand" onclick="openPage('home', null)" style="cursor:pointer;">
     <img src="logo.png?v=4" alt="Logo" class="brand-logo" onerror="this.style.display='none'">
-    <div><h1>U.C.C Institute</h1><small id="hdrAdminLabel">Teacher Panel • 2027</small></div>
+    <div><h1 style="color:var(--dash-hero-fg, var(--accent-light));">U.C.C Institute</h1><small id="hdrAdminLabel" style="color:var(--dash-hero-fg, var(--muted));opacity:0.85;">Teacher Panel • 2027</small></div>
   </div>
-  <div class="sync-wrap">
-    <div id="netDot" class="net-dot"></div>
-    <button id="syncBtn" class="sync-btn" onclick="syncNow(false)">Sync</button>
+  <div class="top-icon-group">
+    <button id="syncBtn" class="top-ic-btn" onclick="syncNow(false)" title="Sync Now" style="width:auto;padding:0 10px;gap:5px;font-size:11px;font-weight:800;">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+      <span id="syncBtnLbl">Sync</span>
+      <span id="netDot" class="mini-dot"></span>
+    </button>
+    <button class="top-ic-btn" onclick="requestNotifPerm(true)" title="Notifications">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+    </button>
+    <button class="top-ic-btn" onclick="openSidebar()" title="Menu & Themes">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+    </button>
+    <button class="top-ic-btn" onclick="lockApp()" title="Lock / Logout">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    </button>
   </div>
 </header>
 
@@ -504,8 +725,36 @@
 </div>
 
 <div class="container">
+  <!-- SUB-PAGE BACK TO DASHBOARD BAR -->
+  <div id="subpageBar" class="subpage-bar">
+    <button type="button" class="subpage-back-btn" onclick="openPage('home', null)">← Home</button>
+    <div id="subpageTitle" class="subpage-title">Dashboard</div>
+  </div>
+
   <!-- IN-APP SALARY NOTIFICATION BANNER (ACCEPT / গ্রহণ) -->
   <div id="salaryNotifBanner"></div>
+
+  <!-- HOME ANIMATED ICON DASHBOARD -->
+  <div id="page-home" class="page active">
+    <div class="dash-hero">
+      <div class="dash-hello">Hello, <span id="dashUserName">Teacher</span>,</div>
+      <div class="dash-welcome">
+        <span>Welcome Back!</span>
+        <span id="dashRoleBadge" class="dash-role-chip">U.C.C 2027</span>
+      </div>
+    </div>
+
+    <div class="dash-stats-row" id="dashStatsRow"></div>
+
+    <div class="dash-tiles-grid" id="dashTilesGrid"></div>
+
+    <div id="dashQuickWrap" style="display:none;">
+      <div class="quick-sec-title">⚡ Quick Actions</div>
+      <div class="quick-chips" id="dashQuickChips"></div>
+    </div>
+
+    <div id="dashBottomBannerWrap"></div>
+  </div>
 
   <!-- TAB 1: CLASSES -->
   <div id="page-classes" class="page">
@@ -980,6 +1229,21 @@
 
   // ===== 7 PREMIUM ANIMATED THEMES =====
   const THEMES = {
+    emerald_clean: {
+      name: 'Emerald Clean (New)', swatch: 'linear-gradient(135deg,#0f766e 50%,#ffffff 50%)',
+      vars: {
+        '--bg-page': 'linear-gradient(180deg, #f3f7f6 0%, #f8fafc 100%)', '--bg-solid': '#f3f7f6',
+        '--bg-header': '#0f766e', '--dash-hero-top': '#0f766e',
+        '--dash-hero-grad': 'linear-gradient(180deg, #0f766e 0%, #0d9488 100%)', '--dash-hero-fg': '#ffffff',
+        '--bg-card': '#ffffff', '--bg-subcard': '#f0fdfa', '--bg-input': '#ffffff',
+        '--bg-hero': 'linear-gradient(135deg,#0f766e,#0d9488)', '--bg-nav': 'rgba(255,255,255,0.96)',
+        '--accent': '#0d9488', '--accent-light': '#0f766e',
+        '--accent-grad': 'linear-gradient(135deg,#14b8a6,#0f766e)', '--accent-text': '#ffffff',
+        '--accent-soft': 'rgba(13,148,136,0.11)', '--accent-border': 'rgba(13,148,136,0.28)',
+        '--text': '#0f172a', '--text-2': '#334155', '--muted': '#64748b', '--border': '#e2e8f0',
+        '--shadow-card': '0 8px 22px rgba(15, 118, 110, 0.08)'
+      }
+    },
     royal_gold: {
       name: 'Royal Navy & Gold', swatch: 'linear-gradient(135deg,#061121 50%,#d4af37 50%)',
       vars: {
@@ -1076,8 +1340,12 @@
 
   function applyThemeVars(vars) {
     const root = document.documentElement;
+    root.style.setProperty('--dash-hero-top', vars['--dash-hero-top'] || vars['--bg-header'] || '#0f766e');
+    root.style.setProperty('--dash-hero-grad', vars['--dash-hero-grad'] || vars['--bg-hero'] || 'linear-gradient(135deg,#0f766e,#0d9488)');
+    root.style.setProperty('--dash-hero-fg', vars['--dash-hero-fg'] || '#ffffff');
     Object.keys(vars).forEach(k => root.style.setProperty(k, vars[k]));
-    if (vars['--bg-solid']) document.getElementById('metaThemeColor').setAttribute('content', vars['--bg-solid']);
+    const metaCol = vars['--dash-hero-top'] || vars['--bg-solid'];
+    if (metaCol) document.getElementById('metaThemeColor').setAttribute('content', metaCol);
   }
   function selectPresetTheme(key, showMsg = true) {
     if (!THEMES[key]) key = 'royal_gold';
@@ -1134,7 +1402,11 @@
       localStorage.setItem('ucc_adm_auto_idx', String((idx + 1) % THEME_KEYS.length));
       selectPresetTheme(nextKey, false); return;
     }
-    const saved = localStorage.getItem('ucc_adm_theme') || 'royal_gold';
+    if (!localStorage.getItem('ucc_dash_v5_theme_init')) {
+      localStorage.setItem('ucc_adm_theme', 'emerald_clean');
+      localStorage.setItem('ucc_dash_v5_theme_init', '1');
+    }
+    const saved = localStorage.getItem('ucc_adm_theme') || 'emerald_clean';
     if (saved === 'custom') {
       try { applyThemeVars(JSON.parse(localStorage.getItem('ucc_adm_custom_vars') || '{}')); return; } catch(e){}
     }
@@ -1177,6 +1449,12 @@
     if (document.getElementById('profileModal').classList.contains('open')) { closeProfile(); window.history.pushState({ app: true }, ''); return; }
     if (activeDueClass) { closeDueClassView(); window.history.pushState({ app: true }, ''); return; }
     if (activeClass) { closeClassView(); window.history.pushState({ app: true }, ''); return; }
+    const activePgEl = document.querySelector('.page.active');
+    if (activePgEl && activePgEl.id !== 'page-home') {
+      openPage('home', null);
+      window.history.pushState({ app: true }, '');
+      return;
+    }
     const now = Date.now();
     if (now - lastBackPress < 2000) window.history.back();
     else { lastBackPress = now; toast('অ্যাপ থেকে বেরোতে আবার Back চাপুন'); window.history.pushState({ app: true }, ''); }
@@ -1232,23 +1510,14 @@
     if (name === 'caller') return !!p.caller;
     if (name === 'absent') return !!(p.fees || p.qr || p.caller);
     if (name === 'superadmin') return false;
-    if (name === 'mysalary' || name === 'noperm') return true;
+    if (name === 'home' || name === 'mysalary' || name === 'noperm') return true;
     return false;
   }
 
   function openDefaultAllowedPage() {
     const u = getCurrentUserObj();
     if (!u) return;
-    // যদি Fees/Full Admin ভিউ থাকে (Super Admin / চিরদা / সৈকত), তাহলে Classes খুলবে
-    // আর সাধারণ টিচার হলে (Fees OFF), তার প্রথম অনুমোদিত অপশনটাই সরাসরি খুলবে (Classes বা Due খুলবেই না!)
-    const order = ['classes', 'scan', 'content', 'notices', 'caller'];
-    for (const pg of order) {
-      if (canAccessPage(pg)) {
-        openPage(pg, document.getElementById('nav-' + pg));
-        return;
-      }
-    }
-    openPage('noperm', null);
+    openPage('home', null);
   }
 
   function applyRolePermissions() {
@@ -1452,18 +1721,36 @@
 
   function openSidebar() { renderThemeGrid(); applyRolePermissions(); document.getElementById('sidebar').classList.add('open'); document.getElementById('sideBackdrop').classList.add('open'); }
   function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sideBackdrop').classList.remove('open'); }
+  const PAGE_TITLES = {
+    home: 'Dashboard',
+    classes: 'Classes & Students',
+    entry: 'New Admission (+ Entry)',
+    scan: 'QR Attendance Scanner',
+    hisab: 'Collection Hisab',
+    caller: 'Absent Caller Desk',
+    duelist: 'Due List (Class-wise)',
+    content: 'Live / Video / PDF / Test',
+    notices: 'Notices & Due-Lock',
+    absent: 'Absent Caller Report',
+    superadmin: 'Super Admin & Salary',
+    mysalary: 'My Salary & Receipts',
+    noperm: 'Access Restricted'
+  };
+
+  function updateSubpageBar(name) {
+    const bar = document.getElementById('subpageBar');
+    const titleEl = document.getElementById('subpageTitle');
+    if (!bar) return;
+    if (name === 'home') {
+      bar.classList.remove('show');
+    } else {
+      bar.classList.add('show');
+      if (titleEl) titleEl.textContent = PAGE_TITLES[name] || 'U.C.C Institute';
+    }
+  }
+
   function openSidePage(name) {
-    if (!canAccessPage(name)) { toast('আপনার এই অপশনের পারমিশন নেই!'); return; }
-    closeSidebar(); if (scannerRunning) stopScanner();
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById('page-' + name).classList.add('active');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    if (name === 'duelist') { closeDueClassView(); renderDueList(); }
-    if (name === 'content' || name === 'notices') renderContentTab();
-    if (name === 'absent') renderTodayAttendance();
-    if (name === 'superadmin') renderSuperAdmin();
-    if (name === 'mysalary') renderMySalary();
+    openPage(name, null);
   }
 
   function togglePassView(btn) { const inp = document.getElementById('loginPass'); inp.type = inp.type === 'password' ? 'text' : 'password'; btn.textContent = inp.type === 'password' ? 'Show' : 'Hide'; }
@@ -1541,9 +1828,15 @@
     updateNetUI();
   }
   function updateNetUI() {
-    const dot = document.getElementById('netDot'), btn = document.getElementById('syncBtn');
-    if (navigator.onLine) { dot.classList.remove('off'); btn.textContent = queue.length > 0 ? `Sync (${queue.length})` : 'Auto ✓'; }
-    else { dot.classList.add('off'); btn.textContent = `Offline (${queue.length})`; }
+    const dot = document.getElementById('netDot'), btn = document.getElementById('syncBtn'), lbl = document.getElementById('syncBtnLbl');
+    if (btn) btn.classList.remove('spin');
+    if (navigator.onLine) {
+      if (dot) dot.classList.remove('off');
+      if (lbl) lbl.textContent = queue.length > 0 ? `Sync (${queue.length})` : 'Sync';
+    } else {
+      if (dot) dot.classList.add('off');
+      if (lbl) lbl.textContent = `Off (${queue.length})`;
+    }
   }
   function toast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.style.display = 'block'; setTimeout(() => { t.style.display = 'none'; }, 2800); }
 
@@ -2069,8 +2362,11 @@
       return;
     }
     isSyncing = true;
-    const syncBtn = document.getElementById('syncBtn');
-    if (syncBtn && (!silent || queue.length > 0)) syncBtn.textContent = queue.length > 0 ? `Syncing (${queue.length})...` : 'Syncing...';
+    const syncBtn = document.getElementById('syncBtn'), syncLbl = document.getElementById('syncBtnLbl');
+    if (syncBtn && (!silent || queue.length > 0)) {
+      syncBtn.classList.add('spin');
+      if (syncLbl) syncLbl.textContent = queue.length > 0 ? `(${queue.length})` : '...';
+    }
     try {
       let data;
       if (queue.length > 0) {
@@ -2120,13 +2416,199 @@
     const pgEl = document.getElementById('page-' + name);
     if (pgEl) pgEl.classList.add('active');
     if (btn) btn.classList.add('active');
+    updateSubpageBar(name);
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    if (name === 'classes') { renderClassGrid(); if (activeClass) renderClassStudents(); }
+    if (name === 'home') renderHomeDashboard();
+    if (name === 'home') renderHomeDashboard();
+    else if (name === 'classes') { renderClassGrid(); if (activeClass) renderClassStudents(); }
     if (name === 'entry') { document.getElementById('nextIdPreview').textContent = getNextStudentId(); applyAdminUI(); }
     if (name === 'scan') renderTodayAttendance();
     if (name === 'hisab') renderHisab();
     if (name === 'caller') renderCallerPage();
+    if (name === 'duelist') { closeDueClassView(); renderDueList(); }
     if (name === 'content' || name === 'notices') renderContentTab();
+    if (name === 'absent') renderTodayAttendance();
+    if (name === 'superadmin') renderSuperAdmin();
+    if (name === 'mysalary') renderMySalary();
+  }
+
+  function renderHomeDashboard() {
+    const u = getCurrentUserObj();
+    if (!u) return;
+    const superFlag = u.role === 'SUPER_ADMIN';
+    const p = u.perms || {};
+    const canFees = superFlag || !!p.fees;
+    const canQr = superFlag || !!p.qr;
+    const canContent = superFlag || !!p.video || !!p.qa;
+    const canNotice = superFlag || !!p.notice;
+    const canCaller = superFlag || !!p.caller;
+
+    const nameEl = document.getElementById('dashUserName');
+    if (nameEl) nameEl.textContent = String(u.name || 'Teacher').toUpperCase();
+    const roleEl = document.getElementById('dashRoleBadge');
+    if (roleEl) roleEl.textContent = superFlag ? '👑 Super Admin' : (canFees ? '⭐ Co-Admin' : '👨‍🏫 Teacher');
+
+    const today = todayStr();
+    const { presentIds, calledToday, absentTodayList } = getTodayCallerSets(today);
+    const totalStudents = students.length;
+    const presentCount = presentIds.size;
+    const absentPendingCount = absentTodayList.length;
+    const todayCol = paymentLog.filter(x => x.date === today).reduce((s, x) => s + (Number(x.amount) || 0), 0);
+    const totalDue = students.reduce((s, x) => s + (Number(x.totalDue) || 0), 0);
+    const pendOnline = onlineRequests.filter(r => r.status === 'Pending').length;
+
+    // 1. Overlapping 2-Card Summary Strip
+    const statsRow = document.getElementById('dashStatsRow');
+    if (statsRow) {
+      const card1 = `
+        <div class="dash-stat-card" style="animation-delay:0.04s;" onclick="openPage('${canQr ? 'scan' : (canCaller ? 'caller' : 'classes')}', null)">
+          <div class="dsc-line"><span>👥 Students</span><span class="dsc-pill">${totalStudents}</span></div>
+          <div class="dsc-line"><span>✅ Present</span><span class="dsc-pill ok">${presentCount}</span></div>
+          <div class="dsc-line"><span>📞 Absent</span><span class="dsc-pill due">${absentPendingCount}</span></div>
+        </div>`;
+
+      let card2 = '';
+      if (canFees) {
+        card2 = `
+        <div class="dash-stat-card" style="animation-delay:0.09s;" onclick="openPage('hisab', null)">
+          <div class="dsc-line"><span>💰 Today</span><span class="dsc-pill ok">₹${todayCol}</span></div>
+          <div class="dsc-line"><span>⚠️ Due</span><span class="dsc-pill due">₹${totalDue}</span></div>
+          <div class="dsc-line"><span>🧾 Online</span><span class="dsc-pill">${pendOnline}</span></div>
+        </div>`;
+      } else {
+        const myLogs = (salaryLog || []).filter(l => String(l.teacherId || '').toUpperCase() === String(u.id || '').toUpperCase());
+        const myPend = myLogs.filter(l => String(l.status || '').toUpperCase() !== 'ACCEPTED').length;
+        card2 = `
+        <div class="dash-stat-card" style="animation-delay:0.09s;" onclick="openPage('mysalary', null)">
+          <div class="dsc-line"><span>💼 Salary</span><span class="dsc-pill ok">₹${u.salary || 0}</span></div>
+          <div class="dsc-line"><span>🔔 Pending</span><span class="dsc-pill ${myPend > 0 ? 'due' : 'ok'}">${myPend}</span></div>
+          <div class="dsc-line"><span>📢 Notices</span><span class="dsc-pill">${notices.length}</span></div>
+        </div>`;
+      }
+      statsRow.innerHTML = card1 + card2;
+    }
+
+    // 2. 3-Column Animated Icon Tiles (strictly permission-filtered)
+    const tiles = [];
+    if (canQr) tiles.push({
+      label: 'Take Attendance', page: 'scan', bg: 'rgba(16,185,129,0.14)', col: '#059669',
+      badge: presentCount > 0 ? String(presentCount) : '', badgeOk: true,
+      icon: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><rect x="7" y="7" width="10" height="10" rx="1.5"/></svg>'
+    });
+    if (canFees) tiles.push({
+      label: 'Classes', page: 'classes', bg: 'rgba(37,99,235,0.14)', col: '#2563eb',
+      badge: '',
+      icon: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>'
+    });
+    if (canFees) tiles.push({
+      label: 'New Entry', page: 'entry', bg: 'rgba(99,102,241,0.14)', col: '#4f46e5',
+      badge: '',
+      icon: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>'
+    });
+    if (canFees) tiles.push({
+      label: 'Hisab', page: 'hisab', bg: 'rgba(245,158,11,0.16)', col: '#d97706',
+      badge: pendOnline > 0 ? String(pendOnline) : '',
+      icon: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>'
+    });
+    if (canFees) tiles.push({
+      label: 'Due List', page: 'duelist', bg: 'rgba(239,68,68,0.14)', col: '#dc2626',
+      badge: totalDue > 0 ? '₹' + totalDue : '',
+      icon: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>'
+    });
+    if (canCaller) tiles.push({
+      label: 'Absent Caller', page: 'caller', bg: 'rgba(13,148,136,0.14)', col: '#0d9488',
+      badge: absentPendingCount > 0 ? String(absentPendingCount) : '',
+      icon: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>'
+    });
+    if (canContent) tiles.push({
+      label: (superFlag || !!p.video) ? 'Video / PDF' : 'Live Q&A', page: 'content', bg: 'rgba(147,51,234,0.14)', col: '#9333ea',
+      badge: '',
+      icon: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>'
+    });
+    if (canNotice) tiles.push({
+      label: 'Notices', page: 'notices', bg: 'rgba(2,132,199,0.14)', col: '#0284c7',
+      badge: notices.length > 0 ? String(notices.length) : '', badgeOk: true,
+      icon: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>'
+    });
+    if (canFees || canQr || canCaller) tiles.push({
+      label: 'Call Report', page: 'absent', bg: 'rgba(234,88,12,0.14)', col: '#ea580c',
+      badge: calledToday.length > 0 ? String(calledToday.length) : '', badgeOk: true,
+      icon: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>'
+    });
+    if (superFlag) tiles.push({
+      label: 'Super Admin', page: 'superadmin', bg: 'rgba(217,119,6,0.18)', col: '#b45309',
+      badge: '',
+      icon: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2l3 7h7l-5.5 4.5L18.5 21 12 16.5 5.5 21l2-7.5L2 9h7l3-7z"/></svg>'
+    });
+    if (!superFlag) tiles.push({
+      label: 'My Salary', page: 'mysalary', bg: 'rgba(16,185,129,0.14)', col: '#059669',
+      badge: '',
+      icon: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>'
+    });
+    tiles.push({
+      label: 'Sync Data', action: 'sync', bg: 'rgba(14,165,233,0.14)', col: '#0284c7',
+      badge: queue.length > 0 ? String(queue.length) : '',
+      icon: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/><polyline points="16 14 12 10 8 14"/></svg>'
+    });
+
+    const gridEl = document.getElementById('dashTilesGrid');
+    if (gridEl) {
+      gridEl.innerHTML = tiles.map((t, idx) => `
+        <div class="dash-tile" style="animation-delay:${(idx * 0.035).toFixed(3)}s;" onclick="${t.action === 'sync' ? 'syncNow(false)' : `openPage('${t.page}', null)`}">
+          ${t.badge ? `<span class="dash-tile-badge ${t.badgeOk ? 'ok' : ''}">${t.badge}</span>` : ''}
+          <div class="dash-tile-circle" style="background:${t.bg};color:${t.col};">${t.icon}</div>
+          <div class="dash-tile-label">${t.label}</div>
+        </div>
+      `).join('');
+    }
+
+    // 3. Quick Actions Chips (like Quick Links in screenshot)
+    const chips = [];
+    if (canQr) chips.push({ cls: 'c-teal', txt: 'START QR SCANNER ↗', fn: "openPage('scan', null)" });
+    if (canFees) chips.push({ cls: 'c-purple', txt: 'NEW ADMISSION 2027 ↗', fn: "openPage('entry', null)" });
+    if (canCaller) chips.push({ cls: 'c-rose', txt: `ABSENT CALLS (${absentPendingCount}) ↗`, fn: "openPage('caller', null)" });
+    chips.push({ cls: 'c-pink', txt: 'APP THEME STUDIO ↗', fn: 'openSidebar()' });
+
+    const qWrap = document.getElementById('dashQuickWrap');
+    const qBox = document.getElementById('dashQuickChips');
+    if (qWrap && qBox) {
+      qWrap.style.display = chips.length ? 'block' : 'none';
+      qBox.innerHTML = chips.map(c => `<button type="button" class="quick-chip ${c.cls}" onclick="${c.fn}">${c.txt}</button>`).join('');
+    }
+
+    // 4. Bottom Warm Highlight Banner (like WORKING HOURS card)
+    const bWrap = document.getElementById('dashBottomBannerWrap');
+    if (bWrap) {
+      if (superFlag) {
+        bWrap.innerHTML = `
+          <div class="dash-highlight-banner" onclick="openPage('superadmin', null)">
+            <div>
+              <div class="dhb-title">NET BALANCE: ₹${saTotals.net || 0}</div>
+              <div class="dhb-sub">Collection ₹${saTotals.col || 0} • Salary Paid ₹${saTotals.sal || 0}</div>
+            </div>
+            <div class="dhb-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="9 18 15 12 9 6"/></svg></div>
+          </div>`;
+      } else if (canFees) {
+        bWrap.innerHTML = `
+          <div class="dash-highlight-banner" onclick="openPage('hisab', null)">
+            <div>
+              <div class="dhb-title">TODAY'S COLLECTION: ₹${todayCol}</div>
+              <div class="dhb-sub">View full hisab &amp; pending online requests</div>
+            </div>
+            <div class="dhb-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="9 18 15 12 9 6"/></svg></div>
+          </div>`;
+      } else {
+        const myTot = (salaryLog || []).filter(l => String(l.teacherId || '').toUpperCase() === String(u.id || '').toUpperCase()).reduce((s, x) => s + (Number(x.amount) || 0), 0);
+        bWrap.innerHTML = `
+          <div class="dash-highlight-banner" onclick="openPage('mysalary', null)">
+            <div>
+              <div class="dhb-title">MY SALARY: ₹${myTot} RECEIVED</div>
+              <div class="dhb-sub">Fixed Monthly ₹${u.salary || 0} • Tap to view history</div>
+            </div>
+            <div class="dhb-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="9 18 15 12 9 6"/></svg></div>
+          </div>`;
+      }
+    }
   }
 
   let _gSearchTimer = null, _cSearchTimer = null;
