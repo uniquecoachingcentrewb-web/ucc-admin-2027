@@ -1,40 +1,52 @@
 <!DOCTYPE html>
+<!-- U.C.C Institute Student Portal - Animated Build v2 -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <meta name="theme-color" id="metaThemeColor" content="#061121">
-  <link rel="icon" type="image/png" href="logo.png?v=3">
-  <title>U.C.C Institute - Student App</title>
+  <meta name="theme-color" id="metaThemeColor" content="#0f766e">
+  <link rel="manifest" href="manifest.json?v=4">
+  <link rel="icon" type="image/png" href="logo.png?v=4">
+  <title>U.C.C Institute Student Portal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://script.google.com" crossorigin>
+  <link rel="preconnect" href="https://script.googleusercontent.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
     :root {
-      --bg-page: radial-gradient(circle at 85% 0%, #12294d 0%, #061121 48%, #040b16 100%);
-      --bg-solid: #061121;
-      --bg-header: rgba(6, 17, 33, 0.9);
-      --bg-card: linear-gradient(180deg, rgba(16, 34, 62, 0.94) 0%, rgba(11, 25, 47, 0.97) 100%);
-      --bg-subcard: rgba(6, 17, 33, 0.55);
-      --bg-input: #081529;
-      --bg-hero: linear-gradient(135deg, #132a4f 0%, #0b1c36 55%, #192b46 100%);
-      --bg-nav: rgba(7, 18, 35, 0.95);
-      --accent: #d4af37;
-      --accent-light: #fae094;
-      --accent-grad: linear-gradient(135deg, #f8df8c 0%, #d4af37 52%, #b08218 100%);
-      --accent-text: #061121;
-      --accent-soft: rgba(212, 175, 55, 0.14);
-      --accent-border: rgba(212, 175, 55, 0.3);
-      --text: #f8fafc;
-      --text-2: #cbd5e1;
-      --muted: #8fa3bf;
-      --border: rgba(148, 163, 184, 0.16);
-      --danger: #f87171;
-      --danger-soft: rgba(239, 68, 68, 0.15);
-      --success: #34d399;
-      --success-soft: rgba(16, 185, 129, 0.15);
-      --shadow-card: 0 10px 28px rgba(0, 0, 0, 0.34);
+      --bg-page: linear-gradient(180deg, #f3f7f6 0%, #f8fafc 100%);
+      --bg-solid: #f3f7f6;
+      --bg-header: #0f766e;
+      --dash-hero-top: #0f766e;
+      --dash-hero-grad: linear-gradient(180deg, #0f766e 0%, #0d9488 100%);
+      --dash-hero-fg: #ffffff;
+      --dash-chip-bg: rgba(255, 255, 255, 0.16);
+      --dash-chip-border: rgba(255, 255, 255, 0.28);
+      --hero-fg: #ffffff;
+      --bg-card: #ffffff;
+      --bg-subcard: #f0fdfa;
+      --bg-input: #ffffff;
+      --bg-hero: linear-gradient(135deg, #0f766e, #0d9488);
+      --bg-nav: rgba(255, 255, 255, 0.96);
+      --accent: #0d9488;
+      --accent-light: #0f766e;
+      --accent-grad: linear-gradient(135deg, #14b8a6, #0f766e);
+      --accent-text: #ffffff;
+      --accent-soft: rgba(13, 148, 136, 0.11);
+      --accent-border: rgba(13, 148, 136, 0.28);
+      --text: #0f172a;
+      --text-2: #334155;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --danger: #dc2626;
+      --danger-soft: rgba(220, 38, 38, 0.12);
+      --success: #059669;
+      --success-soft: rgba(5, 150, 105, 0.13);
+      --shadow-card: 0 8px 22px rgba(15, 118, 110, 0.08);
       --radius: 18px;
+      --ease-fast: cubic-bezier(0.22, 1, 0.36, 1);
     }
 
     * {
@@ -47,40 +59,80 @@
       background: var(--bg-page) fixed;
       background-color: var(--bg-solid);
       color: var(--text);
-      padding-bottom: 94px;
+      padding-bottom: 32px;
       overscroll-behavior-y: contain;
       user-select: none;
       -webkit-font-smoothing: antialiased;
-      transition: background 0.3s ease, color 0.2s ease;
+      transition: background 0.35s ease, color 0.25s ease;
     }
-    input, select { user-select: text; }
+    input, select, textarea { user-select: text; }
     svg { flex-shrink: 0; }
     option { background: var(--bg-input); color: var(--text); }
 
+    /* ===== SUPER-FAST ANIMATED SPLASH ===== */
     #splashScreen {
       position: fixed; inset: 0; z-index: 999;
       background: var(--bg-page); background-color: var(--bg-solid);
       display: flex; flex-direction: column; justify-content: center; align-items: center;
       text-align: center; padding: 24px;
-      transition: opacity 0.2s ease, transform 0.2s ease;
+      transition: opacity 0.16s ease-out, transform 0.16s ease-out;
     }
-    #splashScreen.hide { opacity: 0; transform: scale(1.04); pointer-events: none; }
+    #splashScreen.hide { opacity: 0; transform: scale(1.06); pointer-events: none; }
     .splash-ring {
-      width: 102px; height: 102px; border-radius: 50%; padding: 4px;
+      width: 110px; height: 110px; border-radius: 50%; padding: 4px;
       background: var(--accent-grad);
-      box-shadow: 0 0 0 8px var(--accent-soft), 0 0 30px var(--accent-soft);
-      animation: popIn 0.28s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      box-shadow: 0 0 0 10px var(--accent-soft), 0 0 38px var(--accent-soft);
+      animation: popIn 0.42s var(--ease-fast) forwards;
     }
     .splash-ring img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; background: #fff; display: block; }
-    .splash-title { margin: 15px 0 5px; font-size: 25px; font-weight: 800; color: var(--accent-light); }
-    .splash-tag { margin: 0; color: var(--text-2); font-size: 11px; font-weight: 700; letter-spacing: 2.2px; text-transform: uppercase; padding: 4px 14px; border-radius: 30px; background: var(--accent-soft); border: 1px solid var(--accent-border); }
+    .splash-title {
+      margin: 18px 0 5px; font-size: 25px; font-weight: 800; color: var(--accent-light);
+      opacity: 0; animation: slideUp 0.35s var(--ease-fast) 0.12s forwards;
+      transition: opacity 0.35s var(--ease-fast), transform 0.35s var(--ease-fast);
+    }
+    .splash-tag {
+      margin: 0; color: var(--text-2); font-size: 11px; font-weight: 700; letter-spacing: 2.2px; text-transform: uppercase;
+      padding: 5px 15px; border-radius: 30px; background: var(--accent-soft); border: 1px solid var(--accent-border);
+      opacity: 0; animation: slideUp 0.35s var(--ease-fast) 0.22s forwards;
+    }
+    .splash-bar { width: 124px; height: 3.5px; border-radius: 99px; background: var(--border); margin-top: 24px; overflow: hidden; }
+    .splash-fill { height: 100%; width: 0%; border-radius: 99px; background: var(--accent-grad); animation: loadBar 0.32s ease-out 0.05s forwards; }
 
-    @keyframes popIn { 0% { opacity: 0; transform: scale(0.72); } 100% { opacity: 1; transform: scale(1); } }
-    @keyframes slideUp { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 1; transform: translateY(0); } }
-    @keyframes pageFade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes pulseDot { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.35); opacity: 0.4; } }
-    @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+    @keyframes popIn { 0% { opacity: 0; transform: scale(0.65); } 100% { opacity: 1; transform: scale(1); } }
+    @keyframes slideUp { 0% { opacity: 0; transform: translateY(12px); } 100% { opacity: 1; transform: translateY(0); } }
+    @keyframes loadBar { to { width: 100%; } }
+    @keyframes pageEnter { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes sheetUp { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes pulseDot { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.32); opacity: 0.45; } }
+    @keyframes logoGlowPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(255,255,255,0.28); transform: scale(1); }
+      50% { box-shadow: 0 0 0 5px rgba(255,255,255,0.06); transform: scale(1.04); }
+    }
 
+    /* ===== ANIMATED CORNER BRAND ROTATOR ===== */
+    .brand-logo-pulse { animation: logoGlowPulse 3.2s ease-in-out infinite; }
+    .brand-rotator-wrap {
+      min-width: 0;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .brand-rotator-text {
+      display: inline-block;
+      margin: 0;
+      font-size: clamp(12.5px, 3.6vw, 15.5px);
+      font-weight: 800;
+      line-height: 1.22;
+      white-space: nowrap;
+      letter-spacing: -0.15px;
+      transition: opacity 0.36s var(--ease-fast), transform 0.36s var(--ease-fast);
+      will-change: opacity, transform;
+    }
+    .brand-rotator-text.brand-exit { opacity: 0; transform: translateY(-9px) scale(0.95); }
+    .brand-rotator-text.brand-enter { opacity: 0; transform: translateY(9px) scale(0.95); }
+
+    /* ===== LOGIN GATE ===== */
     #loginScreen {
       position: fixed; inset: 0; z-index: 200;
       background: var(--bg-page); background-color: var(--bg-solid);
@@ -89,396 +141,666 @@
     .login-card {
       position: relative; width: 100%; max-width: 375px;
       background: var(--bg-card); border: 1px solid var(--accent-border);
-      border-radius: 26px; padding: 28px 24px 24px; box-shadow: var(--shadow-card);
-      animation: slideUp 0.25s ease;
+      border-radius: 26px; padding: 26px 22px; box-shadow: var(--shadow-card);
+      animation: slideUp 0.3s var(--ease-fast);
     }
-    .login-logo-wrap { width: 76px; height: 76px; border-radius: 50%; padding: 3px; background: var(--accent-grad); margin: 0 auto 12px; }
-    .login-logo-wrap img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; background: #fff; display: block; }
-    .login-title { text-align: center; margin-bottom: 20px; }
-    .login-title h2 { margin: 0; font-size: 22px; font-weight: 800; color: var(--accent-light); }
-    .login-title p { margin: 5px 0 0; font-size: 11px; color: var(--muted); font-weight: 700; letter-spacing: 1.8px; }
-    .login-err { display: none; background: var(--danger-soft); color: var(--danger); border: 1px solid var(--danger); padding: 10px 12px; border-radius: 12px; font-size: 12.5px; font-weight: 600; margin-bottom: 14px; text-align: center; }
+    .login-logo { width: 76px; height: 76px; border-radius: 50%; object-fit: cover; border: 3px solid var(--accent); padding: 2px; background: #fff; display: block; margin: 0 auto 12px; }
+    .login-title { text-align: center; margin-bottom: 18px; }
+    .login-title h2 { margin: 0; font-size: 21px; font-weight: 800; color: var(--accent-light); transition: opacity 0.36s var(--ease-fast), transform 0.36s var(--ease-fast); }
+    .login-title p { margin: 4px 0 0; font-size: 11px; color: var(--muted); font-weight: 700; letter-spacing: 1.5px; }
+    .login-err { display: none; background: var(--danger-soft); color: var(--danger); border: 1px solid var(--danger); padding: 10px; border-radius: 12px; font-size: 12px; font-weight: 600; margin-bottom: 12px; text-align: center; line-height: 1.45; }
 
-    header {
-      background: var(--bg-header); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
-      color: var(--text); padding: 11px 14px; position: sticky; top: 0; z-index: 30;
-      display: flex; justify-content: space-between; align-items: center;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.14);
+    /* ===== HEADER & SIDEBAR ===== */
+    header.app-topbar {
+      background: var(--dash-hero-top, var(--bg-header));
+      color: var(--dash-hero-fg, #ffffff);
+      padding: 12px 15px 10px;
+      position: sticky; top: 0; z-index: 30;
+      display: flex; justify-content: space-between; align-items: center; gap: 8px;
     }
-    header::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--accent-grad); opacity: 0.8; }
-    .brand { display: flex; align-items: center; gap: 9px; }
-    .brand-logo { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); background: #fff; }
-    .brand h1 { margin: 0; font-size: 15.5px; font-weight: 800; color: var(--accent-light); }
-    .brand small { font-size: 11px; color: var(--muted); display: block; font-weight: 600; }
-    .hdr-actions { display: flex; gap: 7px; }
-    .icon-btn {
-      width: 36px; height: 36px; border-radius: 11px; border: 1px solid var(--accent-border);
-      background: var(--accent-soft); color: var(--accent-light); cursor: pointer;
-      display: flex; align-items: center; justify-content: center; transition: transform 0.12s ease;
+    .brand { display: flex; align-items: center; gap: 8px; min-width: 0; flex: 1; }
+    .brand-logo { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); background: #fff; flex-shrink: 0; }
+    .top-icon-group { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+    .top-ic-btn {
+      position: relative;
+      width: 35px; height: 35px; border-radius: 11px;
+      border: 1px solid var(--dash-chip-border, rgba(255,255,255,0.22));
+      background: var(--dash-chip-bg, rgba(255,255,255,0.14));
+      color: var(--dash-hero-fg, #ffffff);
+      display: inline-flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: transform 0.14s var(--ease-fast), background 0.15s ease;
     }
-    .icon-btn:active { transform: scale(0.9); }
+    .top-ic-btn:active { transform: scale(0.88); }
+    .top-ic-btn .mini-dot {
+      position: absolute; top: 5px; right: 5px; width: 7px; height: 7px;
+      border-radius: 50%; background: #34d399; border: 1.5px solid #04392c;
+    }
+    .top-ic-btn .mini-dot.off { background: #f87171; }
+    .top-ic-btn.spin svg { animation: spin360 0.8s linear infinite; }
+    @keyframes spin360 { to { transform: rotate(360deg); } }
 
-    #sideBackdrop { display: none; position: fixed; inset: 0; background: rgba(2, 8, 18, 0.68); backdrop-filter: blur(4px); z-index: 80; }
+    #sideBackdrop { display: none; position: fixed; inset: 0; background: rgba(2, 8, 18, 0.68); z-index: 80; }
     #sideBackdrop.open { display: block; }
     #sidebar {
       position: fixed; top: 0; bottom: 0; left: -310px; width: 296px;
-      background: var(--bg-solid); border-right: 1.5px solid var(--accent-border);
-      z-index: 85; transition: left 0.2s cubic-bezier(0.22, 1, 0.36, 1);
-      display: flex; flex-direction: column; box-shadow: 8px 0 32px rgba(0, 0, 0, 0.5);
+      background: var(--bg-solid); border-right: 1.5px solid var(--accent-border); z-index: 85;
+      transition: left 0.2s var(--ease-fast); display: flex; flex-direction: column;
+      box-shadow: 8px 0 32px rgba(0, 0, 0, 0.55); will-change: left;
     }
     #sidebar.open { left: 0; }
-    .side-head { background: var(--bg-hero); color: #fff; padding: 18px 15px; border-bottom: 1.5px solid var(--accent-border); display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-    .side-head-left { display: flex; align-items: center; gap: 10px; min-width: 0; }
-    .side-head img { width: 42px; height: 42px; border-radius: 50%; border: 2px solid var(--accent); background: #fff; object-fit: cover; }
-    .side-body { padding: 14px 12px 24px; overflow-y: auto; flex: 1; }
-    .side-sec-title { font-size: 11.5px; font-weight: 800; color: var(--accent-light); text-transform: uppercase; letter-spacing: 0.8px; margin: 4px 0 9px; display: flex; align-items: center; gap: 6px; }
+    .side-head {
+      background: var(--bg-hero); color: var(--hero-fg, #ffffff); padding: 18px 15px;
+      border-bottom: 1.5px solid var(--accent-border); display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    }
+    .side-head img { width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--accent); background: #fff; object-fit: cover; }
+    .side-body { padding: 12px 12px 24px; overflow-y: auto; flex: 1; }
+    .side-item {
+      width: 100%; display: flex; align-items: center; justify-content: space-between;
+      padding: 12px; margin-bottom: 8px; border-radius: 13px;
+      border: 1px solid var(--border); background: var(--bg-card);
+      color: var(--text); font-size: 13px; font-weight: 700; cursor: pointer; text-align: left;
+      transition: transform 0.12s var(--ease-fast), border-color 0.15s ease;
+    }
+    .side-item:active { transform: scale(0.97); border-color: var(--accent); }
+    .side-left { display: flex; align-items: center; gap: 9px; }
+    .side-pill { background: var(--accent-grad); color: var(--accent-text); font-size: 11px; padding: 2px 9px; border-radius: 20px; font-weight: 800; }
 
-    .auto-row { display: flex; justify-content: space-between; align-items: center; background: var(--accent-soft); border: 1px solid var(--accent-border); padding: 10px 11px; border-radius: 13px; margin-bottom: 12px; gap: 8px; }
-    .switch-pill { padding: 5px 12px; border-radius: 20px; border: none; font-size: 11.5px; font-weight: 800; cursor: pointer; flex-shrink: 0; }
-    .switch-pill.on { background: var(--success); color: #061121; }
+    /* SIDEBAR THEME STUDIO */
+    details.theme-accordion {
+      background: var(--bg-card); border: 1px solid var(--accent-border);
+      border-radius: 14px; margin: 10px 0 12px; overflow: hidden;
+    }
+    details.theme-accordion > summary {
+      padding: 12px; font-size: 13px; font-weight: 800; color: var(--accent-light);
+      cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center;
+    }
+    details.theme-accordion > summary::-webkit-details-marker { display: none; }
+    .theme-acc-body { padding: 0 10px 12px; }
+    .auto-row { display: flex; justify-content: space-between; align-items: center; background: var(--accent-soft); border: 1px solid var(--accent-border); padding: 9px 10px; border-radius: 11px; margin-bottom: 9px; gap: 8px; }
+    .switch-pill { padding: 5px 11px; border-radius: 20px; border: none; font-size: 11px; font-weight: 800; cursor: pointer; }
+    .switch-pill.on { background: var(--success); color: #ffffff; }
     .switch-pill.off { background: var(--border); color: var(--text); }
-
-    .theme-list { display: grid; grid-template-columns: 1fr; gap: 7px; margin-bottom: 14px; }
-    .theme-opt { display: flex; align-items: center; justify-content: space-between; padding: 9px 11px; border-radius: 12px; border: 1.5px solid var(--border); background: var(--bg-card); cursor: pointer; color: var(--text); font-size: 12.5px; font-weight: 700; }
+    .theme-list { display: grid; grid-template-columns: 1fr; gap: 6px; margin-bottom: 10px; }
+    .theme-opt {
+      display: flex; align-items: center; justify-content: space-between; padding: 8px 10px; border-radius: 11px;
+      border: 1.5px solid var(--border); background: var(--bg-subcard); cursor: pointer;
+      color: var(--text); font-size: 12px; font-weight: 700;
+    }
     .theme-opt.active { border-color: var(--accent); background: var(--accent-soft); }
-    .theme-opt-left { display: flex; align-items: center; gap: 9px; }
-    .swatch { width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0; border: 2px solid rgba(255,255,255,0.45); }
-    .color-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 9px; }
-    .color-box { background: var(--bg-subcard); border: 1px solid var(--border); border-radius: 10px; padding: 6px; text-align: center; }
-    .color-box input[type="color"] { width: 100%; height: 28px; border: none; background: none; padding: 0; cursor: pointer; }
+    .swatch { width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0; border: 2px solid rgba(255,255,255,0.45); }
+    .color-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 8px; }
+    .color-box { background: var(--bg-subcard); border: 1px solid var(--border); border-radius: 9px; padding: 5px; text-align: center; }
+    .color-box input[type="color"] { width: 100%; height: 26px; border: none; background: none; padding: 0; cursor: pointer; }
 
-    .container { max-width: 580px; margin: 14px auto; padding: 0 14px; }
+    /* ===== MAIN CONTAINER & ANIMATED HERO ===== */
+    .container { position: relative; z-index: 1; max-width: 620px; margin: 14px auto; padding: 0 14px; }
     .page { display: none; }
-    .page.active { display: block; animation: pageFade 0.16s ease; }
+    .page.active { display: block; animation: pageZoomOpen 0.16s var(--ease-fast); }
+    @keyframes pageZoomOpen {
+      from { opacity: 0; transform: translateY(10px) scale(0.985); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
 
-    .card { background: var(--bg-card); border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow-card); margin-bottom: 14px; border: 1px solid var(--border); }
-    .card-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-    .card-title { font-size: 14.5px; font-weight: 800; color: var(--accent-light); display: flex; align-items: center; gap: 7px; }
-    .pill-mini { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; background: var(--accent-soft); color: var(--accent-light); border: 1px solid var(--accent-border); }
+    /* Curved Greeting Hero with Student Photo */
+    .dash-hero {
+      background: var(--dash-hero-grad, var(--bg-hero));
+      color: var(--dash-hero-fg, #ffffff);
+      padding: 8px 18px 54px;
+      border-radius: 0 0 30px 30px;
+      margin: -14px -14px 0;
+      position: relative;
+      box-shadow: 0 10px 26px rgba(0,0,0,0.14);
+      animation: heroDrop 0.35s var(--ease-fast);
+    }
+    @keyframes heroDrop {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .hero-profile-row {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    }
+    .st-photo-box {
+      position: relative; width: 70px; height: 70px; flex-shrink: 0; cursor: pointer;
+    }
+    .st-photo-ring {
+      width: 100%; height: 100%; border-radius: 50%; padding: 3px;
+      background: linear-gradient(135deg, #fde047, #ffffff, #34d399);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.22);
+      transition: transform 0.15s var(--ease-fast);
+    }
+    .st-photo-box:active .st-photo-ring { transform: scale(0.93); }
+    .st-photo-img {
+      width: 100%; height: 100%; border-radius: 50%; object-fit: cover;
+      background: #0f172a; display: block;
+    }
+    .st-photo-fallback {
+      width: 100%; height: 100%; border-radius: 50%;
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      color: #fde047; font-size: 22px; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .st-cam-pill {
+      position: absolute; bottom: -2px; right: -2px;
+      background: #fde047; color: #0f172a;
+      border: 2px solid #0f766e;
+      border-radius: 99px; padding: 2px 6px;
+      font-size: 9.5px; font-weight: 800;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+    }
+    .dash-hello { font-size: 12.5px; font-weight: 600; opacity: 0.92; letter-spacing: 0.3px; text-transform: uppercase; }
+    .dash-welcome { font-size: 22px; font-weight: 800; font-style: italic; margin-top: 2px; letter-spacing: -0.2px; line-height: 1.15; }
+    .dash-role-chip {
+      display: inline-block; margin-top: 6px;
+      font-style: normal; font-size: 10.5px; font-weight: 800;
+      padding: 3px 10px; border-radius: 20px;
+      background: var(--dash-chip-bg, rgba(255,255,255,0.18));
+      color: var(--dash-hero-fg, #ffffff);
+      border: 1px solid var(--dash-chip-border, rgba(255,255,255,0.28));
+    }
 
-    .notice-banner { background: var(--bg-card); border: 1px solid var(--accent-border); border-left: 4px solid var(--accent); border-radius: 16px; padding: 13px 14px; margin-bottom: 14px; box-shadow: var(--shadow-card); }
-    .notice-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 5px; }
-    .notice-badge { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 800; color: var(--accent-light); }
-    .live-dot { width: 8px; height: 8px; border-radius: 50%; background: #ef4444; box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.25); animation: pulseDot 1.3s infinite; }
-    .notice-date { font-size: 11px; font-weight: 600; color: var(--accent-light); background: var(--accent-soft); padding: 2px 9px; border-radius: 20px; border: 1px solid var(--accent-border); }
-    .notice-body { font-size: 13.5px; color: var(--text); line-height: 1.5; font-weight: 500; }
-    .notice-link { display: inline-flex; align-items: center; gap: 5px; margin-top: 9px; background: var(--accent-grad); color: var(--accent-text); text-decoration: none; font-size: 12px; font-weight: 800; padding: 6px 13px; border-radius: 9px; }
+    /* Overlapping 2-Card Live Summary Strip */
+    .dash-stats-row {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 11px;
+      margin-top: -38px; margin-bottom: 18px; position: relative; z-index: 3;
+    }
+    .dash-stat-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 18px; padding: 12px 13px; box-shadow: var(--shadow-card);
+      cursor: pointer; transition: transform 0.14s var(--ease-fast);
+      animation: tilePop 0.36s var(--ease-fast) both;
+    }
+    .dash-stat-card:active { transform: scale(0.96); }
+    .dsc-line {
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: 12px; font-weight: 700; color: var(--text-2); padding: 4px 0;
+    }
+    .dsc-line + .dsc-line { border-top: 1px dashed var(--border); }
+    .dsc-pill {
+      font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 99px;
+      background: var(--accent-soft); color: var(--accent-light);
+    }
+    .dsc-pill.ok { background: var(--success-soft); color: var(--success); }
+    .dsc-pill.due { background: var(--danger-soft); color: var(--danger); }
 
-    .hero-card { position: relative; overflow: hidden; background: var(--bg-hero); border: 1.5px solid var(--accent-border); color: #fff; border-radius: 22px; padding: 18px; margin-bottom: 14px; box-shadow: var(--shadow-card); }
-    .hero-row { position: relative; display: flex; align-items: center; gap: 14px; }
-    .avatar-circle { width: 54px; height: 54px; border-radius: 16px; background: var(--accent-grad); color: var(--accent-text); font-size: 22px; font-weight: 800; display: flex; align-items: center; justify-content: center; border: 2px solid rgba(255,255,255,0.35); }
-    .hero-name { font-size: 19.5px; font-weight: 800; color: #fff; line-height: 1.2; }
-    .hero-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
-    .hero-chip { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; background: rgba(255,255,255,0.16); border: 1px solid rgba(255,255,255,0.22); color: #fff; }
-    .hero-footer { position: relative; margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.18); display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: rgba(255,255,255,0.85); }
+    /* 2-Column BIG Hero Action Tiles */
+    .dash-tiles-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 18px;
+    }
+    .dash-tile {
+      position: relative; background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 24px; padding: 22px 12px 18px; min-height: 142px;
+      text-align: center; cursor: pointer; box-shadow: var(--shadow-card);
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 11px;
+      transition: transform 0.12s var(--ease-fast), border-color 0.12s ease;
+      animation: tilePop 0.22s var(--ease-fast) both;
+    }
+    .dash-tile:active { transform: scale(0.94); border-color: var(--accent); }
+    @keyframes tilePop {
+      from { opacity: 0; transform: translateY(12px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .dash-tile-circle {
+      width: 66px; height: 66px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+    }
+    .dash-tile-label { font-size: 15px; font-weight: 800; color: var(--text); line-height: 1.2; }
+    .dash-tile-sub { font-size: 11px; font-weight: 600; color: var(--muted); margin-top: -5px; }
+    .dash-tile-badge {
+      position: absolute; top: 9px; right: 9px;
+      background: var(--danger); color: #fff; font-size: 10px; font-weight: 800;
+      padding: 2px 7px; border-radius: 99px;
+    }
+    .dash-tile-badge.ok { background: var(--success); color: #ffffff; }
 
-    .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px; }
-    .stat-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 13px 8px; text-align: center; box-shadow: var(--shadow-card); }
-    .stat-icon { width: 32px; height: 32px; border-radius: 10px; margin: 0 auto 7px; display: flex; align-items: center; justify-content: center; }
-    .si-green { background: var(--success-soft); color: var(--success); }
-    .si-accent { background: var(--accent-soft); color: var(--accent-light); }
-    .si-red { background: var(--danger-soft); color: var(--danger); }
-    .stat-num { font-size: 17px; font-weight: 800; }
-    .stat-lbl { font-size: 11px; color: var(--muted); margin-top: 2px; font-weight: 600; }
-    .prog-track { width: 100%; height: 7px; background: var(--border); border-radius: 99px; overflow: hidden; margin-top: 9px; }
-    .prog-fill { height: 100%; border-radius: 99px; background: var(--accent-grad); transition: width 0.35s ease; }
+    /* Bottom Highlight Banner */
+    .dash-highlight-banner {
+      background: linear-gradient(135deg, #fde047 0%, #facc15 55%, #f59e0b 100%);
+      color: #1c1917; border-radius: 20px; padding: 15px 16px;
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      box-shadow: 0 10px 24px rgba(245, 158, 11, 0.24);
+      cursor: pointer; transition: transform 0.15s var(--ease-fast);
+    }
+    .dash-highlight-banner:active { transform: scale(0.97); }
+    .dhb-title { font-size: 14.5px; font-weight: 800; letter-spacing: 0.3px; text-transform: uppercase; color: #1c1917; }
+    .dhb-sub { font-size: 12px; font-weight: 600; color: #44403c; margin-top: 2px; }
+    .dhb-icon {
+      width: 40px; height: 40px; border-radius: 50%; background: rgba(28, 25, 23, 0.14);
+      display: flex; align-items: center; justify-content: center; color: #1c1917; flex-shrink: 0;
+    }
 
-    .months-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-    .m-cell { border: 1px solid var(--border); border-radius: 13px; padding: 9px 4px; text-align: center; background: var(--bg-subcard); }
-    .m-cell .m-name { font-size: 11.5px; font-weight: 700; color: var(--text-2); }
-    .m-cell .m-val { font-size: 11px; font-weight: 700; margin-top: 3px; color: var(--muted); }
-    .m-cell.paid { background: var(--success-soft); border-color: var(--success); }
-    .m-cell.paid .m-name, .m-cell.paid .m-val { color: var(--success); }
+    /* Sub-page Top Back Bar */
+    .subpage-bar {
+      display: none; align-items: center; justify-content: space-between; gap: 10px;
+      margin-bottom: 13px; background: var(--bg-card); border: 1px solid var(--border);
+      padding: 9px 12px; border-radius: 15px; box-shadow: var(--shadow-card);
+    }
+    .subpage-bar.show { display: flex; }
+    .subpage-back-btn {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: var(--accent-soft); color: var(--accent-light); border: 1px solid var(--accent-border);
+      padding: 6px 12px; border-radius: 10px; font-size: 12.5px; font-weight: 800; cursor: pointer;
+    }
+    .subpage-title { font-size: 14.5px; font-weight: 800; color: var(--text); flex: 1; text-align: right; }
 
-    .seg-bar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; background: var(--bg-subcard); border: 1px solid var(--border); padding: 5px; border-radius: 14px; margin-bottom: 14px; }
-    .seg-btn { padding: 9px 4px; border-radius: 10px; border: none; background: transparent; font-weight: 700; font-size: 12.5px; cursor: pointer; color: var(--muted); display: flex; align-items: center; justify-content: center; gap: 5px; }
-    .seg-btn.active { background: var(--accent-grad); color: var(--accent-text); font-weight: 800; }
-
-    .lock-card { background: var(--bg-card); border: 1.5px solid var(--accent-border); border-radius: 22px; padding: 30px 20px; text-align: center; box-shadow: var(--shadow-card); }
-    .lock-icon-circle { width: 64px; height: 64px; border-radius: 50%; margin: 0 auto 14px; background: var(--accent-soft); color: var(--accent-light); display: flex; align-items: center; justify-content: center; border: 1.5px solid var(--accent-border); }
-
-    details.sub-folder { background: var(--bg-card); border: 1px solid var(--accent-border); border-radius: 16px; margin-bottom: 11px; overflow: hidden; box-shadow: var(--shadow-card); }
-    details.sub-folder > summary { padding: 14px 15px; font-size: 14.5px; font-weight: 800; color: var(--text); cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; }
-    details.sub-folder > summary::-webkit-details-marker { display: none; }
-    .folder-left { display: flex; align-items: center; gap: 10px; }
-    .folder-ic { width: 34px; height: 34px; border-radius: 10px; background: var(--accent-soft); color: var(--accent-light); border: 1px solid var(--accent-border); display: flex; align-items: center; justify-content: center; }
-    .sub-body { padding: 0 12px 12px; }
-    details.chap-folder { background: var(--bg-subcard); border: 1px solid var(--border); border-radius: 13px; margin-top: 8px; }
-    details.chap-folder > summary { padding: 11px 12px; font-size: 13.5px; font-weight: 700; color: var(--accent-light); cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; }
-    details.chap-folder > summary::-webkit-details-marker { display: none; }
-    .chap-body { padding: 0 10px 10px; }
-
-    .content-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 13px; margin-top: 8px; }
-    .c-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; background: var(--accent-soft); color: var(--accent-light); border: 1px solid var(--accent-border); }
-    .c-badge.live { background: var(--danger-soft); color: var(--danger); border-color: var(--danger); }
-    .video-box { margin-top: 10px; border-radius: 12px; overflow: hidden; background: #000; aspect-ratio: 16 / 9; width: 100%; border: 1px solid var(--accent-border); }
-    .video-box iframe { width: 100%; height: 100%; border: none; display: block; }
-    .vid-actions { display: flex; gap: 8px; margin-top: 9px; }
-    .vid-btn { flex: 1; padding: 8px 10px; border-radius: 10px; font-size: 12px; font-weight: 800; cursor: pointer; text-align: center; text-decoration: none; border: 1px solid var(--accent-border); background: var(--accent-soft); color: var(--accent-light); }
-
-    .live-chat-wrap { margin-top: 10px; background: var(--bg-subcard); border: 1px solid var(--border); border-radius: 13px; padding: 11px; }
-    .chat-list { max-height: 200px; overflow-y: auto; margin-bottom: 9px; }
-    .chat-msg { background: var(--bg-card); border: 1px solid var(--border); border-radius: 11px; padding: 8px 10px; font-size: 12.5px; margin-bottom: 6px; color: var(--text); }
-    .chat-msg.admin { background: var(--accent-soft); border-color: var(--accent-border); }
-
-    .upi-card { position: relative; overflow: hidden; background: var(--bg-hero); border: 1.5px solid var(--accent-border); color: #fff; border-radius: 20px; padding: 18px; margin-bottom: 16px; box-shadow: var(--shadow-card); }
-    .upi-top { display: flex; justify-content: space-between; align-items: center; }
-    .upi-tag { font-size: 10.5px; font-weight: 700; letter-spacing: 1.2px; color: rgba(255,255,255,0.85); text-transform: uppercase; }
-    .upi-num { font-size: 24px; font-weight: 800; letter-spacing: 2px; margin: 10px 0 6px; color: #fff; }
-    .copy-pill { background: var(--accent-grad); color: var(--accent-text); border: none; padding: 8px 14px; border-radius: 10px; font-size: 12px; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; }
-
-    .form-group { margin-bottom: 13px; }
-    label { display: block; font-size: 12px; font-weight: 700; color: var(--accent-light); margin-bottom: 6px; }
-    input, select { width: 100%; padding: 11px 13px; border: 1.5px solid var(--border); border-radius: 12px; font-size: 14px; background: var(--bg-input); color: var(--text); }
-    input:focus, select:focus { outline: none; border-color: var(--accent); }
+    /* Cards, Forms, Badges, Smart ID Card */
+    .card {
+      background: var(--bg-card); border-radius: var(--radius); padding: 16px;
+      box-shadow: var(--shadow-card); margin-bottom: 14px; border: 1px solid var(--border);
+    }
+    .card-title { font-size: 14.5px; font-weight: 800; color: var(--accent-light); margin-bottom: 11px; display: flex; align-items: center; gap: 7px; }
+    .form-group { margin-bottom: 12px; }
+    label { display: block; font-size: 12px; font-weight: 700; color: var(--accent-light); margin-bottom: 5px; }
+    input, select, textarea {
+      width: 100%; padding: 11px 13px; border: 1.5px solid var(--border);
+      border-radius: 12px; font-size: 14px; background: var(--bg-input); color: var(--text);
+    }
+    input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); }
     .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-
-    .upload-zone { display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1.5px dashed var(--accent-border); border-radius: 14px; padding: 18px 12px; background: var(--bg-subcard); cursor: pointer; text-align: center; }
-    .upload-zone input { display: none; }
-
-    .btn { width: 100%; padding: 13px 16px; border: 1px solid var(--accent-border); border-radius: 13px; font-size: 14px; font-weight: 800; cursor: pointer; color: var(--accent-light); background: var(--bg-card); display: inline-flex; align-items: center; justify-content: center; gap: 7px; transition: transform 0.12s ease; }
-    .btn:active { transform: scale(0.97); }
-    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn {
+      width: 100%; padding: 12.5px 14px; border: 1px solid var(--accent-border); border-radius: 13px;
+      font-size: 13.5px; font-weight: 800; cursor: pointer; color: var(--accent-light);
+      background: var(--bg-card); display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    }
+    .btn:active { transform: scale(0.96); }
     .btn-accent { background: var(--accent-grad); color: var(--accent-text); border: none; }
     .btn-sec { background: #334155; color: #fff; border: none; }
+    .btn-sm { border: none; padding: 7px 11px; border-radius: 9px; font-size: 11.5px; font-weight: 800; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 4px; }
+    .badge-ok { background: var(--success-soft); color: var(--success); padding: 4px 10px; border-radius: 20px; font-size: 11.5px; font-weight: 700; }
+    .badge-due { background: var(--danger-soft); color: var(--danger); padding: 4px 10px; border-radius: 20px; font-size: 11.5px; font-weight: 800; }
 
-    .info-item { display: flex; justify-content: space-between; align-items: center; padding: 11px 0; border-bottom: 1px solid var(--border); gap: 10px; }
-    .info-item:last-child { border-bottom: none; padding-bottom: 2px; }
-    .badge-ok { background: var(--success-soft); color: var(--success); padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
-    .badge-due { background: var(--accent-soft); color: var(--accent-light); padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
-    .badge-rej { background: var(--danger-soft); color: var(--danger); padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+    .months-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; margin-bottom: 12px; }
+    .m-cell { border: 1px solid var(--border); border-radius: 11px; padding: 9px 4px; text-align: center; font-size: 11.5px; background: var(--bg-subcard); color: var(--text-2); cursor: pointer; }
+    .m-cell.paid { background: var(--success-soft); border-color: var(--success); color: var(--success); font-weight: 800; }
+    .info-item { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--border); gap: 8px; }
+    .info-item:last-child { border-bottom: none; }
+    .req-card { background: var(--accent-soft); border: 1px solid var(--accent-border); border-radius: 14px; padding: 13px; margin-bottom: 10px; }
 
-    .skel { background: linear-gradient(90deg, var(--bg-subcard) 25%, var(--accent-soft) 50%, var(--bg-subcard) 75%); background-size: 200% 100%; animation: shimmer 1.2s infinite; border-radius: 16px; }
+    /* Premium Digital Smart ID Card */
+    .smart-id-card {
+      background: linear-gradient(155deg, #061121 0%, #0f294a 60%, #061121 100%);
+      color: #ffffff;
+      border-radius: 24px;
+      border: 2.5px solid #d4af37;
+      overflow: hidden;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35);
+      margin-bottom: 14px;
+    }
+    .sid-banner {
+      background: linear-gradient(135deg, #0f766e, #0d9488);
+      padding: 14px 16px;
+      text-align: center;
+      border-bottom: 2px solid #d4af37;
+    }
+    .sid-body { padding: 18px 16px; text-align: center; }
+    .sid-photo-wrap {
+      width: 96px; height: 96px; margin: 0 auto 10px; border-radius: 50%; padding: 3px;
+      background: linear-gradient(135deg, #fde047, #d4af37);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+      position: relative; cursor: pointer;
+    }
+    .sid-photo-wrap img, .sid-photo-wrap .sid-init {
+      width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block;
+    }
+    .sid-init {
+      background: #1e293b; color: #fae094; font-size: 28px; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .sid-details {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 14px;
+      padding: 10px 12px;
+      margin: 12px 0;
+      text-align: left;
+      font-size: 12.5px;
+    }
+    .sid-row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px dashed rgba(255,255,255,0.14); gap: 8px; }
+    .sid-row:last-child { border-bottom: none; }
+    .sid-qr-box {
+      background: #ffffff; padding: 10px; border-radius: 14px; display: inline-block;
+      border: 2px solid #d4af37; margin-top: 4px;
+    }
 
-    .rcpt-modal-bg { display: none; position: fixed; inset: 0; background: rgba(2, 8, 18, 0.82); backdrop-filter: blur(5px); z-index: 130; justify-content: center; align-items: center; padding: 14px; }
+    /* Modals */
+    .rcpt-modal-bg { display: none; position: fixed; inset: 0; background: rgba(2, 8, 18, 0.84); z-index: 120; justify-content: center; align-items: center; padding: 14px; }
     .rcpt-modal-bg.open { display: flex; }
-    .rcpt-card { background: #ffffff; color: #0f172a; width: 100%; max-width: 430px; border-radius: 20px; padding: 20px; border: 2.5px solid #d4af37; max-height: 92vh; overflow-y: auto; }
-    .rcpt-head { text-align: center; border-bottom: 2px solid #091e3a; padding-bottom: 12px; margin-bottom: 12px; }
+    .rcpt-card { background: #ffffff; color: #0f172a; width: 100%; max-width: 430px; border-radius: 20px; padding: 20px; border: 2.5px solid #d4af37; max-height: 92vh; overflow-y: auto; animation: popIn 0.2s var(--ease-fast); }
+    .rcpt-head { text-align: center; border-bottom: 2px solid #061121; padding-bottom: 10px; margin-bottom: 12px; }
     .rcpt-line { display: flex; justify-content: space-between; font-size: 13px; padding: 6px 0; border-bottom: 1px dashed #cbd5e1; gap: 8px; color: #1e293b; }
     .rcpt-sign { margin-top: 16px; text-align: right; font-size: 12px; color: #334155; }
-
-    @media print {
-      body * { visibility: hidden; }
-      #receiptPrintArea, #receiptPrintArea * { visibility: visible; }
-      #receiptPrintArea { position: fixed; left: 0; top: 0; width: 100%; border: 2px solid #000; border-radius: 0; }
-      .no-print { display: none !important; }
-    }
-
-    .bottom-nav {
-      position: fixed; bottom: 0; left: 0; right: 0;
-      background: var(--bg-nav); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-      border-top: 1px solid var(--accent-border); display: flex; z-index: 40;
-      box-shadow: 0 -8px 26px rgba(0, 0, 0, 0.18);
-      padding: 7px 8px calc(9px + env(safe-area-inset-bottom));
-    }
-    .nav-btn { flex: 1; padding: 5px 4px; border: none; background: none; display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 11px; font-weight: 700; color: var(--muted); cursor: pointer; }
-    .nav-icon-wrap { width: 44px; height: 28px; border-radius: 20px; display: flex; align-items: center; justify-content: center; transition: 0.16s ease; }
-    .nav-btn.active { color: var(--accent-light); }
-    .nav-btn.active .nav-icon-wrap { background: var(--accent-grad); color: var(--accent-text); }
+    .chat-card { background: var(--bg-solid); color: var(--text); width: 100%; max-width: 430px; border-radius: 20px; padding: 16px; border: 1.5px solid var(--accent-border); }
+    .chat-box { height: 280px; overflow-y: auto; background: var(--bg-subcard); border: 1px solid var(--border); border-radius: 12px; padding: 10px; margin-bottom: 10px; }
+    .chat-msg { margin-bottom: 8px; padding: 8px 10px; border-radius: 10px; font-size: 12.5px; background: var(--bg-card); border: 1px solid var(--border); }
+    .chat-msg.admin { background: var(--accent-soft); border-color: var(--accent-border); }
+    .close-btn { border: 1px solid var(--accent-border); background: var(--accent-soft); width: 34px; height: 34px; border-radius: 50%; font-weight: 800; font-size: 15px; cursor: pointer; color: var(--accent-light); }
 
     .toast {
-      position: fixed; bottom: 88px; left: 50%; transform: translateX(-50%);
-      background: var(--bg-solid); color: var(--accent-light); padding: 10px 18px; border-radius: 30px;
-      font-size: 12.5px; font-weight: 700; display: none; z-index: 160; max-width: 90%;
-      text-align: center; box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45); border: 1.5px solid var(--accent);
+      position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
+      background: #061121; color: #fae094; padding: 10px 18px; border-radius: 30px;
+      font-size: 12.5px; font-weight: 700; display: none; z-index: 150; max-width: 90%;
+      text-align: center; box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45); border: 1.5px solid #d4af37;
     }
   </style>
 </head>
 <body>
 
+<!-- HIDDEN PHOTO PICKER INPUT -->
+<input type="file" id="studentPhotoInput" accept="image/*" style="display:none;" onchange="handleStudentPhotoSelected(event)">
+
+<!-- SPLASH -->
 <div id="splashScreen">
-  <div class="splash-ring"><img src="logo.png?v=3" alt="Logo" onerror="this.style.display='none'"></div>
-  <h1 class="splash-title">U.C.C Institute</h1>
-  <p class="splash-tag">Learn • Grow • Succeed</p>
+  <div class="splash-ring"><img src="logo.png?v=4" alt="Logo" onerror="this.style.display='none'"></div>
+  <h1 id="splashBrandTitle" class="splash-title">U.C.C</h1>
+  <p class="splash-tag">Student Portal • 2027</p>
+  <div class="splash-bar"><div class="splash-fill"></div></div>
 </div>
 
+<!-- STUDENT LOGIN SCREEN -->
 <div id="loginScreen">
   <div class="login-card">
-    <div class="login-logo-wrap"><img src="logo.png?v=3" alt="Logo" onerror="this.style.display='none'"></div>
-    <div class="login-title"><h2>U.C.C Student Portal</h2><p>LEARN • GROW • SUCCEED</p></div>
+    <img src="logo.png?v=4" alt="Logo" class="login-logo" onerror="this.style.display='none'">
+    <div class="login-title">
+      <h2 id="loginBrandTitle">U.C.C Institute</h2>
+      <p>STUDENT PORTAL • 2027</p>
+    </div>
     <div id="loginErr" class="login-err">Invalid Student ID or Mobile Number!</div>
     <form onsubmit="handleStudentLogin(event)">
-      <div class="form-group"><label>Student ID</label><input type="text" id="lId" required placeholder="e.g. UCC001" style="text-transform:uppercase;"></div>
-      <div class="form-group"><label>Registered Mobile Number</label><input type="tel" id="lMob" required maxlength="10" placeholder="10-digit mobile number"></div>
-      <button type="submit" id="lBtn" class="btn btn-accent" style="margin-top:8px;">Login to Student App →</button>
+      <div class="form-group">
+        <label>Student ID *</label>
+        <input type="text" id="stLoginId" required placeholder="e.g. UCC001" autocomplete="username" style="text-transform:uppercase;">
+      </div>
+      <div class="form-group">
+        <label>Registered Mobile Number *</label>
+        <input type="tel" id="stLoginMob" required maxlength="10" placeholder="10-digit mobile number" autocomplete="tel">
+      </div>
+      <button type="submit" id="stLoginBtn" class="btn btn-accent" style="margin-top:8px;">Open Student Dashboard</button>
     </form>
   </div>
 </div>
 
-<!-- SIDEBAR WITH THEME STUDIO -->
+<!-- SIDEBAR DRAWER WITH THEME STUDIO -->
 <div id="sideBackdrop" onclick="closeSidebar()"></div>
-<aside id="sidebar">
+<div id="sidebar">
   <div class="side-head">
-    <div class="side-head-left">
-      <img src="logo.png?v=3" alt="Logo" onerror="this.style.display='none'">
+    <div style="display:flex;align-items:center;gap:10px;min-width:0;">
+      <img src="logo.png?v=4" alt="Logo" onerror="this.style.display='none'">
       <div style="min-width:0;">
-        <div style="font-weight:800;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" id="sideStName">U.C.C Student</div>
-        <div style="font-size:11px;opacity:0.8;" id="sideStMeta">Session 2027</div>
+        <div id="sideBrandTitle" class="brand-rotator-text" style="font-size:14px;color:var(--hero-fg,#fff);">U.C.C Institute</div>
+        <div id="sideStudentSub" style="font-size:11px;opacity:0.88;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Student Menu</div>
       </div>
     </div>
     <button onclick="closeSidebar()" style="border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.12);color:#fff;width:30px;height:30px;border-radius:50%;font-weight:800;cursor:pointer;">✕</button>
   </div>
-  <div class="side-body">
-    <div class="side-sec-title">App Theme Studio</div>
-    <div class="auto-row">
-      <div><div style="font-size:12.5px;font-weight:800;color:var(--text);">Auto-Change Theme</div><div style="font-size:10.5px;color:var(--muted);">প্রতিবার অ্যাপ খুললে নতুন থিম</div></div>
-      <button id="autoThemeBtn" class="switch-pill off" onclick="toggleAutoTheme()">OFF</button>
-    </div>
-    <div class="theme-list" id="themeGrid"></div>
-    <div style="border-top:1px solid var(--border);padding-top:12px;margin-top:4px;">
-      <div class="side-sec-title">Custom Theme</div>
-      <div class="color-row">
-        <div class="color-box"><div style="font-size:10px;color:var(--muted);margin-bottom:3px;">BG</div><input type="color" id="custBg" value="#0b132b"></div>
-        <div class="color-box"><div style="font-size:10px;color:var(--muted);margin-bottom:3px;">Card</div><input type="color" id="custCard" value="#1c2541"></div>
-        <div class="color-box"><div style="font-size:10px;color:var(--muted);margin-bottom:3px;">Accent</div><input type="color" id="custAcc" value="#f59e0b"></div>
-      </div>
-      <div class="row-2" style="margin-bottom:14px;">
-        <select id="custMode" style="padding:8px;font-size:12px;"><option value="dark">Dark Text</option><option value="light">Light Text</option></select>
-        <button type="button" class="btn btn-accent" style="padding:8px;font-size:12px;" onclick="applyCustomTheme()">Apply</button>
-      </div>
-    </div>
-    <div style="border-top:1px solid var(--border);padding-top:12px;">
-      <button class="btn" style="background:var(--danger-soft);color:var(--danger);border-color:var(--danger);padding:10px;font-size:13px;" onclick="logoutStudent()">Logout</button>
-    </div>
-  </div>
-</aside>
 
-<header>
-  <div class="brand">
-    <button class="icon-btn" onclick="openSidebar()" title="Menu & Themes">
-      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  <div class="side-body">
+    <button class="side-item" onclick="triggerPhotoUpload()">
+      <span class="side-left">📷 Change My Profile Photo</span>
+      <span class="side-pill">Photo</span>
     </button>
-    <img src="logo.png?v=3" alt="Logo" class="brand-logo" onerror="this.style.display='none'">
-    <div><h1>U.C.C Institute</h1><small id="hdrSub">Student Portal • 2027</small></div>
+    <button class="side-item" onclick="openPage('idcard')">
+      <span class="side-left">🪪 Smart QR ID Card</span>
+      <span>→</span>
+    </button>
+    <button class="side-item" onclick="openPage('fees')">
+      <span class="side-left">💳 Fees, Receipts &amp; Online Pay</span>
+      <span id="sideFeePill" class="side-pill">2027</span>
+    </button>
+    <button class="side-item" onclick="openPage('videos')">
+      <span class="side-left">🎬 Live &amp; Recorded Classes</span>
+      <span>→</span>
+    </button>
+    <button class="side-item" onclick="openPage('pdfs')">
+      <span class="side-left">📄 Smart PDF Notes</span>
+      <span>→</span>
+    </button>
+    <button class="side-item" onclick="openPage('tests')">
+      <span class="side-left">📝 Online Mock Tests</span>
+      <span>→</span>
+    </button>
+    <button class="side-item" onclick="openPage('notices')">
+      <span class="side-left">📢 Institute Notices</span>
+      <span id="sideNotPill" class="side-pill">0</span>
+    </button>
+
+    <!-- THEME STUDIO INSIDE SIDEBAR -->
+    <details class="theme-accordion">
+      <summary>
+        <span class="side-left">🎨 App Theme Studio</span>
+        <span>▾</span>
+      </summary>
+      <div class="theme-acc-body">
+        <div class="auto-row">
+          <div>
+            <div style="font-size:12px;font-weight:800;color:var(--text);">Auto-Change Theme</div>
+            <div style="font-size:10px;color:var(--muted);">প্রতিবার খুললে নতুন থিম</div>
+          </div>
+          <button id="autoThemeBtn" class="switch-pill off" onclick="toggleAutoTheme()">OFF</button>
+        </div>
+        <div class="theme-list" id="themeGrid"></div>
+        <div style="font-size:11px;font-weight:800;color:var(--accent-light);margin-bottom:6px;">Custom Theme</div>
+        <div class="color-row">
+          <div class="color-box"><div style="font-size:9.5px;color:var(--muted);">BG</div><input type="color" id="custBg" value="#0b132b"></div>
+          <div class="color-box"><div style="font-size:9.5px;color:var(--muted);">Card</div><input type="color" id="custCard" value="#1c2541"></div>
+          <div class="color-box"><div style="font-size:9.5px;color:var(--muted);">Accent</div><input type="color" id="custAcc" value="#f59e0b"></div>
+        </div>
+        <div class="row-2">
+          <select id="custMode" style="padding:7px;font-size:11.5px;"><option value="auto">Auto Contrast</option><option value="day">Day (Light)</option><option value="night">Night (Dark)</option></select>
+          <button type="button" class="btn btn-accent" style="padding:7px;font-size:11.5px;" onclick="applyCustomTheme()">Apply</button>
+        </div>
+      </div>
+    </details>
+
+    <button class="side-item" style="background:var(--danger-soft);color:var(--danger);border-color:var(--danger);" onclick="logoutStudent()">
+      <span class="side-left">🔒 Logout Student App</span>
+      <span>→</span>
+    </button>
   </div>
-  <div class="hdr-actions">
-    <button class="icon-btn" onclick="refreshPortal(false)" title="Refresh">
-      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>
+</div>
+
+<!-- TOP HEADER -->
+<header class="app-topbar">
+  <div class="brand">
+    <button class="top-ic-btn" onclick="openSidebar()" title="Menu & Themes" style="flex-shrink:0;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+    <div onclick="openPage('home')" style="display:flex;align-items:center;gap:7px;cursor:pointer;min-width:0;flex:1;">
+      <img src="logo.png?v=4" alt="Logo" class="brand-logo brand-logo-pulse" onerror="this.style.display='none'">
+      <div class="brand-rotator-wrap">
+        <h1 id="hdrBrandAnim" class="brand-rotator-text" style="color:var(--dash-hero-fg, #ffffff);">U.C.C</h1>
+        <small id="hdrSubLabel" style="font-size:10.5px;opacity:0.86;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Student Portal • 2027</small>
+      </div>
+    </div>
+  </div>
+  <div class="top-icon-group">
+    <button id="syncBtn" class="top-ic-btn" onclick="refreshStudentData(false)" title="Refresh" style="width:auto;padding:0 10px;gap:5px;font-size:11px;font-weight:800;">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+      <span>Sync</span>
+      <span id="netDot" class="mini-dot"></span>
+    </button>
+    <button class="top-ic-btn" onclick="openPage('idcard')" title="My ID Card">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M15 8h2"/><path d="M15 12h2"/><path d="M7 16h10"/></svg>
+    </button>
+    <button class="top-ic-btn" onclick="openSidebar()" title="Themes & Menu">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
     </button>
   </div>
 </header>
 
 <div class="container">
-  <div id="skeletonView" style="display:none;">
-    <div class="skel" style="height:128px;margin-bottom:14px;"></div>
-    <div class="stat-grid"><div class="skel" style="height:88px;"></div><div class="skel" style="height:88px;"></div><div class="skel" style="height:88px;"></div></div>
-    <div class="skel" style="height:210px;"></div>
+  <!-- SUB-PAGE BACK TO DASHBOARD BAR -->
+  <div id="subpageBar" class="subpage-bar">
+    <button type="button" class="subpage-back-btn" onclick="openPage('home')">← Home</button>
+    <div id="subpageTitle" class="subpage-title">Dashboard</div>
   </div>
 
-  <div id="mainContent">
-    <div id="noticeArea"></div>
-
-    <!-- TAB 1: HOME -->
-    <div id="page-home" class="page active">
-      <div class="hero-card">
-        <div class="hero-row">
-          <div class="avatar-circle" id="sAvatar">U</div>
-          <div style="min-width:0;">
-            <div class="hero-name" id="sName">-</div>
-            <div class="hero-chips"><span class="hero-chip" id="sIdChip">UCC</span><span class="hero-chip" id="sClassChip">Class</span></div>
+  <!-- HOME ANIMATED DASHBOARD -->
+  <div id="page-home" class="page active">
+    <div class="dash-hero">
+      <div class="hero-profile-row">
+        <div style="min-width:0;flex:1;">
+          <div class="dash-hello">Hello, <span id="heroStudentFirst">Student</span>,</div>
+          <div class="dash-welcome">Welcome Back!</div>
+          <div id="heroClassBadge" class="dash-role-chip">UCC001 • Class 5</div>
+        </div>
+        <div class="st-photo-box" onclick="triggerPhotoUpload()" title="Tap to set or update your photo">
+          <div class="st-photo-ring" id="heroPhotoRing">
+            <div class="st-photo-fallback" id="heroPhotoFallback">ST</div>
           </div>
+          <span class="st-cam-pill">📷 Photo</span>
         </div>
-        <div class="hero-footer"><span id="sFather">Father: -</span><span id="sPhone" style="font-weight:700;">-</span></div>
-      </div>
-
-      <div class="stat-grid">
-        <div class="stat-box">
-          <div class="stat-icon si-green"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
-          <div id="sPresent" class="stat-num" style="color:var(--success);">0</div>
-          <div class="stat-lbl">Present</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-icon si-accent"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
-          <div id="sAbsent" class="stat-num" style="color:var(--accent-light);">0</div>
-          <div class="stat-lbl">Absent</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-icon si-red"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M6 3h12"/><path d="M6 8h12"/><path d="m6 13 8.5 8"/><path d="M6 13h3"/><path d="M9 13c6.667 0 6.667-10 0-10"/></svg></div>
-          <div id="sDue" class="stat-num" style="color:var(--danger);">Rs. 0</div>
-          <div class="stat-lbl">Total Due</div>
-        </div>
-      </div>
-
-      <div class="card" style="padding:14px 16px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;font-size:12.5px;font-weight:700;">
-          <span>Attendance Performance</span><span id="sAttPct" style="color:var(--accent-light);">0%</span>
-        </div>
-        <div class="prog-track"><div id="sAttBar" class="prog-fill" style="width:0%;"></div></div>
-      </div>
-
-      <div class="card">
-        <div class="card-head"><div class="card-title">2027 Monthly Fee Status</div><span id="paidCountPill" class="pill-mini">0 / 12 Paid</span></div>
-        <div class="months-grid" id="sMonths"></div>
       </div>
     </div>
 
-    <!-- TAB 2: CLASSES -->
-    <div id="page-classes" class="page">
-      <div id="classesLockedView" class="lock-card" style="display:none;">
-        <div class="lock-icon-circle"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
-        <div style="font-size:17px;font-weight:800;color:var(--accent-light);">ক্লাস ও মক টেস্ট লক করা আছে</div>
-        <div style="font-size:13px;color:var(--text-2);margin:8px 0 18px;line-height:1.55;">
-          তোমার বর্তমানে <strong id="lockDueAmt" style="color:var(--danger);">Rs. 0</strong> টিউশন ফি বাকি রয়েছে। ফি পরিশোধ করলেই লাইভ ক্লাস, রেকর্ডেড ভিডিও, PDF নোটস ও মক টেস্ট অটোমেটিক খুলে যাবে।
-        </div>
-        <button class="btn btn-accent" onclick="openPage('pay', document.getElementById('navPay'))">এখনই ফি পেমেন্ট করো</button>
+    <div class="dash-stats-row" id="dashStatsRow"></div>
+
+    <div class="dash-tiles-grid" id="dashTilesGrid"></div>
+
+    <div id="dashBottomBannerWrap"></div>
+  </div>
+
+  <!-- PAGE: LIVE & RECORDED VIDEOS -->
+  <div id="page-videos" class="page">
+    <div id="videoLockAlert"></div>
+    <div class="card">
+      <div class="card-title">🎬 Live &amp; Recorded Video Classes</div>
+      <div id="videoListContainer"></div>
+    </div>
+  </div>
+
+  <!-- PAGE: PDF SMART NOTES -->
+  <div id="page-pdfs" class="page">
+    <div id="pdfLockAlert"></div>
+    <div class="card">
+      <div class="card-title">📄 Smart PDF Study Notes</div>
+      <div id="pdfListContainer"></div>
+    </div>
+  </div>
+
+  <!-- PAGE: MOCK TESTS -->
+  <div id="page-tests" class="page">
+    <div id="testLockAlert"></div>
+    <div class="card">
+      <div class="card-title">📝 Online Mock Tests &amp; Practice</div>
+      <div id="testListContainer"></div>
+    </div>
+  </div>
+
+  <!-- PAGE: FEES, RECEIPTS & ONLINE PAY -->
+  <div id="page-fees" class="page">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <div class="card-title" style="margin-bottom:0;">💳 2027 Monthly Fee Status</div>
+        <span id="feePageDueBadge" class="badge-ok">All Clear ✓</span>
       </div>
-      <div id="classesUnlockedView">
-        <div class="seg-bar">
-          <button class="seg-btn active" id="cpLive" onclick="setClassFilter('Live')"><span class="live-dot" style="width:7px;height:7px;"></span> Live</button>
-          <button class="seg-btn" id="cpVideo" onclick="setClassFilter('Video')">Recorded</button>
-          <button class="seg-btn" id="cpOther" onclick="setClassFilter('OTHER')">PDF / Test</button>
-        </div>
-        <div id="classesList"></div>
-      </div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">যেকোনো Paid মাসে ট্যাপ করলে অফিশিয়াল রসিদ (PDF / PNG) ডাউনলোড করতে পারবে।</div>
+      <div class="months-grid" id="stMonthsGrid"></div>
     </div>
 
-    <!-- TAB 3: PAY FEE -->
-    <div id="page-pay" class="page">
-      <div class="upi-card">
-        <div class="upi-top"><span class="upi-tag">Official UPI • PhonePe / GPay</span></div>
-        <div class="upi-num">8016972121</div>
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;gap:8px;">
-          <span style="font-size:11.5px;color:rgba(255,255,255,0.85);">পেমেন্ট করে নিচে স্ক্রিনশট আপলোড করো</span>
-          <button type="button" class="copy-pill" onclick="copyUpi()">Copy</button>
-        </div>
+    <div class="card" style="border-color:var(--accent);">
+      <div class="card-title">📲 Pay Tuition Fee Online (UPI)</div>
+      <div style="background:var(--bg-subcard);border:1px solid var(--accent-border);border-radius:14px;padding:12px;text-align:center;margin-bottom:12px;">
+        <div style="font-size:12px;font-weight:700;color:var(--text-2);margin-bottom:6px;">Scan QR or Pay to UPI / PhonePe / GPay:</div>
+        <img src="https://quickchart.io/qr?size=160&text=upi%3A%2F%2Fpay%3Fpa%3D8016972121%40ybl%26pn%3DU.C.C%2520Institute%26cu%3DINR" alt="UPI QR" style="width:140px;height:140px;background:#fff;padding:6px;border-radius:12px;border:2px solid var(--accent);">
+        <div style="font-size:14px;font-weight:800;color:var(--accent-light);margin-top:6px;">8016972121 (Pralay Sannigrahi)</div>
       </div>
-      <div class="card">
-        <div class="card-head"><div class="card-title">Submit Payment Proof</div></div>
-        <form onsubmit="submitOnlinePay(event)">
-          <div class="row-2">
-            <div class="form-group"><label>Select Month *</label><select id="payMonth" required></select></div>
-            <div class="form-group"><label>Amount (Rs.) *</label><input type="number" id="payAmt" value="300" required min="1"></div>
-          </div>
-          <div class="form-group"><label>UTR / Transaction ID</label><input type="text" id="payUtr" placeholder="Last 4-12 digits"></div>
+
+      <form onsubmit="submitStudentOnlineFee(event)">
+        <div class="row-2">
           <div class="form-group">
-            <label>Payment Screenshot *</label>
-            <label class="upload-zone" for="payFile">
-              <span id="uploadFileName" style="font-size:12.5px;font-weight:700;color:var(--accent-light);">Tap to choose screenshot</span>
-              <span style="font-size:11px;color:var(--muted);margin-top:2px;">JPG / PNG supported</span>
-              <input type="file" id="payFile" accept="image/*" required onchange="previewCompressedImg(event)">
-            </label>
-            <img id="payPreview" style="display:none;width:100%;max-height:190px;object-fit:contain;margin-top:10px;border-radius:12px;border:1px solid var(--accent-border);">
+            <label>Select Month *</label>
+            <select id="stPayMonth" required></select>
           </div>
-          <button type="submit" id="paySubmitBtn" class="btn btn-accent">Submit Payment Proof</button>
-        </form>
-      </div>
-      <div class="card"><div class="card-head"><div class="card-title">My Payment Requests</div></div><div id="myReqList"></div></div>
+          <div class="form-group">
+            <label>Amount (Rs.) *</label>
+            <input type="number" id="stPayAmt" value="300" min="1" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>UTR / Transaction ID *</label>
+          <input type="text" id="stPayUtr" required placeholder="12-digit UTR number">
+        </div>
+        <div class="form-group">
+          <label>Payment Screenshot (Optional)</label>
+          <input type="file" id="stPayShot" accept="image/*">
+        </div>
+        <button type="submit" id="stPaySubmitBtn" class="btn btn-accent">Submit Payment for Verification</button>
+      </form>
     </div>
 
-    <!-- TAB 4: RECEIPTS -->
-    <div id="page-receipts" class="page">
-      <div class="card"><div class="card-head"><div class="card-title">Official Fee Receipts (2027)</div></div><div id="myReceiptsList"></div></div>
+    <div class="card">
+      <div class="card-title">📜 Payment &amp; Request History</div>
+      <div id="stHistoryList"></div>
     </div>
+  </div>
+
+  <!-- PAGE: SMART QR ID CARD -->
+  <div id="page-idcard" class="page">
+    <div class="smart-id-card" id="smartIdCardBox">
+      <div class="sid-banner">
+        <div style="font-size:18px;font-weight:800;color:#fae094;letter-spacing:0.4px;">U.C.C INSTITUTE</div>
+        <div style="font-size:11px;color:#ecfdf5;">Unique Coaching Centre • Penchakola, Raipur, Bankura</div>
+        <div style="font-size:10.5px;color:#fde047;margin-top:2px;font-weight:700;">STUDENT SMART IDENTITY CARD • 2027</div>
+      </div>
+      <div class="sid-body">
+        <div class="sid-photo-wrap" onclick="triggerPhotoUpload()" title="Tap to change photo">
+          <div class="sid-init" id="idCardPhotoSlot">ST</div>
+        </div>
+        <div style="font-size:10.5px;color:#94a3b8;margin-bottom:6px;">(ফটো বদলাতে ওপরের ছবিতে ট্যাপ করো)</div>
+        <div id="idCardName" style="font-size:20px;font-weight:800;color:#ffffff;">Student Name</div>
+        <div id="idCardSub" style="font-size:13px;font-weight:800;color:#fae094;margin-top:2px;">UCC001 • Class 5</div>
+
+        <div class="sid-details">
+          <div class="sid-row"><span style="color:#94a3b8;">Father's Name:</span><strong id="idCardFather">-</strong></div>
+          <div class="sid-row"><span style="color:#94a3b8;">Mobile No:</span><strong id="idCardMobile">-</strong></div>
+          <div class="sid-row"><span style="color:#94a3b8;">Address:</span><strong id="idCardAddress">-</strong></div>
+          <div class="sid-row"><span style="color:#94a3b8;">Admission Date:</span><strong id="idCardAdm">-</strong></div>
+        </div>
+
+        <div class="sid-qr-box">
+          <img id="idCardQrImg" src="" alt="QR" style="width:136px;height:136px;display:block;">
+        </div>
+        <div id="idCardQrLbl" style="font-size:11px;color:#cbd5e1;margin-top:6px;font-weight:700;">Scan at Entry for Instant Attendance</div>
+      </div>
+    </div>
+
+    <div class="row-2" style="margin-bottom:14px;">
+      <button type="button" class="btn btn-accent" onclick="downloadSmartIdPng()">🖼️ Save ID Card (PNG)</button>
+      <button type="button" class="btn" onclick="downloadSmartIdPdf()">📥 Download ID PDF</button>
+    </div>
+  </div>
+
+  <!-- PAGE: NOTICES -->
+  <div id="page-notices" class="page">
+    <div class="card">
+      <div class="card-title">📢 Institute Notices &amp; Updates</div>
+      <div id="stNoticesList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- LIVE Q&A CHAT MODAL -->
+<div class="rcpt-modal-bg" id="chatModal" onclick="if(event.target===this) closeStudentChat()">
+  <div class="chat-card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+      <div><strong style="color:var(--accent-light);" id="chatModalTitle">Ask Teacher (Live Q&A)</strong><div style="font-size:11px;color:var(--muted);">Auto-refreshing every 6 sec</div></div>
+      <button class="close-btn" onclick="closeStudentChat()">✕</button>
+    </div>
+    <div id="stChatBox" class="chat-box"></div>
+    <form onsubmit="sendStudentChat(event)" style="display:flex;gap:7px;">
+      <input type="text" id="stChatInput" required placeholder="তোমার প্রশ্ন লেখো..." style="flex:1;">
+      <button type="submit" class="btn btn-accent" style="width:auto;padding:10px 15px;">Send</button>
+    </form>
   </div>
 </div>
 
 <!-- OFFICIAL RECEIPT MODAL -->
 <div class="rcpt-modal-bg" id="rcptModal" onclick="if(event.target===this) closeReceipt()">
-  <div class="rcpt-card" id="receiptPrintArea">
+  <div class="rcpt-card">
     <div class="rcpt-head">
-      <div style="font-size:20px;font-weight:800;color:#091e3a;">ইউ.সি.সি ইনস্টিটিউট</div>
-      <div style="font-size:11px;color:#475569;margin-top:2px;">পেঁচাকোলা, রায়পুর, বাঁকুড়া • ফোন: 8016972121 / 8159980707</div>
-      <div style="font-size:12px;font-weight:800;margin-top:6px;background:#fef9e7;color:#9a6b0e;border:1px solid #d4af37;display:inline-block;padding:3px 12px;border-radius:20px;">অফিশিয়াল ফি রসিদ (2027)</div>
+      <div style="font-size:20px;font-weight:800;color:#061121;">ইউ.সি.সি ইনস্টিটিউট</div>
+      <div style="font-size:11px;color:#475569;">পেঁচাকোলা, রায়পুর, বাঁকুড়া • ফোন: 8016972121 / 8159980707</div>
+      <div style="font-size:12px;font-weight:800;margin-top:5px;background:#fef9e7;color:#9a6b0e;border:1px solid #d4af37;display:inline-block;padding:2px 12px;border-radius:20px;">অফিশিয়াল ফি রসিদ (2027)</div>
     </div>
     <div class="rcpt-line"><span>রসিদ নং:</span><strong id="rNo"></strong></div>
     <div class="rcpt-line"><span>তারিখ ও সময়:</span><strong id="rDate"></strong></div>
@@ -487,36 +809,32 @@
     <div class="rcpt-line"><span>আইডি ও শ্রেণী:</span><strong id="rIdCls"></strong></div>
     <div class="rcpt-line"><span>কোন মাসের ফি:</span><strong id="rMonth"></strong></div>
     <div class="rcpt-line"><span>পেমেন্টের মাধ্যম:</span><strong id="rMode"></strong></div>
-    <div class="rcpt-line" style="font-size:15px;color:#091e3a;border-top:1.5px solid #cbd5e1;margin-top:6px;padding-top:9px;"><span><strong>মোট জমা টাকা:</strong></span><strong id="rAmt"></strong></div>
-    <div class="rcpt-sign">গ্রহণকারী / অনুমোদিত স্বাক্ষর:<br><strong id="rCollector" style="font-size:15px;color:#091e3a;"></strong><br><span style="color:#64748b;font-size:10px;">ইউ.সি.সি ইনস্টিটিউট, পেঁচাকোলা</span></div>
-    <div style="display:grid;gap:8px;margin-top:16px;" class="no-print">
-      <button class="btn" style="background:#091e3a;color:#fae094;" onclick="window.print()">Print / Save PDF</button>
-      <div class="row-2"><button class="btn btn-accent" onclick="downloadReceiptImage()">Save PNG</button><button class="btn btn-sec" onclick="closeReceipt()">Close</button></div>
+    <div class="rcpt-line" style="font-size:15px;color:#061121;border-top:1.5px solid #cbd5e1;margin-top:5px;padding-top:8px;"><span><strong>মোট জমা টাকা:</strong></span><strong id="rAmt"></strong></div>
+    <div class="rcpt-sign">গ্রহণকারী / অনুমোদিত স্বাক্ষর:<br><strong id="rCollector" style="font-size:15px;color:#061121;"></strong><br><span style="color:#64748b;font-size:10px;">ইউ.সি.সি ইনস্টিটিউট, পেঁচাকোলা</span></div>
+    <div class="row-2" style="margin-top:15px;">
+      <button class="btn btn-accent" onclick="downloadStudentReceiptPdf()">📥 Download PDF</button>
+      <button class="btn" style="background:#061121;color:#fae094;" onclick="downloadStudentReceiptPng()">🖼️ Save PNG</button>
     </div>
+    <button class="btn btn-sec" style="margin-top:8px;" onclick="closeReceipt()">Close</button>
   </div>
 </div>
 
-<nav class="bottom-nav">
-  <button class="nav-btn active" onclick="openPage('home', this)">
-    <div class="nav-icon-wrap"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
-    <span>Home</span>
-  </button>
-  <button class="nav-btn" onclick="openPage('classes', this)">
-    <div class="nav-icon-wrap"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div>
-    <span>Classes</span>
-  </button>
-  <button class="nav-btn" id="navPay" onclick="openPage('pay', this)">
-    <div class="nav-icon-wrap"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
-    <span>Pay Fee</span>
-  </button>
-  <button class="nav-btn" onclick="openPage('receipts', this)">
-    <div class="nav-icon-wrap"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
-    <span>Receipts</span>
-  </button>
-</nav>
 <div id="toast" class="toast"></div>
 
 <script>
+  // Auto-clear old Service Worker cache
+  (function() {
+    const UI_BUILD = 'ucc_student_v2_animated';
+    try {
+      if (localStorage.getItem('ucc_st_ui_build') !== UI_BUILD) {
+        localStorage.setItem('ucc_st_ui_build', UI_BUILD);
+        if ('caches' in window) {
+          caches.keys().then(keys => Promise.all(keys.map(k => caches.delete(k)))).catch(() => {});
+        }
+      }
+    } catch (e) {}
+  })();
+
   const API_URL = 'https://script.google.com/macros/s/AKfycbwAuSfDoikCc998pVuwz0HySky1fChn-Tj8p7OeuUAr_WPG7IFZkfGB5LUO6NlvkiKO/exec';
   const MONTHS = [
     ['Jan_2027','Jan','জানুয়ারি 2027'], ['Feb_2027','Feb','ফেব্রুয়ারি 2027'], ['Mar_2027','Mar','মার্চ 2027'], ['Apr_2027','Apr','এপ্রিল 2027'],
@@ -526,372 +844,1069 @@
   const BN_MONTH_NAMES = ['জানুয়ারি','ফেব্রুয়ারি','মার্চ','এপ্রিল','মে','জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'];
   const CLASSES_BN = { Nursery:'নার্সারি', KG:'কেজি', 'Class 1':'ক্লাস 1', 'Class 2':'ক্লাস 2', 'Class 3':'ক্লাস 3', 'Class 4':'ক্লাস 4', 'Class 5':'ক্লাস 5', 'Class 6':'ক্লাস 6', 'Class 7':'ক্লাস 7', 'Class 8':'ক্লাস 8', 'Class 9':'ক্লাস 9', 'Class 10':'ক্লাস 10', 'Class 11':'ক্লাস 11', 'Class 12':'ক্লাস 12' };
 
-  const THEMES = {
-    royal_gold: { name: 'Royal Navy & Gold', swatch: 'linear-gradient(135deg,#061121 50%,#d4af37 50%)', vars: { '--bg-page':'radial-gradient(circle at 85% 0%,#12294d 0%,#061121 48%,#040b16 100%)','--bg-solid':'#061121','--bg-header':'rgba(6,17,33,0.92)','--bg-card':'linear-gradient(180deg,rgba(16,34,62,0.94),rgba(11,25,47,0.97))','--bg-subcard':'rgba(6,17,33,0.55)','--bg-input':'#081529','--bg-hero':'linear-gradient(135deg,#132a4f,#0b1c36)','--bg-nav':'rgba(7,18,35,0.95)','--accent':'#d4af37','--accent-light':'#fae094','--accent-grad':'linear-gradient(135deg,#f8df8c,#d4af37,#b08218)','--accent-text':'#061121','--accent-soft':'rgba(212,175,55,0.14)','--accent-border':'rgba(212,175,55,0.32)','--text':'#f8fafc','--text-2':'#cbd5e1','--muted':'#8fa3bf','--border':'rgba(148,163,184,0.16)','--shadow-card':'0 10px 28px rgba(0,0,0,0.34)' } },
-    saffron_white: { name: 'Saffron & White', swatch: 'linear-gradient(135deg,#f97316 50%,#ffffff 50%)', vars: { '--bg-page':'linear-gradient(180deg,#fff7ed 0%,#ffffff 45%,#fffaf5 100%)','--bg-solid':'#fff7ed','--bg-header':'rgba(255,255,255,0.95)','--bg-card':'#ffffff','--bg-subcard':'#fff7ed','--bg-input':'#ffffff','--bg-hero':'linear-gradient(135deg,#ea580c,#f97316,#fb923c)','--bg-nav':'rgba(255,255,255,0.96)','--accent':'#ea580c','--accent-light':'#c2410c','--accent-grad':'linear-gradient(135deg,#f97316,#ea580c)','--accent-text':'#ffffff','--accent-soft':'rgba(249,115,22,0.12)','--accent-border':'rgba(234,88,12,0.32)','--text':'#1e293b','--text-2':'#475569','--muted':'#64748b','--border':'#fed7aa','--shadow-card':'0 6px 20px rgba(234,88,12,0.08)' } },
-    midnight_black: { name: 'Midnight Black', swatch: 'linear-gradient(135deg,#000000 50%,#f59e0b 50%)', vars: { '--bg-page':'radial-gradient(circle at 80% 0%,#1c1917 0%,#09090b 55%,#000000 100%)','--bg-solid':'#000000','--bg-header':'rgba(9,9,11,0.94)','--bg-card':'linear-gradient(180deg,#18181b,#111113)','--bg-subcard':'#09090b','--bg-input':'#09090b','--bg-hero':'linear-gradient(135deg,#27272a,#09090b)','--bg-nav':'rgba(9,9,11,0.96)','--accent':'#f59e0b','--accent-light':'#fcd34d','--accent-grad':'linear-gradient(135deg,#fcd34d,#f59e0b,#d97706)','--accent-text':'#09090b','--accent-soft':'rgba(245,158,11,0.14)','--accent-border':'rgba(245,158,11,0.32)','--text':'#fafafa','--text-2':'#d4d4d8','--muted':'#a1a1aa','--border':'rgba(255,255,255,0.1)','--shadow-card':'0 10px 28px rgba(0,0,0,0.6)' } },
-    emerald_gold: { name: 'Emerald & Gold', swatch: 'linear-gradient(135deg,#064e3b 50%,#d4af37 50%)', vars: { '--bg-page':'radial-gradient(circle at 80% 0%,#065f46 0%,#022c22 55%,#011c16 100%)','--bg-solid':'#022c22','--bg-header':'rgba(2,44,34,0.92)','--bg-card':'linear-gradient(180deg,#064e3b,#04392c)','--bg-subcard':'rgba(2,44,34,0.65)','--bg-input':'#022c22','--bg-hero':'linear-gradient(135deg,#065f46,#022c22)','--bg-nav':'rgba(2,44,34,0.95)','--accent':'#d4af37','--accent-light':'#fde68a','--accent-grad':'linear-gradient(135deg,#fde68a,#d4af37)','--accent-text':'#022c22','--accent-soft':'rgba(212,175,55,0.15)','--accent-border':'rgba(212,175,55,0.34)','--text':'#ecfdf5','--text-2':'#a7f3d0','--muted':'#6ee7b7','--border':'rgba(110,231,183,0.18)','--shadow-card':'0 10px 26px rgba(0,0,0,0.35)' } },
-    royal_purple: { name: 'Royal Purple', swatch: 'linear-gradient(135deg,#3b0764 50%,#e879f9 50%)', vars: { '--bg-page':'radial-gradient(circle at 85% 0%,#4c1d95 0%,#1e1035 55%,#120822 100%)','--bg-solid':'#1e1035','--bg-header':'rgba(30,16,53,0.92)','--bg-card':'linear-gradient(180deg,#2e1852,#22113d)','--bg-subcard':'rgba(18,8,34,0.6)','--bg-input':'#170c2b','--bg-hero':'linear-gradient(135deg,#5b21b6,#2e1065)','--bg-nav':'rgba(23,12,43,0.95)','--accent':'#e879f9','--accent-light':'#f5d0fe','--accent-grad':'linear-gradient(135deg,#f5d0fe,#e879f9,#c026d3)','--accent-text':'#1e1035','--accent-soft':'rgba(232,121,249,0.14)','--accent-border':'rgba(232,121,249,0.32)','--text':'#faf5ff','--text-2':'#e9d5ff','--muted':'#c4b5fd','--border':'rgba(196,181,253,0.18)','--shadow-card':'0 10px 28px rgba(0,0,0,0.4)' } },
-    crimson_cream: { name: 'Crimson & Cream', swatch: 'linear-gradient(135deg,#9f1239 50%,#fff1f2 50%)', vars: { '--bg-page':'linear-gradient(180deg,#fff1f2 0%,#ffffff 50%,#fff5f5 100%)','--bg-solid':'#fff1f2','--bg-header':'rgba(255,255,255,0.95)','--bg-card':'#ffffff','--bg-subcard':'#fff1f2','--bg-input':'#ffffff','--bg-hero':'linear-gradient(135deg,#881337,#be123c)','--bg-nav':'rgba(255,255,255,0.96)','--accent':'#be123c','--accent-light':'#9f1239','--accent-grad':'linear-gradient(135deg,#e11d48,#9f1239)','--accent-text':'#ffffff','--accent-soft':'rgba(190,18,60,0.1)','--accent-border':'rgba(190,18,60,0.28)','--text':'#1e293b','--text-2':'#475569','--muted':'#64748b','--border':'#fecdd3','--shadow-card':'0 6px 20px rgba(159,18,57,0.08)' } },
-    ocean_white: { name: 'Ocean Blue & White', swatch: 'linear-gradient(135deg,#0284c7 50%,#ffffff 50%)', vars: { '--bg-page':'linear-gradient(180deg,#f0f9ff 0%,#ffffff 50%,#f8fafc 100%)','--bg-solid':'#f0f9ff','--bg-header':'rgba(255,255,255,0.95)','--bg-card':'#ffffff','--bg-subcard':'#f0f9ff','--bg-input':'#ffffff','--bg-hero':'linear-gradient(135deg,#0369a1,#0284c7,#0ea5e9)','--bg-nav':'rgba(255,255,255,0.96)','--accent':'#0284c7','--accent-light':'#0369a1','--accent-grad':'linear-gradient(135deg,#0ea5e9,#0284c7)','--accent-text':'#ffffff','--accent-soft':'rgba(2,132,199,0.1)','--accent-border':'rgba(2,132,199,0.28)','--text':'#0f172a','--text-2':'#475569','--muted':'#64748b','--border':'#bae6fd','--shadow-card':'0 6px 20px rgba(2,132,199,0.08)' } }
-  };
-  const THEME_KEYS = Object.keys(THEMES);
-
-  function openSidebar() { renderThemeGrid(); document.getElementById('sidebar').classList.add('open'); document.getElementById('sideBackdrop').classList.add('open'); }
-  function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sideBackdrop').classList.remove('open'); }
-  function applyThemeVars(vars) { const root = document.documentElement; Object.keys(vars).forEach(k => root.style.setProperty(k, vars[k])); if (vars['--bg-solid']) document.getElementById('metaThemeColor').setAttribute('content', vars['--bg-solid']); }
-  function selectPresetTheme(key, showMsg = true) { if (!THEMES[key]) key = 'royal_gold'; applyThemeVars(THEMES[key].vars); localStorage.setItem('ucc_st_theme', key); renderThemeGrid(); if (showMsg) toast(`Theme: ${THEMES[key].name}`); }
-  function applyCustomTheme() {
-    const bg = document.getElementById('custBg').value, card = document.getElementById('custCard').value, acc = document.getElementById('custAcc').value;
-    const isLight = document.getElementById('custMode').value === 'light';
-    const customVars = { '--bg-page':bg,'--bg-solid':bg,'--bg-header':card,'--bg-card':card,'--bg-subcard':bg,'--bg-input':bg,'--bg-hero':`linear-gradient(135deg,${acc},${card})`,'--bg-nav':card,'--accent':acc,'--accent-light':acc,'--accent-grad':`linear-gradient(135deg,${acc},${acc})`,'--accent-text':isLight?'#ffffff':'#061121','--accent-soft':isLight?'rgba(0,0,0,0.06)':'rgba(255,255,255,0.1)','--accent-border':acc,'--text':isLight?'#0f172a':'#f8fafc','--text-2':isLight?'#334155':'#cbd5e1','--muted':isLight?'#64748b':'#94a3b8','--border':isLight?'rgba(15,23,42,0.14)':'rgba(255,255,255,0.16)','--shadow-card':'0 8px 24px rgba(0,0,0,0.18)' };
-    applyThemeVars(customVars); localStorage.setItem('ucc_st_theme', 'custom'); localStorage.setItem('ucc_st_custom_vars', JSON.stringify(customVars)); renderThemeGrid(); toast('Custom Theme Applied!');
-  }
-  function toggleAutoTheme() { const next = localStorage.getItem('ucc_st_auto_theme') === 'ON' ? 'OFF' : 'ON'; localStorage.setItem('ucc_st_auto_theme', next); updateAutoThemeUI(); toast(`Auto-Change Theme: ${next}`); }
-  function updateAutoThemeUI() { const isOn = localStorage.getItem('ucc_st_auto_theme') === 'ON'; const btn = document.getElementById('autoThemeBtn'); btn.textContent = isOn ? 'ON' : 'OFF'; btn.className = 'switch-pill ' + (isOn ? 'on' : 'off'); }
-  function renderThemeGrid() {
-    const active = localStorage.getItem('ucc_st_theme') || 'royal_gold';
-    document.getElementById('themeGrid').innerHTML = THEME_KEYS.map(k => `<button type="button" class="theme-opt ${active===k?'active':''}" onclick="selectPresetTheme('${k}')"><span class="theme-opt-left"><span class="swatch" style="background:${THEMES[k].swatch};"></span><span>${THEMES[k].name}</span></span>${active===k?'<span style="color:var(--accent-light);font-weight:800;">✓</span>':''}</button>`).join('');
-    updateAutoThemeUI();
-  }
-  function initTheme() {
-    if (localStorage.getItem('ucc_st_auto_theme') === 'ON') { let idx = Number(localStorage.getItem('ucc_st_auto_idx') || 0); const nextKey = THEME_KEYS[idx % THEME_KEYS.length]; localStorage.setItem('ucc_st_auto_idx', String((idx + 1) % THEME_KEYS.length)); selectPresetTheme(nextKey, false); return; }
-    const saved = localStorage.getItem('ucc_st_theme') || 'royal_gold';
-    if (saved === 'custom') { try { applyThemeVars(JSON.parse(localStorage.getItem('ucc_st_custom_vars') || '{}')); return; } catch(e){} }
-    selectPresetTheme(saved, false);
-  }
-  initTheme();
-
   function bnClass(c) { return CLASSES_BN[c] || c; }
   function bnMonth(k) { const f = MONTHS.find(x => x[0] === k); return f ? f[2] : k; }
   function bnCollector(c) { const s = String(c||''); if (s.includes('Pralay')) return 'প্রলয় ষন্নিগ্রহী'; if (s.includes('Chiranjit')) return 'চিরঞ্জিত ষন্নিগ্রহী'; if (s.includes('Saikat')) return 'সৈকত ষন্নিগ্রহী'; return s || 'অ্যাডমিন'; }
   function bnMode(m) { return (m||'').toLowerCase().includes('cash') ? 'নগদ (ক্যাশ)' : 'অনলাইন (UPI)'; }
   function formatBnDate(iso) { if (!iso) return '-'; const p = String(iso).split('-'); return p.length===3 ? `${parseInt(p[2],10)} ${BN_MONTH_NAMES[parseInt(p[1],10)-1]||p[1]} ${p[0]}` : iso; }
 
-  let portalData = null, classFilter = 'Live', compressedBase64 = '', lastContentHash = '';
-  let activeReceiptObj = null, lastBackPress = 0, liveChatTimer = null, activeLiveIds = [];
-  let chatCache = {};
-
-  window.history.pushState({ app: true }, '');
-  window.addEventListener('popstate', () => {
-    if (document.getElementById('sidebar').classList.contains('open')) { closeSidebar(); window.history.pushState({ app: true }, ''); return; }
-    if (document.getElementById('rcptModal').classList.contains('open')) { closeReceipt(); window.history.pushState({ app: true }, ''); return; }
-    const now = Date.now();
-    if (now - lastBackPress < 2000) window.history.back();
-    else { lastBackPress = now; toast('অ্যাপ থেকে বেরোতে আবার Back চাপুন'); window.history.pushState({ app: true }, ''); }
-  });
-
-  // Fast Background Sync (15s + instant on online/focus)
-  window.addEventListener('online', () => refreshPortal(true));
-  document.addEventListener('visibilitychange', () => { if (!document.hidden && navigator.onLine) refreshPortal(true); });
-  setInterval(() => { if (!document.hidden && navigator.onLine && portalData) refreshPortal(true); }, 15000);
-
-  function toast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.style.display = 'block'; setTimeout(() => { t.style.display = 'none'; }, 2400); }
-  function copyUpi() { navigator.clipboard?.writeText('8016972121').catch(()=>{}); toast('UPI Number 8016972121 Copied'); }
-  function setLoading(show) { document.getElementById('skeletonView').style.display = show ? 'block' : 'none'; document.getElementById('mainContent').style.display = show ? 'none' : 'block'; }
-
-  // Instant 0ms Boot
-  (function bootInstant() {
-    setTimeout(() => {
-      const sp = document.getElementById('splashScreen');
-      sp.classList.add('hide');
-      setTimeout(() => { sp.style.display = 'none'; }, 220);
-    }, 380);
-
-    const savedId = localStorage.getItem('ucc_st_id'), savedMob = localStorage.getItem('ucc_st_mob');
-    if (savedId && savedMob) {
-      document.getElementById('loginScreen').style.display = 'none';
-      const cached = localStorage.getItem('ucc_st_cache_' + savedId);
-      if (cached) {
-        try { portalData = JSON.parse(cached); setLoading(false); renderPortal(); }
-        catch (e) { setLoading(true); }
-      } else setLoading(true);
-      if (navigator.onLine) loadStudentData(savedId, savedMob, true);
+  // ===== 8 DAY & NIGHT THEMES =====
+  const THEMES = {
+    emerald_clean: {
+      name: 'Emerald Clean (Day)', swatch: 'linear-gradient(135deg,#0f766e 50%,#ffffff 50%)',
+      vars: {
+        '--bg-page': 'linear-gradient(180deg, #f3f7f6 0%, #f8fafc 100%)', '--bg-solid': '#f3f7f6',
+        '--bg-header': '#0f766e', '--dash-hero-top': '#0f766e',
+        '--dash-hero-grad': 'linear-gradient(180deg, #0f766e 0%, #0d9488 100%)', '--dash-hero-fg': '#ffffff',
+        '--bg-card': '#ffffff', '--bg-subcard': '#f0fdfa', '--bg-input': '#ffffff',
+        '--bg-hero': 'linear-gradient(135deg,#0f766e,#0d9488)', '--bg-nav': 'rgba(255,255,255,0.96)',
+        '--accent': '#0d9488', '--accent-light': '#0f766e',
+        '--accent-grad': 'linear-gradient(135deg,#14b8a6,#0f766e)', '--accent-text': '#ffffff',
+        '--accent-soft': 'rgba(13,148,136,0.11)', '--accent-border': 'rgba(13,148,136,0.28)',
+        '--text': '#0f172a', '--text-2': '#334155', '--muted': '#64748b', '--border': '#e2e8f0',
+        '--shadow-card': '0 8px 22px rgba(15, 118, 110, 0.08)'
+      }
+    },
+    royal_gold: {
+      name: 'Royal Navy & Gold', swatch: 'linear-gradient(135deg,#061121 50%,#d4af37 50%)',
+      vars: {
+        '--bg-page': 'radial-gradient(circle at 85% 0%, #12294d 0%, #061121 48%, #040b16 100%)', '--bg-solid': '#061121',
+        '--bg-header': '#0b1933', '--dash-hero-top': '#0b1933',
+        '--dash-hero-grad': 'linear-gradient(180deg, #0b1933 0%, #162e59 100%)', '--dash-hero-fg': '#ffffff',
+        '--bg-card': 'linear-gradient(180deg, rgba(16,34,62,0.94), rgba(11,25,47,0.97))',
+        '--bg-subcard': 'rgba(6, 17, 33, 0.58)', '--bg-input': '#081529', '--bg-hero': 'linear-gradient(135deg,#1b3661,#0d1f3d)',
+        '--bg-nav': 'rgba(7, 18, 35, 0.95)', '--accent': '#d4af37', '--accent-light': '#fae094',
+        '--accent-grad': 'linear-gradient(135deg,#f8df8c,#d4af37,#b08218)', '--accent-text': '#061121',
+        '--accent-soft': 'rgba(212,175,55,0.14)', '--accent-border': 'rgba(212,175,55,0.32)',
+        '--text': '#f8fafc', '--text-2': '#cbd5e1', '--muted': '#8fa3bf', '--border': 'rgba(148,163,184,0.16)',
+        '--shadow-card': '0 10px 28px rgba(0,0,0,0.35)'
+      }
+    },
+    saffron_white: {
+      name: 'Saffron & White', swatch: 'linear-gradient(135deg,#ea580c 50%,#ffffff 50%)',
+      vars: {
+        '--bg-page': 'linear-gradient(180deg, #fff7ed 0%, #ffffff 45%, #fffaf5 100%)', '--bg-solid': '#fff7ed',
+        '--bg-header': '#ea580c', '--dash-hero-top': '#ea580c',
+        '--dash-hero-grad': 'linear-gradient(180deg, #ea580c 0%, #f97316 100%)', '--dash-hero-fg': '#ffffff',
+        '--bg-card': '#ffffff',
+        '--bg-subcard': '#fff7ed', '--bg-input': '#ffffff', '--bg-hero': 'linear-gradient(135deg,#ea580c,#f97316,#fb923c)',
+        '--bg-nav': 'rgba(255, 255, 255, 0.96)', '--accent': '#ea580c', '--accent-light': '#c2410c',
+        '--accent-grad': 'linear-gradient(135deg,#f97316,#ea580c)', '--accent-text': '#ffffff',
+        '--accent-soft': 'rgba(249,115,22,0.12)', '--accent-border': 'rgba(234,88,12,0.32)',
+        '--text': '#1e293b', '--text-2': '#475569', '--muted': '#64748b', '--border': '#fed7aa',
+        '--shadow-card': '0 6px 20px rgba(234,88,12,0.08)'
+      }
+    },
+    midnight_black: {
+      name: 'Midnight Black', swatch: 'linear-gradient(135deg,#000000 50%,#f59e0b 50%)',
+      vars: {
+        '--bg-page': 'radial-gradient(circle at 80% 0%, #1c1917 0%, #09090b 55%, #000000 100%)', '--bg-solid': '#000000',
+        '--bg-header': '#111113', '--dash-hero-top': '#111113',
+        '--dash-hero-grad': 'linear-gradient(180deg, #111113 0%, #27272a 100%)', '--dash-hero-fg': '#ffffff',
+        '--bg-card': 'linear-gradient(180deg,#18181b,#111113)',
+        '--bg-subcard': '#09090b', '--bg-input': '#09090b', '--bg-hero': 'linear-gradient(135deg,#27272a,#09090b)',
+        '--bg-nav': 'rgba(9, 9, 11, 0.96)', '--accent': '#f59e0b', '--accent-light': '#fcd34d',
+        '--accent-grad': 'linear-gradient(135deg,#fcd34d,#f59e0b,#d97706)', '--accent-text': '#09090b',
+        '--accent-soft': 'rgba(245,158,11,0.14)', '--accent-border': 'rgba(245,158,11,0.32)',
+        '--text': '#fafafa', '--text-2': '#d4d4d8', '--muted': '#a1a1aa', '--border': 'rgba(255,255,255,0.1)',
+        '--shadow-card': '0 10px 28px rgba(0,0,0,0.6)'
+      }
+    },
+    emerald_gold: {
+      name: 'Emerald & Gold', swatch: 'linear-gradient(135deg,#064e3b 50%,#d4af37 50%)',
+      vars: {
+        '--bg-page': 'radial-gradient(circle at 80% 0%, #065f46 0%, #022c22 55%, #011c16 100%)', '--bg-solid': '#022c22',
+        '--bg-header': '#04392c', '--dash-hero-top': '#04392c',
+        '--dash-hero-grad': 'linear-gradient(180deg, #04392c 0%, #065f46 100%)', '--dash-hero-fg': '#ffffff',
+        '--bg-card': 'linear-gradient(180deg,#064e3b,#04392c)',
+        '--bg-subcard': 'rgba(2, 44, 34, 0.65)', '--bg-input': '#022c22', '--bg-hero': 'linear-gradient(135deg,#065f46,#022c22)',
+        '--bg-nav': 'rgba(2, 44, 34, 0.95)', '--accent': '#d4af37', '--accent-light': '#fde68a',
+        '--accent-grad': 'linear-gradient(135deg,#fde68a,#d4af37)', '--accent-text': '#022c22',
+        '--accent-soft': 'rgba(212,175,55,0.15)', '--accent-border': 'rgba(212,175,55,0.34)',
+        '--text': '#ecfdf5', '--text-2': '#a7f3d0', '--muted': '#6ee7b7', '--border': 'rgba(110,231,183,0.18)',
+        '--shadow-card': '0 10px 26px rgba(0,0,0,0.35)'
+      }
+    },
+    royal_purple: {
+      name: 'Royal Purple', swatch: 'linear-gradient(135deg,#3b0764 50%,#e879f9 50%)',
+      vars: {
+        '--bg-page': 'radial-gradient(circle at 85% 0%, #4c1d95 0%, #1e1035 55%, #120822 100%)', '--bg-solid': '#1e1035',
+        '--bg-header': '#3b0764', '--dash-hero-top': '#3b0764',
+        '--dash-hero-grad': 'linear-gradient(180deg, #3b0764 0%, #5b21b6 100%)', '--dash-hero-fg': '#ffffff',
+        '--bg-card': 'linear-gradient(180deg,#2e1852,#22113d)',
+        '--bg-subcard': 'rgba(18, 8, 34, 0.6)', '--bg-input': '#170c2b', '--bg-hero': 'linear-gradient(135deg,#5b21b6,#2e1065)',
+        '--bg-nav': 'rgba(23, 12, 43, 0.95)', '--accent': '#e879f9', '--accent-light': '#f5d0fe',
+        '--accent-grad': 'linear-gradient(135deg,#f5d0fe,#e879f9,#c026d3)', '--accent-text': '#1e1035',
+        '--accent-soft': 'rgba(232,121,249,0.14)', '--accent-border': 'rgba(232,121,249,0.32)',
+        '--text': '#faf5ff', '--text-2': '#e9d5ff', '--muted': '#c4b5fd', '--border': 'rgba(196,181,253,0.18)',
+        '--shadow-card': '0 10px 28px rgba(0,0,0,0.4)'
+      }
+    },
+    crimson_cream: {
+      name: 'Crimson & Cream', swatch: 'linear-gradient(135deg,#9f1239 50%,#fff1f2 50%)',
+      vars: {
+        '--bg-page': 'linear-gradient(180deg, #fff1f2 0%, #ffffff 50%, #fff5f5 100%)', '--bg-solid': '#fff1f2',
+        '--bg-header': '#9f1239', '--dash-hero-top': '#9f1239',
+        '--dash-hero-grad': 'linear-gradient(180deg, #9f1239 0%, #be123c 100%)', '--dash-hero-fg': '#ffffff',
+        '--bg-card': '#ffffff',
+        '--bg-subcard': '#fff1f2', '--bg-input': '#ffffff', '--bg-hero': 'linear-gradient(135deg,#881337,#be123c)',
+        '--bg-nav': 'rgba(255, 255, 255, 0.96)', '--accent': '#be123c', '--accent-light': '#9f1239',
+        '--accent-grad': 'linear-gradient(135deg,#e11d48,#9f1239)', '--accent-text': '#ffffff',
+        '--accent-soft': 'rgba(190,18,60,0.1)', '--accent-border': 'rgba(190,18,60,0.28)',
+        '--text': '#1e293b', '--text-2': '#475569', '--muted': '#64748b', '--border': '#fecdd3',
+        '--shadow-card': '0 6px 20px rgba(159,18,57,0.08)'
+      }
+    },
+    ocean_white: {
+      name: 'Ocean Blue & White', swatch: 'linear-gradient(135deg,#0284c7 50%,#ffffff 50%)',
+      vars: {
+        '--bg-page': 'linear-gradient(180deg, #f0f9ff 0%, #ffffff 50%, #f8fafc 100%)', '--bg-solid': '#f0f9ff',
+        '--bg-header': '#0369a1', '--dash-hero-top': '#0369a1',
+        '--dash-hero-grad': 'linear-gradient(180deg, #0369a1 0%, #0284c7 100%)', '--dash-hero-fg': '#ffffff',
+        '--bg-card': '#ffffff',
+        '--bg-subcard': '#f0f9ff', '--bg-input': '#ffffff', '--bg-hero': 'linear-gradient(135deg,#0369a1,#0284c7,#0ea5e9)',
+        '--bg-nav': 'rgba(255, 255, 255, 0.96)', '--accent': '#0284c7', '--accent-light': '#0369a1',
+        '--accent-grad': 'linear-gradient(135deg,#0ea5e9,#0284c7)', '--accent-text': '#ffffff',
+        '--accent-soft': 'rgba(2,132,199,0.1)', '--accent-border': 'rgba(2,132,199,0.28)',
+        '--text': '#0f172a', '--text-2': '#475569', '--muted': '#64748b', '--border': '#bae6fd',
+        '--shadow-card': '0 6px 20px rgba(2,132,199,0.08)'
+      }
     }
+  };
+  const THEME_KEYS = Object.keys(THEMES);
+
+  function getColorBrightness(c) {
+    if (!c) return 0;
+    const s = String(c).trim();
+    const hexMatch = s.match(/#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})(?![0-9a-fA-F])/);
+    if (hexMatch) {
+      let h = hexMatch[1];
+      if (h.length === 3) h = h[0]+h[0]+h[1]+h[1]+h[2]+h[2];
+      const r = parseInt(h.slice(0,2), 16), g = parseInt(h.slice(2,4), 16), b = parseInt(h.slice(4,6), 16);
+      return (r * 299 + g * 587 + b * 114) / 1000;
+    }
+    const rgbMatch = s.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/i);
+    if (rgbMatch) {
+      return (Number(rgbMatch[1]) * 299 + Number(rgbMatch[2]) * 587 + Number(rgbMatch[3]) * 114) / 1000;
+    }
+    return 0;
+  }
+
+  function applyThemeVars(vars) {
+    const root = document.documentElement;
+    const topBg = vars['--dash-hero-top'] || vars['--bg-header'] || '#0f766e';
+    const heroGrad = vars['--dash-hero-grad'] || vars['--bg-hero'] || 'linear-gradient(135deg,#0f766e,#0d9488)';
+    const topIsBright = getColorBrightness(topBg) > 165;
+    const autoFg = vars['--dash-hero-fg'] || (topIsBright ? '#0f172a' : '#ffffff');
+    const fgIsDark = getColorBrightness(autoFg) < 128;
+
+    root.style.setProperty('--dash-hero-top', topBg);
+    root.style.setProperty('--dash-hero-grad', heroGrad);
+    root.style.setProperty('--dash-hero-fg', autoFg);
+    root.style.setProperty('--dash-chip-bg', fgIsDark ? 'rgba(15, 23, 42, 0.08)' : 'rgba(255, 255, 255, 0.16)');
+    root.style.setProperty('--dash-chip-border', fgIsDark ? 'rgba(15, 23, 42, 0.22)' : 'rgba(255, 255, 255, 0.28)');
+    root.style.setProperty('--hero-fg', vars['--hero-fg'] || autoFg);
+
+    Object.keys(vars).forEach(k => root.style.setProperty(k, vars[k]));
+    const metaCol = topBg.startsWith('#') ? topBg : (vars['--bg-solid'] || '#0f766e');
+    if (metaCol) document.getElementById('metaThemeColor').setAttribute('content', metaCol);
+  }
+  function selectPresetTheme(key, showMsg = true) {
+    if (!THEMES[key]) key = 'emerald_clean';
+    applyThemeVars(THEMES[key].vars);
+    localStorage.setItem('ucc_st_theme', key);
+    renderThemeGrid();
+    if (showMsg) toast(`Theme: ${THEMES[key].name}`);
+  }
+  function applyCustomTheme() {
+    const bg = document.getElementById('custBg').value, card = document.getElementById('custCard').value, acc = document.getElementById('custAcc').value;
+    const mode = document.getElementById('custMode').value;
+    const isDay = mode === 'auto' ? (getColorBrightness(bg) > 145) : (mode === 'day');
+    const accIsBright = getColorBrightness(acc) > 165;
+    const heroFg = accIsBright ? '#0f172a' : '#ffffff';
+    const customVars = {
+      '--bg-page': bg, '--bg-solid': bg,
+      '--bg-header': acc, '--dash-hero-top': acc,
+      '--dash-hero-grad': `linear-gradient(180deg, ${acc} 0%, ${acc} 100%)`,
+      '--dash-hero-fg': heroFg, '--hero-fg': heroFg,
+      '--bg-card': card, '--bg-subcard': isDay ? 'rgba(15,23,42,0.04)' : 'rgba(255,255,255,0.06)', '--bg-input': card,
+      '--bg-hero': `linear-gradient(135deg, ${acc}, ${acc})`,
+      '--bg-nav': card, '--accent': acc, '--accent-light': isDay ? '#0f172a' : acc,
+      '--accent-grad': `linear-gradient(135deg, ${acc}, ${acc})`, '--accent-text': heroFg,
+      '--accent-soft': isDay ? 'rgba(15,23,42,0.07)' : 'rgba(255,255,255,0.12)', '--accent-border': acc,
+      '--text': isDay ? '#0f172a' : '#f8fafc', '--text-2': isDay ? '#334155' : '#cbd5e1',
+      '--muted': isDay ? '#64748b' : '#94a3b8', '--border': isDay ? 'rgba(15,23,42,0.14)' : 'rgba(255,255,255,0.16)',
+      '--shadow-card': isDay ? '0 6px 20px rgba(15,23,42,0.08)' : '0 8px 24px rgba(0,0,0,0.35)'
+    };
+    applyThemeVars(customVars);
+    localStorage.setItem('ucc_st_theme', 'custom');
+    localStorage.setItem('ucc_st_custom_vars', JSON.stringify(customVars));
+    renderThemeGrid(); toast('Custom Theme Applied!');
+  }
+  function toggleAutoTheme() {
+    const next = localStorage.getItem('ucc_st_auto_theme') === 'ON' ? 'OFF' : 'ON';
+    localStorage.setItem('ucc_st_auto_theme', next);
+    updateAutoThemeUI(); toast(`Auto-Change Theme: ${next}`);
+  }
+  function updateAutoThemeUI() {
+    const isOn = localStorage.getItem('ucc_st_auto_theme') === 'ON';
+    const btn = document.getElementById('autoThemeBtn');
+    if (!btn) return;
+    btn.textContent = isOn ? 'ON' : 'OFF';
+    btn.className = 'switch-pill ' + (isOn ? 'on' : 'off');
+  }
+  function renderThemeGrid() {
+    const el = document.getElementById('themeGrid'); if (!el) return;
+    const active = localStorage.getItem('ucc_st_theme') || 'emerald_clean';
+    el.innerHTML = THEME_KEYS.map(k => `
+      <button type="button" class="theme-opt ${active===k?'active':''}" onclick="selectPresetTheme('${k}')">
+        <span class="side-left"><span class="swatch" style="background:${THEMES[k].swatch};"></span><span>${THEMES[k].name}</span></span>
+        ${active===k ? '<span style="color:var(--accent-light);font-weight:800;">✓</span>' : ''}
+      </button>
+    `).join('');
+    updateAutoThemeUI();
+  }
+  function initTheme() {
+    if (localStorage.getItem('ucc_st_auto_theme') === 'ON') {
+      let idx = Number(localStorage.getItem('ucc_st_auto_idx') || 0);
+      const nextKey = THEME_KEYS[idx % THEME_KEYS.length];
+      localStorage.setItem('ucc_st_auto_idx', String((idx + 1) % THEME_KEYS.length));
+      selectPresetTheme(nextKey, false); return;
+    }
+    const saved = localStorage.getItem('ucc_st_theme') || 'emerald_clean';
+    if (saved === 'custom') {
+      try { applyThemeVars(JSON.parse(localStorage.getItem('ucc_st_custom_vars') || '{}')); return; } catch(e){}
+    }
+    selectPresetTheme(saved, false);
+  }
+  initTheme();
+
+  // ===== ANIMATED CORNER BRAND ROTATOR (U.C.C -> U.C.C Institute -> Unique Coaching Centre) =====
+  (function initAnimatedBrandRotator() {
+    const BRAND_NAMES = ['U.C.C', 'U.C.C Institute', 'Unique Coaching Centre'];
+    let idx = 0;
+    function cycleBrand() {
+      idx = (idx + 1) % BRAND_NAMES.length;
+      const nextText = BRAND_NAMES[idx];
+      const targets = [
+        document.getElementById('hdrBrandAnim'),
+        document.getElementById('sideBrandTitle'),
+        document.getElementById('loginBrandTitle'),
+        document.getElementById('splashBrandTitle')
+      ].filter(Boolean);
+
+      targets.forEach(el => el.classList.add('brand-exit'));
+      setTimeout(() => {
+        targets.forEach(el => {
+          el.textContent = nextText;
+          el.classList.remove('brand-exit');
+          el.classList.add('brand-enter');
+          void el.offsetWidth;
+          el.classList.remove('brand-enter');
+        });
+      }, 340);
+    }
+    setInterval(cycleBrand, 2400);
   })();
 
-  async function handleStudentLogin(e) {
-    e.preventDefault();
-    const id = document.getElementById('lId').value.trim().toUpperCase(), mob = document.getElementById('lMob').value.replace(/\D/g,'').slice(-10);
-    const btn = document.getElementById('lBtn'), err = document.getElementById('loginErr');
-    btn.disabled = true; btn.textContent = 'Verifying...'; err.style.display = 'none';
-    const ok = await loadStudentData(id, mob, false);
-    if (ok) { localStorage.setItem('ucc_st_id', id); localStorage.setItem('ucc_st_mob', mob); document.getElementById('loginScreen').style.display = 'none'; }
-    else err.style.display = 'block';
-    btn.disabled = false; btn.textContent = 'Login to Student App →';
+  // ===== STUDENT APP STATE =====
+  let stAuth = JSON.parse(localStorage.getItem('ucc_st_auth_v2') || 'null');
+  let stData = JSON.parse(localStorage.getItem('ucc_st_cache_v2') || 'null');
+  let activeChatId = null, chatTimer = null, activeReceipt = null, lastBackPress = 0;
+
+  function toast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.style.display = 'block';
+    setTimeout(() => { t.style.display = 'none'; }, 2800);
   }
 
-  async function loadStudentData(id, mob, silent) {
-    try {
-      const res = await fetch(`${API_URL}?mode=student&id=${encodeURIComponent(id)}&mobile=${encodeURIComponent(mob)}`);
-      const data = await res.json();
-      if (data.status === 'ok') {
-        portalData = data;
-        try { localStorage.setItem('ucc_st_cache_' + id, JSON.stringify(data)); } catch (e) {}
-        setLoading(false); renderPortal(); return true;
-      }
-      setLoading(false); return false;
-    } catch (e) { setLoading(false); if (!silent) toast('Network error!'); return false; }
+  function updateNetUI() {
+    const dot = document.getElementById('netDot');
+    if (!dot) return;
+    if (navigator.onLine) dot.classList.remove('off');
+    else dot.classList.add('off');
   }
+  window.addEventListener('online', () => { updateNetUI(); if (stAuth) refreshStudentData(true); });
+  window.addEventListener('offline', updateNetUI);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden && navigator.onLine && stAuth) refreshStudentData(true); });
+  setInterval(() => { if (!document.hidden && navigator.onLine && stAuth) refreshStudentData(true); }, 18000);
 
-  function refreshPortal(silent = false) {
-    const id = localStorage.getItem('ucc_st_id'), mob = localStorage.getItem('ucc_st_mob');
-    if (id && mob) { if (!silent) toast('Updating...'); loadStudentData(id, mob, silent); }
-  }
-  function logoutStudent() {
-    closeSidebar(); if (liveChatTimer) clearInterval(liveChatTimer);
-    const id = localStorage.getItem('ucc_st_id');
-    if (id) localStorage.removeItem('ucc_st_cache_' + id);
-    localStorage.removeItem('ucc_st_id'); localStorage.removeItem('ucc_st_mob');
-    portalData = null; lastContentHash = '';
-    document.getElementById('loginScreen').style.display = 'flex';
-  }
-  function openPage(name, btn) {
+  window.history.pushState({ stApp: true }, '');
+  window.addEventListener('popstate', () => {
+    if (document.getElementById('sidebar').classList.contains('open')) { closeSidebar(); window.history.pushState({ stApp: true }, ''); return; }
+    if (document.getElementById('chatModal').classList.contains('open')) { closeStudentChat(); window.history.pushState({ stApp: true }, ''); return; }
+    if (document.getElementById('rcptModal').classList.contains('open')) { closeReceipt(); window.history.pushState({ stApp: true }, ''); return; }
+    const activePg = document.querySelector('.page.active');
+    if (activePg && activePg.id !== 'page-home') {
+      openPage('home');
+      window.history.pushState({ stApp: true }, '');
+      return;
+    }
+    const now = Date.now();
+    if (now - lastBackPress < 2000) window.history.back();
+    else { lastBackPress = now; toast('অ্যাপ থেকে বেরোতে আবার Back চাপুন'); window.history.pushState({ stApp: true }, ''); }
+  });
+
+  function openSidebar() { renderThemeGrid(); document.getElementById('sidebar').classList.add('open'); document.getElementById('sideBackdrop').classList.add('open'); }
+  function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sideBackdrop').classList.remove('open'); }
+
+  const PAGE_TITLES = {
+    home: 'Dashboard',
+    videos: 'Live & Recorded Classes',
+    pdfs: 'Smart PDF Notes',
+    tests: 'Online Mock Tests',
+    fees: 'Fees, Receipts & Pay',
+    idcard: 'Smart QR ID Card',
+    notices: 'Institute Notices'
+  };
+
+  function openPage(name) {
     closeSidebar();
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById('page-' + name).classList.add('active');
-    if (btn) btn.classList.add('active');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    const pg = document.getElementById('page-' + name);
+    if (pg) pg.classList.add('active');
+    const bar = document.getElementById('subpageBar');
+    const ttl = document.getElementById('subpageTitle');
+    if (bar) {
+      if (name === 'home') bar.classList.remove('show');
+      else { bar.classList.add('show'); if (ttl) ttl.textContent = PAGE_TITLES[name] || 'Student Portal'; }
+    }
+    window.scrollTo(0, 0);
+    renderAllStudentUI();
   }
 
-  function renderPortal() {
-    if (!portalData) return;
-    const s = portalData.student;
-    document.getElementById('hdrSub').textContent = `${s.id} • ${s.studentClass}`;
-    document.getElementById('sideStName').textContent = s.name;
-    document.getElementById('sideStMeta').textContent = `${s.id} • ${s.studentClass}`;
-    document.getElementById('sAvatar').textContent = (s.name || 'U').trim().charAt(0).toUpperCase();
-    document.getElementById('sName').textContent = s.name;
-    document.getElementById('sIdChip').textContent = s.id;
-    document.getElementById('sClassChip').textContent = s.studentClass;
-    document.getElementById('sFather').textContent = `Father: ${s.fatherName || '-'}`;
-    document.getElementById('sPhone').textContent = s.mobile || '-';
-
-    const pres = Number(portalData.presentDays) || 0, abs = Number(portalData.absentDays) || 0, totalDays = pres + abs;
-    const pct = totalDays > 0 ? Math.round((pres / totalDays) * 100) : 100;
-    document.getElementById('sPresent').textContent = pres;
-    document.getElementById('sAbsent').textContent = abs;
-    document.getElementById('sDue').textContent = 'Rs. ' + (Number(s.totalDue) || 0);
-    document.getElementById('sDue').style.color = s.totalDue > 0 ? 'var(--danger)' : 'var(--success)';
-    document.getElementById('sAttPct').textContent = totalDays > 0 ? `${pct}% (${pres}/${totalDays} days)` : 'New Session';
-    document.getElementById('sAttBar').style.width = `${pct}%`;
-
-    document.getElementById('noticeArea').innerHTML = (portalData.notices || []).map(n => `
-      <div class="notice-banner"><div class="notice-top"><span class="notice-badge"><span class="live-dot"></span> ${n.title}</span><span class="notice-date">${n.date}</span></div>
-      <div class="notice-body">${n.message}</div>${n.link ? `<a href="${n.link}" target="_blank" class="notice-link">Open Link →</a>` : ''}</div>`).join('');
-
-    let payOpts = '', paidCount = 0;
-    document.getElementById('sMonths').innerHTML = MONTHS.map(([k, lbl]) => {
-      const val = Number(s.months?.[k]) || 0;
-      if (val > 0) paidCount++; else payOpts += `<option value="${k}">${k.replace('_',' ')}</option>`;
-      return `<div class="m-cell ${val>0?'paid':''}"><div class="m-name">${lbl}</div><div class="m-val">${val>0 ? `₹${val} ✓` : 'Due'}</div></div>`;
-    }).join('');
-    document.getElementById('paidCountPill').textContent = `${paidCount} / 12 Paid`;
-    document.getElementById('payMonth').innerHTML = payOpts || '<option value="">All Paid ✓</option>';
-    document.getElementById('paySubmitBtn').disabled = !payOpts;
-
-    const isLocked = (portalData.dueLock === 'ON' && Number(s.totalDue) > 0);
-    document.getElementById('classesLockedView').style.display = isLocked ? 'block' : 'none';
-    document.getElementById('classesUnlockedView').style.display = isLocked ? 'none' : 'block';
-    document.getElementById('lockDueAmt').textContent = 'Rs. ' + s.totalDue;
-
-    const newHash = JSON.stringify(portalData.classesContent || []) + '|' + isLocked + '|' + classFilter;
-    if (!isLocked && newHash !== lastContentHash) { lastContentHash = newHash; renderClassesList(); }
-
-    const reqs = portalData.requests || [];
-    document.getElementById('myReqList').innerHTML = reqs.length
-      ? reqs.map(r => `<div class="info-item" style="font-size:12.5px;"><div><strong>${r.month.replace('_',' ')}</strong> • <span style="color:var(--accent-light);font-weight:700;">₹${r.amount}</span><br><span style="color:var(--muted);font-size:11.5px;">${r.date} • UTR: ${r.utr||'-'}</span>${r.remarks?`<br><span style="color:var(--danger);font-size:11.5px;">${r.remarks}</span>`:''}</div><span class="${r.status==='Approved'?'badge-ok':(r.status==='Rejected'?'badge-rej':'badge-due')}">${r.status}</span></div>`).join('')
-      : '<div style="font-size:12.5px;color:var(--muted);text-align:center;padding:8px 0;">No online payment requests yet.</div>';
-
-    const pays = portalData.payments || [];
-    document.getElementById('myReceiptsList').innerHTML = pays.length
-      ? pays.map((p, i) => `<div class="info-item"><div><div style="font-size:13.5px;font-weight:800;">${bnMonth(p.month)} • <span style="color:var(--accent-light);">₹${p.amount}</span></div><div style="font-size:11.5px;color:var(--muted);margin-top:2px;">${formatBnDate(p.date)} • ${bnCollector(p.collector)}</div></div><button class="btn btn-accent" style="width:auto;padding:8px 13px;font-size:12px;border-radius:10px;" onclick="openReceipt(${i})">Receipt</button></div>`).join('')
-      : '<div style="font-size:12.5px;color:var(--muted);text-align:center;padding:12px 0;">No fee receipts available yet.</div>';
-  }
-
-  function setClassFilter(f) {
-    classFilter = f; lastContentHash = '';
-    document.getElementById('cpLive').classList.toggle('active', f==='Live');
-    document.getElementById('cpVideo').classList.toggle('active', f==='Video');
-    document.getElementById('cpOther').classList.toggle('active', f==='OTHER');
-    renderClassesList();
-  }
-  function getEmbedUrl(url) {
-    if (!url) return '';
-    const yt = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|live\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);
-    if (yt) return `https://www.youtube.com/embed/${yt[1]}?rel=0&playsinline=1`;
-    const gd = url.match(/drive\.google\.com\/file\/d\/([^\/]+)/);
-    if (gd) return `https://drive.google.com/file/d/${gd[1]}/preview`;
+  // ===== STUDENT PHOTO UPLOAD & DISPLAY =====
+  function getStudentPhotoUrl(st) {
+    if (!st) return '';
+    const localPhoto = localStorage.getItem('ucc_st_photo_' + String(st.id || '').toUpperCase());
+    if (localPhoto) return localPhoto;
+    if (st.photo && String(st.photo).startsWith('http')) return st.photo;
     return '';
   }
 
-  function renderClassesList() {
-    const all = (portalData && portalData.classesContent) || [], box = document.getElementById('classesList');
-    if (liveChatTimer) clearInterval(liveChatTimer);
-    activeLiveIds = [];
-
-    if (classFilter === 'Live') {
-      const lives = all.filter(c => c.type === 'Live');
-      if (!lives.length) { box.innerHTML = '<div class="card" style="text-align:center;padding:24px;color:var(--muted);font-size:13px;">এখন কোনো লাইভ ক্লাস চলছে না। পুরনো ক্লাস দেখতে <strong>Recorded</strong> ট্যাবে যাও।</div>'; return; }
-      box.innerHTML = lives.map(c => {
-        activeLiveIds.push(c.id);
-        const embed = getEmbedUrl(c.link);
-        return `<div class="card" style="border-left:4px solid var(--danger);">
-          <div style="display:flex;justify-content:space-between;"><span class="c-badge live">LIVE • ${c.subject} (${c.chapter||'General'})</span><span style="font-size:11px;color:var(--muted);">${c.date}</span></div>
-          <div style="font-size:16px;font-weight:800;margin-top:8px;">${c.title}</div>
-          ${embed ? `<div class="video-box"><iframe src="${embed}" allow="autoplay; fullscreen; encrypted-media" allowfullscreen></iframe></div>` : `<a href="${c.link}" target="_blank" class="btn btn-accent" style="text-decoration:none;margin-top:10px;">Join Live Class →</a>`}
-          <div class="live-chat-wrap">
-            <div style="font-size:12.5px;font-weight:800;color:var(--accent-light);margin-bottom:8px;">Live Question & Answer</div>
-            <div id="chat_${c.id}" class="chat-list"><div style="font-size:11.5px;color:var(--muted);">Loading Q&A...</div></div>
-            <form onsubmit="sendStudentChat(event,'${c.id}')" style="display:flex;gap:7px;"><input type="text" id="cin_${c.id}" required placeholder="তোমার প্রশ্ন লেখো..." style="padding:9px 12px;font-size:13px;"><button type="submit" class="btn btn-accent" style="width:auto;padding:9px 15px;font-size:12.5px;">Send</button></form>
-          </div>
-        </div>`;
-      }).join('');
-      refreshAllLiveChats(); liveChatTimer = setInterval(refreshAllLiveChats, 5000); return;
-    }
-
-    const items = all.filter(c => classFilter === 'Video' ? c.type === 'Video' : (c.type === 'PDF' || c.type === 'Mock Test'));
-    if (!items.length) { box.innerHTML = '<div class="card" style="text-align:center;color:var(--muted);font-size:13px;padding:24px;">এখানে এখনো কোনো কনটেন্ট আপলোড হয়নি।</div>'; return; }
-
-    const tree = {};
-    items.forEach(c => { const sub = c.subject || 'General', chap = c.chapter || 'General'; if (!tree[sub]) tree[sub] = {}; if (!tree[sub][chap]) tree[sub][chap] = []; tree[sub][chap].push(c); });
-    box.innerHTML = Object.keys(tree).map((sub, sIdx) => {
-      const chapters = tree[sub];
-      const chapHtml = Object.keys(chapters).map((chap, cIdx) => {
-        const listHtml = chapters[chap].map(c => {
-          const embed = c.type === 'Video' ? getEmbedUrl(c.link) : '';
-          return `<div class="content-card">
-            <div style="display:flex;justify-content:space-between;"><span class="c-badge">${c.type}</span><span style="font-size:11px;color:var(--muted);">${c.date}</span></div>
-            <div style="font-size:14.5px;font-weight:800;margin-top:6px;">${c.title}</div>
-            ${embed ? `
-              <div class="video-box"><iframe src="${embed}" allow="autoplay; fullscreen; encrypted-media" allowfullscreen></iframe></div>
-              <div class="vid-actions">
-                <a href="${c.link}" target="_blank" class="vid-btn">📺 ফুল-স্ক্রিনে দেখো</a>
-                <button type="button" class="vid-btn" onclick="toggleVideoComments('${c.id}')">💬 প্রশ্ন / কমেন্ট</button>
-              </div>
-              <div id="cwrap_${c.id}" class="live-chat-wrap" style="display:none;">
-                <div style="font-size:12px;font-weight:800;color:var(--accent-light);margin-bottom:7px;">ভিডিও নিয়ে কোনো প্রশ্ন বা কমেন্ট লেখো:</div>
-                <div id="chat_${c.id}" class="chat-list"><div style="font-size:11.5px;color:var(--muted);">Loading comments...</div></div>
-                <form onsubmit="sendStudentChat(event,'${c.id}')" style="display:flex;gap:7px;">
-                  <input type="text" id="cin_${c.id}" required placeholder="তোমার প্রশ্ন বা কমেন্ট..." style="padding:8px 11px;font-size:13px;">
-                  <button type="submit" class="btn btn-accent" style="width:auto;padding:8px 14px;font-size:12px;">Send</button>
-                </form>
-              </div>
-            ` : `<a href="${c.link}" target="_blank" class="btn btn-accent" style="text-decoration:none;margin-top:10px;padding:10px;font-size:13px;">Open ${c.type} →</a>`}
-          </div>`;
-        }).join('');
-        return `<details class="chap-folder" ${sIdx===0 && cIdx===0 ? 'open' : ''}><summary><span>${chap}</span><span class="pill-mini">${chapters[chap].length} items ▾</span></summary><div class="chap-body">${listHtml}</div></details>`;
-      }).join('');
-      return `<details class="sub-folder" ${sIdx===0 ? 'open' : ''}><summary><span class="folder-left"><span class="folder-ic">📁</span>${sub}</span><span style="font-size:11.5px;color:var(--accent-light);font-weight:700;">${Object.keys(chapters).length} Chapters ▾</span></summary><div class="sub-body">${chapHtml}</div></details>`;
-    }).join('');
+  function triggerPhotoUpload() {
+    closeSidebar();
+    const inp = document.getElementById('studentPhotoInput');
+    if (inp) inp.click();
   }
 
-  function toggleVideoComments(cid) {
-    const w = document.getElementById('cwrap_' + cid);
-    if (!w) return;
-    const isOpen = w.style.display === 'block';
-    w.style.display = isOpen ? 'none' : 'block';
-    if (!isOpen) loadSingleChat(cid);
-  }
-
-  async function loadSingleChat(cid) {
-    if (chatCache[cid]) renderStudentChat(cid, chatCache[cid]);
-    try {
-      const res = await fetch(`${API_URL}?mode=chat&contentId=${encodeURIComponent(cid)}`);
-      const data = await res.json();
-      if (data.status === 'ok') { chatCache[cid] = data.messages || []; renderStudentChat(cid, chatCache[cid]); }
-    } catch (e) {}
-  }
-
-  async function refreshAllLiveChats() {
-    for (const cid of activeLiveIds) { loadSingleChat(cid); }
-  }
-  function renderStudentChat(cid, msgs) {
-    const el = document.getElementById('chat_' + cid); if (!el) return;
-    el.innerHTML = msgs.length
-      ? msgs.map(m => `<div class="chat-msg ${m.role==='Admin'?'admin':''}"><strong style="color:var(--accent-light);">${m.senderName}</strong> <span style="font-size:10px;color:var(--muted);">${m.time}</span><div style="margin-top:2px;">${m.message}</div></div>`).join('')
-      : '<div style="font-size:11.5px;color:var(--muted);">কোনো প্রশ্ন বা কমেন্ট থাকলে নিচে লিখে পাঠাও...</div>';
-    el.scrollTop = el.scrollHeight;
-  }
-
-  // Instant Optimistic UI Send (0ms wait)
-  async function sendStudentChat(e, cid) {
-    e.preventDefault(); if (!portalData) return;
-    const inp = document.getElementById('cin_' + cid), msg = inp.value.trim(); if (!msg) return;
-    inp.value = '';
-    const s = portalData.student;
-    if (!chatCache[cid]) chatCache[cid] = [];
-    chatCache[cid].push({ senderName: s.name, role: 'Student', time: 'Just now', message: msg });
-    renderStudentChat(cid, chatCache[cid]);
-
-    try {
-      const res = await fetch(API_URL, {
-        method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify({ action: 'sendChat', contentId: cid, senderId: s.id, senderName: s.name, role: 'Student', message: msg })
-      });
-      const data = await res.json();
-      if (data.status === 'ok') { chatCache[cid] = data.messages || []; renderStudentChat(cid, chatCache[cid]); }
-    } catch (err) { toast('Comment saved locally — check internet.'); }
-  }
-
-  function previewCompressedImg(e) {
-    const file = e.target.files[0]; if (!file) return;
-    document.getElementById('uploadFileName').textContent = file.name;
+  function handleStudentPhotoSelected(e) {
+    const file = e.target.files && e.target.files[0];
+    if (!file || !stData || !stData.student) return;
     const reader = new FileReader();
     reader.onload = ev => {
       const img = new Image();
       img.onload = () => {
-        const c = document.createElement('canvas'), scale = Math.min(1, 480 / img.width);
-        c.width = img.width * scale; c.height = img.height * scale;
-        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
-        compressedBase64 = c.toDataURL('image/jpeg', 0.5);
-        const prev = document.getElementById('payPreview'); prev.src = compressedBase64; prev.style.display = 'block';
+        const c = document.createElement('canvas');
+        const size = 280;
+        c.width = size; c.height = size;
+        const ctx = c.getContext('2d');
+        const minSide = Math.min(img.width, img.height);
+        const sx = (img.width - minSide) / 2;
+        const sy = (img.height - minSide) / 2;
+        ctx.drawImage(img, sx, sy, minSide, minSide, 0, 0, size, size);
+        const dataUrl = c.toDataURL('image/jpeg', 0.86);
+        localStorage.setItem('ucc_st_photo_' + String(stData.student.id).toUpperCase(), dataUrl);
+        renderAllStudentUI();
+        toast('📷 প্রোফাইল ফটো সুন্দরভাবে সেট হয়ে গেছে!');
       };
       img.src = ev.target.result;
     };
     reader.readAsDataURL(file);
+    e.target.value = '';
   }
 
-  async function submitOnlinePay(e) {
-    e.preventDefault(); if (!portalData || !compressedBase64) { toast('Attach screenshot.'); return; }
-    const s = portalData.student, btn = document.getElementById('paySubmitBtn');
-    btn.disabled = true; btn.textContent = 'Uploading...';
+  // ===== LOGIN & DATA SYNC =====
+  async function handleStudentLogin(e) {
+    e.preventDefault();
+    const sid = document.getElementById('stLoginId').value.trim().toUpperCase();
+    const mob = document.getElementById('stLoginMob').value.replace(/\D/g, '').slice(-10);
+    const errEl = document.getElementById('loginErr');
+    const btn = document.getElementById('stLoginBtn');
+    if (!sid || mob.length < 10) {
+      errEl.textContent = 'সঠিক Student ID এবং 10 সংখ্যার মোবাইল নম্বর দিন!';
+      errEl.style.display = 'block';
+      return;
+    }
+    if (!navigator.onLine) {
+      errEl.textContent = 'প্রথমবার লগইন করতে ইন্টারনেট চালু রাখুন।';
+      errEl.style.display = 'block';
+      return;
+    }
+    btn.disabled = true; btn.textContent = 'Loading Profile...'; errEl.style.display = 'none';
     try {
-      const res = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: 'submitOnlinePayment', studentId: s.id, studentName: s.name, studentClass: s.studentClass, month: document.getElementById('payMonth').value, amount: Number(document.getElementById('payAmt').value)||300, utr: document.getElementById('payUtr').value.trim(), screenshotData: compressedBase64 }) });
+      const res = await fetch(`${API_URL}?mode=student&id=${encodeURIComponent(sid)}&mobile=${encodeURIComponent(mob)}`, { cache: 'no-store' });
       const data = await res.json();
-      if (data.status === 'ok') { toast('Submitted! Admin will verify soon.'); e.target.reset(); document.getElementById('uploadFileName').textContent = 'Tap to choose screenshot'; document.getElementById('payPreview').style.display = 'none'; compressedBase64 = ''; refreshPortal(true); }
-      else toast('Failed.');
-    } catch (err) { toast('Upload failed.'); }
-    finally { btn.disabled = false; btn.textContent = 'Submit Payment Proof'; }
+      if (data && data.status === 'ok' && data.student) {
+        stAuth = { id: sid, mobile: mob };
+        stData = data;
+        localStorage.setItem('ucc_st_auth_v2', JSON.stringify(stAuth));
+        localStorage.setItem('ucc_st_cache_v2', JSON.stringify(stData));
+        document.getElementById('loginScreen').style.display = 'none';
+        openPage('home');
+        toast(`স্বাগতম, ${data.student.name}!`);
+      } else {
+        errEl.textContent = (data && data.message) || 'Student ID বা Mobile Number মিলছে না!';
+        errEl.style.display = 'block';
+      }
+    } catch (err) {
+      errEl.textContent = 'Network error! আবার চেষ্টা করুন।';
+      errEl.style.display = 'block';
+    } finally {
+      btn.disabled = false; btn.textContent = 'Open Student Dashboard';
+    }
   }
 
-  function openReceipt(idx) {
-    const p = portalData.payments[idx], s = portalData.student; if (!p) return;
-    activeReceiptObj = { p, fatherName: s.fatherName || '-' };
-    document.getElementById('rNo').textContent = p.receiptNo || '-'; document.getElementById('rDate').textContent = `${formatBnDate(p.date)}${p.time ? ', '+p.time : ''}`;
-    document.getElementById('rName').textContent = p.studentName; document.getElementById('rFather').textContent = s.fatherName || '-';
-    document.getElementById('rIdCls').textContent = `${p.studentId} • ${bnClass(p.studentClass)}`; document.getElementById('rMonth').textContent = bnMonth(p.month);
-    document.getElementById('rMode').textContent = bnMode(p.mode); document.getElementById('rAmt').textContent = p.amount + ' টাকা';
+  async function refreshStudentData(silent = false) {
+    if (!stAuth || !navigator.onLine) {
+      if (!silent) toast('Offline mode — cached data shown.');
+      return;
+    }
+    const btn = document.getElementById('syncBtn');
+    if (btn && !silent) btn.classList.add('spin');
+    try {
+      const res = await fetch(`${API_URL}?mode=student&id=${encodeURIComponent(stAuth.id)}&mobile=${encodeURIComponent(stAuth.mobile)}`, { cache: 'no-store' });
+      const data = await res.json();
+      if (data && data.status === 'ok' && data.student) {
+        stData = data;
+        localStorage.setItem('ucc_st_cache_v2', JSON.stringify(stData));
+        renderAllStudentUI();
+        if (!silent) toast('Updated ✓');
+      }
+    } catch (e) {
+      if (!silent) toast('Network slow — cached data shown.');
+    } finally {
+      if (btn) btn.classList.remove('spin');
+    }
+  }
+
+  function logoutStudent() {
+    closeSidebar();
+    localStorage.removeItem('ucc_st_auth_v2');
+    localStorage.removeItem('ucc_st_cache_v2');
+    stAuth = null; stData = null;
+    document.getElementById('loginScreen').style.display = 'flex';
+  }
+
+  window.onload = function() {
+    setTimeout(() => {
+      const sp = document.getElementById('splashScreen');
+      sp.classList.add('hide');
+      setTimeout(() => { sp.style.display = 'none'; }, 180);
+    }, 360);
+    updateNetUI();
+    if (stAuth && stData && stData.student) {
+      document.getElementById('loginScreen').style.display = 'none';
+      openPage('home');
+      if (navigator.onLine) refreshStudentData(true);
+    } else if (stAuth) {
+      document.getElementById('stLoginId').value = stAuth.id || '';
+      document.getElementById('stLoginMob').value = stAuth.mobile || '';
+      refreshStudentData(false);
+    } else {
+      document.getElementById('loginScreen').style.display = 'flex';
+    }
+  };
+
+  // ===== RENDER ALL STUDENT UI =====
+  function renderAllStudentUI() {
+    if (!stData || !stData.student) return;
+    const s = stData.student;
+    const due = Number(s.totalDue) || 0;
+    const isLocked = (stData.dueLock !== 'OFF') && due > 0;
+    const presentDays = Number(stData.presentDays) || 0;
+    const absentDays = Number(stData.absentDays) || 0;
+    const content = stData.classesContent || [];
+    const notices = stData.notices || [];
+    const payments = stData.payments || [];
+    const requests = stData.requests || [];
+
+    const videos = content.filter(c => c.type === 'Live' || c.type === 'Video');
+    const pdfs = content.filter(c => c.type === 'PDF');
+    const tests = content.filter(c => c.type === 'Mock Test');
+
+    // Header & Hero
+    document.getElementById('hdrSubLabel').textContent = `${s.id} • ${s.studentClass}`;
+    document.getElementById('sideStudentSub').textContent = `${s.name} (${s.id})`;
+    document.getElementById('heroStudentFirst').textContent = String(s.name || 'Student').toUpperCase();
+    document.getElementById('heroClassBadge').textContent = `${s.id} • ${s.studentClass}`;
+
+    // Student Photo in Hero & Smart ID Card
+    const photoUrl = getStudentPhotoUrl(s);
+    const initials = String(s.name || 'ST').trim().split(/\s+/).map(w => w[0]).slice(0, 2).join('').toUpperCase() || 'ST';
+    const heroRing = document.getElementById('heroPhotoRing');
+    if (heroRing) {
+      heroRing.innerHTML = photoUrl
+        ? `<img src="${photoUrl}" alt="${s.name}" class="st-photo-img">`
+        : `<div class="st-photo-fallback">${initials}</div>`;
+    }
+    const idPhotoSlot = document.getElementById('idCardPhotoSlot');
+    if (idPhotoSlot) {
+      idPhotoSlot.outerHTML = photoUrl
+        ? `<img id="idCardPhotoSlot" src="${photoUrl}" alt="${s.name}">`
+        : `<div class="sid-init" id="idCardPhotoSlot">${initials}</div>`;
+    }
+
+    // Overlapping 2-Card Summary Strip
+    document.getElementById('dashStatsRow').innerHTML = `
+      <div class="dash-stat-card" style="animation-delay:0.04s;" onclick="openPage('idcard')">
+        <div class="dsc-line"><span>✅ Present</span><span class="dsc-pill ok">${presentDays} Days</span></div>
+        <div class="dsc-line"><span>📅 Absent</span><span class="dsc-pill due">${absentDays} Days</span></div>
+        <div class="dsc-line"><span>🪪 ID Card</span><span class="dsc-pill">${s.id}</span></div>
+      </div>
+      <div class="dash-stat-card" style="animation-delay:0.09s;" onclick="openPage('fees')">
+        <div class="dsc-line"><span>💰 Fee Due</span><span class="dsc-pill ${due > 0 ? 'due' : 'ok'}">${due > 0 ? '₹' + due : 'Clear ✓'}</span></div>
+        <div class="dsc-line"><span>🎬 Classes</span><span class="dsc-pill">${content.length}</span></div>
+        <div class="dsc-line"><span>📢 Notices</span><span class="dsc-pill">${notices.length}</span></div>
+      </div>
+    `;
+
+    // 2x3 Big Animated Hero Tiles
+    const tiles = [
+      {
+        label: 'Live & Video', sub: `${videos.length} Classes`, page: 'videos', bg: 'rgba(147,51,234,0.14)', col: '#9333ea',
+        badge: videos.some(v => v.type === 'Live') ? 'LIVE' : '',
+        icon: '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>'
+      },
+      {
+        label: 'PDF Notes', sub: `${pdfs.length} Study PDFs`, page: 'pdfs', bg: 'rgba(37,99,235,0.14)', col: '#2563eb',
+        badge: '',
+        icon: '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>'
+      },
+      {
+        label: 'Mock Test', sub: `${tests.length} Tests`, page: 'tests', bg: 'rgba(16,185,129,0.14)', col: '#059669',
+        badge: '',
+        icon: '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>'
+      },
+      {
+        label: 'Fees & Pay', sub: due > 0 ? `Due ₹${due}` : 'Receipts & Pay', page: 'fees', bg: 'rgba(245,158,11,0.16)', col: '#d97706',
+        badge: due > 0 ? 'DUE' : '✓', badgeOk: due === 0,
+        icon: '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>'
+      },
+      {
+        label: 'Smart ID Card', sub: 'Photo & QR Code', page: 'idcard', bg: 'rgba(13,148,136,0.14)', col: '#0d9488',
+        badge: '',
+        icon: '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M15 8h2"/><path d="M15 12h2"/><path d="M7 16h10"/></svg>'
+      },
+      {
+        label: 'Notices', sub: `${notices.length} Updates`, page: 'notices', bg: 'rgba(2,132,199,0.14)', col: '#0284c7',
+        badge: notices.length > 0 ? String(notices.length) : '', badgeOk: true,
+        icon: '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>'
+      }
+    ];
+
+    document.getElementById('dashTilesGrid').innerHTML = tiles.map((t, idx) => `
+      <div class="dash-tile" style="animation-delay:${(idx * 0.03).toFixed(2)}s;" onclick="openPage('${t.page}')">
+        ${t.badge ? `<span class="dash-tile-badge ${t.badgeOk ? 'ok' : ''}">${t.badge}</span>` : ''}
+        <div class="dash-tile-circle" style="background:${t.bg};color:${t.col};">${t.icon}</div>
+        <div class="dash-tile-label">${t.label}</div>
+        <div class="dash-tile-sub">${t.sub}</div>
+      </div>
+    `).join('');
+
+    // Bottom Highlight Banner
+    document.getElementById('dashBottomBannerWrap').innerHTML = due > 0
+      ? `<div class="dash-highlight-banner" onclick="openPage('fees')">
+          <div>
+            <div class="dhb-title">PENDING TUITION FEE: ₹${due}</div>
+            <div class="dhb-sub">Tap here to pay online via UPI or view details</div>
+          </div>
+          <div class="dhb-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="9 18 15 12 9 6"/></svg></div>
+        </div>`
+      : `<div class="dash-highlight-banner" onclick="openPage('idcard')">
+          <div>
+            <div class="dhb-title">ALL FEES CLEAR • ID CARD READY</div>
+            <div class="dhb-sub">Tap to view or download your Smart QR ID Card</div>
+          </div>
+          <div class="dhb-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="9 18 15 12 9 6"/></svg></div>
+        </div>`;
+
+    // Lock Alert Banner for Study Materials
+    const lockHtml = isLocked
+      ? `<div class="card" style="background:var(--danger-soft);border:1.5px solid var(--danger);">
+          <div style="font-weight:800;font-size:14px;color:var(--danger);">🔒 টিউশন ফি বাকি থাকায় ক্লাস লক আছে (Due: ₹${due})</div>
+          <div style="font-size:12px;color:var(--text-2);margin:5px 0 9px;">ভিডিও ক্লাস, PDF নোটস ও মক টেস্ট আনলক করতে বকেয়া ফি পরিশোধ করুন।</div>
+          <button type="button" class="btn btn-accent" style="padding:9px;font-size:12.5px;" onclick="openPage('fees')">💳 Pay Fee Online Now</button>
+        </div>`
+      : '';
+    ['videoLockAlert', 'pdfLockAlert', 'testLockAlert'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = lockHtml;
+    });
+
+    // Render Content Lists
+    renderStudyContentList('videoListContainer', videos, isLocked, 'এখনো কোনো ভিডিও বা লাইভ ক্লাস আপলোড হয়নি।');
+    renderStudyContentList('pdfListContainer', pdfs, isLocked, 'এখনো কোনো PDF নোটস আপলোড হয়নি।');
+    renderStudyContentList('testListContainer', tests, isLocked, 'এখনো কোনো মক টেস্ট আপলোড হয়নি।');
+
+    // Render Fees & Receipts
+    document.getElementById('sideFeePill').textContent = due > 0 ? '₹' + due : 'Clear';
+    const fBadge = document.getElementById('feePageDueBadge');
+    fBadge.className = due > 0 ? 'badge-due' : 'badge-ok';
+    fBadge.textContent = due > 0 ? `Due: ₹${due}` : 'All Clear ✓';
+
+    let payOpts = '';
+    document.getElementById('stMonthsGrid').innerHTML = MONTHS.map(([key, lbl]) => {
+      const paidVal = Number(s.months?.[key]) || 0;
+      const isPaid = paidVal > 0;
+      if (!isPaid) payOpts += `<option value="${key}">${bnMonth(key)}</option>`;
+      return `<div class="m-cell ${isPaid ? 'paid' : ''}" onclick="${isPaid ? `openStudentReceipt('${key}')` : `toast('${bnMonth(key)}-এর ফি এখনো বাকি আছে')`}">
+        ${lbl}<br>${isPaid ? '₹' + paidVal + ' ✓' : 'Due'}
+      </div>`;
+    }).join('');
+
+    const selEl = document.getElementById('stPayMonth');
+    if (selEl) {
+      selEl.innerHTML = payOpts || '<option value="">All 12 Months Paid ✓</option>';
+      document.getElementById('stPaySubmitBtn').disabled = !payOpts;
+    }
+
+    // Payment & Online Request History
+    const histItems = [];
+    payments.forEach((p, idx) => {
+      histItems.push(`<div class="info-item" style="font-size:12.5px;">
+        <div>
+          <strong>${bnMonth(p.month)}</strong> • <span style="color:var(--success);font-weight:800;">₹${p.amount} Paid ✓</span><br>
+          <span style="color:var(--muted);font-size:11px;">${formatBnDate(p.date)} • ${bnMode(p.mode)} • ${bnCollector(p.collector)}</span>
+        </div>
+        <button type="button" class="btn-sm" style="background:var(--accent-grad);color:var(--accent-text);" onclick="openReceiptObj(${idx})">Receipt</button>
+      </div>`);
+    });
+    requests.forEach(r => {
+      const stCol = r.status === 'Approved' ? 'var(--success)' : (r.status === 'Rejected' ? 'var(--danger)' : '#d97706');
+      histItems.push(`<div class="info-item" style="font-size:12.5px;">
+        <div>
+          <strong>Online Request: ${bnMonth(r.month)}</strong> (₹${r.amount})<br>
+          <span style="color:var(--muted);font-size:11px;">UTR: ${r.utr || '-'} • ${r.date}${r.remarks ? ' • ' + r.remarks : ''}</span>
+        </div>
+        <span style="font-weight:800;font-size:11.5px;color:${stCol};">${r.status}</span>
+      </div>`);
+    });
+    document.getElementById('stHistoryList').innerHTML = histItems.length
+      ? histItems.join('')
+      : '<div style="font-size:12.5px;color:var(--muted);text-align:center;">কোনো পেমেন্ট রেকর্ড নেই।</div>';
+
+    // Smart ID Card Details
+    document.getElementById('idCardName').textContent = s.name;
+    document.getElementById('idCardSub').textContent = `${s.id} • ${s.studentClass}`;
+    document.getElementById('idCardFather').textContent = s.fatherName || '-';
+    document.getElementById('idCardMobile').textContent = s.mobile || '-';
+    document.getElementById('idCardAddress').textContent = s.address || 'Penchakola, Bankura';
+    document.getElementById('idCardAdm').textContent = s.admissionDate || '-';
+    document.getElementById('idCardQrImg').src = 'https://quickchart.io/qr?size=180&text=' + encodeURIComponent(s.id);
+
+    // Notices
+    document.getElementById('sideNotPill').textContent = notices.length;
+    document.getElementById('stNoticesList').innerHTML = notices.length
+      ? notices.map(n => `<div class="req-card">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+            <strong style="font-size:14px;color:var(--accent-light);">${n.title}</strong>
+            <span style="font-size:11px;color:var(--muted);">${n.date}</span>
+          </div>
+          <div style="font-size:13px;color:var(--text-2);margin-top:5px;line-height:1.45;">${n.message}</div>
+          ${n.link ? `<a href="${n.link}" target="_blank" class="btn-sm" style="margin-top:8px;background:var(--accent-grad);color:var(--accent-text);">Open Link →</a>` : ''}
+        </div>`).join('')
+      : '<div style="font-size:12.5px;color:var(--muted);text-align:center;">বর্তমানে কোনো নতুন নোটিশ নেই।</div>';
+  }
+
+  function renderStudyContentList(containerId, list, isLocked, emptyMsg) {
+    const box = document.getElementById(containerId);
+    if (!box) return;
+    if (!list.length) {
+      box.innerHTML = `<div style="font-size:12.5px;color:var(--muted);text-align:center;padding:12px 0;">${emptyMsg}</div>`;
+      return;
+    }
+    box.innerHTML = list.map(c => {
+      const isLive = c.type === 'Live';
+      const safeTitle = String(c.title || '').replace(/'/g, "\\'");
+      return `<div class="req-card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+          <div>
+            <strong style="font-size:14px;color:var(--text);">${c.title}</strong>
+            <div style="font-size:11.5px;color:var(--accent-light);font-weight:700;margin-top:2px;">${c.subject} • ${c.chapter || 'General'}</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px;">${c.date}</div>
+          </div>
+          <span class="${isLive ? 'badge-due' : 'badge-ok'}">${c.type}</span>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:10px;">
+          ${isLocked
+            ? `<button type="button" class="btn-sm" style="background:var(--danger-soft);color:var(--danger);flex:1;" onclick="openPage('fees')">🔒 Locked (Pay Fee)</button>`
+            : `<a href="${c.link}" target="_blank" class="btn-sm" style="background:var(--accent-grad);color:var(--accent-text);flex:1;">${c.type === 'PDF' ? '📥 Open / Download PDF' : (c.type === 'Mock Test' ? '✍️ Start Test' : '▶️ Watch Class')}</a>`
+          }
+          ${isLive && !isLocked ? `<button type="button" class="btn-sm" style="background:#0284c7;color:#fff;" onclick="openStudentChat('${c.id}','${safeTitle}')">💬 Ask Doubt</button>` : ''}
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  // ===== ONLINE PAYMENT SUBMIT =====
+  async function submitStudentOnlineFee(e) {
+    e.preventDefault();
+    if (!stData || !stData.student) return;
+    if (!navigator.onLine) { toast('অনলাইন পেমেন্ট সাবমিট করতে ইন্টারনেট চালু রাখুন।'); return; }
+    const s = stData.student;
+    const month = document.getElementById('stPayMonth').value;
+    const amount = Number(document.getElementById('stPayAmt').value) || 0;
+    const utr = document.getElementById('stPayUtr').value.trim();
+    const shotFile = document.getElementById('stPayShot').files[0];
+    if (!month || amount <= 0 || !utr) { toast('সব তথ্য সঠিকভাবে পূরণ করুন!'); return; }
+
+    const btn = document.getElementById('stPaySubmitBtn');
+    btn.disabled = true; btn.textContent = 'Submitting...';
+
+    const sendReq = async (screenshotData) => {
+      try {
+        const res = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({
+            action: 'submitOnlinePayment',
+            studentId: s.id,
+            studentName: s.name,
+            studentClass: s.studentClass,
+            month,
+            amount,
+            utr,
+            screenshotData
+          })
+        });
+        const data = await res.json();
+        if (data && data.status === 'ok') {
+          e.target.reset();
+          toast('✅ পেমেন্ট রিকোয়েস্ট পাঠানো হয়েছে! স্যার ভেরিফাই করলেই রসিদ পাবে।');
+          refreshStudentData(true);
+        } else {
+          toast('সাবমিট করতে সমস্যা হয়েছে!');
+        }
+      } catch (err) {
+        toast('Network error! আবার চেষ্টা করুন।');
+      } finally {
+        btn.disabled = false; btn.textContent = 'Submit Payment for Verification';
+      }
+    };
+
+    if (shotFile) {
+      const reader = new FileReader();
+      reader.onload = ev => {
+        const img = new Image();
+        img.onload = () => {
+          const c = document.createElement('canvas');
+          const scale = Math.min(1, 700 / Math.max(img.width, img.height));
+          c.width = img.width * scale; c.height = img.height * scale;
+          c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+          sendReq(c.toDataURL('image/jpeg', 0.72));
+        };
+        img.src = ev.target.result;
+      };
+      reader.readAsDataURL(shotFile);
+    } else {
+      sendReq('');
+    }
+  }
+
+  // ===== LIVE Q&A CHAT =====
+  function openStudentChat(cid, title) {
+    activeChatId = cid;
+    document.getElementById('chatModalTitle').textContent = title || 'Live Q&A';
+    document.getElementById('chatModal').classList.add('open');
+    loadStudentChat();
+    if (chatTimer) clearInterval(chatTimer);
+    chatTimer = setInterval(loadStudentChat, 6000);
+  }
+  function closeStudentChat() {
+    activeChatId = null;
+    if (chatTimer) clearInterval(chatTimer);
+    document.getElementById('chatModal').classList.remove('open');
+  }
+  async function loadStudentChat() {
+    if (!activeChatId) return;
+    try {
+      const res = await fetch(`${API_URL}?mode=chat&contentId=${encodeURIComponent(activeChatId)}`);
+      const data = await res.json();
+      if (data && data.status === 'ok') renderStudentChatMsgs(data.messages || []);
+    } catch (e) {}
+  }
+  function renderStudentChatMsgs(msgs) {
+    const box = document.getElementById('stChatBox');
+    box.innerHTML = msgs.length
+      ? msgs.map(m => `<div class="chat-msg ${m.role==='Admin'?'admin':''}"><strong style="color:var(--accent-light);">${m.senderName}</strong> <span style="font-size:10px;color:var(--muted);">${m.time}</span><div style="margin-top:2px;">${m.message}</div></div>`).join('')
+      : '<div style="font-size:12px;color:var(--muted);text-align:center;margin-top:40px;">কোনো প্রশ্ন থাকলে নিচে লিখে পাঠাও।</div>';
+    box.scrollTop = box.scrollHeight;
+  }
+  async function sendStudentChat(e) {
+    e.preventDefault();
+    if (!stData || !stData.student || !activeChatId) return;
+    const inp = document.getElementById('stChatInput');
+    const msg = inp.value.trim();
+    if (!msg) return;
+    inp.value = '';
+    const s = stData.student;
+    const res = await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({
+        action: 'sendChat',
+        contentId: activeChatId,
+        senderId: s.id,
+        senderName: `${s.name} (${s.id})`,
+        role: 'Student',
+        message: msg
+      })
+    });
+    const data = await res.json();
+    if (data && data.status === 'ok') renderStudentChatMsgs(data.messages || []);
+  }
+
+  // ===== RECEIPT VIEW & PNG/PDF DOWNLOAD =====
+  function openReceiptObj(idx) {
+    if (!stData || !stData.payments || !stData.payments[idx]) return;
+    openReceiptModal(stData.payments[idx]);
+  }
+  function openStudentReceipt(monthKey) {
+    if (!stData || !stData.student) return;
+    const s = stData.student;
+    const found = (stData.payments || []).find(p => p.month === monthKey);
+    openReceiptModal(found || {
+      receiptNo: 'UCC-R27',
+      date: s.firstPayment || '-',
+      time: '',
+      studentId: s.id,
+      studentName: s.name,
+      studentClass: s.studentClass,
+      month: monthKey,
+      amount: Number(s.months?.[monthKey]) || 300,
+      collector: 'U.C.C Institute',
+      mode: 'Cash'
+    });
+  }
+  function openReceiptModal(p) {
+    const s = (stData && stData.student) || {};
+    activeReceipt = { p, fatherName: s.fatherName || '-' };
+    document.getElementById('rNo').textContent = p.receiptNo || '-';
+    document.getElementById('rDate').textContent = `${formatBnDate(p.date)}${p.time ? ', ' + p.time : ''}`;
+    document.getElementById('rName').textContent = p.studentName || s.name;
+    document.getElementById('rFather').textContent = s.fatherName || '-';
+    document.getElementById('rIdCls').textContent = `${p.studentId || s.id} • ${bnClass(p.studentClass || s.studentClass)}`;
+    document.getElementById('rMonth').textContent = bnMonth(p.month);
+    document.getElementById('rMode').textContent = bnMode(p.mode);
+    document.getElementById('rAmt').textContent = p.amount + ' টাকা';
     document.getElementById('rCollector').textContent = bnCollector(p.collector);
     document.getElementById('rcptModal').classList.add('open');
   }
   function closeReceipt() { document.getElementById('rcptModal').classList.remove('open'); }
-  function downloadReceiptImage() {
-    if (!activeReceiptObj) return; const { p, fatherName } = activeReceiptObj;
-    const c = document.createElement('canvas'); c.width = 720; c.height = 860; const ctx = c.getContext('2d');
-    ctx.fillStyle='#fff'; ctx.fillRect(0,0,720,860); ctx.strokeStyle='#061121'; ctx.lineWidth=8; ctx.strokeRect(18,18,684,824);
+
+  function buildReceiptCanvas() {
+    const { p, fatherName } = activeReceipt;
+    const c = document.createElement('canvas'); c.width = 720; c.height = 860;
+    const ctx = c.getContext('2d');
+    ctx.fillStyle='#fff'; ctx.fillRect(0,0,720,860);
+    ctx.strokeStyle='#061121'; ctx.lineWidth=8; ctx.strokeRect(18,18,684,824);
     ctx.strokeStyle='#d4af37'; ctx.lineWidth=3; ctx.strokeRect(28,28,664,804);
-    ctx.fillStyle='#061121'; ctx.fillRect(22,22,676,155); ctx.fillStyle='#d4af37'; ctx.fillRect(22,173,676,6);
+    ctx.fillStyle='#061121'; ctx.fillRect(22,22,676,155);
+    ctx.fillStyle='#d4af37'; ctx.fillRect(22,173,676,6);
     ctx.fillStyle='#fae094'; ctx.textAlign='center'; ctx.font='bold 38px sans-serif'; ctx.fillText('ইউ.সি.সি ইনস্টিটিউট',360,82);
     ctx.fillStyle='#e2e8f0'; ctx.font='20px sans-serif'; ctx.fillText('পেঁচাকোলা, রায়পুর, বাঁকুড়া • ফোন: 8016972121 / 8159980707',360,120);
     ctx.font='bold 22px sans-serif'; ctx.fillStyle='#d4af37'; ctx.fillText('অফিশিয়াল টিউশন ফি রসিদ (2027)',360,156);
-    const rows=[['রসিদ নং:',p.receiptNo||'-'],['তারিখ ও সময়:',`${formatBnDate(p.date)}${p.time?', '+p.time:''}`],['ছাত্র/ছাত্রীর নাম:',p.studentName],['পিতার নাম:',fatherName],['আইডি ও শ্রেণী:',`${p.studentId} • ${bnClass(p.studentClass)}`],['কোন মাসের ফি:',bnMonth(p.month)],['পেমেন্টের মাধ্যম:',bnMode(p.mode)]];
-    let y=240; rows.forEach(([l,v])=>{ ctx.textAlign='left'; ctx.fillStyle='#475569'; ctx.font='22px sans-serif'; ctx.fillText(l,55,y); ctx.textAlign='right'; ctx.fillStyle='#0f172a'; ctx.font='bold 23px sans-serif'; ctx.fillText(String(v),665,y); ctx.strokeStyle='#e2e8f0'; ctx.lineWidth=1.5; ctx.beginPath(); ctx.moveTo(55,y+18); ctx.lineTo(665,y+18); ctx.stroke(); y+=62; });
-    ctx.fillStyle='#fef9e7'; ctx.fillRect(55,y-10,610,68); ctx.strokeStyle='#d4af37'; ctx.lineWidth=2.5; ctx.strokeRect(55,y-10,610,68);
-    ctx.textAlign='left'; ctx.fillStyle='#061121'; ctx.font='bold 26px sans-serif'; ctx.fillText('মোট জমা টাকা:',75,y+33); ctx.textAlign='right'; ctx.font='bold 30px sans-serif'; ctx.fillText(`${p.amount} টাকা`,645,y+33);
-    y+=120; ctx.textAlign='right'; ctx.fillStyle='#475569'; ctx.font='19px sans-serif'; ctx.fillText('গ্রহণকারী / অনুমোদিত স্বাক্ষর:',665,y); ctx.fillStyle='#061121'; ctx.font='bold 26px sans-serif'; ctx.fillText(bnCollector(p.collector),665,y+36);
-    const a=document.createElement('a'); a.download=`UCC_Receipt_${p.studentId}_${p.month}.png`; a.href=c.toDataURL('image/png'); a.click();
+    const rows=[
+      ['রসিদ নং:',p.receiptNo||'-'],
+      ['তারিখ ও সময়:',`${formatBnDate(p.date)}${p.time?', '+p.time:''}`],
+      ['ছাত্র/ছাত্রীর নাম:',p.studentName],
+      ['পিতার নাম:',fatherName],
+      ['আইডি ও শ্রেণী:',`${p.studentId} • ${bnClass(p.studentClass)}`],
+      ['কোন মাসের ফি:',bnMonth(p.month)],
+      ['পেমেন্টের মাধ্যম:',bnMode(p.mode)]
+    ];
+    let y=240;
+    rows.forEach(([l,v])=>{
+      ctx.textAlign='left'; ctx.fillStyle='#475569'; ctx.font='22px sans-serif'; ctx.fillText(l,55,y);
+      ctx.textAlign='right'; ctx.fillStyle='#0f172a'; ctx.font='bold 23px sans-serif'; ctx.fillText(String(v),665,y);
+      ctx.strokeStyle='#e2e8f0'; ctx.lineWidth=1.5; ctx.beginPath(); ctx.moveTo(55,y+18); ctx.lineTo(665,y+18); ctx.stroke();
+      y+=62;
+    });
+    ctx.fillStyle='#fef9e7'; ctx.fillRect(55,y-10,610,68);
+    ctx.strokeStyle='#d4af37'; ctx.lineWidth=2.5; ctx.strokeRect(55,y-10,610,68);
+    ctx.textAlign='left'; ctx.fillStyle='#061121'; ctx.font='bold 26px sans-serif'; ctx.fillText('মোট জমা টাকা:',75,y+33);
+    ctx.textAlign='right'; ctx.font='bold 30px sans-serif'; ctx.fillText(`${p.amount} টাকা`,645,y+33);
+    y+=120;
+    ctx.textAlign='right'; ctx.fillStyle='#475569'; ctx.font='19px sans-serif'; ctx.fillText('গ্রহণকারী / অনুমোদিত স্বাক্ষর:',665,y);
+    ctx.fillStyle='#061121'; ctx.font='bold 26px sans-serif'; ctx.fillText(bnCollector(p.collector),665,y+36);
+    return c;
+  }
+
+  function downloadStudentReceiptPng() {
+    if (!activeReceipt) return;
+    const c = buildReceiptCanvas();
+    const a = document.createElement('a');
+    a.download = `UCC_Receipt_${activeReceipt.p.studentId}_${activeReceipt.p.month}.png`;
+    a.href = c.toDataURL('image/png');
+    a.click();
+  }
+
+  function downloadStudentReceiptPdf() {
+    if (!activeReceipt) return;
+    const c = buildReceiptCanvas();
+    if (window.jspdf && window.jspdf.jsPDF) {
+      const doc = new window.jspdf.jsPDF({ orientation: 'p', unit: 'pt', format: 'a4' });
+      const w = doc.internal.pageSize.getWidth();
+      doc.addImage(c.toDataURL('image/jpeg', 0.94), 'JPEG', 30, 30, w - 60, (w - 60) * (860 / 720));
+      doc.save(`UCC_Receipt_${activeReceipt.p.studentId}_${activeReceipt.p.month}.pdf`);
+      toast('✅ PDF Receipt ডাউনলোড হয়েছে!');
+    } else {
+      window.print();
+    }
+  }
+
+  // ===== SMART ID CARD PNG & PDF DOWNLOAD =====
+  function buildSmartIdCanvas(cb) {
+    if (!stData || !stData.student) return;
+    const s = stData.student;
+    const c = document.createElement('canvas');
+    c.width = 680; c.height = 1040;
+    const ctx = c.getContext('2d');
+
+    // Background & Border
+    ctx.fillStyle = '#061121';
+    ctx.fillRect(0, 0, 680, 1040);
+    ctx.strokeStyle = '#d4af37';
+    ctx.lineWidth = 10;
+    ctx.strokeRect(14, 14, 652, 1012);
+
+    // Header Banner
+    ctx.fillStyle = '#0f766e';
+    ctx.fillRect(19, 19, 642, 165);
+    ctx.fillStyle = '#d4af37';
+    ctx.fillRect(19, 182, 642, 6);
+
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#fae094';
+    ctx.font = 'bold 38px sans-serif';
+    ctx.fillText('U.C.C INSTITUTE', 340, 76);
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 20px sans-serif';
+    ctx.fillText('Unique Coaching Centre • Penchakola, Bankura', 340, 114);
+    ctx.fillStyle = '#fde047';
+    ctx.font = 'bold 19px sans-serif';
+    ctx.fillText('STUDENT SMART IDENTITY CARD • 2027', 340, 154);
+
+    // Photo Circle
+    const drawRest = (photoImg) => {
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(340, 290, 82, 0, Math.PI * 2);
+      ctx.closePath();
+      ctx.fillStyle = '#d4af37';
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(340, 290, 76, 0, Math.PI * 2);
+      ctx.closePath();
+      ctx.clip();
+      if (photoImg) {
+        ctx.drawImage(photoImg, 264, 214, 152, 152);
+      } else {
+        ctx.fillStyle = '#1e293b';
+        ctx.fillRect(264, 214, 152, 152);
+        const init = String(s.name || 'ST').trim().split(/\s+/).map(w => w[0]).slice(0, 2).join('').toUpperCase() || 'ST';
+        ctx.fillStyle = '#fae094';
+        ctx.font = 'bold 48px sans-serif';
+        ctx.fillText(init, 340, 306);
+      }
+      ctx.restore();
+
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 32px sans-serif';
+      ctx.fillText(s.name, 340, 418);
+
+      ctx.fillStyle = '#fae094';
+      ctx.font = 'bold 22px sans-serif';
+      ctx.fillText(`${s.id}  •  ${s.studentClass}`, 340, 454);
+
+      // Details Box
+      ctx.fillStyle = 'rgba(255,255,255,0.08)';
+      ctx.fillRect(48, 480, 584, 240);
+      ctx.strokeStyle = 'rgba(212,175,55,0.45)';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(48, 480, 584, 240);
+
+      const details = [
+        ["Father's Name:", s.fatherName || '-'],
+        ['Mobile No:', s.mobile || '-'],
+        ['Address:', s.address || 'Penchakola, Bankura'],
+        ['Admission Date:', s.admissionDate || '-']
+      ];
+      let y = 528;
+      details.forEach(([k, v]) => {
+        ctx.textAlign = 'left';
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '20px sans-serif';
+        ctx.fillText(k, 72, y);
+        ctx.textAlign = 'right';
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 21px sans-serif';
+        ctx.fillText(String(v).slice(0, 28), 608, y);
+        y += 54;
+      });
+
+      // QR Code Box
+      const qrImg = new Image();
+      qrImg.crossOrigin = 'anonymous';
+      qrImg.onload = () => {
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(245, 745, 190, 190);
+        ctx.strokeStyle = '#d4af37';
+        ctx.lineWidth = 4;
+        ctx.strokeRect(245, 745, 190, 190);
+        ctx.drawImage(qrImg, 255, 755, 170, 170);
+
+        ctx.textAlign = 'center';
+        ctx.fillStyle = '#cbd5e1';
+        ctx.font = '18px sans-serif';
+        ctx.fillText('Contact: 8016972121 / 8159980707', 340, 980);
+        cb(c);
+      };
+      qrImg.onerror = () => cb(c);
+      qrImg.src = 'https://quickchart.io/qr?size=180&text=' + encodeURIComponent(s.id);
+    };
+
+    const pUrl = getStudentPhotoUrl(s);
+    if (pUrl) {
+      const pImg = new Image();
+      pImg.crossOrigin = 'anonymous';
+      pImg.onload = () => drawRest(pImg);
+      pImg.onerror = () => drawRest(null);
+      pImg.src = pUrl;
+    } else {
+      drawRest(null);
+    }
+  }
+
+  function downloadSmartIdPng() {
+    toast('🪪 ID Card তৈরি হচ্ছে...');
+    buildSmartIdCanvas(c => {
+      const a = document.createElement('a');
+      a.download = `UCC_ID_Card_${stData.student.id}.png`;
+      a.href = c.toDataURL('image/png');
+      a.click();
+      toast('✅ Smart ID Card (PNG) ডাউনলোড হয়েছে!');
+    });
+  }
+
+  function downloadSmartIdPdf() {
+    toast('📥 ID Card PDF তৈরি হচ্ছে...');
+    buildSmartIdCanvas(c => {
+      if (window.jspdf && window.jspdf.jsPDF) {
+        const doc = new window.jspdf.jsPDF({ orientation: 'p', unit: 'pt', format: 'a4' });
+        const pdfW = doc.internal.pageSize.getWidth();
+        const cardW = 310;
+        const cardH = cardW * (1040 / 680);
+        doc.addImage(c.toDataURL('image/jpeg', 0.95), 'JPEG', (pdfW - cardW) / 2, 60, cardW, cardH);
+        doc.save(`UCC_ID_Card_${stData.student.id}.pdf`);
+        toast('✅ Smart ID Card (PDF) ডাউনলোড হয়েছে!');
+      } else {
+        downloadSmartIdPng();
+      }
+    });
   }
 </script>
 </body>
