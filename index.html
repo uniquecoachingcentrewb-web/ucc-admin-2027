@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- U.C.C Institute Teacher Panel - Final Build v12 -->
+<!-- U.C.C Institute Teacher Panel - Final Build v13 -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -360,6 +360,44 @@
       text-align: center; box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45); border: 1.5px solid var(--accent);
     }
 
+    /* ===== ANIMATED CORNER BRAND TITLE (U.C.C -> U.C.C Institute -> Unique Coaching Centre) ===== */
+    .brand-logo-pulse {
+      animation: logoGlowPulse 3.2s ease-in-out infinite;
+    }
+    @keyframes logoGlowPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(255,255,255,0.28); transform: scale(1); }
+      50% { box-shadow: 0 0 0 5px rgba(255,255,255,0.06); transform: scale(1.04); }
+    }
+    .brand-rotator-wrap {
+      min-width: 0;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .brand-rotator-text {
+      display: inline-block;
+      margin: 0;
+      font-size: clamp(12.5px, 3.6vw, 15.5px);
+      font-weight: 800;
+      line-height: 1.22;
+      white-space: nowrap;
+      letter-spacing: -0.15px;
+      transition: opacity 0.36s cubic-bezier(0.22, 1, 0.36, 1), transform 0.36s cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: opacity, transform;
+    }
+    .brand-rotator-text.brand-exit {
+      opacity: 0;
+      transform: translateY(-9px) scale(0.95);
+    }
+    .brand-rotator-text.brand-enter {
+      opacity: 0;
+      transform: translateY(9px) scale(0.95);
+    }
+    .splash-title, .login-title h2 {
+      transition: opacity 0.36s cubic-bezier(0.22, 1, 0.36, 1), transform 0.36s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
     /* ===== MODERN ANIMATED DASHBOARD UI (CANVIEE-INSPIRED) ===== */
     body { padding-bottom: 28px; }
     .bottom-nav { display: none !important; }
@@ -594,7 +632,7 @@
 <!-- SPLASH -->
 <div id="splashScreen">
   <div class="splash-ring"><img src="logo.png?v=4" alt="Logo" onerror="this.style.display='none'"></div>
-  <h1 class="splash-title">U.C.C Institute</h1>
+  <h1 id="splashBrandTitle" class="splash-title">U.C.C Institute</h1>
   <p class="splash-tag">Learn • Grow • Succeed</p>
   <div class="splash-bar"><div class="splash-fill"></div></div>
 </div>
@@ -603,7 +641,7 @@
 <div id="loginScreen">
   <div class="login-card">
     <img src="logo.png?v=4" alt="Logo" class="login-logo" onerror="this.style.display='none'">
-    <div class="login-title"><h2>U.C.C Institute Teacher Panel</h2><p>LEARN • GROW • SUCCEED</p></div>
+    <div class="login-title"><h2 id="loginBrandTitle">U.C.C Institute</h2><p>TEACHER PANEL • LEARN • GROW • SUCCEED</p></div>
     <div id="loginErr" class="login-err">Invalid User ID or Password!</div>
     <form onsubmit="handleLogin(event)">
       <div class="form-group"><label>Teacher / Admin ID</label><input type="text" id="loginUser" required placeholder="T01 / T02..." autocomplete="username"></div>
@@ -625,7 +663,7 @@
     <div style="display:flex;align-items:center;gap:10px;min-width:0;">
       <img src="logo.png?v=4" alt="Logo" onerror="this.style.display='none'">
       <div style="min-width:0;">
-        <div style="font-weight:800;font-size:15px;">U.C.C Institute</div>
+        <div id="sideBrandTitle" class="brand-rotator-text" style="font-size:14px;color:var(--hero-fg,#fff);">U.C.C Institute</div>
         <div id="sideAdminName" style="font-size:11px;opacity:0.85;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Admin Menu</div>
       </div>
     </div>
@@ -712,13 +750,16 @@
 
 <!-- HEADER -->
 <header class="app-topbar">
-  <div class="brand" style="gap:8px;">
+  <div class="brand" style="gap:7px;min-width:0;flex:1;">
     <button class="top-ic-btn" onclick="openSidebar()" title="Open Sidebar Menu" style="flex-shrink:0;">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
     </button>
-    <div onclick="openPage('home', null)" style="display:flex;align-items:center;gap:8px;cursor:pointer;">
-    <img src="logo.png?v=4" alt="Logo" class="brand-logo" onerror="this.style.display='none'">
-    <div><h1 style="color:var(--dash-hero-fg, var(--accent-light));">U.C.C Institute</h1><small id="hdrAdminLabel" style="color:var(--dash-hero-fg, var(--muted));opacity:0.85;">Teacher Panel • 2027</small></div>
+    <div onclick="openPage('home', null)" style="display:flex;align-items:center;gap:7px;cursor:pointer;min-width:0;flex:1;">
+      <img src="logo.png?v=4" alt="Logo" class="brand-logo brand-logo-pulse" style="flex-shrink:0;" onerror="this.style.display='none'">
+      <div class="brand-rotator-wrap">
+        <h1 id="hdrBrandAnim" class="brand-rotator-text" style="color:var(--dash-hero-fg, var(--accent-light));">U.C.C</h1>
+        <small id="hdrAdminLabel" style="color:var(--dash-hero-fg, var(--muted));opacity:0.85;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Teacher Panel • 2027</small>
+      </div>
     </div>
   </div>
   <div class="top-icon-group">
@@ -1299,7 +1340,7 @@
 <script>
   // Auto-clear old Service Worker cache whenever a new UI build is deployed
   (function() {
-    const UI_BUILD = 'ucc_teacher_v12_final';
+    const UI_BUILD = 'ucc_teacher_v13_brand';
     try {
       if (localStorage.getItem('ucc_ui_build') !== UI_BUILD) {
         localStorage.setItem('ucc_ui_build', UI_BUILD);
@@ -4181,6 +4222,38 @@
     });
   }
 
+
+
+  // ===== ANIMATED CORNER BRAND NAME ROTATOR =====
+  (function initAnimatedBrandRotator() {
+    const BRAND_NAMES = ['U.C.C', 'U.C.C Institute', 'Unique Coaching Centre'];
+    let idx = 0;
+    function cycleBrand() {
+      idx = (idx + 1) % BRAND_NAMES.length;
+      const nextText = BRAND_NAMES[idx];
+      const targets = [
+        document.getElementById('hdrBrandAnim'),
+        document.getElementById('sideBrandTitle'),
+        document.getElementById('loginBrandTitle'),
+        document.getElementById('splashBrandTitle')
+      ].filter(Boolean);
+
+      targets.forEach(el => {
+        el.classList.add('brand-exit');
+      });
+
+      setTimeout(() => {
+        targets.forEach(el => {
+          el.textContent = nextText;
+          el.classList.remove('brand-exit');
+          el.classList.add('brand-enter');
+          void el.offsetWidth;
+          el.classList.remove('brand-enter');
+        });
+      }, 340);
+    }
+    setInterval(cycleBrand, 2400);
+  })();
 
 </script>
 </body>
