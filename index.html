@@ -59,16 +59,7 @@
       -webkit-font-smoothing: antialiased;
       transition: background 0.35s ease, color 0.25s ease;
     }
-    body::before {
-      content: ''; position: fixed; top: -120px; right: -100px; width: 320px; height: 320px;
-      border-radius: 50%; background: var(--accent); opacity: 0.11; filter: blur(90px);
-      pointer-events: none; z-index: 0; animation: floatGlow 9s ease-in-out infinite alternate;
-      will-change: transform;
-    }
-    @keyframes floatGlow {
-      0% { transform: translate(0, 0) scale(1); }
-      100% { transform: translate(-45px, 55px) scale(1.18); }
-    }
+    /* Heavy blur glow removed for 60fps superfast mobile performance */
     input, select, textarea { user-select: text; }
     svg { flex-shrink: 0; }
     option { background: var(--bg-input); color: var(--text); }
@@ -79,7 +70,7 @@
       background: var(--bg-page); background-color: var(--bg-solid);
       display: flex; flex-direction: column; justify-content: center; align-items: center;
       text-align: center; padding: 24px;
-      transition: opacity 0.28s var(--ease-fast), transform 0.28s var(--ease-fast);
+      transition: opacity 0.16s ease-out, transform 0.16s ease-out;
     }
     #splashScreen.hide { opacity: 0; transform: scale(1.06); pointer-events: none; }
     .splash-ring {
@@ -99,7 +90,7 @@
       opacity: 0; animation: slideUp 0.35s var(--ease-fast) 0.22s forwards;
     }
     .splash-bar { width: 124px; height: 3.5px; border-radius: 99px; background: var(--border); margin-top: 24px; overflow: hidden; }
-    .splash-fill { height: 100%; width: 0%; border-radius: 99px; background: var(--accent-grad); animation: loadBar 0.72s var(--ease-fast) 0.15s forwards; }
+    .splash-fill { height: 100%; width: 0%; border-radius: 99px; background: var(--accent-grad); animation: loadBar 0.32s ease-out 0.05s forwards; }
 
     @keyframes popIn { 0% { opacity: 0; transform: scale(0.65); } 100% { opacity: 1; transform: scale(1); } }
     @keyframes slideUp { 0% { opacity: 0; transform: translateY(12px); } 100% { opacity: 1; transform: translateY(0); } }
@@ -130,7 +121,7 @@
 
     /* ===== HEADER & SIDEBAR ===== */
     header {
-      background: var(--bg-header); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      background: var(--bg-header); 
       color: var(--text); padding: 11px 14px; position: sticky; top: 0; z-index: 30;
       display: flex; justify-content: space-between; align-items: center;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.16);
@@ -155,7 +146,7 @@
     }
     .sync-btn:active { transform: scale(0.92); }
 
-    #sideBackdrop { display: none; position: fixed; inset: 0; background: rgba(2, 8, 18, 0.68); z-index: 80; backdrop-filter: blur(4px); }
+    #sideBackdrop { display: none; position: fixed; inset: 0; background: rgba(2, 8, 18, 0.68); z-index: 80;  }
     #sideBackdrop.open { display: block; }
     #sidebar {
       position: fixed; top: 0; bottom: 0; left: -310px; width: 296px;
@@ -165,7 +156,7 @@
     }
     #sidebar.open { left: 0; }
     .side-head {
-      background: var(--bg-hero); color: #fff; padding: 18px 15px;
+      background: var(--bg-hero); color: var(--hero-fg, #ffffff); padding: 18px 15px;
       border-bottom: 1.5px solid var(--accent-border); display: flex; align-items: center; justify-content: space-between; gap: 10px;
     }
     .side-head img { width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--accent); background: #fff; object-fit: cover; }
@@ -284,7 +275,7 @@
     .filter-pills { display: grid; grid-template-columns: 1fr 1fr 1.35fr; gap: 7px; margin-bottom: 12px; }
     .pill { padding: 9px 6px; border-radius: 11px; border: 1px solid var(--border); background: var(--bg-subcard); font-weight: 700; font-size: 12px; cursor: pointer; color: var(--muted); }
     .pill.active { background: var(--accent-grad); color: var(--accent-text); border-color: transparent; font-weight: 800; }
-    .hisab-hero { background: var(--bg-hero); border: 1.5px solid var(--accent-border); color: #fff; border-radius: 18px; padding: 16px; text-align: center; margin-bottom: 12px; box-shadow: var(--shadow-card); }
+    .hisab-hero { background: var(--bg-hero); border: 1.5px solid var(--accent-border); color: var(--hero-fg, #ffffff); border-radius: 18px; padding: 16px; text-align: center; margin-bottom: 12px; box-shadow: var(--shadow-card); }
     .hisab-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
     .hisab-box { background: var(--bg-subcard); border: 1px solid var(--accent-border); border-radius: 14px; padding: 11px 5px; text-align: center; }
     .hisab-amt { font-size: 15px; font-weight: 800; color: var(--accent-light); }
@@ -298,7 +289,7 @@
     .toggle-btn.off { background: var(--danger); color: #fff; }
 
     /* ===== PROFILE MODAL ===== */
-    .modal-bg { display: none; position: fixed; inset: 0; background: rgba(2, 8, 18, 0.78); backdrop-filter: blur(4px); z-index: 60; justify-content: center; align-items: flex-end; }
+    .modal-bg { display: none; position: fixed; inset: 0; background: rgba(2, 8, 18, 0.78);  z-index: 60; justify-content: center; align-items: flex-end; }
     .modal-bg.open { display: flex; }
     .modal-sheet {
       background: var(--bg-solid); border-top: 2px solid var(--accent); width: 100%; max-width: 540px; max-height: 92vh;
@@ -328,7 +319,7 @@
     .act-link { text-align: center; text-decoration: none; padding: 10px 6px; border-radius: 11px; color: #fff; font-weight: 700; font-size: 12px; display: block; border: none; cursor: pointer; width: 100%; }
 
     /* ===== RECEIPT & CHAT MODALS ===== */
-    .rcpt-modal-bg { display: none; position: fixed; inset: 0; background: rgba(2, 8, 18, 0.84); backdrop-filter: blur(5px); z-index: 120; justify-content: center; align-items: center; padding: 14px; }
+    .rcpt-modal-bg { display: none; position: fixed; inset: 0; background: rgba(2, 8, 18, 0.84);  z-index: 120; justify-content: center; align-items: center; padding: 14px; }
     .rcpt-modal-bg.open { display: flex; }
     .rcpt-card { background: #ffffff; color: #0f172a; width: 100%; max-width: 430px; border-radius: 20px; padding: 20px; border: 2.5px solid #d4af37; max-height: 92vh; overflow-y: auto; animation: popIn 0.2s var(--ease-fast); }
     .rcpt-head { text-align: center; border-bottom: 2px solid #061121; padding-bottom: 10px; margin-bottom: 12px; }
@@ -350,7 +341,7 @@
     /* ===== BOTTOM NAV ===== */
     .bottom-nav {
       position: fixed; bottom: 0; left: 0; right: 0;
-      background: var(--bg-nav); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      background: var(--bg-nav); 
       border-top: 1px solid var(--accent-border); display: flex; z-index: 40;
       box-shadow: 0 -8px 26px rgba(0, 0, 0, 0.22);
       padding: 7px 8px calc(9px + env(safe-area-inset-bottom));
@@ -383,9 +374,9 @@
     .top-ic-btn {
       position: relative;
       width: 35px; height: 35px; border-radius: 11px;
-      border: 1px solid rgba(255,255,255,0.18);
-      background: rgba(255,255,255,0.12);
-      color: var(--dash-hero-fg, var(--text));
+      border: 1px solid var(--dash-chip-border, rgba(255,255,255,0.22));
+      background: var(--dash-chip-bg, rgba(255,255,255,0.14));
+      color: var(--dash-hero-fg, #ffffff);
       display: inline-flex; align-items: center; justify-content: center;
       cursor: pointer; transition: transform 0.14s var(--ease-fast), background 0.15s ease;
     }
@@ -425,8 +416,9 @@
     .dash-role-chip {
       font-style: normal; font-size: 10.5px; font-weight: 800;
       padding: 4px 10px; border-radius: 20px;
-      background: rgba(255,255,255,0.18); color: #fff;
-      border: 1px solid rgba(255,255,255,0.28);
+      background: var(--dash-chip-bg, rgba(255,255,255,0.18));
+      color: var(--dash-hero-fg, #ffffff);
+      border: 1px solid var(--dash-chip-border, rgba(255,255,255,0.28));
       white-space: nowrap;
     }
 
@@ -459,45 +451,60 @@
     .dsc-pill.ok { background: var(--success-soft); color: var(--success); }
     .dsc-pill.due { background: var(--danger-soft); color: var(--danger); }
 
-    /* 3-Column Animated Icon Tiles Grid */
+    /* Superfast Crisp Page Open Animation (160ms GPU-only) */
+    .page.active {
+      display: block;
+      animation: pageZoomOpen 0.16s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    @keyframes pageZoomOpen {
+      from { opacity: 0; transform: translateY(10px) scale(0.985); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* 2-Column BIG Hero Action Tiles (Attendance, Classes, Entry, Hisab) */
     .dash-tiles-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
       margin-bottom: 18px;
     }
     .dash-tile {
       position: relative;
       background: var(--bg-card);
       border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 16px 8px 14px;
+      border-radius: 24px;
+      padding: 24px 12px 20px;
+      min-height: 146px;
       text-align: center;
       cursor: pointer;
-      box-shadow: var(--shadow-card);
-      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 9px;
-      transition: transform 0.16s var(--ease-fast), box-shadow 0.16s ease, border-color 0.16s ease;
-      animation: tilePop 0.38s var(--ease-fast) both;
+      box-shadow: 0 10px 26px rgba(15, 118, 110, 0.09);
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
+      transition: transform 0.12s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.12s ease;
+      animation: tilePop 0.22s cubic-bezier(0.22, 1, 0.36, 1) both;
       will-change: transform;
     }
     .dash-tile:active {
-      transform: scale(0.92);
+      transform: scale(0.94);
       border-color: var(--accent);
     }
     @keyframes tilePop {
-      from { opacity: 0; transform: translateY(14px) scale(0.94); }
+      from { opacity: 0; transform: translateY(12px) scale(0.95); }
       to { opacity: 1; transform: translateY(0) scale(1); }
     }
     .dash-tile-circle {
-      width: 54px; height: 54px; border-radius: 50%;
+      width: 68px; height: 68px; border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 6px 16px rgba(0,0,0,0.08);
-      transition: transform 0.18s var(--ease-fast);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+      transition: transform 0.14s ease;
     }
     .dash-tile:active .dash-tile-circle { transform: scale(1.08); }
     .dash-tile-label {
-      font-size: 11.8px; font-weight: 800; color: var(--text);
-      line-height: 1.2; letter-spacing: -0.1px;
+      font-size: 15px; font-weight: 800; color: var(--text);
+      line-height: 1.2; letter-spacing: -0.2px;
+    }
+    .dash-tile-sub {
+      font-size: 11px; font-weight: 600; color: var(--muted);
+      margin-top: -6px;
     }
     .dash-tile-badge {
       position: absolute; top: 8px; right: 8px;
@@ -625,6 +632,10 @@
   </div>
 
   <div class="side-body">
+    <button id="sideCallerBtn" class="side-item" onclick="openSidePage('caller')">
+      <span class="side-left"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>Absent Caller Desk</span>
+      <span id="sideCallerPill" class="side-pill">0</span>
+    </button>
     <button id="sideDueBtn" class="side-item" onclick="openSidePage('duelist')">
       <span class="side-left"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Due List (Class-wise)</span>
       <span id="sideDuePill" class="side-pill">Rs. 0</span>
@@ -676,7 +687,7 @@
           <div class="color-box"><div style="font-size:9.5px;color:var(--muted);">Accent</div><input type="color" id="custAcc" value="#f59e0b"></div>
         </div>
         <div class="row-2">
-          <select id="custMode" style="padding:7px;font-size:11.5px;"><option value="dark">Dark Text</option><option value="light">Light Text</option></select>
+          <select id="custMode" style="padding:7px;font-size:11.5px;"><option value="auto">Auto Contrast</option><option value="day">Day (Light)</option><option value="night">Night (Dark)</option></select>
           <button type="button" class="btn btn-accent" style="padding:7px;font-size:11.5px;" onclick="applyCustomTheme()">Apply</button>
         </div>
       </div>
@@ -696,9 +707,14 @@
 
 <!-- HEADER -->
 <header class="app-topbar">
-  <div class="brand" onclick="openPage('home', null)" style="cursor:pointer;">
+  <div class="brand" style="gap:8px;">
+    <button class="top-ic-btn" onclick="openSidebar()" title="Open Sidebar Menu" style="flex-shrink:0;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+    <div onclick="openPage('home', null)" style="display:flex;align-items:center;gap:8px;cursor:pointer;">
     <img src="logo.png?v=4" alt="Logo" class="brand-logo" onerror="this.style.display='none'">
     <div><h1 style="color:var(--dash-hero-fg, var(--accent-light));">U.C.C Institute</h1><small id="hdrAdminLabel" style="color:var(--dash-hero-fg, var(--muted));opacity:0.85;">Teacher Panel • 2027</small></div>
+    </div>
   </div>
   <div class="top-icon-group">
     <button id="syncBtn" class="top-ic-btn" onclick="syncNow(false)" title="Sync Now" style="width:auto;padding:0 10px;gap:5px;font-size:11px;font-weight:800;">
@@ -1230,7 +1246,7 @@
   // ===== 7 PREMIUM ANIMATED THEMES =====
   const THEMES = {
     emerald_clean: {
-      name: 'Emerald Clean (New)', swatch: 'linear-gradient(135deg,#0f766e 50%,#ffffff 50%)',
+      name: 'Emerald Clean (Day)', swatch: 'linear-gradient(135deg,#0f766e 50%,#ffffff 50%)',
       vars: {
         '--bg-page': 'linear-gradient(180deg, #f3f7f6 0%, #f8fafc 100%)', '--bg-solid': '#f3f7f6',
         '--bg-header': '#0f766e', '--dash-hero-top': '#0f766e',
@@ -1248,7 +1264,9 @@
       name: 'Royal Navy & Gold', swatch: 'linear-gradient(135deg,#061121 50%,#d4af37 50%)',
       vars: {
         '--bg-page': 'radial-gradient(circle at 85% 0%, #12294d 0%, #061121 48%, #040b16 100%)', '--bg-solid': '#061121',
-        '--bg-header': 'rgba(6, 17, 33, 0.92)', '--bg-card': 'linear-gradient(180deg, rgba(16,34,62,0.94), rgba(11,25,47,0.97))',
+        '--bg-header': '#0b1933', '--dash-hero-top': '#0b1933',
+        '--dash-hero-grad': 'linear-gradient(180deg, #0b1933 0%, #162e59 100%)', '--dash-hero-fg': '#ffffff',
+        '--bg-card': 'linear-gradient(180deg, rgba(16,34,62,0.94), rgba(11,25,47,0.97))',
         '--bg-subcard': 'rgba(6, 17, 33, 0.58)', '--bg-input': '#081529', '--bg-hero': 'linear-gradient(135deg,#1b3661,#0d1f3d)',
         '--bg-nav': 'rgba(7, 18, 35, 0.95)', '--accent': '#d4af37', '--accent-light': '#fae094',
         '--accent-grad': 'linear-gradient(135deg,#f8df8c,#d4af37,#b08218)', '--accent-text': '#061121',
@@ -1258,10 +1276,12 @@
       }
     },
     saffron_white: {
-      name: 'Saffron & White', swatch: 'linear-gradient(135deg,#f97316 50%,#ffffff 50%)',
+      name: 'Saffron & White', swatch: 'linear-gradient(135deg,#ea580c 50%,#ffffff 50%)',
       vars: {
         '--bg-page': 'linear-gradient(180deg, #fff7ed 0%, #ffffff 45%, #fffaf5 100%)', '--bg-solid': '#fff7ed',
-        '--bg-header': 'rgba(255, 255, 255, 0.95)', '--bg-card': '#ffffff',
+        '--bg-header': '#ea580c', '--dash-hero-top': '#ea580c',
+        '--dash-hero-grad': 'linear-gradient(180deg, #ea580c 0%, #f97316 100%)', '--dash-hero-fg': '#ffffff',
+        '--bg-card': '#ffffff',
         '--bg-subcard': '#fff7ed', '--bg-input': '#ffffff', '--bg-hero': 'linear-gradient(135deg,#ea580c,#f97316,#fb923c)',
         '--bg-nav': 'rgba(255, 255, 255, 0.96)', '--accent': '#ea580c', '--accent-light': '#c2410c',
         '--accent-grad': 'linear-gradient(135deg,#f97316,#ea580c)', '--accent-text': '#ffffff',
@@ -1274,7 +1294,9 @@
       name: 'Midnight Black', swatch: 'linear-gradient(135deg,#000000 50%,#f59e0b 50%)',
       vars: {
         '--bg-page': 'radial-gradient(circle at 80% 0%, #1c1917 0%, #09090b 55%, #000000 100%)', '--bg-solid': '#000000',
-        '--bg-header': 'rgba(9, 9, 11, 0.94)', '--bg-card': 'linear-gradient(180deg,#18181b,#111113)',
+        '--bg-header': '#111113', '--dash-hero-top': '#111113',
+        '--dash-hero-grad': 'linear-gradient(180deg, #111113 0%, #27272a 100%)', '--dash-hero-fg': '#ffffff',
+        '--bg-card': 'linear-gradient(180deg,#18181b,#111113)',
         '--bg-subcard': '#09090b', '--bg-input': '#09090b', '--bg-hero': 'linear-gradient(135deg,#27272a,#09090b)',
         '--bg-nav': 'rgba(9, 9, 11, 0.96)', '--accent': '#f59e0b', '--accent-light': '#fcd34d',
         '--accent-grad': 'linear-gradient(135deg,#fcd34d,#f59e0b,#d97706)', '--accent-text': '#09090b',
@@ -1287,7 +1309,9 @@
       name: 'Emerald & Gold', swatch: 'linear-gradient(135deg,#064e3b 50%,#d4af37 50%)',
       vars: {
         '--bg-page': 'radial-gradient(circle at 80% 0%, #065f46 0%, #022c22 55%, #011c16 100%)', '--bg-solid': '#022c22',
-        '--bg-header': 'rgba(2, 44, 34, 0.92)', '--bg-card': 'linear-gradient(180deg,#064e3b,#04392c)',
+        '--bg-header': '#04392c', '--dash-hero-top': '#04392c',
+        '--dash-hero-grad': 'linear-gradient(180deg, #04392c 0%, #065f46 100%)', '--dash-hero-fg': '#ffffff',
+        '--bg-card': 'linear-gradient(180deg,#064e3b,#04392c)',
         '--bg-subcard': 'rgba(2, 44, 34, 0.65)', '--bg-input': '#022c22', '--bg-hero': 'linear-gradient(135deg,#065f46,#022c22)',
         '--bg-nav': 'rgba(2, 44, 34, 0.95)', '--accent': '#d4af37', '--accent-light': '#fde68a',
         '--accent-grad': 'linear-gradient(135deg,#fde68a,#d4af37)', '--accent-text': '#022c22',
@@ -1300,7 +1324,9 @@
       name: 'Royal Purple', swatch: 'linear-gradient(135deg,#3b0764 50%,#e879f9 50%)',
       vars: {
         '--bg-page': 'radial-gradient(circle at 85% 0%, #4c1d95 0%, #1e1035 55%, #120822 100%)', '--bg-solid': '#1e1035',
-        '--bg-header': 'rgba(30, 16, 53, 0.92)', '--bg-card': 'linear-gradient(180deg,#2e1852,#22113d)',
+        '--bg-header': '#3b0764', '--dash-hero-top': '#3b0764',
+        '--dash-hero-grad': 'linear-gradient(180deg, #3b0764 0%, #5b21b6 100%)', '--dash-hero-fg': '#ffffff',
+        '--bg-card': 'linear-gradient(180deg,#2e1852,#22113d)',
         '--bg-subcard': 'rgba(18, 8, 34, 0.6)', '--bg-input': '#170c2b', '--bg-hero': 'linear-gradient(135deg,#5b21b6,#2e1065)',
         '--bg-nav': 'rgba(23, 12, 43, 0.95)', '--accent': '#e879f9', '--accent-light': '#f5d0fe',
         '--accent-grad': 'linear-gradient(135deg,#f5d0fe,#e879f9,#c026d3)', '--accent-text': '#1e1035',
@@ -1313,7 +1339,9 @@
       name: 'Crimson & Cream', swatch: 'linear-gradient(135deg,#9f1239 50%,#fff1f2 50%)',
       vars: {
         '--bg-page': 'linear-gradient(180deg, #fff1f2 0%, #ffffff 50%, #fff5f5 100%)', '--bg-solid': '#fff1f2',
-        '--bg-header': 'rgba(255, 255, 255, 0.95)', '--bg-card': '#ffffff',
+        '--bg-header': '#9f1239', '--dash-hero-top': '#9f1239',
+        '--dash-hero-grad': 'linear-gradient(180deg, #9f1239 0%, #be123c 100%)', '--dash-hero-fg': '#ffffff',
+        '--bg-card': '#ffffff',
         '--bg-subcard': '#fff1f2', '--bg-input': '#ffffff', '--bg-hero': 'linear-gradient(135deg,#881337,#be123c)',
         '--bg-nav': 'rgba(255, 255, 255, 0.96)', '--accent': '#be123c', '--accent-light': '#9f1239',
         '--accent-grad': 'linear-gradient(135deg,#e11d48,#9f1239)', '--accent-text': '#ffffff',
@@ -1326,7 +1354,9 @@
       name: 'Ocean Blue & White', swatch: 'linear-gradient(135deg,#0284c7 50%,#ffffff 50%)',
       vars: {
         '--bg-page': 'linear-gradient(180deg, #f0f9ff 0%, #ffffff 50%, #f8fafc 100%)', '--bg-solid': '#f0f9ff',
-        '--bg-header': 'rgba(255, 255, 255, 0.95)', '--bg-card': '#ffffff',
+        '--bg-header': '#0369a1', '--dash-hero-top': '#0369a1',
+        '--dash-hero-grad': 'linear-gradient(180deg, #0369a1 0%, #0284c7 100%)', '--dash-hero-fg': '#ffffff',
+        '--bg-card': '#ffffff',
         '--bg-subcard': '#f0f9ff', '--bg-input': '#ffffff', '--bg-hero': 'linear-gradient(135deg,#0369a1,#0284c7,#0ea5e9)',
         '--bg-nav': 'rgba(255, 255, 255, 0.96)', '--accent': '#0284c7', '--accent-light': '#0369a1',
         '--accent-grad': 'linear-gradient(135deg,#0ea5e9,#0284c7)', '--accent-text': '#ffffff',
@@ -1338,17 +1368,47 @@
   };
   const THEME_KEYS = Object.keys(THEMES);
 
+  function getColorBrightness(c) {
+    if (!c) return 0;
+    const s = String(c).trim();
+    const hexMatch = s.match(/#([0-9a-fA-F]{3}|[0-9a-fA-F]{6}) /);
+    if (hexMatch) {
+      let h = hexMatch[1];
+      if (h.length === 3) h = h[0]+h[0]+h[1]+h[1]+h[2]+h[2];
+      const r = parseInt(h.slice(0,2), 16), g = parseInt(h.slice(2,4), 16), b = parseInt(h.slice(4,6), 16);
+      return (r * 299 + g * 587 + b * 114) / 1000;
+    }
+    const rgbMatch = s.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/i);
+    if (rgbMatch) {
+      return (Number(rgbMatch[1]) * 299 + Number(rgbMatch[2]) * 587 + Number(rgbMatch[3]) * 114) / 1000;
+    }
+    return 0;
+  }
+
   function applyThemeVars(vars) {
     const root = document.documentElement;
-    root.style.setProperty('--dash-hero-top', vars['--dash-hero-top'] || vars['--bg-header'] || '#0f766e');
-    root.style.setProperty('--dash-hero-grad', vars['--dash-hero-grad'] || vars['--bg-hero'] || 'linear-gradient(135deg,#0f766e,#0d9488)');
-    root.style.setProperty('--dash-hero-fg', vars['--dash-hero-fg'] || '#ffffff');
+    const topBg = vars['--dash-hero-top'] || vars['--bg-header'] || '#0f766e';
+    const heroGrad = vars['--dash-hero-grad'] || vars['--bg-hero'] || 'linear-gradient(135deg,#0f766e,#0d9488)';
+    const topIsBright = getColorBrightness(topBg) > 165;
+    const autoFg = vars['--dash-hero-fg'] || (topIsBright ? '#0f172a' : '#ffffff');
+    const fgIsDark = getColorBrightness(autoFg) < 128;
+
+    root.style.setProperty('--dash-hero-top', topBg);
+    root.style.setProperty('--dash-hero-grad', heroGrad);
+    root.style.setProperty('--dash-hero-fg', autoFg);
+    root.style.setProperty('--dash-chip-bg', fgIsDark ? 'rgba(15, 23, 42, 0.08)' : 'rgba(255, 255, 255, 0.16)');
+    root.style.setProperty('--dash-chip-border', fgIsDark ? 'rgba(15, 23, 42, 0.22)' : 'rgba(255, 255, 255, 0.28)');
+    root.style.setProperty('--hero-fg', vars['--hero-fg'] || autoFg);
+
     Object.keys(vars).forEach(k => root.style.setProperty(k, vars[k]));
-    const metaCol = vars['--dash-hero-top'] || vars['--bg-solid'];
+    if (topIsBright && !vars['--dash-hero-fg']) {
+      root.style.setProperty('--dash-hero-fg', '#0f172a');
+    }
+    const metaCol = topBg.startsWith('#') ? topBg : (vars['--bg-solid'] || '#0f766e');
     if (metaCol) document.getElementById('metaThemeColor').setAttribute('content', metaCol);
   }
   function selectPresetTheme(key, showMsg = true) {
-    if (!THEMES[key]) key = 'royal_gold';
+    if (!THEMES[key]) key = 'emerald_clean';
     applyThemeVars(THEMES[key].vars);
     localStorage.setItem('ucc_adm_theme', key);
     renderThemeGrid();
@@ -1356,16 +1416,23 @@
   }
   function applyCustomTheme() {
     const bg = document.getElementById('custBg').value, card = document.getElementById('custCard').value, acc = document.getElementById('custAcc').value;
-    const isLight = document.getElementById('custMode').value === 'light';
+    const mode = document.getElementById('custMode').value;
+    const isDay = mode === 'auto' ? (getColorBrightness(bg) > 145) : (mode === 'day');
+    const accIsBright = getColorBrightness(acc) > 165;
+    const heroFg = accIsBright ? '#0f172a' : '#ffffff';
     const customVars = {
-      '--bg-page': bg, '--bg-solid': bg, '--bg-header': card, '--bg-card': card,
-      '--bg-subcard': bg, '--bg-input': bg, '--bg-hero': `linear-gradient(135deg,${acc},${card})`,
-      '--bg-nav': card, '--accent': acc, '--accent-light': acc,
-      '--accent-grad': `linear-gradient(135deg,${acc},${acc})`, '--accent-text': isLight ? '#ffffff' : '#061121',
-      '--accent-soft': isLight ? 'rgba(0,0,0,0.06)' : 'rgba(255,255,255,0.1)', '--accent-border': acc,
-      '--text': isLight ? '#0f172a' : '#f8fafc', '--text-2': isLight ? '#334155' : '#cbd5e1',
-      '--muted': isLight ? '#64748b' : '#94a3b8', '--border': isLight ? 'rgba(15,23,42,0.14)' : 'rgba(255,255,255,0.16)',
-      '--shadow-card': '0 8px 24px rgba(0,0,0,0.18)'
+      '--bg-page': bg, '--bg-solid': bg,
+      '--bg-header': acc, '--dash-hero-top': acc,
+      '--dash-hero-grad': `linear-gradient(180deg, ${acc} 0%, ${acc} 100%)`,
+      '--dash-hero-fg': heroFg, '--hero-fg': heroFg,
+      '--bg-card': card, '--bg-subcard': isDay ? 'rgba(15,23,42,0.04)' : 'rgba(255,255,255,0.06)', '--bg-input': card,
+      '--bg-hero': `linear-gradient(135deg, ${acc}, ${acc})`,
+      '--bg-nav': card, '--accent': acc, '--accent-light': isDay ? '#0f172a' : acc,
+      '--accent-grad': `linear-gradient(135deg, ${acc}, ${acc})`, '--accent-text': heroFg,
+      '--accent-soft': isDay ? 'rgba(15,23,42,0.07)' : 'rgba(255,255,255,0.12)', '--accent-border': acc,
+      '--text': isDay ? '#0f172a' : '#f8fafc', '--text-2': isDay ? '#334155' : '#cbd5e1',
+      '--muted': isDay ? '#64748b' : '#94a3b8', '--border': isDay ? 'rgba(15,23,42,0.14)' : 'rgba(255,255,255,0.16)',
+      '--shadow-card': isDay ? '0 6px 20px rgba(15,23,42,0.08)' : '0 8px 24px rgba(0,0,0,0.35)'
     };
     applyThemeVars(customVars);
     localStorage.setItem('ucc_adm_theme', 'custom');
@@ -1538,13 +1605,14 @@
     const showFlex = (id, cond) => { const el = document.getElementById(id); if (el) el.style.display = cond ? 'flex' : 'none'; };
     const showBlock = (id, cond) => { const el = document.getElementById(id); if (el) el.style.display = cond ? 'block' : 'none'; };
 
-    // Sidebar items: Full Admins get full sidebar; Regular Teachers do NOT need sidebar menus (only Theme, Notif, Logout)
+    // Sidebar items: All secondary tools cleanly organized in sidebar by permission
+    showFlex('sideCallerBtn', canCaller);
     showFlex('sideSuperBtn', superFlag);
     showFlex('sideMySalaryBtn', !superFlag);
     showFlex('sideDueBtn', isAdminView);
-    showFlex('sideContentBtn', isAdminView && canContent);
-    showFlex('sideNoticesBtn', isAdminView && canNotice);
-    showFlex('sideAbsentBtn', isAdminView && (canQr || canCaller));
+    showFlex('sideContentBtn', canContent);
+    showFlex('sideNoticesBtn', canNotice);
+    showFlex('sideAbsentBtn', isAdminView || canQr || canCaller);
 
     // Bottom navigation tabs
     showFlex('nav-classes', isAdminView);
@@ -1801,7 +1869,7 @@
   }
 
   window.onload = function() {
-    setTimeout(() => { const sp = document.getElementById('splashScreen'); sp.classList.add('hide'); setTimeout(() => { sp.style.display = 'none'; }, 300); }, 950);
+    setTimeout(() => { const sp = document.getElementById('splashScreen'); sp.classList.add('hide'); setTimeout(() => { sp.style.display = 'none'; }, 180); }, 360);
     const clsOpts = CLASSES.map(c => `<option value="${c}">${c}</option>`).join('');
     document.getElementById('fClass').innerHTML = '<option value="">Select Class</option>' + clsOpts;
     document.getElementById('nClass').innerHTML = '<option value="ALL">All Classes</option>' + clsOpts;
@@ -2417,10 +2485,9 @@
     if (pgEl) pgEl.classList.add('active');
     if (btn) btn.classList.add('active');
     updateSubpageBar(name);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo(0, 0);
     if (name === 'home') renderHomeDashboard();
-    if (name === 'home') renderHomeDashboard();
-    else if (name === 'classes') { renderClassGrid(); if (activeClass) renderClassStudents(); }
+    else if (name === 'classes') { closeClassView(); renderClassGrid(); }
     if (name === 'entry') { document.getElementById('nextIdPreview').textContent = getNextStudentId(); applyAdminUI(); }
     if (name === 'scan') renderTodayAttendance();
     if (name === 'hisab') renderHisab();
@@ -2488,93 +2555,68 @@
       statsRow.innerHTML = card1 + card2;
     }
 
-    // 2. 3-Column Animated Icon Tiles (strictly permission-filtered)
+    // 2. 2-Column BIG Hero Action Tiles: প্রথমে Attendance, তারপরে Classes, + Entry, Hisab (বাকি সব Sidebar-এ)
     const tiles = [];
     if (canQr) tiles.push({
-      label: 'Take Attendance', page: 'scan', bg: 'rgba(16,185,129,0.14)', col: '#059669',
+      label: 'Take Attendance', sub: 'QR Scanner', page: 'scan', bg: 'rgba(16,185,129,0.14)', col: '#059669',
       badge: presentCount > 0 ? String(presentCount) : '', badgeOk: true,
-      icon: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><rect x="7" y="7" width="10" height="10" rx="1.5"/></svg>'
+      icon: '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><rect x="7" y="7" width="10" height="10" rx="1.5"/></svg>'
     });
     if (canFees) tiles.push({
-      label: 'Classes', page: 'classes', bg: 'rgba(37,99,235,0.14)', col: '#2563eb',
+      label: 'Classes', sub: `${totalStudents} Students`, page: 'classes', bg: 'rgba(37,99,235,0.14)', col: '#2563eb',
       badge: '',
-      icon: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>'
+      icon: '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>'
     });
     if (canFees) tiles.push({
-      label: 'New Entry', page: 'entry', bg: 'rgba(99,102,241,0.14)', col: '#4f46e5',
+      label: '+ Entry', sub: 'New Admission', page: 'entry', bg: 'rgba(99,102,241,0.14)', col: '#4f46e5',
       badge: '',
-      icon: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>'
+      icon: '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>'
     });
     if (canFees) tiles.push({
-      label: 'Hisab', page: 'hisab', bg: 'rgba(245,158,11,0.16)', col: '#d97706',
+      label: 'Hisab', sub: `Today ₹${todayCol}`, page: 'hisab', bg: 'rgba(245,158,11,0.16)', col: '#d97706',
       badge: pendOnline > 0 ? String(pendOnline) : '',
-      icon: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>'
+      icon: '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>'
     });
-    if (canFees) tiles.push({
-      label: 'Due List', page: 'duelist', bg: 'rgba(239,68,68,0.14)', col: '#dc2626',
-      badge: totalDue > 0 ? '₹' + totalDue : '',
-      icon: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>'
-    });
-    if (canCaller) tiles.push({
-      label: 'Absent Caller', page: 'caller', bg: 'rgba(13,148,136,0.14)', col: '#0d9488',
-      badge: absentPendingCount > 0 ? String(absentPendingCount) : '',
-      icon: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>'
-    });
-    if (canContent) tiles.push({
-      label: (superFlag || !!p.video) ? 'Video / PDF' : 'Live Q&A', page: 'content', bg: 'rgba(147,51,234,0.14)', col: '#9333ea',
-      badge: '',
-      icon: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>'
-    });
-    if (canNotice) tiles.push({
-      label: 'Notices', page: 'notices', bg: 'rgba(2,132,199,0.14)', col: '#0284c7',
-      badge: notices.length > 0 ? String(notices.length) : '', badgeOk: true,
-      icon: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>'
-    });
-    if (canFees || canQr || canCaller) tiles.push({
-      label: 'Call Report', page: 'absent', bg: 'rgba(234,88,12,0.14)', col: '#ea580c',
-      badge: calledToday.length > 0 ? String(calledToday.length) : '', badgeOk: true,
-      icon: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>'
-    });
-    if (superFlag) tiles.push({
-      label: 'Super Admin', page: 'superadmin', bg: 'rgba(217,119,6,0.18)', col: '#b45309',
-      badge: '',
-      icon: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2l3 7h7l-5.5 4.5L18.5 21 12 16.5 5.5 21l2-7.5L2 9h7l3-7z"/></svg>'
-    });
-    if (!superFlag) tiles.push({
-      label: 'My Salary', page: 'mysalary', bg: 'rgba(16,185,129,0.14)', col: '#059669',
-      badge: '',
-      icon: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>'
-    });
-    tiles.push({
-      label: 'Sync Data', action: 'sync', bg: 'rgba(14,165,233,0.14)', col: '#0284c7',
-      badge: queue.length > 0 ? String(queue.length) : '',
-      icon: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/><polyline points="16 14 12 10 8 14"/></svg>'
-    });
+
+    // সাধারণ টিচারদের (যাদের Fees পারমিশন নেই) হোম পেজে তাদের অনুমোদিত মূল কাজগুলো বড় করে দেখাবে
+    if (!canFees) {
+      if (canCaller) tiles.push({
+        label: 'Absent Caller', sub: `${absentPendingCount} Pending`, page: 'caller', bg: 'rgba(13,148,136,0.14)', col: '#0d9488',
+        badge: absentPendingCount > 0 ? String(absentPendingCount) : '',
+        icon: '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>'
+      });
+      if (canContent) tiles.push({
+        label: !!p.video ? 'Video / PDF' : 'Live Q&A', sub: 'Study Material', page: 'content', bg: 'rgba(147,51,234,0.14)', col: '#9333ea',
+        badge: '',
+        icon: '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>'
+      });
+      if (canNotice) tiles.push({
+        label: 'Notices', sub: `${notices.length} Active`, page: 'notices', bg: 'rgba(2,132,199,0.14)', col: '#0284c7',
+        badge: notices.length > 0 ? String(notices.length) : '', badgeOk: true,
+        icon: '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>'
+      });
+      tiles.push({
+        label: 'My Salary', sub: `Fixed ₹${u.salary || 0}`, page: 'mysalary', bg: 'rgba(245,158,11,0.16)', col: '#d97706',
+        badge: '',
+        icon: '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>'
+      });
+    }
 
     const gridEl = document.getElementById('dashTilesGrid');
     if (gridEl) {
       gridEl.innerHTML = tiles.map((t, idx) => `
-        <div class="dash-tile" style="animation-delay:${(idx * 0.035).toFixed(3)}s;" onclick="${t.action === 'sync' ? 'syncNow(false)' : `openPage('${t.page}', null)`}">
+        <div class="dash-tile" style="animation-delay:${(idx * 0.03).toFixed(2)}s;" onclick="openPage('${t.page}', null)">
           ${t.badge ? `<span class="dash-tile-badge ${t.badgeOk ? 'ok' : ''}">${t.badge}</span>` : ''}
           <div class="dash-tile-circle" style="background:${t.bg};color:${t.col};">${t.icon}</div>
           <div class="dash-tile-label">${t.label}</div>
+          ${t.sub ? `<div class="dash-tile-sub">${t.sub}</div>` : ''}
         </div>
       `).join('');
     }
 
-    // 3. Quick Actions Chips (like Quick Links in screenshot)
-    const chips = [];
-    if (canQr) chips.push({ cls: 'c-teal', txt: 'START QR SCANNER ↗', fn: "openPage('scan', null)" });
-    if (canFees) chips.push({ cls: 'c-purple', txt: 'NEW ADMISSION 2027 ↗', fn: "openPage('entry', null)" });
-    if (canCaller) chips.push({ cls: 'c-rose', txt: `ABSENT CALLS (${absentPendingCount}) ↗`, fn: "openPage('caller', null)" });
-    chips.push({ cls: 'c-pink', txt: 'APP THEME STUDIO ↗', fn: 'openSidebar()' });
-
+    // 3. Home screen ultra-clean (rest in sidebar)
     const qWrap = document.getElementById('dashQuickWrap');
-    const qBox = document.getElementById('dashQuickChips');
-    if (qWrap && qBox) {
-      qWrap.style.display = chips.length ? 'block' : 'none';
-      qBox.innerHTML = chips.map(c => `<button type="button" class="quick-chip ${c.cls}" onclick="${c.fn}">${c.txt}</button>`).join('');
-    }
+    if (qWrap) qWrap.style.display = 'none';
 
     // 4. Bottom Warm Highlight Banner (like WORKING HOURS card)
     const bWrap = document.getElementById('dashBottomBannerWrap');
@@ -2634,6 +2676,8 @@
       const cPend = absentTodayList.length;
       const cb = document.getElementById('callerPendingBadge');
       if (cb) { cb.textContent = cPend; cb.style.display = cPend > 0 ? 'inline-block' : 'none'; }
+      const scp = document.getElementById('sideCallerPill');
+      if (scp) scp.textContent = cPend;
     }
     // My Salary badge for teachers
     const u = getCurrentUserObj();
@@ -2648,7 +2692,8 @@
   function renderActivePage(keepReceipt = false) {
     const activePg = document.querySelector('.page.active');
     const name = activePg ? activePg.id.replace('page-', '') : '';
-    if (name === 'classes') { renderClassGrid(); if (activeClass) renderClassStudents(); }
+    if (name === 'home') renderHomeDashboard();
+    else if (name === 'classes') { renderClassGrid(); if (activeClass) renderClassStudents(); }
     else if (name === 'duelist') { renderDueList(); if (activeDueClass) renderDueClassStudents(); }
     else if (name === 'scan' || name === 'absent') renderTodayAttendance();
     else if (name === 'hisab') renderHisab();
