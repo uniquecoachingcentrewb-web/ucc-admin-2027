@@ -1,12 +1,17 @@
 <!DOCTYPE html>
-<!-- U.C.C Institute Student Portal - Animated Build v3 Live Classroom -->
+<!-- U.C.C Institute Student Portal - Animated Build v4 -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <meta name="theme-color" id="metaThemeColor" content="#0f766e">
-  <link rel="manifest" href="manifest.json?v=4">
-  <link rel="icon" type="image/png" href="logo.png?v=4">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="U.C.C Student">
+  <link rel="manifest" href="manifest.json?v=5">
+  <link rel="icon" type="image/png" href="logo.png?v=5">
+  <link rel="apple-touch-icon" href="logo.png?v=5">
   <title>U.C.C Institute Student Portal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -575,6 +580,133 @@
       font-size: 12.5px; font-weight: 700; display: none; z-index: 150; max-width: 90%;
       text-align: center; box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45); border: 1.5px solid #d4af37;
     }
+
+    /* ===== DIRECT MOBILE APP INSTALL BOTTOM BAR ===== */
+    body.has-install-bar {
+      padding-bottom: 92px !important;
+    }
+    .pwa-install-bar {
+      position: fixed;
+      left: 12px;
+      right: 12px;
+      bottom: calc(12px + env(safe-area-inset-bottom));
+      max-width: 560px;
+      margin: 0 auto;
+      z-index: 260;
+      background: linear-gradient(135deg, #061121 0%, #0f294a 100%);
+      color: #ffffff;
+      border: 1.5px solid #d4af37;
+      border-radius: 18px;
+      padding: 11px 13px;
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.45);
+      animation: sheetUp 0.28s var(--ease-fast);
+    }
+    .pwa-install-bar.show {
+      display: flex;
+    }
+    .pwa-inst-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      flex: 1;
+    }
+    .pwa-inst-logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      object-fit: cover;
+      background: #ffffff;
+      border: 1.5px solid #d4af37;
+      flex-shrink: 0;
+    }
+    .pwa-inst-title {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: #fae094;
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .pwa-inst-sub {
+      font-size: 11px;
+      color: #cbd5e1;
+      margin-top: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .pwa-inst-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    .pwa-inst-btn {
+      background: linear-gradient(135deg, #fde047 0%, #f59e0b 100%);
+      color: #061121;
+      border: none;
+      border-radius: 11px;
+      padding: 9px 13px;
+      font-size: 12.5px;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35);
+      transition: transform 0.14s var(--ease-fast);
+      white-space: nowrap;
+    }
+    .pwa-inst-btn:active {
+      transform: scale(0.93);
+    }
+    .pwa-inst-close {
+      background: rgba(255, 255, 255, 0.12);
+      color: #cbd5e1;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .guide-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      background: var(--bg-subcard);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 12px;
+      margin-bottom: 9px;
+      font-size: 12.5px;
+      color: var(--text);
+      line-height: 1.45;
+    }
+    .guide-num {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--accent-grad);
+      color: var(--accent-text);
+      font-size: 12px;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
   </style>
 </head>
 <body>
@@ -610,6 +742,11 @@
       </div>
       <button type="submit" id="stLoginBtn" class="btn btn-accent" style="margin-top:8px;">Open Student Dashboard</button>
     </form>
+    <div id="loginInstallWrap" style="margin-top:12px;padding-top:11px;border-top:1px dashed var(--border);text-align:center;">
+      <button type="button" class="btn" style="padding:9px 12px;font-size:12.5px;background:var(--accent-soft);" onclick="triggerMobileAppInstall()">
+        📲 মোবাইলে অ্যাপ ইনস্টল করুন (Install App)
+      </button>
+    </div>
   </div>
 </div>
 
@@ -628,6 +765,10 @@
   </div>
 
   <div class="side-body">
+    <button id="sideInstallAppBtn" class="side-item" style="border-color:var(--accent);background:var(--accent-soft);" onclick="triggerMobileAppInstall()">
+      <span class="side-left">📲 Install Mobile App</span>
+      <span class="side-pill">Install</span>
+    </button>
     <button class="side-item" onclick="triggerPhotoUpload()">
       <span class="side-left">📷 Change My Profile Photo</span>
       <span class="side-pill">Photo</span>
@@ -944,12 +1085,51 @@
   </div>
 </div>
 
+<!-- DIRECT BOTTOM FLOATING INSTALL APP BAR -->
+<div id="pwaInstallBar" class="pwa-install-bar">
+  <div class="pwa-inst-left" onclick="triggerMobileAppInstall()" style="cursor:pointer;">
+    <img src="logo.png?v=5" alt="U.C.C" class="pwa-inst-logo" onerror="this.style.display='none'">
+    <div style="min-width:0;">
+      <div class="pwa-inst-title">U.C.C Student App</div>
+      <div id="pwaInstallSubText" class="pwa-inst-sub">১ ক্লিকে মোবাইলে অ্যাপ ইনস্টল করুন</div>
+    </div>
+  </div>
+  <div class="pwa-inst-actions">
+    <button type="button" id="pwaInstallBtn" class="pwa-inst-btn" onclick="triggerMobileAppInstall()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Install App
+    </button>
+    <button type="button" class="pwa-inst-close" onclick="dismissInstallBar()" title="Close">✕</button>
+  </div>
+</div>
+
+<!-- SMART INSTALL FALLBACK MODAL (ONLY IF BROWSER BLOCKS DIRECT POPUP, e.g. iPhone Safari / WhatsApp WebView) -->
+<div class="rcpt-modal-bg" id="installGuideModal" style="z-index:280;" onclick="if(event.target===this) closeInstallGuide()">
+  <div class="chat-card" style="max-width:400px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+      <div style="display:flex;align-items:center;gap:9px;">
+        <img src="logo.png?v=5" alt="Logo" style="width:36px;height:36px;border-radius:10px;background:#fff;border:1.5px solid var(--accent);" onerror="this.style.display='none'">
+        <div>
+          <strong style="color:var(--accent-light);font-size:15px;">Install U.C.C Student App</strong>
+          <div style="font-size:11px;color:var(--muted);">মোবাইলের হোম স্ক্রিনে অ্যাপ সেট করুন</div>
+        </div>
+      </div>
+      <button class="close-btn" onclick="closeInstallGuide()">✕</button>
+    </div>
+    <div id="installGuideSteps"></div>
+    <div class="row-2" style="margin-top:10px;">
+      <button type="button" class="btn btn-accent" style="padding:10px;font-size:12.5px;" onclick="copyAppLinkForChrome()">📋 Copy App Link</button>
+      <button type="button" class="btn btn-sec" style="padding:10px;font-size:12.5px;" onclick="closeInstallGuide()">ঠিক আছে</button>
+    </div>
+  </div>
+</div>
+
 <div id="toast" class="toast"></div>
 
 <script>
-  // Auto-clear old Service Worker cache
+  // Register Service Worker & update cache cleanly so direct PWA Install works 100%
   (function() {
-    const UI_BUILD = 'ucc_student_v3_classroom';
+    const UI_BUILD = 'ucc_student_v5_install';
     try {
       if (localStorage.getItem('ucc_st_ui_build') !== UI_BUILD) {
         localStorage.setItem('ucc_st_ui_build', UI_BUILD);
@@ -957,8 +1137,126 @@
           caches.keys().then(keys => Promise.all(keys.map(k => caches.delete(k)))).catch(() => {});
         }
       }
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('./sw.js?v=5').catch(() => {});
+      }
     } catch (e) {}
   })();
+
+  // ===== DIRECT MOBILE APP INSTALL ENGINE (1-TAP INSTALL) =====
+  let deferredInstallPrompt = null;
+
+  function isAppAlreadyInstalled() {
+    return window.matchMedia('(display-mode: standalone)').matches ||
+           window.navigator.standalone === true ||
+           document.referrer.includes('android-app://');
+  }
+
+  function showBottomInstallBar() {
+    if (isAppAlreadyInstalled()) {
+      hideAllInstallPrompts();
+      return;
+    }
+    if (sessionStorage.getItem('ucc_st_install_dismissed') === '1') return;
+    const bar = document.getElementById('pwaInstallBar');
+    if (bar) {
+      bar.classList.add('show');
+      document.body.classList.add('has-install-bar');
+    }
+  }
+
+  function hideAllInstallPrompts() {
+    const bar = document.getElementById('pwaInstallBar');
+    if (bar) bar.classList.remove('show');
+    document.body.classList.remove('has-install-bar');
+    const sideBtn = document.getElementById('sideInstallAppBtn');
+    if (sideBtn) sideBtn.style.display = 'none';
+    const loginWrap = document.getElementById('loginInstallWrap');
+    if (loginWrap) loginWrap.style.display = 'none';
+  }
+
+  function dismissInstallBar() {
+    sessionStorage.setItem('ucc_st_install_dismissed', '1');
+    const bar = document.getElementById('pwaInstallBar');
+    if (bar) bar.classList.remove('show');
+    document.body.classList.remove('has-install-bar');
+  }
+
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredInstallPrompt = e;
+    const sub = document.getElementById('pwaInstallSubText');
+    if (sub) sub.textContent = 'Direct Install Ready • ১ ক্লিকে ইনস্টল করুন';
+    showBottomInstallBar();
+  });
+
+  window.addEventListener('appinstalled', () => {
+    deferredInstallPrompt = null;
+    hideAllInstallPrompts();
+    closeInstallGuide();
+    toast('🎉 U.C.C Student App মোবাইলে ইনস্টল হয়ে গেছে!');
+  });
+
+  async function triggerMobileAppInstall() {
+    closeSidebar();
+    if (isAppAlreadyInstalled()) {
+      toast('✅ অ্যাপটি আগেই আপনার মোবাইলে ইনস্টল করা আছে!');
+      return;
+    }
+    if (deferredInstallPrompt) {
+      try {
+        deferredInstallPrompt.prompt();
+        const choice = await deferredInstallPrompt.userChoice;
+        if (choice && choice.outcome === 'accepted') {
+          deferredInstallPrompt = null;
+          hideAllInstallPrompts();
+          toast('📲 অ্যাপ ইনস্টল হচ্ছে...');
+        }
+        return;
+      } catch (err) {}
+    }
+    // Fallback guide ONLY when browser doesn't expose direct prompt (e.g., iPhone Safari or WhatsApp in-app WebView)
+    openInstallGuideModal();
+  }
+
+  function openInstallGuideModal() {
+    const ua = navigator.userAgent || '';
+    const isIOS = /iPhone|iPad|iPod/i.test(ua);
+    const isInAppBrowser = /FBAN|FBAV|Instagram|WhatsApp|wv\)/i.test(ua);
+    const stepsEl = document.getElementById('installGuideSteps');
+
+    if (isIOS) {
+      stepsEl.innerHTML = `
+        <div class="guide-step"><span class="guide-num">1</span><div>নিচের Safari বারে থাকা <strong>Share (⬆️)</strong> আইকনে ট্যাপ করো।</div></div>
+        <div class="guide-step"><span class="guide-num">2</span><div>মেনু থেকে <strong>"Add to Home Screen"</strong> বেছে ওপরে <strong>Add</strong> চাপলেই অ্যাপ ইনস্টল হয়ে যাবে।</div></div>
+      `;
+    } else if (isInAppBrowser) {
+      stepsEl.innerHTML = `
+        <div class="guide-step"><span class="guide-num">1</span><div>তুমি এখন WhatsApp/Facebook ব্রাউজারে আছো। ওপরের ডানদিকে <strong>⋮ (Three Dots)</strong> চাপো।</div></div>
+        <div class="guide-step"><span class="guide-num">2</span><div><strong>"Open in Chrome"</strong> সিলেক্ট করো — Chrome খুললেই নিচের <strong>Install App</strong> বাটনে ১ ক্লিকে ইনস্টল হয়ে যাবে!</div></div>
+      `;
+    } else {
+      stepsEl.innerHTML = `
+        <div class="guide-step"><span class="guide-num">1</span><div>ব্রাউজারের ওপরের ডানদিকে <strong>⋮ (Three Dots)</strong> মেনুতে ট্যাপ করো।</div></div>
+        <div class="guide-step"><span class="guide-num">2</span><div><strong>"Install app"</strong> অথবা <strong>"Add to Home screen"</strong> অপশনে চাপলেই সরাসরি মোবাইলে অ্যাপ ইনস্টল হয়ে যাবে।</div></div>
+      `;
+    }
+    document.getElementById('installGuideModal').classList.add('open');
+  }
+
+  function closeInstallGuide() {
+    const el = document.getElementById('installGuideModal');
+    if (el) el.classList.remove('open');
+  }
+
+  function copyAppLinkForChrome() {
+    const url = window.location.href;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(() => toast('📋 লিংক কপি হয়েছে! Chrome-এ পেস্ট করো।')).catch(() => toast(url));
+    } else {
+      toast('Link: ' + url);
+    }
+  }
 
   const API_URL = 'https://script.google.com/macros/s/AKfycbwAuSfDoikCc998pVuwz0HySky1fChn-Tj8p7OeuUAr_WPG7IFZkfGB5LUO6NlvkiKO/exec';
   const MONTHS = [
@@ -1434,6 +1732,11 @@
     } else {
       document.getElementById('loginScreen').style.display = 'flex';
     }
+    if (isAppAlreadyInstalled()) {
+      hideAllInstallPrompts();
+    } else {
+      setTimeout(showBottomInstallBar, 600);
+    }
   };
 
   // ===== RENDER ALL STUDENT UI =====
@@ -1449,6 +1752,13 @@
     const payments = stData.payments || [];
     const requests = stData.requests || [];
 
+    const isRealLiveItem = (c) => {
+      const tLow = String(c.type || '').toLowerCase();
+      const lnk = String(c.link || '').toLowerCase();
+      if (!tLow.includes('live')) return false;
+      if (c.driveFileId || lnk.includes('drive.google.com')) return false;
+      return true;
+    };
     const videos = content.filter(c => c.type === 'Live' || c.type === 'Video');
     const pdfs = content.filter(c => c.type === 'PDF');
     const tests = content.filter(c => c.type === 'Mock Test');
@@ -1493,7 +1803,7 @@
     const tiles = [
       {
         label: 'Live & Video', sub: `${videos.length} Classes`, page: 'videos', bg: 'rgba(147,51,234,0.14)', col: '#9333ea',
-        badge: videos.some(v => v.type === 'Live') ? 'LIVE' : '',
+        badge: videos.some(v => isRealLiveItem(v)) ? 'LIVE' : '',
         icon: '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>'
       },
       {
@@ -1677,7 +1987,8 @@
     const isVideoSection = containerId === 'videoListContainer';
     box.innerHTML = list.map(c => {
       const typeLow = String(c.type || '').toLowerCase();
-      const isLive = typeLow.includes('live');
+      const lnkLow = String(c.link || '').toLowerCase();
+      const isLive = typeLow.includes('live') && !c.driveFileId && !lnkLow.includes('drive.google.com');
       const isPlaying = isVideoSection && activeVideoId === c.id;
       return `<div class="req-card ${isPlaying ? 'video-item-active' : ''}">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
@@ -1713,7 +2024,7 @@
     }
 
     activeVideoId = cid;
-    const isLive = String(item.type || '').toLowerCase().includes('live');
+    const isLive = String(item.type || '').toLowerCase().includes('live') && !item.driveFileId && !String(item.link || '').toLowerCase().includes('drive.google.com');
     document.getElementById('crLiveBadge').style.display = isLive ? 'inline-flex' : 'none';
     document.getElementById('crVideoTitle').textContent = item.title || 'Class Video';
     document.getElementById('crVideoMeta').textContent = `${item.subject || ''} • ${item.chapter || 'General'} • ${item.date || ''}`;
