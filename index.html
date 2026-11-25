@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- U.C.C Institute Teacher Panel - Final Build -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -619,11 +620,9 @@
     </div>
 
     <div class="card">
-      <div class="card-title">📞 Pending Absent List</div>
-      <div class="filter-pills" style="grid-template-columns:1fr 1fr 1.2fr;">
-        <button class="pill active" id="cPillActive" onclick="setCallerFilter('active')">Active Classes</button>
-        <button class="pill" id="cPillAll" onclick="setCallerFilter('all')">All Classes</button>
-        <select id="callerClassSel" onchange="renderCallerPage()" style="padding:7px;font-size:12px;font-weight:700;border-radius:11px;"></select>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:11px;flex-wrap:wrap;">
+        <div class="card-title" style="margin-bottom:0;">📞 আজকের অ্যাবসেন্ট লিস্ট</div>
+        <select id="callerClassSel" onchange="renderCallerPage()" style="width:auto;min-width:155px;padding:7px 10px;font-size:12px;font-weight:700;border-radius:11px;"></select>
       </div>
       <div id="callerPendingList"></div>
     </div>
@@ -845,6 +844,65 @@
   </div>
 </div>
 
+<!-- FAST TEACHER SALARY PAYMENT MODAL -->
+<div class="modal-bg" id="salaryPayModal" onclick="if(event.target===this) closeSalaryPayModal()">
+  <div class="modal-sheet">
+    <div class="modal-top">
+      <div>
+        <div id="spTeacherName" style="font-size:18px;font-weight:800;color:var(--accent-light);">Pay Salary</div>
+        <div id="spTeacherSub" style="font-size:12px;color:var(--muted);font-weight:600;">-</div>
+      </div>
+      <button class="close-btn" onclick="closeSalaryPayModal()">✕</button>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat-box"><div id="spFixedVal" class="stat-num" style="color:var(--accent-light);">₹0</div><div class="stat-lbl">Fixed Salary</div></div>
+      <div class="stat-box"><div id="spPaidVal" class="stat-num" style="color:var(--success);">₹0</div><div class="stat-lbl">জমা হয়েছে</div></div>
+      <div class="stat-box"><div id="spRemVal" class="stat-num" style="color:var(--danger);">₹0</div><div class="stat-lbl">বাকি আছে</div></div>
+    </div>
+
+    <div class="pay-box" style="margin-bottom:12px;">
+      <div class="form-group" style="margin-bottom:10px;">
+        <label>মাস বেছে নিন (Month) *</label>
+        <select id="spMonthSel" onchange="onSalaryMonthChange()"></select>
+      </div>
+
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;" id="spQuickBtns"></div>
+
+      <div class="row-2" style="margin-bottom:10px;">
+        <div class="form-group" style="margin-bottom:0;">
+          <label>কত টাকা দেবেন (₹) *</label>
+          <input type="number" id="spAmtInp" min="1" placeholder="Amount" oninput="validateSalaryAmtUI()">
+        </div>
+        <div class="form-group" style="margin-bottom:0;">
+          <label>নোট (ঐচ্ছিক)</label>
+          <input type="text" id="spNoteInp" placeholder="যেমন: 1st part / Cash">
+        </div>
+      </div>
+
+      <div id="spFullNotice" style="display:none;background:var(--success-soft);border:1px solid var(--success);color:var(--success);padding:9px 11px;border-radius:11px;font-size:12px;font-weight:700;margin-bottom:10px;"></div>
+      <div id="spAmtWarn" class="pay-warn" style="margin-bottom:10px;"></div>
+
+      <label id="spExtraWrap" style="display:none;align-items:center;gap:6px;margin:0 0 10px;font-size:12px;color:var(--text-2);cursor:pointer;">
+        <input type="checkbox" id="spExtraChk" onchange="validateSalaryAmtUI()" style="width:16px;height:16px;">
+        ফিক্সড স্যালারির বেশি (Bonus / Extra) হিসেবে পেমেন্ট করুন
+      </label>
+
+      <button type="button" id="spSubmitBtn" class="btn btn-accent" onclick="submitTeacherSalaryFast()">⚡ Pay Salary Now</button>
+    </div>
+
+    <div id="spDoneBar" class="receipt-bar" style="margin-bottom:12px;">
+      <div id="spDoneMsg" style="font-size:13px;font-weight:700;margin-bottom:8px;"></div>
+      <a id="spDoneWaLink" href="#" target="_blank" class="act-link" style="background:#059669;">WhatsApp-এ রিসিপ্ট পাঠান</a>
+    </div>
+
+    <div class="card" style="margin-bottom:6px;padding:12px;">
+      <div class="card-title" style="font-size:13px;margin-bottom:8px;">📋 এই মাসের কিস্তি / পেমেন্ট হিস্ট্রি (<span id="spHistCount">0</span>)</div>
+      <div id="spMonthHistory"></div>
+    </div>
+  </div>
+</div>
+
 <!-- BENGALI RECEIPT MODAL -->
 <div class="rcpt-modal-bg" id="rcptModal" onclick="if(event.target===this) closeReceipt()">
   <div class="rcpt-card" id="receiptPrintArea">
@@ -913,6 +971,12 @@
     ['Jan_2027','Jan','জানুয়ারি 2027'], ['Feb_2027','Feb','ফেব্রুয়ারি 2027'], ['Mar_2027','Mar','মার্চ 2027'], ['Apr_2027','Apr','এপ্রিল 2027'],
     ['May_2027','May','মে 2027'], ['Jun_2027','Jun','জুন 2027'], ['Jul_2027','Jul','জুলাই 2027'], ['Aug_2027','Aug','আগস্ট 2027'],
     ['Sep_2027','Sep','সেপ্টেম্বর 2027'], ['Oct_2027','Oct','অক্টোবর 2027'], ['Nov_2027','Nov','নভেম্বর 2027'], ['Dec_2027','Dec','ডিসেম্বর 2027']
+  ];
+  const SALARY_MONTHS = [
+    ['Oct_2026','অক্টোবর 2026'], ['Nov_2026','নভেম্বর 2026'], ['Dec_2026','ডিসেম্বর 2026'],
+    ['Jan_2027','জানুয়ারি 2027'], ['Feb_2027','ফেব্রুয়ারি 2027'], ['Mar_2027','মার্চ 2027'], ['Apr_2027','এপ্রিল 2027'],
+    ['May_2027','মে 2027'], ['Jun_2027','জুন 2027'], ['Jul_2027','জুলাই 2027'], ['Aug_2027','আগস্ট 2027'],
+    ['Sep_2027','সেপ্টেম্বর 2027'], ['Oct_2027','অক্টোবর 2027'], ['Nov_2027','নভেম্বর 2027'], ['Dec_2027','ডিসেম্বর 2027']
   ];
   const BN_MONTH_NAMES = ['জানুয়ারি','ফেব্রুয়ারি','মার্চ','এপ্রিল','মে','জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'];
   const CLASSES_BN = { Nursery:'নার্সারি', KG:'কেজি', 'Class 1':'ক্লাস 1', 'Class 2':'ক্লাস 2', 'Class 3':'ক্লাস 3', 'Class 4':'ক্লাস 4', 'Class 5':'ক্লাস 5', 'Class 6':'ক্লাস 6', 'Class 7':'ক্লাস 7', 'Class 8':'ক্লাস 8', 'Class 9':'ক্লাস 9', 'Class 10':'ক্লাস 10', 'Class 11':'ক্লাস 11', 'Class 12':'ক্লাস 12' };
@@ -1112,6 +1176,7 @@
     if (document.getElementById('sidebar').classList.contains('open')) { closeSidebar(); window.history.pushState({ app: true }, ''); return; }
     if (document.getElementById('chatModal').classList.contains('open')) { closeAdminChat(); window.history.pushState({ app: true }, ''); return; }
     if (document.getElementById('rcptModal').classList.contains('open')) { closeReceipt(); window.history.pushState({ app: true }, ''); return; }
+    if (document.getElementById('salaryPayModal').classList.contains('open')) { closeSalaryPayModal(); window.history.pushState({ app: true }, ''); return; }
     if (document.getElementById('profileModal').classList.contains('open')) { closeProfile(); window.history.pushState({ app: true }, ''); return; }
     if (activeDueClass) { closeDueClassView(); window.history.pushState({ app: true }, ''); return; }
     if (activeClass) { closeClassView(); window.history.pushState({ app: true }, ''); return; }
@@ -1317,7 +1382,7 @@
           <span class="badge-ok" style="background:#34d399;color:#061121;">₹${s.amount}</span>
         </div>
         <div style="font-size:13px;color:#ecfdf5;margin:6px 0 10px;line-height:1.45;">
-          আপনার <strong>${s.month}</strong> মাসের স্যালারি বাবদ <strong>₹${s.amount}</strong> পাঠানো হয়েছে।<br>
+          আপনার <strong>${bnSalMonth(s.month)}</strong> মাসের স্যালারি বাবদ <strong>₹${s.amount}</strong> পাঠানো হয়েছে${s.remarks ? ` (${s.remarks})` : ''}।<br>
           <span style="font-size:11.5px;opacity:0.9;">তারিখ: ${s.date} ${s.time || ''} • প্রেরক: ${s.paidBy || 'Super Admin'}</span>
         </div>
         <button class="btn btn-accent" style="padding:10px;" onclick="acceptSalaryUI('${s.salaryId}', this)">✅ Accept / গ্রহণ করুন</button>
@@ -1339,7 +1404,7 @@
       return `
       <div class="info-item" style="font-size:12.5px;align-items:flex-start;">
         <div>
-          <strong>${l.month}</strong> • <span style="color:var(--success);font-weight:800;">₹${l.amount}</span><br>
+          <strong>${bnSalMonth(l.month)}</strong> • <span style="color:var(--success);font-weight:800;">₹${l.amount}</span>${l.remarks ? ` <span style="color:var(--accent-light);font-size:11px;">(${l.remarks})</span>` : ''}<br>
           <span style="color:var(--muted);font-size:11px;">${l.date} ${l.time || ''} • Paid by ${l.paidBy || 'Admin'}</span><br>
           <span class="${acc ? 'badge-ok' : 'badge-due'}" style="display:inline-block;margin-top:4px;font-size:10px;padding:2px 8px;">${acc ? '✅ Accepted' + (l.acceptedAt ? ' (' + l.acceptedAt + ')' : '') : '⏳ Pending Accept'}</span>
         </div>
@@ -1444,7 +1509,7 @@
   }
 
   function lockApp() {
-    closeSidebar(); if (scannerRunning) stopScanner(); closeProfile(); closeReceipt(); closeAdminChat();
+    closeSidebar(); if (scannerRunning) stopScanner(); closeSalaryPayModal(); closeProfile(); closeReceipt(); closeAdminChat();
     localStorage.removeItem('ucc_admin_user_v3');
     localStorage.removeItem('ucc_user_v4'); lastPayloadSig = ''; lastServerVer = ''; localStorage.removeItem('ucc_server_ver');
     document.getElementById('loginUser').value = ''; document.getElementById('loginPass').value = '';
@@ -1458,7 +1523,7 @@
     document.getElementById('nClass').innerHTML = '<option value="ALL">All Classes</option>' + clsOpts;
     document.getElementById('cClass').innerHTML = '<option value="ALL">All Classes</option>' + clsOpts;
     const cSel = document.getElementById('callerClassSel');
-    if (cSel) cSel.innerHTML = '<option value="ALL">All Classes</option>' + clsOpts;
+    if (cSel) cSel.innerHTML = '<option value="TODAY">আজকের অ্যাবসেন্ট (চলমান ক্লাস)</option>' + clsOpts;
     document.getElementById('fMonth').innerHTML = '<option value="">None</option>' + MONTHS.map(([k]) => `<option value="${k}">${k}</option>`).join('');
     document.getElementById('hisabMonthSel').innerHTML = '<option value="">Month-wise...</option>' + MONTHS.map(([k, lbl]) => `<option value="${k}">${lbl} 2027</option>`).join('');
     document.getElementById('fAdmDate').value = todayStr();
@@ -1590,6 +1655,18 @@
         <div style="font-size:12px;color:var(--text-2);margin:6px 0;">
           Mobile: <strong>${t.mobile || '-'}</strong> • PIN: <strong>${t.pin}</strong> • Sub: <strong>${t.subjects || 'ALL'}</strong>
         </div>
+        ${(() => {
+          const cm = getDefaultSalaryMonthKey();
+          const cmLbl = bnSalMonth(cm);
+          const paidCur = getTeacherMonthPaid(t.id, cm);
+          const fixCur = Number(t.salary) || 0;
+          const remCur = Math.max(0, fixCur - paidCur);
+          if (fixCur <= 0 && paidCur <= 0) return '';
+          return `<div style="font-size:11.5px;margin:4px 0 8px;display:flex;align-items:center;justify-content:space-between;background:var(--bg-subcard);padding:6px 10px;border-radius:10px;border:1px solid var(--border);">
+            <span style="color:var(--text-2);font-weight:700;">${cmLbl}: <strong style="color:var(--success);">₹${paidCur}</strong> / ₹${fixCur}</span>
+            <span class="${remCur === 0 ? 'badge-ok' : 'badge-due'}" style="font-size:10.5px;padding:2px 8px;">${remCur === 0 ? 'Full Paid ✓' : 'বাকি ₹' + remCur}</span>
+          </div>`;
+        })()}
         <div class="row-2" style="margin:8px 0;">
           <div>
             <label style="font-size:10.5px;margin-bottom:3px;">Fixed Salary (Rs.)</label>
@@ -1627,7 +1704,7 @@
       <div class="info-item" style="font-size:12.5px;">
         <div>
           <strong>${l.teacherName}</strong> <span style="color:var(--muted);">(${l.teacherId})</span><br>
-          <span style="color:var(--muted);font-size:11px;">${l.month} • ${l.date} ${l.time || ''}</span><br>
+          <span style="color:var(--muted);font-size:11px;">${bnSalMonth(l.month)} • ${l.date} ${l.time || ''}${l.remarks ? ' • ' + l.remarks : ''}</span><br>
           <span class="${acc ? 'badge-ok' : 'badge-due'}" style="display:inline-block;margin-top:4px;font-size:10px;padding:2px 8px;">${acc ? '✅ Accepted' + (l.acceptedAt ? ' (' + l.acceptedAt + ')' : '') : '⏳ Pending Accept'}</span>
         </div>
         <div style="font-weight:800;color:var(--danger);">- ₹${l.amount}</div>
@@ -1713,34 +1790,269 @@
     if (data.status === 'ok') { applyServerPayload(data); toast('Teacher Deleted.'); }
   }
 
-  async function payTeacherSalaryUI(teacherId, teacherName, mobile) {
-    if (!navigator.onLine) { toast('Internet required.'); return; }
-    const salInp = document.getElementById('sal_' + teacherId);
-    const defaultAmt = salInp ? Number(salInp.value) || 0 : 0;
+  let activeSalaryTeacher = null;
+  let salarySubmitting = false;
+
+  function getDefaultSalaryMonthKey() {
     const now = new Date();
     const mNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    const defMonth = `${mNames[now.getMonth()]}_${now.getFullYear()}`;
-    const month = prompt('কোন মাসের স্যালারি? (যেমন: Nov_2026)', defMonth);
-    if (!month) return;
-    const amount = prompt(`${teacherName}-এর স্যালারি পরিমাণ (Rs.):`, defaultAmt);
-    if (!amount || Number(amount) <= 0) return;
-    if (!confirm(`Confirm Salary Payment?\n\nTeacher: ${teacherName} (${teacherId})\nMonth: ${month}\nAmount: Rs. ${amount}\n\nমেইন ব্যালেন্স থেকে এই টাকা অটোমেটিক বিয়োগ হবে।`)) return;
-    const res = await fetch(API_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify({ action: 'payTeacherSalary', teacherId, teacherName, month: month.trim(), amount: Number(amount), paidBy: getCurrentAdmin() })
-    });
-    const data = await res.json();
-    if (data.status === 'ok') {
-      applyServerPayload(data);
-      toast('স্যালারি পেইড! টিচারের অ্যাপে Accept নোটিফিকেশন চলে গেছে।');
-      const mob = String(mobile || '').replace(/\D/g, '');
-      if (mob && confirm('টিচারের অ্যাপে নোটিফিকেশন চলে গেছে!\n\nএছাড়াও কি WhatsApp-এ রিসিপ্ট পাঠাতে চান? (Cancel চাপলে শুধু অ্যাপ নোটিফিকেশনই থাকবে)')) {
-        const msg = encodeURIComponent(`ইউ.সি.সি ইনস্টিটিউট: নমস্কার ${teacherName}, আপনার ${month} মাসের স্যালারি বাবদ ${amount} টাকা পাঠানো হয়েছে। তারিখ: ${formatBnDate(todayStr())}। ধন্যবাদ।`);
-        window.open(`https://wa.me/91${mob}?text=${msg}`, '_blank');
+    const key = `${mNames[now.getMonth()]}_${now.getFullYear()}`;
+    return SALARY_MONTHS.some(x => x[0] === key) ? key : 'Jan_2027';
+  }
+
+  function bnSalMonth(k) {
+    const f = SALARY_MONTHS.find(x => x[0] === k);
+    return f ? f[1] : String(k || '').replace('_', ' ');
+  }
+
+  function getTeacherMonthLogs(teacherId, monthKey) {
+    const tidU = String(teacherId || '').toUpperCase();
+    return (salaryLog || []).filter(l => String(l.teacherId || '').toUpperCase() === tidU && String(l.month || '').trim() === monthKey);
+  }
+
+  function getTeacherMonthPaid(teacherId, monthKey) {
+    return getTeacherMonthLogs(teacherId, monthKey).reduce((sum, x) => sum + (Number(x.amount) || 0), 0);
+  }
+
+  function payTeacherSalaryUI(teacherId, teacherName, mobile) {
+    const salInp = document.getElementById('sal_' + teacherId);
+    const tObj = teachersList.find(x => String(x.id).toUpperCase() === String(teacherId).toUpperCase());
+    const fixedSalary = salInp ? (Number(salInp.value) || 0) : (tObj ? Number(tObj.salary) || 0 : 0);
+    activeSalaryTeacher = { id: teacherId, name: teacherName, mobile: mobile || (tObj ? tObj.mobile : ''), fixedSalary };
+
+    document.getElementById('spTeacherName').textContent = `${teacherName} (${teacherId})`;
+    document.getElementById('spTeacherSub').textContent = `Fixed Monthly Salary: ₹${fixedSalary}${activeSalaryTeacher.mobile ? ' • 📱 ' + activeSalaryTeacher.mobile : ''}`;
+    document.getElementById('spDoneBar').style.display = 'none';
+    document.getElementById('spNoteInp').value = '';
+    document.getElementById('spExtraChk').checked = false;
+
+    populateSalaryMonthDropdown(getDefaultSalaryMonthKey());
+    onSalaryMonthChange();
+    document.getElementById('salaryPayModal').classList.add('open');
+  }
+
+  function closeSalaryPayModal() {
+    activeSalaryTeacher = null;
+    document.getElementById('salaryPayModal').classList.remove('open');
+  }
+
+  function populateSalaryMonthDropdown(selectedKey) {
+    if (!activeSalaryTeacher) return;
+    const sel = document.getElementById('spMonthSel');
+    const fix = activeSalaryTeacher.fixedSalary;
+    sel.innerHTML = SALARY_MONTHS.map(([k, bn]) => {
+      const paid = getTeacherMonthPaid(activeSalaryTeacher.id, k);
+      const rem = Math.max(0, fix - paid);
+      let tag = '';
+      if (fix > 0) {
+        if (paid === 0) tag = ` — বাকি ₹${fix}`;
+        else if (rem > 0) tag = ` — জমা ₹${paid} | বাকি ₹${rem}`;
+        else tag = ` — Full Paid ✓ (₹${paid})`;
+      } else if (paid > 0) {
+        tag = ` — জমা ₹${paid}`;
       }
+      return `<option value="${k}" ${k === selectedKey ? 'selected' : ''}>${bn}${tag}</option>`;
+    }).join('');
+  }
+
+  function setQuickSalAmt(val) {
+    const inp = document.getElementById('spAmtInp');
+    if (inp) { inp.value = val; validateSalaryAmtUI(); }
+  }
+
+  function onSalaryMonthChange() {
+    if (!activeSalaryTeacher) return;
+    const monthKey = document.getElementById('spMonthSel').value;
+    const fix = activeSalaryTeacher.fixedSalary;
+    const logs = getTeacherMonthLogs(activeSalaryTeacher.id, monthKey);
+    const paid = logs.reduce((sum, x) => sum + (Number(x.amount) || 0), 0);
+    const rem = Math.max(0, fix - paid);
+
+    document.getElementById('spFixedVal').textContent = '₹' + fix;
+    document.getElementById('spPaidVal').textContent = '₹' + paid;
+    const remEl = document.getElementById('spRemVal');
+    remEl.textContent = rem === 0 && fix > 0 ? '₹0 ✓' : '₹' + rem;
+    remEl.style.color = rem > 0 ? 'var(--danger)' : 'var(--success)';
+
+    // কুইক অ্যামাউন্ট বাটন (বাকি অনুযায়ী)
+    const qBox = document.getElementById('spQuickBtns');
+    if (rem > 0) {
+      const presets = [rem, 500, 300, 200, 1000].filter((v, idx, arr) => v > 0 && v <= rem && arr.indexOf(v) === idx);
+      qBox.innerHTML = presets.map((v, i) => `<button type="button" class="btn-sm" style="background:${i===0?'var(--accent-grad)':'var(--bg-subcard)'};color:${i===0?'var(--accent-text)':'var(--accent-light)'};border:1px solid var(--accent-border);" onclick="setQuickSalAmt(${v})">${i===0?'বাকি পুরোটা ₹'+v:'₹'+v}</button>`).join('');
     } else {
-      toast(data.message || 'Error!');
+      qBox.innerHTML = '';
+    }
+
+    document.getElementById('spAmtInp').value = rem > 0 ? rem : '';
+    document.getElementById('spExtraChk').checked = false;
+
+    // ওই মাসের আগের কিস্তি/পেমেন্ট হিস্ট্রি
+    document.getElementById('spHistCount').textContent = logs.length;
+    document.getElementById('spMonthHistory').innerHTML = logs.length ? logs.slice().reverse().map((l, idx) => {
+      const acc = String(l.status || '').toUpperCase() === 'ACCEPTED';
+      return `<div class="info-item" style="font-size:12px;">
+        <div>
+          <strong>#${logs.length - idx} • ₹${l.amount}</strong>${l.remarks ? ` <span style="color:var(--accent-light);">(${l.remarks})</span>` : ''}<br>
+          <span style="color:var(--muted);font-size:10.5px;">${l.date} ${l.time || ''}</span>
+        </div>
+        <span class="${acc ? 'badge-ok' : 'badge-due'}" style="font-size:10px;padding:2px 8px;">${acc ? '✅ Accepted' : '⏳ Pending'}</span>
+      </div>`;
+    }).join('') : '<div style="font-size:12px;color:var(--muted);text-align:center;">এই মাসে এখনো কোনো পেমেন্ট হয়নি।</div>';
+
+    validateSalaryAmtUI();
+  }
+
+  function validateSalaryAmtUI() {
+    if (!activeSalaryTeacher) return;
+    const monthKey = document.getElementById('spMonthSel').value;
+    const fix = activeSalaryTeacher.fixedSalary;
+    const paid = getTeacherMonthPaid(activeSalaryTeacher.id, monthKey);
+    const rem = Math.max(0, fix - paid);
+    const amt = Number(document.getElementById('spAmtInp').value) || 0;
+    const allowExtra = document.getElementById('spExtraChk').checked;
+
+    const fullBox = document.getElementById('spFullNotice');
+    const warnBox = document.getElementById('spAmtWarn');
+    const extraWrap = document.getElementById('spExtraWrap');
+    const btn = document.getElementById('spSubmitBtn');
+
+    if (fix > 0 && rem === 0) {
+      fullBox.textContent = `✅ ${bnSalMonth(monthKey)}-এর পুরো স্যালারি (₹${fix}) সম্পূর্ণ পেমেন্ট হয়ে গেছে!`;
+      fullBox.style.display = 'block';
+      extraWrap.style.display = 'flex';
+      warnBox.style.display = 'none';
+      btn.disabled = !allowExtra || amt <= 0;
+      btn.textContent = allowExtra ? `⚡ Pay Bonus / Extra ₹${amt || 0}` : 'Full Salary Paid ✓';
+    } else {
+      fullBox.style.display = 'none';
+      if (fix > 0 && amt > rem) {
+        extraWrap.style.display = 'flex';
+        if (!allowExtra) {
+          warnBox.textContent = `বাকি আছে মাত্র ₹${rem}! (আগেই দেওয়া হয়েছে ₹${paid})। এর বেশি দিতে চাইলে নিচে Bonus/Extra টিক দিন।`;
+          warnBox.style.display = 'block';
+          btn.disabled = true;
+          btn.textContent = `সর্বোচ্চ ₹${rem} দিতে পারবেন`;
+          return;
+        }
+      } else {
+        extraWrap.style.display = 'none';
+      }
+      warnBox.style.display = 'none';
+      btn.disabled = amt <= 0;
+      btn.textContent = amt > 0 ? `⚡ Pay ₹${amt} Now (${bnSalMonth(monthKey)})` : 'টাকার পরিমাণ লিখুন';
+    }
+  }
+
+  async function submitTeacherSalaryFast() {
+    if (!activeSalaryTeacher || salarySubmitting) return;
+    if (!navigator.onLine) { toast('স্যালারি পেমেন্ট করতে ইন্টারনেট অন রাখুন।'); return; }
+    const { id: teacherId, name: teacherName, mobile, fixedSalary } = activeSalaryTeacher;
+    const month = document.getElementById('spMonthSel').value;
+    const amount = Number(document.getElementById('spAmtInp').value) || 0;
+    const remarks = document.getElementById('spNoteInp').value.trim();
+    const allowExtra = document.getElementById('spExtraChk').checked;
+    const paidBefore = getTeacherMonthPaid(teacherId, month);
+    const remBefore = Math.max(0, fixedSalary - paidBefore);
+
+    if (amount <= 0) { toast('সঠিক টাকার পরিমাণ লিখুন!'); return; }
+    if (fixedSalary > 0 && !allowExtra && amount > remBefore) {
+      toast(`এই মাসে আর মাত্র ₹${remBefore} বাকি আছে!`); return;
+    }
+
+    salarySubmitting = true;
+    const btn = document.getElementById('spSubmitBtn');
+    btn.disabled = true; btn.textContent = 'Saving...';
+
+    // ০ms ঝাকাঝাক ইনস্ট্যান্ট আপডেট (Optimistic UI)
+    const tempSalId = 'SAL' + Date.now();
+    const newEntry = {
+      salaryId: tempSalId,
+      date: todayStr(),
+      time: bnNowTime(),
+      month,
+      teacherId,
+      teacherName,
+      amount,
+      paidBy: getCurrentAdmin() || 'Prolay Sannigrahi',
+      remarks,
+      status: 'PENDING',
+      acceptedAt: ''
+    };
+    salaryLog.push(newEntry);
+    saTotals.sal = (Number(saTotals.sal) || 0) + amount;
+    saTotals.net = (Number(saTotals.col) || 0) - saTotals.sal;
+    localStorage.setItem('ucc_salary_log', JSON.stringify(salaryLog));
+    localStorage.setItem('ucc_sa_totals', JSON.stringify(saTotals));
+
+    const newPaid = paidBefore + amount;
+    const newRem = Math.max(0, fixedSalary - newPaid);
+
+    document.getElementById('spNoteInp').value = '';
+    populateSalaryMonthDropdown(month);
+    onSalaryMonthChange();
+    renderSuperAdmin();
+    renderSalaryNotifications();
+
+    const mob = String(mobile || '').replace(/\D/g, '');
+    const waBox = document.getElementById('spDoneBar');
+    document.getElementById('spDoneMsg').textContent = `✅ ₹${amount} পেইড (${bnSalMonth(month)})! মোট জমা: ₹${newPaid} • বাকি: ₹${newRem}`;
+    const waLink = document.getElementById('spDoneWaLink');
+    if (mob) {
+      const msg = `ইউ.সি.সি ইনস্টিটিউট: নমস্কার ${teacherName}, আপনার ${bnSalMonth(month)} মাসের স্যালারি বাবদ ₹${amount} পাঠানো হয়েছে${remarks ? ' (' + remarks + ')' : ''}। ওই মাসে মোট জমা: ₹${newPaid}${fixedSalary > 0 ? ' (বাকি: ₹' + newRem + ')' : ''}। তারিখ: ${formatBnDate(todayStr())}। ধন্যবাদ।`;
+      waLink.href = `https://wa.me/91${mob}?text=${encodeURIComponent(msg)}`;
+      waLink.style.display = 'block';
+    } else {
+      waLink.style.display = 'none';
+    }
+    waBox.style.display = 'block';
+    toast(`✅ ₹${amount} পেইড! বাকি ₹${newRem}`);
+
+    // ব্যাকগ্রাউন্ডে সুপার-ফাস্ট সার্ভার সেভ
+    try {
+      const data = await fetchFastJson(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({
+          action: 'payTeacherSalary',
+          salaryId: tempSalId,
+          teacherId,
+          teacherName,
+          month,
+          amount,
+          remarks,
+          paidBy: getCurrentAdmin(),
+          allowDuplicate: true,
+          allowExtra
+        })
+      }, 15000);
+      if (data && data.status === 'ok') {
+        applyServerPayload(data, true);
+        if (activeSalaryTeacher) { populateSalaryMonthDropdown(month); onSalaryMonthChange(); }
+      } else {
+        // সার্ভার এরর হলে রোলব্যাক
+        salaryLog = salaryLog.filter(x => x.salaryId !== tempSalId);
+        saTotals.sal = Math.max(0, (Number(saTotals.sal) || 0) - amount);
+        saTotals.net = (Number(saTotals.col) || 0) - saTotals.sal;
+        localStorage.setItem('ucc_salary_log', JSON.stringify(salaryLog));
+        localStorage.setItem('ucc_sa_totals', JSON.stringify(saTotals));
+        renderSuperAdmin();
+        if (activeSalaryTeacher) { populateSalaryMonthDropdown(month); onSalaryMonthChange(); }
+        waBox.style.display = 'none';
+        toast((data && data.message) || 'Payment failed!');
+      }
+    } catch (e) {
+      salaryLog = salaryLog.filter(x => x.salaryId !== tempSalId);
+      saTotals.sal = Math.max(0, (Number(saTotals.sal) || 0) - amount);
+      saTotals.net = (Number(saTotals.col) || 0) - saTotals.sal;
+      localStorage.setItem('ucc_salary_log', JSON.stringify(salaryLog));
+      localStorage.setItem('ucc_sa_totals', JSON.stringify(saTotals));
+      renderSuperAdmin();
+      if (activeSalaryTeacher) { populateSalaryMonthDropdown(month); onSalaryMonthChange(); }
+      waBox.style.display = 'none';
+      toast('Network error! আবার চেষ্টা করুন।');
+    } finally {
+      salarySubmitting = false;
+      if (activeSalaryTeacher) validateSalaryAmtUI();
     }
   }
 
@@ -1841,15 +2153,8 @@
     const absTodayCount = absentLog.filter(a => a.date === today).length;
     const sa = document.getElementById('sideAbsPill'); if (sa) sa.textContent = absTodayCount;
     if (hasPerm('caller')) {
-      const presentToday = attendance.filter(a => a.date === today);
-      const presentIds = new Set(presentToday.map(a => String(a.studentId || '').toUpperCase()));
-      const activeClasses = new Set(presentToday.map(a => a.studentClass));
-      const calledIds = new Set(absentLog.filter(a => a.date === today).map(a => String(a.studentId || '').toUpperCase()));
-      let cPend = 0;
-      students.forEach(s => {
-        const idU = String(s.id || '').toUpperCase();
-        if (!presentIds.has(idU) && !calledIds.has(idU) && (activeClasses.size === 0 || activeClasses.has(s.studentClass))) cPend++;
-      });
+      const { absentTodayList } = getTodayCallerSets(today);
+      const cPend = absentTodayList.length;
       const cb = document.getElementById('callerPendingBadge');
       if (cb) { cb.textContent = cPend; cb.style.display = cPend > 0 ? 'inline-block' : 'none'; }
     }
@@ -2297,14 +2602,43 @@
     document.getElementById('absentReportList').innerHTML = absToday.length ? absToday.map(a => `<div class="info-item" style="font-size:12.5px;"><div><strong>${a.studentName}</strong> <span style="color:var(--muted);">(${a.studentId} • ${a.studentClass})</span><br><span style="color:var(--accent-light);font-weight:700;">কারণ: ${a.reason}</span></div><span style="color:var(--muted);font-size:11px;text-align:right;">${a.time}<br>${a.callerName}</span></div>`).join('') : '<div style="font-size:12.5px;color:var(--muted);">No absent calls logged today.</div>';
   }
 
-  // ===== ABSENT CALLER DESK (HOMEPAGE BOTTOM NAV) =====
-  let callerFilterMode = 'active';
-  function setCallerFilter(mode) {
-    callerFilterMode = mode;
-    const pa = document.getElementById('cPillActive'), pall = document.getElementById('cPillAll');
-    if (pa) pa.classList.toggle('active', mode === 'active');
-    if (pall) pall.classList.toggle('active', mode === 'all');
-    renderCallerPage();
+  // ===== ABSENT CALLER DESK (ONLY ABSENT + DUE AMOUNT DISPLAY) =====
+  function getTodayCallerSets(today) {
+    const presentToday = attendance.filter(a => String(a.date || '').trim() === today);
+    const queuedPresent = queue.filter(q => q.type === 'markAttendance' && q.data && String(q.data.date || '').trim() === today).map(q => q.data);
+    const allPresent = presentToday.concat(queuedPresent);
+
+    const presentIds = new Set(allPresent.map(a => String(a.studentId || '').trim().toUpperCase()));
+    const scannedClasses = new Set(allPresent.map(a => String(a.studentClass || '').trim()).filter(Boolean));
+
+    const calledToday = absentLog.filter(a => String(a.date || '').trim() === today);
+    const queuedCalled = queue.filter(q => q.type === 'logAbsentCall' && q.data && String(q.data.date || '').trim() === today).map(q => q.data);
+    const calledIds = new Set(calledToday.concat(queuedCalled).map(a => String(a.studentId || '').trim().toUpperCase()));
+
+    // শুধুমাত্র আজকের যে ক্লাসগুলোর অ্যাটেন্ডেন্স নেওয়া হয়েছে, তাদের অ্যাবসেন্ট স্টুডেন্টরা (Present ও Called বাদে)
+    const absentTodayList = scannedClasses.size > 0
+      ? students.filter(s => {
+          const idU = String(s.id || '').trim().toUpperCase();
+          return scannedClasses.has(s.studentClass) && !presentIds.has(idU) && !calledIds.has(idU);
+        })
+      : [];
+
+    return { presentIds, scannedClasses, calledToday, calledIds, absentTodayList };
+  }
+
+  function getDueMonthsShort(s) {
+    const now = new Date();
+    if (now < new Date(2027, 0, 1) || !s.admissionDate) return '';
+    const end = now > new Date(2027, 11, 31) ? new Date(2027, 11, 31) : now;
+    const adm = new Date(s.admissionDate + 'T00:00:00');
+    const startIdx = adm < new Date(2027, 0, 1) ? 0 : adm.getMonth();
+    const endIdx = end.getMonth();
+    const unpaid = [];
+    for (let i = startIdx; i <= endIdx && i < MONTHS.length; i++) {
+      const [key, lbl] = MONTHS[i];
+      if ((Number(s.months?.[key]) || 0) <= 0) unpaid.push(lbl);
+    }
+    return unpaid.join(', ');
   }
 
   function renderCallerPage() {
@@ -2314,25 +2648,25 @@
     const dtEl = document.getElementById('callerTodayDate');
     if (dtEl) dtEl.textContent = formatBnDate(today);
 
-    const presentToday = attendance.filter(a => a.date === today);
-    const presentIds = new Set(presentToday.map(a => String(a.studentId || '').toUpperCase()));
-    const activeClasses = new Set(presentToday.map(a => a.studentClass));
-
-    const calledToday = absentLog.filter(a => a.date === today);
-    const calledIds = new Set(calledToday.map(a => String(a.studentId || '').toUpperCase()));
-
-    const allAbsent = students.filter(s => !presentIds.has(String(s.id || '').toUpperCase()) && !calledIds.has(String(s.id || '').toUpperCase()));
-    const activeAbsent = activeClasses.size > 0 ? allAbsent.filter(s => activeClasses.has(s.studentClass)) : allAbsent;
+    const { presentIds, scannedClasses, calledToday, calledIds, absentTodayList } = getTodayCallerSets(today);
 
     const badge = document.getElementById('callerPendingBadge');
     if (badge) {
-      if (activeAbsent.length > 0) { badge.textContent = activeAbsent.length; badge.style.display = 'inline-block'; }
+      if (absentTodayList.length > 0) { badge.textContent = absentTodayList.length; badge.style.display = 'inline-block'; }
       else badge.style.display = 'none';
     }
 
-    let list = callerFilterMode === 'active' ? activeAbsent : allAbsent;
-    const selCls = document.getElementById('callerClassSel') ? document.getElementById('callerClassSel').value : 'ALL';
-    if (selCls && selCls !== 'ALL') list = list.filter(s => s.studentClass === selCls);
+    const selCls = document.getElementById('callerClassSel') ? document.getElementById('callerClassSel').value : 'TODAY';
+    let list;
+    if (selCls && selCls !== 'TODAY') {
+      // নির্দিষ্ট ক্লাস বেছে নিলে সেই ক্লাসের শুধু অ্যাবসেন্ট (Present ও Called নয়) স্টুডেন্ট দেখাবে
+      list = students.filter(s => {
+        const idU = String(s.id || '').trim().toUpperCase();
+        return s.studentClass === selCls && !presentIds.has(idU) && !calledIds.has(idU);
+      });
+    } else {
+      list = absentTodayList;
+    }
 
     document.getElementById('callerPendCount').textContent = list.length;
     document.getElementById('callerDoneCount').textContent = calledToday.length;
@@ -2340,15 +2674,25 @@
 
     pendBox.innerHTML = list.length ? list.map(s => {
       const mob = String(s.mobile || '').replace(/\D/g, '');
+      const due = Number(s.totalDue) || 0;
+      const dueMonths = due > 0 ? getDueMonthsShort(s) : '';
+      const dueBadgeHtml = due > 0
+        ? `<span class="badge-due" style="display:inline-block;margin-top:5px;font-size:11px;padding:3px 9px;">💰 ফি বাকি: ₹${due}${dueMonths ? ' (' + dueMonths + ')' : ''}</span>`
+        : `<span class="badge-ok" style="display:inline-block;margin-top:5px;font-size:10.5px;padding:2px 8px;">✓ ফি ক্লিয়ার (₹0)</span>`;
+      const waMsg = `ইউ.সি.সি ইনস্টিটিউট: নমস্কার, ${s.name} (${bnClass(s.studentClass)}) আজ (${formatBnDate(today)}) ক্লাসে অনুপস্থিত ছিল। অনুগ্রহ করে না আসার কারণ জানাবেন।${due > 0 ? ` সেইসাথে ওর বর্তমানে ₹${due} টিউশন ফি বাকি রয়েছে — অনুগ্রহ করে শীঘ্রই জমা দেবেন।` : ''} ধন্যবাদ।`;
       return `
       <div class="req-card" style="margin-bottom:11px;">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
-          <div>
+          <div style="min-width:0;">
             <strong style="font-size:14.5px;color:var(--accent-light);">${s.name}</strong>
             <div style="font-size:11.5px;color:var(--text-2);margin-top:2px;">${s.id} • ${s.studentClass}${s.fatherName ? ' • পিতা: ' + s.fatherName : ''}</div>
             <div style="font-size:12px;color:var(--muted);margin-top:2px;">📱 ${mob || 'নম্বর নেই'}</div>
+            ${dueBadgeHtml}
           </div>
-          ${mob ? `<a href="tel:${mob}" class="btn-sm" style="background:#059669;color:#fff;text-decoration:none;padding:9px 13px;font-size:12px;">📞 Call</a>` : ''}
+          <div style="display:flex;flex-direction:column;gap:5px;flex-shrink:0;">
+            ${mob ? `<a href="tel:${mob}" class="btn-sm" style="background:#059669;color:#fff;text-decoration:none;padding:8px 12px;font-size:12px;text-align:center;">📞 Call</a>` : ''}
+            ${mob ? `<a href="https://wa.me/91${mob}?text=${encodeURIComponent(waMsg)}" target="_blank" class="btn-sm" style="background:#0284c7;color:#fff;text-decoration:none;padding:6px 10px;font-size:11px;text-align:center;">💬 WA</a>` : ''}
+          </div>
         </div>
         <div class="row-2" style="margin-top:9px;grid-template-columns:1fr 1fr;">
           <select id="crSel_${s.id}" onchange="onCallerQuickReason('${s.id}', this.value)" style="padding:8px;font-size:12px;">
@@ -2363,7 +2707,7 @@
         </div>
         <button class="btn btn-accent" style="margin-top:8px;padding:9px;font-size:12.5px;" onclick="saveCallerReason('${s.id}')">✓ কারণ সেভ করুন (লিস্ট থেকে সরবে)</button>
       </div>`;
-    }).join('') : `<div style="font-size:12.5px;color:var(--success);text-align:center;padding:12px 0;font-weight:700;">${activeClasses.size === 0 && callerFilterMode === 'active' ? 'আজকের কোনো ক্লাসের অ্যাটেন্ডেন্স এখনো স্ক্যান হয়নি। সব স্টুডেন্ট দেখতে "All Classes" চাপুন।' : 'কোনো পেন্ডিং অ্যাবসেন্ট কল বাকি নেই ✓'}</div>`;
+    }).join('') : `<div style="font-size:12.5px;color:${scannedClasses.size === 0 && selCls === 'TODAY' ? 'var(--muted)' : 'var(--success)'};text-align:center;padding:14px 6px;font-weight:700;line-height:1.5;">${scannedClasses.size === 0 && selCls === 'TODAY' ? 'আজ এখনো কোনো ক্লাসের QR অ্যাটেন্ডেন্স স্ক্যান হয়নি। স্ক্যান হলেই শুধু অনুপস্থিত (Absent) স্টুডেন্টদের নাম এখানে চলে আসবে। (নির্দিষ্ট ক্লাস দেখতে ওপরের মেনু থেকে ক্লাস বেছে নিন)' : 'কোনো পেন্ডিং অ্যাবসেন্ট কল বাকি নেই ✓'}</div>`;
 
     const doneBox = document.getElementById('callerDoneList');
     doneBox.innerHTML = calledToday.length ? calledToday.slice().reverse().map(a => `
