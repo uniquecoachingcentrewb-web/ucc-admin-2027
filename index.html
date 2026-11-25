@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- U.C.C Institute Teacher Panel - Final Build v13 -->
+<!-- U.C.C Institute Teacher Panel - Final Build v14 Q&A -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -987,6 +987,13 @@
         <button type="submit" id="cSubmitBtn" class="btn btn-accent">Publish to Student App</button>
       </form>
     </div>
+    <div class="card" id="qaInboxCard" style="display:none;border:1.5px solid var(--accent);background:var(--accent-soft);">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:9px;">
+        <div class="card-title" style="margin-bottom:0;">💬 ছাত্রছাত্রীদের প্রশ্ন (Student Q&amp;A Inbox)</div>
+        <button type="button" class="btn-sm" style="background:var(--accent-grad);color:var(--accent-text);" onclick="refreshAllContentChats()">🔄 Refresh</button>
+      </div>
+      <div id="qaInboxList"></div>
+    </div>
     <div class="card"><div class="card-title">Uploaded Classes & Materials (<span id="conCount">0</span>)</div><div id="adminContentList"></div></div>
   </div>
 
@@ -1340,7 +1347,7 @@
 <script>
   // Auto-clear old Service Worker cache whenever a new UI build is deployed
   (function() {
-    const UI_BUILD = 'ucc_teacher_v13_brand';
+    const UI_BUILD = 'ucc_teacher_v14_qa';
     try {
       if (localStorage.getItem('ucc_ui_build') !== UI_BUILD) {
         localStorage.setItem('ucc_ui_build', UI_BUILD);
@@ -2878,6 +2885,8 @@
     document.getElementById('cLinkWrap').style.display = m === 'link' ? 'block' : 'none';
     document.getElementById('cFileWrap').style.display = m === 'file' ? 'block' : 'none';
   }
+  let contentChatCache = {};
+
   function renderContentTab() {
     const btn = document.getElementById('dueLockBtn');
     btn.textContent = dueLock === 'OFF' ? 'OFF' : 'ON';
@@ -2889,9 +2898,135 @@
       : '<div style="font-size:12.5px;color:var(--muted);">No notices posted yet.</div>';
 
     document.getElementById('conCount').textContent = classesContent.length;
+    const canQa = hasPerm('qa');
     document.getElementById('adminContentList').innerHTML = classesContent.length
-      ? classesContent.slice().reverse().map(c => `<div class="info-item" style="align-items:flex-start;"><div style="font-size:12.5px;"><strong>${c.title}</strong> <span style="color:${c.type==='Live'?'var(--danger)':'var(--accent-light)'};font-weight:800;">(${c.type})</span><br><span style="color:var(--accent-light);font-weight:700;">${c.targetClass}</span> • ${c.subject} → <strong>${c.chapter || 'General'}</strong><br><span style="color:var(--muted);font-size:11px;">${c.date}${c.driveFileId ? ' • Drive File' : ''}</span>${c.type === 'Live' ? `<div style="display:flex;gap:6px;margin-top:7px;">${hasPerm('qa') ? `<button class="btn-sm" style="background:var(--accent-grad);color:var(--accent-text);" onclick="openAdminChat('${c.id}')">Live Q&A</button>` : ''}<button class="btn-sm" style="background:var(--success);color:#061121;" onclick="moveLiveToRecorded('${c.id}')">Save Recorded</button></div>` : ''}</div>${isSuperAdmin() ? `<button class="btn-sm" style="background:var(--danger-soft);color:var(--danger);" onclick="deleteContent('${c.id}')">Delete</button>` : ''}</div>`).join('')
+      ? classesContent.slice().reverse().map(c => {
+          const isLive = String(c.type || '').toLowerCase().includes('live');
+          const msgs = contentChatCache[c.id] || [];
+          const stMsgs = msgs.filter(m => String(m.role || '').toLowerCase() !== 'admin');
+          const lastMsg = msgs.length ? msgs[msgs.length - 1] : null;
+          const needsReply = lastMsg && String(lastMsg.role || '').toLowerCase() !== 'admin';
+          const qaBtnLabel = needsReply
+            ? `💬 Reply (${stMsgs.length} New!)`
+            : (stMsgs.length > 0 ? `💬 Q&A (${stMsgs.length})` : '💬 Q&A / Reply');
+          const qaBtnStyle = needsReply
+            ? 'background:linear-gradient(135deg,#dc2626,#b91c1c);color:#ffffff;'
+            : 'background:var(--accent-grad);color:var(--accent-text);';
+
+          return `<div class="info-item" style="align-items:flex-start;">
+            <div style="font-size:12.5px;flex:1;min-width:0;">
+              <strong>${c.title}</strong> <span style="color:${isLive?'var(--danger)':'var(--accent-light)'};font-weight:800;">(${c.type})</span><br>
+              <span style="color:var(--accent-light);font-weight:700;">${c.targetClass}</span> • ${c.subject} → <strong>${c.chapter || 'General'}</strong><br>
+              <span style="color:var(--muted);font-size:11px;">${c.date}${c.driveFileId ? ' • Drive File' : ''}</span>
+              ${needsReply ? `<div style="margin-top:5px;padding:6px 8px;border-radius:8px;background:var(--danger-soft);color:var(--danger);font-size:11.5px;font-weight:700;">❓ ${lastMsg.senderName}: "${lastMsg.message}"</div>` : ''}
+              <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:7px;">
+                ${canQa ? `<button type="button" class="btn-sm" style="${qaBtnStyle}" onclick="openAdminChat('${c.id}')">${qaBtnLabel}</button>` : ''}
+                ${isLive ? `<button type="button" class="btn-sm" style="background:var(--success);color:#061121;" onclick="moveLiveToRecorded('${c.id}')">Save Recorded</button>` : ''}
+              </div>
+            </div>
+            ${isSuperAdmin() ? `<button type="button" class="btn-sm" style="background:var(--danger-soft);color:var(--danger);flex-shrink:0;" onclick="deleteContent('${c.id}')">Delete</button>` : ''}
+          </div>`;
+        }).join('')
       : '<div style="font-size:12.5px;color:var(--muted);">No classes/materials uploaded yet.</div>';
+
+    renderQaInboxSummary();
+    if (canQa && navigator.onLine && classesContent.length) {
+      refreshAllContentChats(true);
+    }
+  }
+
+  let _qaSweepRunning = false;
+  async function refreshAllContentChats(silent = false) {
+    if (_qaSweepRunning || !navigator.onLine || !classesContent.length) return;
+    _qaSweepRunning = true;
+    try {
+      const targets = classesContent.slice(-15);
+      await Promise.all(targets.map(async c => {
+        try {
+          const res = await fetch(`${API_URL}?mode=chat&contentId=${encodeURIComponent(c.id)}`, { cache: 'no-store' });
+          const data = await res.json();
+          if (data && data.status === 'ok') {
+            contentChatCache[c.id] = data.messages || [];
+          }
+        } catch (e) {}
+      }));
+      // Re-render badges & inbox without re-triggering sweep
+      renderQaInboxSummary();
+      updateContentQaButtonsOnly();
+      if (!silent) toast('Q&A আপডেট হয়েছে ✓');
+    } finally {
+      _qaSweepRunning = false;
+    }
+  }
+
+  function renderQaInboxSummary() {
+    const card = document.getElementById('qaInboxCard');
+    const listBox = document.getElementById('qaInboxList');
+    if (!card || !listBox || !hasPerm('qa')) return;
+
+    const itemsWithQuestions = [];
+    classesContent.slice().reverse().forEach(c => {
+      const msgs = contentChatCache[c.id] || [];
+      const stMsgs = msgs.filter(m => String(m.role || '').toLowerCase() !== 'admin');
+      if (stMsgs.length > 0) {
+        const lastMsg = msgs[msgs.length - 1];
+        const needsReply = String(lastMsg.role || '').toLowerCase() !== 'admin';
+        itemsWithQuestions.push({ c, stMsgs, lastMsg, needsReply });
+      }
+    });
+
+    if (!itemsWithQuestions.length) {
+      card.style.display = 'none';
+      return;
+    }
+
+    card.style.display = 'block';
+    listBox.innerHTML = itemsWithQuestions.map(({ c, stMsgs, lastMsg, needsReply }) => `
+      <div class="info-item" style="align-items:center;padding:8px 0;">
+        <div style="font-size:12px;flex:1;min-width:0;padding-right:8px;">
+          <strong style="color:var(--text);">${c.title}</strong> <span style="color:var(--accent-light);font-weight:700;">(${c.targetClass})</span><br>
+          <span style="color:${needsReply ? 'var(--danger)' : 'var(--text-2)'};font-weight:${needsReply ? '700' : '500'};">
+            ${needsReply ? '❓ ' + lastMsg.senderName + ': ' + lastMsg.message : '✅ Answered (' + stMsgs.length + ' questions)'}
+          </span>
+        </div>
+        <button type="button" class="btn-sm" style="background:${needsReply ? '#dc2626' : 'var(--accent-grad)'};color:${needsReply ? '#fff' : 'var(--accent-text)'};flex-shrink:0;" onclick="openAdminChat('${c.id}')">
+          ${needsReply ? 'Reply Now' : 'View Q&A'}
+        </button>
+      </div>
+    `).join('');
+  }
+
+  function updateContentQaButtonsOnly() {
+    const box = document.getElementById('adminContentList');
+    if (!box || !classesContent.length) return;
+    const canQa = hasPerm('qa');
+    box.innerHTML = classesContent.slice().reverse().map(c => {
+      const isLive = String(c.type || '').toLowerCase().includes('live');
+      const msgs = contentChatCache[c.id] || [];
+      const stMsgs = msgs.filter(m => String(m.role || '').toLowerCase() !== 'admin');
+      const lastMsg = msgs.length ? msgs[msgs.length - 1] : null;
+      const needsReply = lastMsg && String(lastMsg.role || '').toLowerCase() !== 'admin';
+      const qaBtnLabel = needsReply
+        ? `💬 Reply (${stMsgs.length} New!)`
+        : (stMsgs.length > 0 ? `💬 Q&A (${stMsgs.length})` : '💬 Q&A / Reply');
+      const qaBtnStyle = needsReply
+        ? 'background:linear-gradient(135deg,#dc2626,#b91c1c);color:#ffffff;'
+        : 'background:var(--accent-grad);color:var(--accent-text);';
+
+      return `<div class="info-item" style="align-items:flex-start;">
+        <div style="font-size:12.5px;flex:1;min-width:0;">
+          <strong>${c.title}</strong> <span style="color:${isLive?'var(--danger)':'var(--accent-light)'};font-weight:800;">(${c.type})</span><br>
+          <span style="color:var(--accent-light);font-weight:700;">${c.targetClass}</span> • ${c.subject} → <strong>${c.chapter || 'General'}</strong><br>
+          <span style="color:var(--muted);font-size:11px;">${c.date}${c.driveFileId ? ' • Drive File' : ''}</span>
+          ${needsReply ? `<div style="margin-top:5px;padding:6px 8px;border-radius:8px;background:var(--danger-soft);color:var(--danger);font-size:11.5px;font-weight:700;">❓ ${lastMsg.senderName}: "${lastMsg.message}"</div>` : ''}
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:7px;">
+            ${canQa ? `<button type="button" class="btn-sm" style="${qaBtnStyle}" onclick="openAdminChat('${c.id}')">${qaBtnLabel}</button>` : ''}
+            ${isLive ? `<button type="button" class="btn-sm" style="background:var(--success);color:#061121;" onclick="moveLiveToRecorded('${c.id}')">Save Recorded</button>` : ''}
+          </div>
+        </div>
+        ${isSuperAdmin() ? `<button type="button" class="btn-sm" style="background:var(--danger-soft);color:var(--danger);flex-shrink:0;" onclick="deleteContent('${c.id}')">Delete</button>` : ''}
+      </div>`;
+    }).join('');
   }
 
   async function postContent(e) {
@@ -2944,24 +3079,72 @@
 
   function openAdminChat(cid) {
     activeChatId = cid; const item = classesContent.find(x => x.id === cid);
-    document.getElementById('chatModalTitle').textContent = item ? item.title : 'Live Q&A';
+    document.getElementById('chatModalTitle').textContent = item ? `${item.title} (${item.targetClass})` : 'Class Q&A';
     document.getElementById('chatModal').classList.add('open');
-    loadAdminChat(); if (chatTimer) clearInterval(chatTimer); chatTimer = setInterval(loadAdminChat, 6000);
+    if (contentChatCache[cid]) renderAdminChatMsgs(contentChatCache[cid]);
+    else document.getElementById('adminChatBox').innerHTML = '<div style="font-size:12px;color:var(--muted);text-align:center;margin-top:60px;">প্রশ্ন লোড হচ্ছে...</div>';
+    loadAdminChat(); if (chatTimer) clearInterval(chatTimer); chatTimer = setInterval(loadAdminChat, 5000);
   }
   function closeAdminChat() { activeChatId = null; if (chatTimer) clearInterval(chatTimer); document.getElementById('chatModal').classList.remove('open'); }
   async function loadAdminChat() {
     if (!activeChatId) return;
-    try { const res = await fetch(`${API_URL}?mode=chat&contentId=${encodeURIComponent(activeChatId)}`); const data = await res.json(); if (data.status === 'ok') renderAdminChatMsgs(data.messages || []); } catch (e) {}
+    const cid = activeChatId;
+    try {
+      const res = await fetch(`${API_URL}?mode=chat&contentId=${encodeURIComponent(cid)}`, { cache: 'no-store' });
+      const data = await res.json();
+      if (data.status === 'ok') {
+        contentChatCache[cid] = data.messages || [];
+        if (activeChatId === cid) renderAdminChatMsgs(data.messages || []);
+        renderQaInboxSummary();
+        updateContentQaButtonsOnly();
+      }
+    } catch (e) {}
   }
   function renderAdminChatMsgs(msgs) {
     const box = document.getElementById('adminChatBox');
-    box.innerHTML = msgs.length ? msgs.map(m => `<div class="chat-msg ${m.role==='Admin'?'admin':''}"><strong style="color:var(--accent-light);">${m.senderName}</strong> <span style="font-size:10px;color:var(--muted);">${m.time}</span><div style="margin-top:2px;">${m.message}</div></div>`).join('') : '<div style="font-size:12px;color:var(--muted);text-align:center;margin-top:40px;">No student questions yet.</div>';
+    box.innerHTML = msgs.length ? msgs.map(m => {
+      const isSir = String(m.role || '').toLowerCase() === 'admin';
+      return `<div class="chat-msg ${isSir ? 'admin' : ''}">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+          <strong style="color:${isSir ? 'var(--accent-light)' : 'var(--text)'};">${m.senderName}${isSir ? ' ✓' : ''}</strong>
+          <span style="font-size:10px;color:var(--muted);">${m.date ? m.date + ' • ' : ''}${m.time || ''}</span>
+        </div>
+        <div style="margin-top:3px;line-height:1.4;">${m.message}</div>
+      </div>`;
+    }).join('') : '<div style="font-size:12px;color:var(--muted);text-align:center;margin-top:60px;">এই ক্লাসে এখনো কোনো ছাত্রছাত্রী প্রশ্ন করেনি।</div>';
     box.scrollTop = box.scrollHeight;
   }
   async function sendAdminChat(e) {
-    e.preventDefault(); const inp = document.getElementById('adminChatInput'), msg = inp.value.trim(); if (!msg || !activeChatId) return; inp.value = '';
-    const res = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: 'sendChat', contentId: activeChatId, senderId: 'ADMIN', senderName: getCurrentAdmin() + ' (Sir)', role: 'Admin', message: msg }) });
-    const data = await res.json(); if (data.status === 'ok') renderAdminChatMsgs(data.messages || []);
+    e.preventDefault();
+    const inp = document.getElementById('adminChatInput'), msg = inp.value.trim();
+    if (!msg || !activeChatId) return;
+    if (!navigator.onLine) { toast('উত্তর পাঠাতে ইন্টারনেট চালু রাখুন।'); return; }
+    const cid = activeChatId;
+    inp.value = '';
+    const sirName = (getCurrentAdmin() || 'Admin') + ' (Sir)';
+    if (!contentChatCache[cid]) contentChatCache[cid] = [];
+    contentChatCache[cid].push({ senderId: 'ADMIN', senderName: sirName, role: 'Admin', time: bnNowTime(), message: msg });
+    renderAdminChatMsgs(contentChatCache[cid]);
+    renderQaInboxSummary();
+    updateContentQaButtonsOnly();
+
+    try {
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ action: 'sendChat', contentId: cid, senderId: 'ADMIN', senderName: sirName, role: 'Admin', message: msg })
+      });
+      const data = await res.json();
+      if (data.status === 'ok') {
+        contentChatCache[cid] = data.messages || [];
+        if (activeChatId === cid) renderAdminChatMsgs(data.messages || []);
+        renderQaInboxSummary();
+        updateContentQaButtonsOnly();
+        toast('✅ উত্তর পাঠানো হয়েছে!');
+      }
+    } catch (err) {
+      toast('Network error! আবার চেষ্টা করুন।');
+    }
   }
 
   async function toggleDueLock() {
