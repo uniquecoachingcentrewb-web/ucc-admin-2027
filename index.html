@@ -620,10 +620,7 @@
     </div>
 
     <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:11px;flex-wrap:wrap;">
-        <div class="card-title" style="margin-bottom:0;">📞 আজকের অ্যাবসেন্ট লিস্ট</div>
-        <select id="callerClassSel" onchange="renderCallerPage()" style="width:auto;min-width:155px;padding:7px 10px;font-size:12px;font-weight:700;border-radius:11px;"></select>
-      </div>
+      <div class="card-title">📞 আজকের অ্যাবসেন্ট লিস্ট (সব ক্লাস)</div>
       <div id="callerPendingList"></div>
     </div>
 
@@ -1522,8 +1519,6 @@
     document.getElementById('fClass').innerHTML = '<option value="">Select Class</option>' + clsOpts;
     document.getElementById('nClass').innerHTML = '<option value="ALL">All Classes</option>' + clsOpts;
     document.getElementById('cClass').innerHTML = '<option value="ALL">All Classes</option>' + clsOpts;
-    const cSel = document.getElementById('callerClassSel');
-    if (cSel) cSel.innerHTML = '<option value="TODAY">আজকের অ্যাবসেন্ট (চলমান ক্লাস)</option>' + clsOpts;
     document.getElementById('fMonth').innerHTML = '<option value="">None</option>' + MONTHS.map(([k]) => `<option value="${k}">${k}</option>`).join('');
     document.getElementById('hisabMonthSel').innerHTML = '<option value="">Month-wise...</option>' + MONTHS.map(([k, lbl]) => `<option value="${k}">${lbl} 2027</option>`).join('');
     document.getElementById('fAdmDate').value = todayStr();
@@ -2615,13 +2610,17 @@
     const queuedCalled = queue.filter(q => q.type === 'logAbsentCall' && q.data && String(q.data.date || '').trim() === today).map(q => q.data);
     const calledIds = new Set(calledToday.concat(queuedCalled).map(a => String(a.studentId || '').trim().toUpperCase()));
 
-    // শুধুমাত্র আজকের যে ক্লাসগুলোর অ্যাটেন্ডেন্স নেওয়া হয়েছে, তাদের অ্যাবসেন্ট স্টুডেন্টরা (Present ও Called বাদে)
-    const absentTodayList = scannedClasses.size > 0
-      ? students.filter(s => {
-          const idU = String(s.id || '').trim().toUpperCase();
-          return scannedClasses.has(s.studentClass) && !presentIds.has(idU) && !calledIds.has(idU);
-        })
-      : [];
+    // টোটাল যতজন স্টুডেন্ট আজকে অ্যাবসেন্ট (Present নয় এবং এখনো কল করা হয়নি) — সবার নাম একসাথে ক্লাস অনুযায়ী সাজানো থাকবে
+    const absentTodayList = students
+      .filter(s => {
+        const idU = String(s.id || '').trim().toUpperCase();
+        return !presentIds.has(idU) && !calledIds.has(idU);
+      })
+      .sort((a, b) => {
+        const ia = CLASSES.indexOf(a.studentClass);
+        const ib = CLASSES.indexOf(b.studentClass);
+        return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib);
+      });
 
     return { presentIds, scannedClasses, calledToday, calledIds, absentTodayList };
   }
@@ -2656,17 +2655,7 @@
       else badge.style.display = 'none';
     }
 
-    const selCls = document.getElementById('callerClassSel') ? document.getElementById('callerClassSel').value : 'TODAY';
-    let list;
-    if (selCls && selCls !== 'TODAY') {
-      // নির্দিষ্ট ক্লাস বেছে নিলে সেই ক্লাসের শুধু অ্যাবসেন্ট (Present ও Called নয়) স্টুডেন্ট দেখাবে
-      list = students.filter(s => {
-        const idU = String(s.id || '').trim().toUpperCase();
-        return s.studentClass === selCls && !presentIds.has(idU) && !calledIds.has(idU);
-      });
-    } else {
-      list = absentTodayList;
-    }
+    const list = absentTodayList;
 
     document.getElementById('callerPendCount').textContent = list.length;
     document.getElementById('callerDoneCount').textContent = calledToday.length;
@@ -2707,7 +2696,7 @@
         </div>
         <button class="btn btn-accent" style="margin-top:8px;padding:9px;font-size:12.5px;" onclick="saveCallerReason('${s.id}')">✓ কারণ সেভ করুন (লিস্ট থেকে সরবে)</button>
       </div>`;
-    }).join('') : `<div style="font-size:12.5px;color:${scannedClasses.size === 0 && selCls === 'TODAY' ? 'var(--muted)' : 'var(--success)'};text-align:center;padding:14px 6px;font-weight:700;line-height:1.5;">${scannedClasses.size === 0 && selCls === 'TODAY' ? 'আজ এখনো কোনো ক্লাসের QR অ্যাটেন্ডেন্স স্ক্যান হয়নি। স্ক্যান হলেই শুধু অনুপস্থিত (Absent) স্টুডেন্টদের নাম এখানে চলে আসবে। (নির্দিষ্ট ক্লাস দেখতে ওপরের মেনু থেকে ক্লাস বেছে নিন)' : 'কোনো পেন্ডিং অ্যাবসেন্ট কল বাকি নেই ✓'}</div>`;
+    }).join('') : '<div style="font-size:12.5px;color:var(--success);text-align:center;padding:14px 6px;font-weight:700;">আজ কোনো পেন্ডিং অ্যাবসেন্ট বাকি নেই ✓</div>';
 
     const doneBox = document.getElementById('callerDoneList');
     doneBox.innerHTML = calledToday.length ? calledToday.slice().reverse().map(a => `
