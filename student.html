@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- U.C.C Institute Student Portal - Animated Build v2 -->
+<!-- U.C.C Institute Student Portal - Animated Build v3 Live Classroom -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -462,6 +462,100 @@
       border: 2px solid #d4af37; margin-top: 4px;
     }
 
+    /* ===== IN-APP LIVE VIDEO CLASSROOM + INTEGRATED Q&A ===== */
+    .classroom-card {
+      background: var(--bg-card);
+      border: 1.5px solid var(--accent);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+      margin-bottom: 14px;
+      animation: pageZoomOpen 0.2s var(--ease-fast);
+    }
+    .classroom-top {
+      background: var(--bg-hero);
+      color: var(--hero-fg, #ffffff);
+      padding: 11px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .live-pulse-pill {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: #dc2626; color: #ffffff;
+      font-size: 10px; font-weight: 800; letter-spacing: 0.5px;
+      padding: 2px 8px; border-radius: 99px;
+    }
+    .live-pulse-dot {
+      width: 6px; height: 6px; border-radius: 50%; background: #ffffff;
+      animation: pulseDot 1.2s infinite;
+    }
+    .video-frame-wrap {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%; /* 16:9 Responsive Aspect Ratio */
+      background: #000000;
+    }
+    .video-frame-wrap iframe,
+    .video-frame-wrap video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+      background: #000000;
+    }
+    .classroom-qa-section {
+      padding: 13px 14px 14px;
+      background: var(--bg-card);
+    }
+    .classroom-qa-hdr {
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+      margin-bottom: 9px;
+    }
+    .classroom-qa-box {
+      height: 215px;
+      overflow-y: auto;
+      background: var(--bg-subcard);
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      padding: 10px;
+      margin-bottom: 9px;
+      user-select: text;
+    }
+    .qa-bubble {
+      margin-bottom: 8px;
+      padding: 8px 11px;
+      border-radius: 12px;
+      font-size: 12.5px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      line-height: 1.4;
+    }
+    .qa-bubble.sir {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+    }
+    .qa-bubble.mine {
+      border-left: 3px solid var(--success);
+    }
+    .sir-tag {
+      display: inline-block;
+      background: var(--accent-grad);
+      color: var(--accent-text);
+      font-size: 9.5px;
+      font-weight: 800;
+      padding: 1px 6px;
+      border-radius: 99px;
+      margin-left: 4px;
+    }
+    .video-item-active {
+      border: 2px solid var(--accent) !important;
+      box-shadow: 0 6px 18px var(--accent-soft);
+    }
+
     /* Modals */
     .rcpt-modal-bg { display: none; position: fixed; inset: 0; background: rgba(2, 8, 18, 0.84); z-index: 120; justify-content: center; align-items: center; padding: 14px; }
     .rcpt-modal-bg.open { display: flex; }
@@ -662,6 +756,37 @@
   <!-- PAGE: LIVE & RECORDED VIDEOS -->
   <div id="page-videos" class="page">
     <div id="videoLockAlert"></div>
+
+    <!-- IN-APP EMBEDDED VIDEO PLAYER + LIVE Q&A CLASSROOM -->
+    <div id="inAppClassroomCard" class="classroom-card" style="display:none;">
+      <div class="classroom-top">
+        <div style="min-width:0;flex:1;">
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+            <span id="crLiveBadge" class="live-pulse-pill" style="display:none;"><span class="live-pulse-dot"></span>LIVE</span>
+            <strong id="crVideoTitle" style="font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Class Video</strong>
+          </div>
+          <div id="crVideoMeta" style="font-size:11px;opacity:0.86;margin-top:2px;">Subject • Chapter</div>
+        </div>
+        <button type="button" onclick="closeInAppPlayer()" style="border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.14);color:#fff;padding:5px 10px;border-radius:10px;font-size:11.5px;font-weight:800;cursor:pointer;flex-shrink:0;">✕ Close</button>
+      </div>
+
+      <div class="video-frame-wrap" id="crPlayerStage"></div>
+
+      <div class="classroom-qa-section">
+        <div class="classroom-qa-hdr">
+          <div style="font-size:13.5px;font-weight:800;color:var(--accent-light);">💬 প্রশ্ন ও উত্তর (Live Q&amp;A)</div>
+          <span style="font-size:10.5px;color:var(--muted);font-weight:700;">● Auto-updating</span>
+        </div>
+        <div id="crChatBox" class="classroom-qa-box">
+          <div style="font-size:12px;color:var(--muted);text-align:center;margin-top:65px;">লোড হচ্ছে...</div>
+        </div>
+        <form onsubmit="sendClassroomQuestion(event)" style="display:flex;gap:7px;">
+          <input type="text" id="crChatInput" required placeholder="ক্লাস চলাকালীন তোমার প্রশ্ন এখানে লেখো..." style="flex:1;padding:10px 12px;font-size:13px;">
+          <button type="submit" id="crChatSendBtn" class="btn btn-accent" style="width:auto;padding:10px 16px;font-size:13px;">Send</button>
+        </form>
+      </div>
+    </div>
+
     <div class="card">
       <div class="card-title">🎬 Live &amp; Recorded Video Classes</div>
       <div id="videoListContainer"></div>
@@ -824,7 +949,7 @@
 <script>
   // Auto-clear old Service Worker cache
   (function() {
-    const UI_BUILD = 'ucc_student_v2_animated';
+    const UI_BUILD = 'ucc_student_v3_classroom';
     try {
       if (localStorage.getItem('ucc_st_ui_build') !== UI_BUILD) {
         localStorage.setItem('ucc_st_ui_build', UI_BUILD);
@@ -1135,6 +1260,7 @@
   window.addEventListener('popstate', () => {
     if (document.getElementById('sidebar').classList.contains('open')) { closeSidebar(); window.history.pushState({ stApp: true }, ''); return; }
     if (document.getElementById('chatModal').classList.contains('open')) { closeStudentChat(); window.history.pushState({ stApp: true }, ''); return; }
+    if (activeVideoId) { closeInAppPlayer(); window.history.pushState({ stApp: true }, ''); return; }
     if (document.getElementById('rcptModal').classList.contains('open')) { closeReceipt(); window.history.pushState({ stApp: true }, ''); return; }
     const activePg = document.querySelector('.page.active');
     if (activePg && activePg.id !== 'page-home') {
@@ -1162,6 +1288,7 @@
 
   function openPage(name) {
     closeSidebar();
+    if (name !== 'videos' && activeVideoId) closeInAppPlayer();
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     const pg = document.getElementById('page-' + name);
     if (pg) pg.classList.add('active');
@@ -1282,6 +1409,7 @@
 
   function logoutStudent() {
     closeSidebar();
+    closeInAppPlayer();
     localStorage.removeItem('ucc_st_auth_v2');
     localStorage.removeItem('ucc_st_cache_v2');
     stAuth = null; stData = null;
@@ -1509,6 +1637,36 @@
       : '<div style="font-size:12.5px;color:var(--muted);text-align:center;">বর্তমানে কোনো নতুন নোটিশ নেই।</div>';
   }
 
+  let activeVideoId = null;
+  let crChatTimer = null;
+
+  function parseInAppVideoSource(rawUrl, driveFileId) {
+    const url = String(rawUrl || '').trim();
+    // 1. YouTube (watch?v=, youtu.be/, /live/, /shorts/, /embed/)
+    const ytMatch = url.match(/(?:youtube\.com\/(?:watch\?(?:.*&)?v=|embed\/|v\/|shorts\/|live\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);
+    if (ytMatch && ytMatch[1]) {
+      return {
+        kind: 'iframe',
+        src: `https://www.youtube.com/embed/${ytMatch[1]}?autoplay=1&playsinline=1&rel=0&modestbranding=1`
+      };
+    }
+    // 2. Google Drive Video
+    const driveMatch = url.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/) || url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+    const fid = driveFileId || (driveMatch && driveMatch[1]);
+    if (fid) {
+      return {
+        kind: 'iframe',
+        src: `https://drive.google.com/file/d/${fid}/preview`
+      };
+    }
+    // 3. Direct MP4 / WebM / Video file
+    if (/\.(mp4|webm|ogg|mov)(\?|$)/i.test(url)) {
+      return { kind: 'video', src: url };
+    }
+    // 4. Fallback iframe
+    return { kind: 'iframe', src: url };
+  }
+
   function renderStudyContentList(containerId, list, isLocked, emptyMsg) {
     const box = document.getElementById(containerId);
     if (!box) return;
@@ -1516,27 +1674,76 @@
       box.innerHTML = `<div style="font-size:12.5px;color:var(--muted);text-align:center;padding:12px 0;">${emptyMsg}</div>`;
       return;
     }
+    const isVideoSection = containerId === 'videoListContainer';
     box.innerHTML = list.map(c => {
-      const isLive = c.type === 'Live';
-      const safeTitle = String(c.title || '').replace(/'/g, "\\'");
-      return `<div class="req-card">
+      const typeLow = String(c.type || '').toLowerCase();
+      const isLive = typeLow.includes('live');
+      const isPlaying = isVideoSection && activeVideoId === c.id;
+      return `<div class="req-card ${isPlaying ? 'video-item-active' : ''}">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
           <div>
             <strong style="font-size:14px;color:var(--text);">${c.title}</strong>
             <div style="font-size:11.5px;color:var(--accent-light);font-weight:700;margin-top:2px;">${c.subject} • ${c.chapter || 'General'}</div>
             <div style="font-size:11px;color:var(--muted);margin-top:2px;">${c.date}</div>
           </div>
-          <span class="${isLive ? 'badge-due' : 'badge-ok'}">${c.type}</span>
+          <span class="${isLive ? 'badge-due' : 'badge-ok'}">${isLive ? '● LIVE' : c.type}</span>
         </div>
         <div style="display:flex;gap:8px;margin-top:10px;">
           ${isLocked
-            ? `<button type="button" class="btn-sm" style="background:var(--danger-soft);color:var(--danger);flex:1;" onclick="openPage('fees')">🔒 Locked (Pay Fee)</button>`
-            : `<a href="${c.link}" target="_blank" class="btn-sm" style="background:var(--accent-grad);color:var(--accent-text);flex:1;">${c.type === 'PDF' ? '📥 Open / Download PDF' : (c.type === 'Mock Test' ? '✍️ Start Test' : '▶️ Watch Class')}</a>`
+            ? `<button type="button" class="btn-sm" style="background:var(--danger-soft);color:var(--danger);flex:1;padding:9px;" onclick="openPage('fees')">🔒 Locked (Pay Fee)</button>`
+            : isVideoSection
+              ? `<button type="button" class="btn-sm" style="background:${isPlaying ? 'var(--success)' : 'var(--accent-grad)'};color:${isPlaying ? '#ffffff' : 'var(--accent-text)'};flex:1;padding:9.5px;font-size:12px;" onclick="openInAppVideoClass('${c.id}')">${isPlaying ? '📺 এখন চলছে • নিচে প্রশ্ন করো' : (isLive ? '▶️ Join Live Class & Ask Q&A' : '▶️ Watch Class & Ask Q&A')}</button>`
+              : `<a href="${c.link}" target="_blank" class="btn-sm" style="background:var(--accent-grad);color:var(--accent-text);flex:1;padding:9px;">${c.type === 'PDF' ? '📥 Open / Download PDF' : '✍️ Start Test'}</a>`
           }
-          ${isLive && !isLocked ? `<button type="button" class="btn-sm" style="background:#0284c7;color:#fff;" onclick="openStudentChat('${c.id}','${safeTitle}')">💬 Ask Doubt</button>` : ''}
         </div>
       </div>`;
     }).join('');
+  }
+
+  function openInAppVideoClass(cid) {
+    if (!stData) return;
+    const item = (stData.classesContent || []).find(x => x.id === cid);
+    if (!item) return;
+
+    const due = Number(stData.student?.totalDue) || 0;
+    const isLocked = (stData.dueLock !== 'OFF') && due > 0;
+    if (isLocked) {
+      openPage('fees');
+      return;
+    }
+
+    activeVideoId = cid;
+    const isLive = String(item.type || '').toLowerCase().includes('live');
+    document.getElementById('crLiveBadge').style.display = isLive ? 'inline-flex' : 'none';
+    document.getElementById('crVideoTitle').textContent = item.title || 'Class Video';
+    document.getElementById('crVideoMeta').textContent = `${item.subject || ''} • ${item.chapter || 'General'} • ${item.date || ''}`;
+
+    const parsed = parseInAppVideoSource(item.link, item.driveFileId);
+    const stage = document.getElementById('crPlayerStage');
+    if (parsed.kind === 'video') {
+      stage.innerHTML = `<video src="${parsed.src}" controls playsinline autoplay></video>`;
+    } else {
+      stage.innerHTML = `<iframe src="${parsed.src}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>`;
+    }
+
+    const card = document.getElementById('inAppClassroomCard');
+    card.style.display = 'block';
+    renderAllStudentUI();
+    card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    loadClassroomChat();
+    if (crChatTimer) clearInterval(crChatTimer);
+    crChatTimer = setInterval(loadClassroomChat, 5000);
+  }
+
+  function closeInAppPlayer() {
+    activeVideoId = null;
+    if (crChatTimer) { clearInterval(crChatTimer); crChatTimer = null; }
+    const stage = document.getElementById('crPlayerStage');
+    if (stage) stage.innerHTML = '';
+    const card = document.getElementById('inAppClassroomCard');
+    if (card) card.style.display = 'none';
+    renderAllStudentUI();
   }
 
   // ===== ONLINE PAYMENT SUBMIT =====
@@ -1604,58 +1811,86 @@
     }
   }
 
-  // ===== LIVE Q&A CHAT =====
+  // ===== INTEGRATED CLASSROOM LIVE Q&A CHAT =====
   function openStudentChat(cid, title) {
-    activeChatId = cid;
-    document.getElementById('chatModalTitle').textContent = title || 'Live Q&A';
-    document.getElementById('chatModal').classList.add('open');
-    loadStudentChat();
-    if (chatTimer) clearInterval(chatTimer);
-    chatTimer = setInterval(loadStudentChat, 6000);
+    openInAppVideoClass(cid);
   }
   function closeStudentChat() {
     activeChatId = null;
     if (chatTimer) clearInterval(chatTimer);
     document.getElementById('chatModal').classList.remove('open');
   }
-  async function loadStudentChat() {
-    if (!activeChatId) return;
+  async function loadClassroomChat() {
+    const cid = activeVideoId || activeChatId;
+    if (!cid) return;
     try {
-      const res = await fetch(`${API_URL}?mode=chat&contentId=${encodeURIComponent(activeChatId)}`);
+      const res = await fetch(`${API_URL}?mode=chat&contentId=${encodeURIComponent(cid)}`, { cache: 'no-store' });
       const data = await res.json();
-      if (data && data.status === 'ok') renderStudentChatMsgs(data.messages || []);
+      if (data && data.status === 'ok') renderClassroomChatMsgs(data.messages || []);
     } catch (e) {}
   }
-  function renderStudentChatMsgs(msgs) {
-    const box = document.getElementById('stChatBox');
+  function renderClassroomChatMsgs(msgs) {
+    const box = document.getElementById('crChatBox');
+    if (!box) return;
+    const myId = stData && stData.student ? String(stData.student.id || '').toUpperCase() : '';
+    const wasNearBottom = (box.scrollHeight - box.scrollTop - box.clientHeight) < 60;
     box.innerHTML = msgs.length
-      ? msgs.map(m => `<div class="chat-msg ${m.role==='Admin'?'admin':''}"><strong style="color:var(--accent-light);">${m.senderName}</strong> <span style="font-size:10px;color:var(--muted);">${m.time}</span><div style="margin-top:2px;">${m.message}</div></div>`).join('')
-      : '<div style="font-size:12px;color:var(--muted);text-align:center;margin-top:40px;">কোনো প্রশ্ন থাকলে নিচে লিখে পাঠাও।</div>';
-    box.scrollTop = box.scrollHeight;
+      ? msgs.map(m => {
+          const isAdmin = String(m.role || '').toLowerCase() === 'admin';
+          const isMine = myId && String(m.senderId || '').toUpperCase() === myId;
+          return `<div class="qa-bubble ${isAdmin ? 'sir' : (isMine ? 'mine' : '')}">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+              <strong style="color:${isAdmin ? 'var(--accent-light)' : 'var(--text)'};font-size:12px;">${m.senderName}${isAdmin ? '<span class="sir-tag">SIR</span>' : ''}</strong>
+              <span style="font-size:10px;color:var(--muted);">${m.time || ''}</span>
+            </div>
+            <div style="margin-top:3px;color:var(--text);">${m.message}</div>
+          </div>`;
+        }).join('')
+      : '<div style="font-size:12px;color:var(--muted);text-align:center;margin-top:68px;">এই ক্লাস নিয়ে কোনো প্রশ্ন থাকলে নিচে লিখে Send করো 👇</div>';
+    if (wasNearBottom || msgs.length <= 4) box.scrollTop = box.scrollHeight;
   }
-  async function sendStudentChat(e) {
+  async function sendClassroomQuestion(e) {
     e.preventDefault();
-    if (!stData || !stData.student || !activeChatId) return;
-    const inp = document.getElementById('stChatInput');
+    const cid = activeVideoId || activeChatId;
+    if (!stData || !stData.student || !cid) return;
+    const inp = document.getElementById('crChatInput');
     const msg = inp.value.trim();
     if (!msg) return;
+    if (!navigator.onLine) { toast('প্রশ্ন পাঠাতে ইন্টারনেট চালু রাখো।'); return; }
     inp.value = '';
     const s = stData.student;
-    const res = await fetch(API_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify({
-        action: 'sendChat',
-        contentId: activeChatId,
-        senderId: s.id,
-        senderName: `${s.name} (${s.id})`,
-        role: 'Student',
-        message: msg
-      })
-    });
-    const data = await res.json();
-    if (data && data.status === 'ok') renderStudentChatMsgs(data.messages || []);
+    const box = document.getElementById('crChatBox');
+    if (box) {
+      if (box.innerHTML.includes('নিচে লিখে Send করো')) box.innerHTML = '';
+      box.insertAdjacentHTML('beforeend', `<div class="qa-bubble mine">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+          <strong style="color:var(--text);font-size:12px;">${s.name} (${s.id})</strong>
+          <span style="font-size:10px;color:var(--muted);">Sending...</span>
+        </div>
+        <div style="margin-top:3px;color:var(--text);">${msg}</div>
+      </div>`);
+      box.scrollTop = box.scrollHeight;
+    }
+    try {
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({
+          action: 'sendChat',
+          contentId: cid,
+          senderId: s.id,
+          senderName: `${s.name} (${s.id})`,
+          role: 'Student',
+          message: msg
+        })
+      });
+      const data = await res.json();
+      if (data && data.status === 'ok') renderClassroomChatMsgs(data.messages || []);
+    } catch (err) {
+      toast('নেটওয়ার্ক সমস্যা, আবার চেষ্টা করো।');
+    }
   }
+  async function sendStudentChat(e) { return sendClassroomQuestion(e); }
 
   // ===== RECEIPT VIEW & PNG/PDF DOWNLOAD =====
   function openReceiptObj(idx) {
