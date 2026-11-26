@@ -1,13 +1,11 @@
 {
-  "name": "U.C.C Institute Student App",
-  "short_name": "U.C.C Student",
-  "description": "U.C.C Institute Student Portal - Live Classes, PDF Notes, Mock Tests, Fees & Smart QR ID Card",
+  "name": "U.C.C Institute Teacher App",
+  "short_name": "U.C.C Teacher",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "orientation": "portrait",
-  "background_color": "#0f766e",
-  "theme_color": "#0f766e",
+  "background_color": "#061121",
+  "theme_color": "#061121",
   "icons": [
     {
       "src": "logo.png",
