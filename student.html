@@ -868,7 +868,13 @@
       <div id="boardClassSelectGroup" class="form-group">
         <label>Select Class (ক্লাস বেছে নাও) *</label>
         <select id="stRegClass">
-          <option value="Class 5">Class 5</option>
+          <option value="Nursery">Nursery (Primary)</option>
+          <option value="KG">KG (Primary)</option>
+          <option value="Class 1">Class 1 (Primary)</option>
+          <option value="Class 2">Class 2 (Primary)</option>
+          <option value="Class 3">Class 3 (Primary)</option>
+          <option value="Class 4">Class 4 (Primary)</option>
+          <option value="Class 5" selected>Class 5</option>
           <option value="Class 6">Class 6</option>
           <option value="Class 7">Class 7</option>
           <option value="Class 8">Class 8</option>
@@ -1373,7 +1379,7 @@
 <script>
   // Register Service Worker & update cache cleanly so direct PWA Install works 100%
   (function() {
-    const UI_BUILD = 'ucc_student_v20_full_system';
+    const UI_BUILD = 'ucc_student_v22_simple_yt_pw';
     try {
       if (localStorage.getItem('ucc_st_ui_build') !== UI_BUILD) {
         localStorage.setItem('ucc_st_ui_build', UI_BUILD);
@@ -2403,7 +2409,7 @@
     if (ytMatch && ytMatch[1]) {
       return {
         kind: 'iframe',
-        src: `https://www.youtube.com/embed/${ytMatch[1]}?autoplay=1&playsinline=1&rel=0&modestbranding=1`
+        src: `https://www.youtube.com/embed/${ytMatch[1]}?autoplay=1&playsinline=1&rel=0&modestbranding=1&iv_load_policy=3`
       };
     }
     // 2. Google Drive Video
@@ -3239,6 +3245,260 @@
         </div>
       `);
     }
+  };
+
+
+  // ===== V21: UCC ID FORMAT, STRICT TRACK ISOLATION & VIDEO DEMO/PAID ACCESS =====
+  function generateNextUccId(existingList = []) {
+    let maxN = 0;
+    (existingList || []).forEach(x => {
+      const m = String(x.id || '').match(/^UCC(\d+)$/i);
+      if (m) maxN = Math.max(maxN, parseInt(m[1], 10));
+    });
+    const localSaved = JSON.parse(localStorage.getItem('ucc_signup_students') || '[]');
+    localSaved.forEach(x => {
+      const m = String(x.id || '').match(/^UCC(\d+)$/i);
+      if (m) maxN = Math.max(maxN, parseInt(m[1], 10));
+    });
+    return 'UCC' + String(maxN + 1).padStart(3, '0');
+  }
+
+  function isFreeGrantedForStudent(stObj, itemId) {
+    if (!stObj) return false;
+    const sid = String(stObj.id || '').toUpperCase();
+    const freeMap = JSON.parse(localStorage.getItem('ucc_free_grants') || '{}');
+    const list = freeMap[sid] || stObj.freeGrantedIds || [];
+    return Array.isArray(list) && (list.includes('ALL') || list.includes(itemId));
+  }
+
+  function canStudentWatchVideo(item, stObj) {
+    if (!item) return false;
+    if (isFreeGrantedForStudent(stObj, item.id)) return true;
+    const isDemo = !!item.isFree || String(item.accessType || '').toUpperCase() === 'DEMO' || String(item.chapter || '').toLowerCase().includes('demo');
+    if (isDemo) return true;
+    // Competitive / Premium paid check
+    if (String(item.track || '').toUpperCase() === 'COMPETITIVE') {
+      const unlocked = getUnlockedBatchIds();
+      if (item.batchId && unlocked.has(String(item.batchId))) return true;
+      if (unlocked.has('ALL_COMP')) return true;
+      return false;
+    }
+    // Board / School video check: if fee lock is ON and student has due, lock non-demo unless free granted
+    const due = Number(stObj && stObj.totalDue) || 0;
+    const isLocked = (stData && stData.dueLock !== 'OFF') && due > 0;
+    return !isLocked;
+  }
+
+  // Override handleStudentSignup to generate UCCxxx ID, save to local/server queue for Admin Panel visibility, and enforce separate account per track
+  const _origSignupV20 = handleStudentSignup;
+  handleStudentSignup = async function(e) {
+    e.preventDefault();
+    const name = document.getElementById('stRegName').value.trim();
+    const mob = document.getElementById('stRegMob').value.replace(/\D/g, '').slice(-10);
+    const guardian = document.getElementById('stRegGuardian').value.trim();
+    const clsVal = selectedAuthTrack === 'BOARD'
+      ? document.getElementById('stRegClass').value
+      : document.getElementById('stRegTarget').value;
+    const errEl = document.getElementById('loginErr');
+    const btn = document.getElementById('stSignupBtn');
+
+    if (!name || mob.length < 10) {
+      errEl.textContent = 'তোমার নাম এবং 10 সংখ্যার মোবাইল নম্বর সঠিকভাবে দাও!';
+      errEl.style.display = 'block';
+      return;
+    }
+    errEl.style.display = 'none';
+    btn.disabled = true; btn.textContent = 'Creating UCC ID...';
+
+    const serverStudents = (stData && Array.isArray(stData.allStudents)) ? stData.allStudents : [];
+    const newUccId = generateNextUccId(serverStudents);
+    const newStudentRecord = {
+      id: newUccId,
+      name: name,
+      studentClass: clsVal,
+      track: selectedAuthTrack,
+      mobile: mob,
+      fatherName: guardian || '-',
+      address: selectedAuthTrack === 'COMPETITIVE' ? `Competitive (${clsVal})` : 'Board / School',
+      admissionDate: new Date().toISOString().slice(0, 10),
+      months: {},
+      totalDue: 0
+    };
+
+    const signupList = JSON.parse(localStorage.getItem('ucc_signup_students') || '[]');
+    signupList.push(newStudentRecord);
+    localStorage.setItem('ucc_signup_students', JSON.stringify(signupList));
+
+    if (navigator.onLine) {
+      try {
+        await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({
+            action: 'addStudent',
+            id: newUccId,
+            name: name,
+            studentClass: clsVal,
+            track: selectedAuthTrack,
+            mobile: mob,
+            fatherName: guardian || '-',
+            address: newStudentRecord.address,
+            admissionDate: newStudentRecord.admissionDate,
+            collector: 'Self SignUp'
+          })
+        });
+      } catch (err) {}
+    }
+
+    stData = {
+      ...(stData || {}),
+      status: 'ok',
+      student: newStudentRecord
+    };
+    stAuth = { id: newUccId, mobile: mob, track: selectedAuthTrack };
+    localStorage.setItem('ucc_st_auth_v2', JSON.stringify(stAuth));
+    localStorage.setItem('ucc_st_cache_v2', JSON.stringify(stData));
+    localStorage.setItem('ucc_st_active_view_track', selectedAuthTrack);
+    document.getElementById('loginScreen').style.display = 'none';
+    openPage(selectedAuthTrack === 'COMPETITIVE' ? 'comp_hub' : 'home');
+    toast(`🎉 আইডি তৈরি হয়েছে: ${newUccId} (${selectedAuthTrack})`);
+    btn.disabled = false; btn.textContent = 'Create Account & Continue';
+  };
+
+  // Prevent switching between Board and Competitive inside the same session without separate login/signup
+  switchTrackToCompetitive = function() {
+    if (stAuth && stAuth.track === 'BOARD') {
+      toast('কম্পিটিটিভ ব্যাচ দেখতে আলাদা করে Competitive সাইন-আপ বা লগইন করুন!');
+      return;
+    }
+    openPage('comp_hub');
+  };
+
+  switchTrackToBoard = function() {
+    if (stAuth && stAuth.track === 'COMPETITIVE') {
+      toast('বোর্ড/ক্লাস প্যানেল দেখতে আলাদা করে Board সাইন-আপ বা লগইন করুন!');
+      return;
+    }
+    openPage('home');
+  };
+
+  // Make sure newly signed-up students see available videos/classes with Demo / Paid / Free status clearly
+  const _origRenderStudyListV21 = renderStudyContentList;
+  renderStudyContentList = function(containerId, list, isLocked, emptyMsg) {
+    const s = (stData && stData.student) || {};
+    const isCompUser = String(s.track || '').toUpperCase() === 'COMPETITIVE';
+    const filtered = (list || []).filter(item => {
+      if (isCompUser) {
+        return String(item.track || '').toUpperCase() === 'COMPETITIVE' || ['Mock Test', 'PDF', 'Video'].includes(item.type);
+      }
+      return String(item.track || '').toUpperCase() !== 'COMPETITIVE';
+    });
+
+    if (!filtered.length && containerId === 'videoListContainer') {
+      // Provide default sample demo/paid classes if none published yet so student can test video + lock flow immediately
+      const fallbackVideos = isCompUser
+        ? [
+            { id: 'DEMO_V1', title: 'Free Demo Class: General Awareness & Tricks', subject: 'GK & Math', chapter: 'Free Demo', date: '2027', type: 'Video', track: 'COMPETITIVE', isFree: true, link: 'https://www.youtube.com/watch?v=aqz-KE-bpKQ' },
+            { id: 'PAID_V2', title: 'Premium Class: Full Syllabus Concept', subject: 'Core Subject', chapter: 'Paid Batch', date: '2027', type: 'Video', track: 'COMPETITIVE', isFree: false, batchId: 'BATCH_PSC_CLK', link: 'https://www.youtube.com/watch?v=aqz-KE-bpKQ' }
+          ]
+        : [
+            { id: 'SCH_V1', title: 'Class Concept Video Session', subject: s.studentClass || 'Class', chapter: 'Chapter 1', date: '2027', type: 'Video', track: 'BOARD', isFree: false, link: 'https://www.youtube.com/watch?v=aqz-KE-bpKQ' }
+          ];
+      _origRenderStudyListV21(containerId, fallbackVideos, false, emptyMsg);
+      return;
+    }
+    _origRenderStudyListV21(containerId, filtered, false, emptyMsg);
+  };
+
+  const _origOpenInAppVideoV21 = openInAppVideoClass;
+  openInAppVideoClass = function(cid) {
+    const s = (stData && stData.student) || {};
+    let item = (stData && stData.classesContent || []).find(x => x.id === cid);
+    if (!item) {
+      if (cid === 'DEMO_V1') item = { id: 'DEMO_V1', title: 'Free Demo Class: General Awareness & Tricks', subject: 'GK & Math', chapter: 'Free Demo', date: '2027', type: 'Video', track: 'COMPETITIVE', isFree: true, link: 'https://www.youtube.com/watch?v=aqz-KE-bpKQ' };
+      else if (cid === 'PAID_V2') item = { id: 'PAID_V2', title: 'Premium Class: Full Syllabus Concept', subject: 'Core Subject', chapter: 'Paid Batch', date: '2027', type: 'Video', track: 'COMPETITIVE', isFree: false, batchId: 'BATCH_PSC_CLK', link: 'https://www.youtube.com/watch?v=aqz-KE-bpKQ' };
+      else if (cid === 'SCH_V1') item = { id: 'SCH_V1', title: 'Class Concept Video Session', subject: s.studentClass || 'Class', chapter: 'Chapter 1', date: '2027', type: 'Video', track: 'BOARD', isFree: false, link: 'https://www.youtube.com/watch?v=aqz-KE-bpKQ' };
+    }
+    if (!item) return;
+
+    if (!canStudentWatchVideo(item, s)) {
+      toast('🔒 এই ভিডিওটি পেইড! ব্যাচ/কোর্স পেমেন্ট বা ফ্রি পারমিশন ছাড়া খুলবে না।');
+      if (String(item.track || '').toUpperCase() === 'COMPETITIVE') openPage('comp_hub');
+      else openPage('fees');
+      return;
+    }
+
+    if (!stData.classesContent) stData.classesContent = [];
+    if (!stData.classesContent.some(x => x.id === item.id)) stData.classesContent.push(item);
+    _origOpenInAppVideoV21(item.id);
+  };
+
+
+  // ===== V22: SIMPLE PW-STYLE YOUTUBE CLASS FLOW (NO COMPLEXITY) =====
+  function simpleIsVideoAllowed(videoItem, stObj) {
+    if (!videoItem) return false;
+    if (isFreeGrantedForStudent(stObj, videoItem.id)) return true;
+    if (videoItem.isFree || String(videoItem.accessType || '').toUpperCase() === 'FREE' || String(videoItem.chapter || '').toLowerCase().includes('free') || String(videoItem.chapter || '').toLowerCase().includes('demo')) {
+      return true;
+    }
+    if (String(videoItem.track || '').toUpperCase() === 'COMPETITIVE') {
+      const unlocked = getUnlockedBatchIds();
+      if (videoItem.batchId && unlocked.has(String(videoItem.batchId))) return true;
+      if (unlocked.has('ALL_COMP')) return true;
+      return false;
+    }
+    const due = Number(stObj && stObj.totalDue) || 0;
+    const lockActive = (stData && stData.dueLock !== 'OFF') && due > 0;
+    return !lockActive;
+  }
+
+  canStudentWatchVideo = simpleIsVideoAllowed;
+
+  const _origRenderStudySimple = renderStudyContentList;
+  renderStudyContentList = function(containerId, list, isLocked, emptyMsg) {
+    if (containerId !== 'videoListContainer') {
+      return _origRenderStudySimple(containerId, list, isLocked, emptyMsg);
+    }
+    const s = (stData && stData.student) || {};
+    const isComp = String(s.track || '').toUpperCase() === 'COMPETITIVE';
+    const rawItems = (list && list.length) ? list : (
+      isComp
+        ? [
+            { id: 'DEMO_V1', title: 'Free Demo Class: General Awareness & Math Tricks', subject: 'Competitive', chapter: 'Free Demo', date: '2027', type: 'Video', track: 'COMPETITIVE', isFree: true, link: 'https://www.youtube.com/watch?v=aqz-KE-bpKQ' },
+            { id: 'PAID_V2', title: 'Batch Class: Full Syllabus Concept Video', subject: 'Competitive Batch', chapter: 'Paid Class', date: '2027', type: 'Video', track: 'COMPETITIVE', isFree: false, batchId: 'BATCH_PSC_CLK', link: 'https://www.youtube.com/watch?v=aqz-KE-bpKQ' }
+          ]
+        : [
+            { id: 'SCH_DEMO_1', title: 'Free Demo Class: Concept & Tricks', subject: s.studentClass || 'Class', chapter: 'Free Demo', date: '2027', type: 'Video', track: 'BOARD', isFree: true, link: 'https://www.youtube.com/watch?v=aqz-KE-bpKQ' },
+            { id: 'SCH_V1', title: 'Regular Class Video Lecture', subject: s.studentClass || 'Class', chapter: 'Chapter 1', date: '2027', type: 'Video', track: 'BOARD', isFree: false, link: 'https://www.youtube.com/watch?v=aqz-KE-bpKQ' }
+          ]
+    );
+
+    const box = document.getElementById(containerId);
+    if (!box) return;
+    box.innerHTML = rawItems.map(c => {
+      const allowed = simpleIsVideoAllowed(c, s);
+      const isPlaying = activeVideoId === c.id;
+      const statusBadge = allowed
+        ? (c.isFree ? '<span class="pill-demo">FREE DEMO</span>' : '<span class="pill-unlocked">UNLOCKED</span>')
+        : '<span class="pill-paid-lock">🔒 PAID</span>';
+
+      return `<div class="req-card ${isPlaying ? 'video-item-active' : ''}">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+          <div>
+            <strong style="font-size:14px;color:var(--text);">${c.title}</strong>
+            <div style="font-size:11.5px;color:var(--accent-light);font-weight:700;margin-top:2px;">${c.subject} • ${c.chapter || 'Class'}</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px;">${c.date}</div>
+          </div>
+          ${statusBadge}
+        </div>
+        <div style="margin-top:10px;">
+          ${allowed
+            ? `<button type="button" class="btn-sm" style="background:${isPlaying ? 'var(--success)' : 'var(--accent-grad)'};color:${isPlaying ? '#ffffff' : 'var(--accent-text)'};width:100%;padding:9.5px;font-size:12px;" onclick="openInAppVideoClass('${c.id}')">${isPlaying ? '📺 YouTube ক্লাস চলছে' : '▶️ Watch YouTube Class'}</button>`
+            : `<button type="button" class="btn-sm" style="background:var(--danger-soft);color:var(--danger);width:100%;padding:9.5px;font-size:12px;" onclick="openPage('${isComp ? 'comp_hub' : 'fees'}')">🔒 Locked — Pay / Unlock to Watch</button>`
+          }
+        </div>
+      </div>`;
+    }).join('');
   };
 
 </script>
