@@ -916,7 +916,7 @@
       <button type="button" id="trackBtnBoard" class="track-choice-btn active" onclick="selectAuthTrack('BOARD')">
         <div style="font-size:20px;">🏫</div>
         <div style="font-size:13px;font-weight:800;margin-top:3px;">Board Exam</div>
-        <div style="font-size:10.5px;color:var(--muted);margin-top:1px;">School Class 5–12</div>
+        <div style="font-size:10.5px;color:var(--muted);margin-top:1px;">Nursery – Class 12</div>
       </button>
       <button type="button" id="trackBtnComp" class="track-choice-btn" onclick="selectAuthTrack('COMPETITIVE')">
         <div style="font-size:20px;">🎯</div>
@@ -1019,7 +1019,7 @@
       <span class="side-left">📲 Install Mobile App</span>
       <span class="side-pill">Install</span>
     </button>
-    <button class="side-item" style="border-color:var(--accent);" onclick="openPage('comp_hub')">
+    <button id="sideCompBatchBtn" class="side-item" style="border-color:var(--accent);" onclick="switchTrackToCompetitive()">
       <span class="side-left">🎯 Competitive Batches</span>
       <span class="side-pill">Batches</span>
     </button>
@@ -1266,8 +1266,8 @@
       </div>
       <div style="padding:11px 12px;display:flex;align-items:center;justify-content:space-between;gap:10px;background:#ffffff;">
         <div style="display:flex;align-items:center;gap:10px;min-width:0;flex:1;">
-          <div onclick="triggerPhotoUpload()" title="Tap to change photo" style="width:56px;height:56px;border-radius:12px;border:1.5px solid #0f766e;overflow:hidden;flex-shrink:0;cursor:pointer;background:#f1f5f9;display:flex;align-items:center;justify-content:center;">
-            <div class="sid-init" id="idCardPhotoSlot" style="width:100%;height:100%;border-radius:0;font-size:18px;background:#e2e8f0;color:#0f172a;">ST</div>
+          <div onclick="triggerPhotoUpload()" title="Tap to change photo" style="width:62px;height:70px;border-radius:10px;border:1.5px solid #0f766e;overflow:hidden;flex-shrink:0;cursor:pointer;background:#f1f5f9;display:flex;align-items:center;justify-content:center;position:relative;">
+            <div class="sid-init" id="idCardPhotoSlot" style="width:100%;height:100%;border-radius:0;font-size:18px;background:#e2e8f0;color:#0f172a;display:flex;align-items:center;justify-content:center;">ST</div>
           </div>
           <div style="min-width:0;flex:1;font-size:11px;line-height:1.38;color:#1e293b;">
             <div id="idCardName" style="font-size:14.5px;font-weight:800;color:#0f172a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Student Name</div>
@@ -1454,7 +1454,7 @@
 <script>
   // Register Service Worker & update cache cleanly so direct PWA Install works 100%
   (function() {
-    const UI_BUILD = 'ucc_student_v23_pw_akash_byjus_premium';
+    const UI_BUILD = 'ucc_student_v26_class_videos_premium_unlock';
     try {
       if (localStorage.getItem('ucc_st_ui_build') !== UI_BUILD) {
         localStorage.setItem('ucc_st_ui_build', UI_BUILD);
@@ -1952,7 +1952,7 @@
     document.getElementById('compTargetGroup').style.display = selectedAuthTrack === 'COMPETITIVE' ? 'block' : 'none';
     document.getElementById('loginTrackSubtitle').textContent = selectedAuthTrack === 'COMPETITIVE'
       ? 'COMPETITIVE EXAM PORTAL • BATCHES & MOCK TESTS'
-      : 'BOARD EXAM PORTAL • CLASS 5–12';
+      : 'BOARD EXAM PORTAL • NURSERY – CLASS 12';
     document.getElementById('loginErr').style.display = 'none';
   }
 
@@ -2305,8 +2305,8 @@
     const idPhotoSlot = document.getElementById('idCardPhotoSlot');
     if (idPhotoSlot) {
       idPhotoSlot.outerHTML = photoUrl
-        ? `<img id="idCardPhotoSlot" src="${photoUrl}" alt="${s.name}">`
-        : `<div class="sid-init" id="idCardPhotoSlot">${initials}</div>`;
+        ? `<img id="idCardPhotoSlot" src="${photoUrl}" alt="${s.name}" style="width:100%;height:100%;object-fit:cover;object-position:center top;display:block;border-radius:0;">`
+        : `<div class="sid-init" id="idCardPhotoSlot" style="width:100%;height:100%;border-radius:0;font-size:18px;background:#e2e8f0;color:#0f172a;display:flex;align-items:center;justify-content:center;">${initials}</div>`;
     }
 
     // Overlapping 2-Card Summary Strip
@@ -2470,6 +2470,10 @@
         </div>`).join('')
       : '<div style="font-size:12.5px;color:var(--muted);text-align:center;">বর্তমানে কোনো নতুন নোটিশ নেই।</div>';
 
+    const sideCompBtn = document.getElementById('sideCompBatchBtn');
+    if (sideCompBtn) {
+      sideCompBtn.style.display = String(s.track || '').toUpperCase() === 'COMPETITIVE' ? 'flex' : 'none';
+    }
     renderCompetitiveHub();
     if (activeCompBatchId) renderCompetitiveBatchDetail(activeCompBatchId);
   }
@@ -2863,8 +2867,13 @@
       ctx.beginPath();
       ctx.rect(28, 102, 132, 148);
       ctx.clip();
-      if (photoImg) {
-        ctx.drawImage(photoImg, 28, 102, 132, 148);
+      if (photoImg && photoImg.width && photoImg.height) {
+        const boxW = 132, boxH = 148;
+        const scale = Math.max(boxW / photoImg.width, boxH / photoImg.height);
+        const sw = boxW / scale, sh = boxH / scale;
+        const sx = (photoImg.width - sw) / 2;
+        const sy = Math.max(0, (photoImg.height - sh) * 0.25);
+        ctx.drawImage(photoImg, sx, sy, sw, sh, 28, 102, boxW, boxH);
       } else {
         ctx.fillStyle = '#f1f5f9';
         ctx.fillRect(28, 102, 132, 148);
@@ -3283,15 +3292,12 @@
     if (bannerWrap && stData && stData.student) {
       const uTime = formatUsageDuration(activeSessionSeconds);
       bannerWrap.insertAdjacentHTML('beforeend', `
-        <div class="card" style="margin-top:12px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;">
+        <div class="card" style="margin-top:12px;padding:11px 14px;display:flex;justify-content:space-between;align-items:center;">
           <div>
             <div style="font-size:12.5px;font-weight:800;color:var(--accent-light);">⏱️ Today's App Study Time: ${uTime}</div>
             <div style="font-size:11px;color:var(--muted);">Active session tracked for study progress</div>
           </div>
-          <div style="display:flex;gap:6px;">
-            <button type="button" class="btn-sm" style="background:var(--accent-soft);color:var(--accent-light);border:1px solid var(--accent-border);" onclick="openPage('primary_hub')">🎈 Primary</button>
-            <button type="button" class="btn-sm" style="background:var(--accent-grad);color:var(--accent-text);" onclick="openPage('comp_hub')">🎯 Batches</button>
-          </div>
+          <span class="badge-ok">${stData.student.track === 'COMPETITIVE' ? 'Competitive' : (stData.student.studentClass || 'Board')}</span>
         </div>
       `);
     }
@@ -3779,6 +3785,180 @@
         </div>
       </div>`;
     }).join('');
+  };
+
+
+  // ===== V26: CLASS-BASED FULL VIDEO ACCESS + PREMIUM PAYMENT UNLOCK =====
+  function hasStudentPremiumAccess(stObj) {
+    if (!stObj) return false;
+    const sid = String(stObj.id || '').toUpperCase();
+    // 1. Admin granted free/premium access
+    if (isFreeGrantedForStudent(stObj, 'ALL') || isFreeGrantedForStudent(stObj, 'PREMIUM')) return true;
+    // 2. Local or server unlocked batches / premium flag
+    if (stObj.isPremium === true || String(stObj.plan || '').toUpperCase() === 'PREMIUM') return true;
+    const unlocked = getUnlockedBatchIds();
+    if (unlocked.has('ALL_COMP') || unlocked.has('ALL_PREMIUM') || unlocked.size > 1) return true;
+    // 3. Approved online payment in requests/payments
+    const reqs = (stData && Array.isArray(stData.requests)) ? stData.requests : [];
+    const pays = (stData && Array.isArray(stData.payments)) ? stData.payments : [];
+    if (reqs.some(r => String(r.status || '').toLowerCase() === 'approved')) return true;
+    if (pays.length > 0 && (Number(stObj.totalDue) || 0) <= 0) return true;
+    return false;
+  }
+
+  function isItemPremiumLocked(item, stObj) {
+    if (!item) return false;
+    // Explicitly marked Free or Demo is never locked
+    if (item.isFree === true || String(item.accessType || '').toUpperCase() === 'FREE' || String(item.accessType || '').toUpperCase() === 'DEMO') {
+      return false;
+    }
+    const titleLow = String(item.title || '').toLowerCase();
+    const chapLow = String(item.chapter || '').toLowerCase();
+    if (titleLow.includes('free') || titleLow.includes('demo') || chapLow.includes('free') || chapLow.includes('demo')) {
+      return false;
+    }
+    // Check if item is marked as Premium / Paid or belongs to a paid batch
+    const isMarkedPremium = item.isPremium === true ||
+      String(item.accessType || '').toUpperCase() === 'PREMIUM' ||
+      String(item.accessType || '').toUpperCase() === 'PAID' ||
+      titleLow.includes('premium') ||
+      chapLow.includes('premium') ||
+      Boolean(item.batchId);
+
+    if (!isMarkedPremium) {
+      // Standard class videos for the student's chosen class are unlocked right after sign-up!
+      return false;
+    }
+
+    // If it IS Premium / Paid, check if student has unlocked it
+    if (isFreeGrantedForStudent(stObj, item.id)) return false;
+    if (hasStudentPremiumAccess(stObj)) return false;
+    if (item.batchId && getUnlockedBatchIds().has(String(item.batchId))) return false;
+    return true;
+  }
+
+  simpleIsVideoAllowed = function(videoItem, stObj) {
+    return !isItemPremiumLocked(videoItem, stObj);
+  };
+  canStudentWatchVideo = simpleIsVideoAllowed;
+
+  function getStudentClassFilteredItems(allItems, typeList) {
+    const s = (stData && stData.student) || {};
+    const myClass = String(s.studentClass || '').trim().toLowerCase();
+    const isComp = String(s.track || '').toUpperCase() === 'COMPETITIVE';
+
+    return (allItems || []).filter(item => {
+      if (typeList && typeList.length && !typeList.includes(item.type)) return false;
+      const tCls = String(item.targetClass || 'ALL').trim().toLowerCase();
+      const itemTrack = String(item.track || '').toUpperCase();
+
+      if (isComp) {
+        return itemTrack === 'COMPETITIVE' || tCls === 'competitive' || tCls === myClass || tCls === 'all';
+      }
+      // Board student (Nursery - Class 12): show everything uploaded for their specific class OR 'ALL'
+      if (itemTrack === 'COMPETITIVE') return false;
+      return !tCls || tCls === 'all' || tCls === myClass;
+    });
+  }
+
+  // Sync class content even for newly signed-up students using public/class feed if available
+  const _origRefreshStV26 = refreshStudentData;
+  refreshStudentData = async function(silent = false) {
+    await _origRefreshStV26(silent);
+    // Also fetch general content list if classesContent is empty for a newly signed-up student
+    if (stData && stData.student && (!stData.classesContent || !stData.classesContent.length) && navigator.onLine) {
+      try {
+        const res = await fetch(API_URL, { cache: 'no-store' });
+        const d = await res.json();
+        if (d && Array.isArray(d.classesContent) && d.classesContent.length) {
+          stData.classesContent = d.classesContent;
+          if (Array.isArray(d.notices)) stData.notices = d.notices;
+          if (d.dueLock) stData.dueLock = d.dueLock;
+          localStorage.setItem('ucc_st_cache_v2', JSON.stringify(stData));
+          renderAllStudentUI();
+        }
+      } catch (e) {}
+    }
+  };
+
+  // Override renderAllStudentUI to filter Videos, PDFs, and Mock Tests strictly to the signed-up student's class + handle Premium unlock cleanly
+  const _origRenderAllV26 = renderAllStudentUI;
+  renderAllStudentUI = function() {
+    _origRenderAllV26();
+    if (!stData || !stData.student) return;
+    const s = stData.student;
+    const allContent = stData.classesContent || [];
+    const classVideos = getStudentClassFilteredItems(allContent, ['Live', 'Video']);
+    const classPdfs = getStudentClassFilteredItems(allContent, ['PDF']);
+    const classTests = getStudentClassFilteredItems(allContent, ['Mock Test']);
+    const isPrem = hasStudentPremiumAccess(s);
+
+    // Update top alert banner on Videos / PDFs / Tests to show Class Access & Premium Unlock option
+    const premBannerHtml = isPrem
+      ? `<div class="card" style="background:var(--success-soft);border:1.5px solid var(--success);padding:11px 14px;">
+          <div style="font-weight:800;font-size:13.5px;color:var(--success);">👑 Premium Active — ${s.studentClass}-এর সব ভিডিও, নোটস ও মক টেস্ট আনলক আছে!</div>
+        </div>`
+      : `<div class="card" style="background:var(--accent-soft);border:1.5px solid var(--accent);padding:12px 14px;display:flex;justify-content:space-between;align-items:center;gap:10px;">
+          <div>
+            <div style="font-weight:800;font-size:13px;color:var(--accent-light);">📚 ${s.studentClass} ক্লাসের সব ফ্রি ভিডিও চালু আছে</div>
+            <div style="font-size:11.5px;color:var(--text-2);margin-top:2px;">Premium / পেইড ব্যাচ আনলক করতে পেমেন্ট করুন।</div>
+          </div>
+          <button type="button" class="btn-sm" style="background:var(--accent-grad);color:var(--accent-text);padding:8px 12px;flex-shrink:0;" onclick="openPage('${String(s.track||'').toUpperCase()==='COMPETITIVE'?'comp_hub':'fees'}')">🔓 Unlock All</button>
+        </div>`;
+
+    ['videoLockAlert', 'pdfLockAlert', 'testLockAlert'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = premBannerHtml;
+    });
+
+    // Re-render Videos with class-filtered items (showing all class videos + Premium lock badge where applicable)
+    renderStudyContentList('videoListContainer', classVideos, false, `${s.studentClass}-এর জন্য এখনো কোনো ভিডিও আপলোড হয়নি।`);
+
+    // Render PDFs with Free vs Premium Unlock check
+    const pdfBox = document.getElementById('pdfListContainer');
+    if (pdfBox) {
+      pdfBox.innerHTML = classPdfs.length ? classPdfs.map(c => {
+        const locked = isItemPremiumLocked(c, s);
+        return `<div class="req-card">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+            <div>
+              <strong style="font-size:14px;color:var(--text);">${c.title}</strong>
+              <div style="font-size:11.5px;color:var(--accent-light);font-weight:700;margin-top:2px;">${c.subject} • ${c.chapter || 'Notes'}</div>
+            </div>
+            <span class="${locked ? 'pill-paid-lock' : 'pill-demo'}">${locked ? '🔒 PREMIUM' : 'FREE'}</span>
+          </div>
+          <div style="margin-top:10px;">
+            ${locked
+              ? `<button type="button" class="btn-sm" style="background:var(--danger-soft);color:var(--danger);width:100%;padding:9px;" onclick="openPage('${String(s.track||'').toUpperCase()==='COMPETITIVE'?'comp_hub':'fees'}')">🔒 Pay / Unlock Premium to Open PDF</button>`
+              : `<a href="${c.link}" target="_blank" class="btn-sm" style="background:var(--accent-grad);color:var(--accent-text);width:100%;padding:9px;">📥 Open / Download PDF</a>`
+            }
+          </div>
+        </div>`;
+      }).join('') : `<div style="font-size:12.5px;color:var(--muted);text-align:center;padding:12px 0;">${s.studentClass}-এর জন্য এখনো কোনো PDF নোটস আপলোড হয়নি।</div>`;
+    }
+
+    // Render Mock Tests with Free vs Premium Unlock check
+    const testBox = document.getElementById('testListContainer');
+    if (testBox) {
+      testBox.innerHTML = classTests.length ? classTests.map(c => {
+        const locked = isItemPremiumLocked(c, s);
+        return `<div class="req-card">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+            <div>
+              <strong style="font-size:14px;color:var(--text);">${c.title}</strong>
+              <div style="font-size:11.5px;color:var(--accent-light);font-weight:700;margin-top:2px;">${c.subject} • ${c.chapter || 'Mock Test'}</div>
+            </div>
+            <span class="${locked ? 'pill-paid-lock' : 'pill-demo'}">${locked ? '🔒 PREMIUM' : 'FREE'}</span>
+          </div>
+          <div style="margin-top:10px;">
+            ${locked
+              ? `<button type="button" class="btn-sm" style="background:var(--danger-soft);color:var(--danger);width:100%;padding:9px;" onclick="openPage('${String(s.track||'').toUpperCase()==='COMPETITIVE'?'comp_hub':'fees'}')">🔒 Pay / Unlock Premium to Start Test</button>`
+              : `<a href="${c.link}" target="_blank" class="btn-sm" style="background:var(--accent-grad);color:var(--accent-text);width:100%;padding:9px;">✍️ Start Mock Test</a>`
+            }
+          </div>
+        </div>`;
+      }).join('') : `<div style="font-size:12.5px;color:var(--muted);text-align:center;padding:12px 0;">${s.studentClass}-এর জন্য এখনো কোনো মক টেস্ট আপলোড হয়নি।</div>`;
+    }
   };
 
 </script>
