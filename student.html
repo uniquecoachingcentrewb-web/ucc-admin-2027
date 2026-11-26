@@ -813,6 +813,80 @@
       background: var(--danger-soft); color: var(--danger);
       font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: 99px;
     }
+
+    /* ===== PW / AKASH / BYJU'S PREMIUM BATCH & STUDY EXPERIENCE ===== */
+    .pw-hero-banner {
+      background: linear-gradient(135deg, #1e1b4b 0%, #312e81 52%, #0f766e 100%);
+      color: #ffffff;
+      border-radius: 24px;
+      padding: 18px 16px;
+      margin-bottom: 14px;
+      border: 1.5px solid rgba(255, 255, 255, 0.22);
+      box-shadow: 0 14px 32px rgba(30, 27, 75, 0.26);
+      position: relative;
+      overflow: hidden;
+    }
+    .pw-hero-pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255, 255, 255, 0.16);
+      color: #fde047;
+      font-size: 10.5px; font-weight: 800; letter-spacing: 0.5px;
+      padding: 4px 10px; border-radius: 99px;
+      border: 1px solid rgba(253, 224, 71, 0.35);
+    }
+    .pw-hero-title {
+      font-size: 19px; font-weight: 800; margin: 8px 0 4px;
+      line-height: 1.25; letter-spacing: -0.2px;
+    }
+    .pw-hero-sub {
+      font-size: 12px; opacity: 0.9; line-height: 1.45;
+    }
+    .pw-filter-bar {
+      display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 14px;
+      scrollbar-width: none;
+    }
+    .pw-filter-bar::-webkit-scrollbar { display: none; }
+    .pw-chip-btn {
+      flex-shrink: 0; padding: 8px 14px; border-radius: 99px;
+      border: 1.5px solid var(--border); background: var(--bg-card);
+      color: var(--text-2); font-size: 12px; font-weight: 800; cursor: pointer;
+      transition: transform 0.14s var(--ease-fast), background 0.15s ease;
+    }
+    .pw-chip-btn:active { transform: scale(0.95); }
+    .pw-chip-btn.active {
+      background: var(--accent-grad); color: var(--accent-text);
+      border-color: transparent; box-shadow: 0 6px 16px var(--accent-soft);
+    }
+    .pw-batch-card {
+      background: var(--bg-card); border: 1.5px solid var(--border);
+      border-radius: 22px; padding: 15px; margin-bottom: 13px;
+      box-shadow: var(--shadow-card); position: relative;
+      transition: transform 0.14s var(--ease-fast), border-color 0.15s ease;
+    }
+    .pw-batch-card:active { transform: scale(0.98); border-color: var(--accent); }
+    .pw-batch-top {
+      display: flex; justify-content: space-between; align-items: flex-start; gap: 10px;
+    }
+    .pw-batch-tag {
+      display: inline-block; font-size: 10.5px; font-weight: 800;
+      padding: 3px 9px; border-radius: 99px;
+      background: var(--accent-soft); color: var(--accent-light);
+      border: 1px solid var(--accent-border);
+    }
+    .pw-batch-price-box { text-align: right; flex-shrink: 0; }
+    .pw-batch-price-main {
+      font-size: 17px; font-weight: 800; color: var(--accent-light); line-height: 1.1;
+    }
+    .pw-batch-price-sub {
+      font-size: 10px; color: var(--muted); font-weight: 700; margin-top: 2px;
+    }
+    .pw-batch-meta-strip {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px;
+      background: var(--bg-subcard); border: 1px solid var(--border);
+      border-radius: 14px; padding: 9px 8px; margin: 11px 0; text-align: center;
+    }
+    .pw-meta-val { font-size: 12.5px; font-weight: 800; color: var(--text); }
+    .pw-meta-lbl { font-size: 10px; color: var(--muted); font-weight: 600; margin-top: 1px; }
   </style>
 </head>
 <body>
@@ -1379,7 +1453,7 @@
 <script>
   // Register Service Worker & update cache cleanly so direct PWA Install works 100%
   (function() {
-    const UI_BUILD = 'ucc_student_v22_simple_yt_pw';
+    const UI_BUILD = 'ucc_student_v23_pw_akash_byjus_premium';
     try {
       if (localStorage.getItem('ucc_st_ui_build') !== UI_BUILD) {
         localStorage.setItem('ucc_st_ui_build', UI_BUILD);
@@ -3499,6 +3573,109 @@
         </div>
       </div>`;
     }).join('');
+  };
+
+
+  // ===== V23: PW / AKASH / BYJU'S STYLE BATCH HUB WITH EXAM FILTER & PREMIUM CARDS =====
+  let activeCompFilter = 'ALL';
+
+  function setCompBatchFilter(catKey, btnEl) {
+    activeCompFilter = catKey || 'ALL';
+    document.querySelectorAll('#compFilterBar .pw-chip-btn').forEach(b => b.classList.remove('active'));
+    if (btnEl) btnEl.classList.add('active');
+    renderCompetitiveHubWithExpiry();
+  }
+
+  const _origRenderCompHubV22 = renderCompetitiveHub;
+  renderCompetitiveHub = function() {
+    const box = document.getElementById('compBatchListContainer');
+    if (!box) return;
+    const batches = getCompetitiveBatchesData();
+    const lessons = getCompetitiveLessonsData();
+    const unlocked = getUnlockedBatchIds();
+
+    const filtered = batches.filter(b => {
+      if (activeCompFilter === 'ALL') return true;
+      const hay = `${b.title || ''} ${b.exam || ''} ${b.description || ''}`.toUpperCase();
+      if (activeCompFilter === 'FREE') return Number(b.price || 0) <= 0;
+      return hay.includes(activeCompFilter.toUpperCase());
+    });
+
+    const listToRender = filtered.length ? filtered : batches;
+
+    box.innerHTML = listToRender.map(b => {
+      const isFree = Number(b.price || 0) <= 0;
+      const isUnl = unlocked.has(String(b.id));
+      const expired = isBatchExpired(b);
+      const bLessons = lessons.filter(l => String(l.batchId) === String(b.id));
+      const freeCount = bLessons.filter(l => l.isFree || isFree).length;
+
+      return `
+      <div class="pw-batch-card ${isUnl ? 'unlocked' : ''}">
+        <div class="pw-batch-top">
+          <div style="min-width:0;flex:1;">
+            <span class="pw-batch-tag">🎯 ${b.exam || 'TARGET BATCH'}</span>
+            <div style="font-size:15.5px;font-weight:800;color:var(--text);margin-top:6px;line-height:1.25;">${b.title}</div>
+            <div style="font-size:12px;color:var(--text-2);margin-top:4px;line-height:1.42;">${b.description || 'Live/Recorded YouTube Classes + Notes + Mock Tests'}</div>
+          </div>
+          <div class="pw-batch-price-box">
+            <div class="pw-batch-price-main" style="color:${expired ? 'var(--danger)' : (isFree ? 'var(--success)' : 'var(--accent-light)')};">
+              ${expired ? 'EXPIRED' : (isFree ? 'FREE' : '₹' + b.price)}
+            </div>
+            <div class="pw-batch-price-sub">${isFree ? 'No Fee' : 'Full Batch'}</div>
+          </div>
+        </div>
+
+        <div class="pw-batch-meta-strip">
+          <div>
+            <div class="pw-meta-val">${b.validity || 'Full Course'}</div>
+            <div class="pw-meta-lbl">Validity</div>
+          </div>
+          <div>
+            <div class="pw-meta-val" style="color:var(--success);">${freeCount} Free</div>
+            <div class="pw-meta-lbl">Demo Classes</div>
+          </div>
+          <div>
+            <div class="pw-meta-val" style="color:${isUnl ? 'var(--success)' : 'var(--danger)'};">${isUnl ? 'Unlocked ✓' : 'Locked 🔒'}</div>
+            <div class="pw-meta-lbl">Access</div>
+          </div>
+        </div>
+
+        <button type="button" class="btn btn-accent" style="padding:11px;font-size:13px;" onclick="openCompetitiveBatch('${b.id}')">
+          ${expired ? '⚠️ View Details / Renew' : (isUnl ? '▶️ Enter Batch Classroom' : '🚀 Explore Batch & Watch Free Demo')}
+        </button>
+      </div>`;
+    }).join('');
+  };
+
+  const _origOpenPageV22 = openPage;
+  openPage = function(name) {
+    _origOpenPageV22(name);
+    if (name === 'comp_hub') {
+      const hubPg = document.getElementById('page-comp_hub');
+      if (hubPg && !document.querySelector('#pwCompHero')) {
+        const hero = document.createElement('div');
+        hero.id = 'pwCompHero';
+        hero.className = 'pw-hero-banner';
+        hero.innerHTML = `
+          <span class="pw-hero-pill">⭐ U.C.C COMPETITIVE • BATCHES</span>
+          <div class="pw-hero-title">আপনার লক্ষ্য অনুযায়ী ব্যাচ বেছে নিন</div>
+          <div class="pw-hero-sub">ফ্রি ডেমো ক্লাস দেখে যাচাই করুন, অথবা পছন্দের ব্যাচ আনলক করে YouTube ক্লাস, নোটস ও মক টেস্ট শুরু করুন।</div>
+        `;
+        const filterBar = document.createElement('div');
+        filterBar.id = 'compFilterBar';
+        filterBar.className = 'pw-filter-bar';
+        filterBar.innerHTML = `
+          <button type="button" class="pw-chip-btn active" onclick="setCompBatchFilter('ALL', this)">All Batches</button>
+          <button type="button" class="pw-chip-btn" onclick="setCompBatchFilter('PSC', this)">WBPSC</button>
+          <button type="button" class="pw-chip-btn" onclick="setCompBatchFilter('TET', this)">TET</button>
+          <button type="button" class="pw-chip-btn" onclick="setCompBatchFilter('FREE', this)">Free Demo</button>
+        `;
+        hubPg.insertBefore(filterBar, hubPg.firstChild);
+        hubPg.insertBefore(hero, hubPg.firstChild);
+      }
+      renderCompetitiveHubWithExpiry();
+    }
   };
 
 </script>
