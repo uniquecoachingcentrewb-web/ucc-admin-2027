@@ -1468,7 +1468,7 @@
 <script>
   // Register Service Worker & update cache cleanly so direct PWA Install works 100%
   (function() {
-    const UI_BUILD = 'ucc_student_v30_routine_pdf_png';
+    const UI_BUILD = 'ucc_student_v31_7day_3class_routine';
     try {
       if (localStorage.getItem('ucc_st_ui_build') !== UI_BUILD) {
         localStorage.setItem('ucc_st_ui_build', UI_BUILD);
@@ -4309,70 +4309,85 @@
   };
 
 
-  // ===== V30: STUDENT ROUTINE VIEWER + PDF/PNG DOWNLOAD =====
-  const ROUTINE_TAG = '[ROUTINE]';
-  PAGE_TITLES.routine = 'Class & Exam Routine';
+  // ===== V31: STUDENT 7-DAY x 3-CLASS ROUTINE VIEWER + PDF/PNG =====
+  const ROUTINE_TAG = '[ROUTINE_7X3]';
+  const WEEK_DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  PAGE_TITLES.routine = '7-Day Class Routine';
 
-  function parseStudentRoutineNotice(n) {
-    if (!n || !String(n.title || '').startsWith(ROUTINE_TAG)) return null;
-    const tParts = String(n.title).slice(ROUTINE_TAG.length).trim().split('|').map(x => x.trim());
-    const mParts = String(n.message || '').split('|').map(x => x.trim());
-    return {
-      id: n.id,
-      targetClass: n.targetClass || 'ALL',
-      type: tParts[0] || 'Class Routine',
-      day: tParts[1] || '-',
-      time: tParts[2] || '-',
-      subject: mParts[0] || '-',
-      teacher: mParts[1] || '-'
-    };
-  }
-
-  function getMyStudentRoutines() {
+  function getMyWeeklyRoutine() {
     const s = (stData && stData.student) || {};
     const myCls = String(s.studentClass || '').trim().toLowerCase();
+    let found = null;
+
+    // 1. Check local saved routines first
+    try {
+      const loc = JSON.parse(localStorage.getItem('ucc_weekly_routines_v31') || '{}');
+      Object.keys(loc).forEach(k => {
+        if (k.trim().toLowerCase() === myCls) found = loc[k];
+      });
+    } catch (e) {}
+
+    // 2. Check synced server notices (latest wins)
     const noticesArr = (stData && Array.isArray(stData.notices)) ? stData.notices : [];
-    const fromNotices = noticesArr.map(parseStudentRoutineNotice).filter(Boolean);
-    const localOnly = JSON.parse(localStorage.getItem('ucc_local_routines') || '[]');
-    const allR = [...fromNotices, ...localOnly];
-    return allR.filter(r => {
-      const tc = String(r.targetClass || 'ALL').trim().toLowerCase();
-      return !tc || tc === 'all' || tc === myCls;
+    noticesArr.forEach(n => {
+      if (!n || !String(n.title || '').startsWith(ROUTINE_TAG)) return;
+      const tc = String(n.targetClass || '').trim().toLowerCase();
+      if (tc === myCls || tc === 'all') {
+        try {
+          const parsed = JSON.parse(n.message || '{}');
+          found = { ...parsed, targetClass: n.targetClass || s.studentClass };
+        } catch (e) {}
+      }
     });
+    return found;
   }
 
   function renderStudentRoutinePage() {
     const s = (stData && stData.student) || {};
-    const myRoutines = getMyStudentRoutines();
+    const r = getMyWeeklyRoutine();
     const clsBadge = document.getElementById('stRoutineClassBadge');
     if (clsBadge) clsBadge.textContent = s.studentClass || 'School';
     const sidePill = document.getElementById('sideRoutinePill');
-    if (sidePill) sidePill.textContent = myRoutines.length;
+    if (sidePill) sidePill.textContent = r ? '7 Days' : '0';
 
     const box = document.getElementById('stRoutineList');
     if (!box) return;
-    if (!myRoutines.length) {
-      box.innerHTML = '<div style="font-size:12.5px;color:var(--muted);text-align:center;padding:14px 0;">তোমার ক্লাসের জন্য এখনো কোনো রুটিন আপলোড হয়নি।</div>';
+    if (!r) {
+      box.innerHTML = '<div style="font-size:12.5px;color:var(--muted);text-align:center;padding:16px 0;">তোমার ক্লাসের 7 দিনের (প্রতিদিন 3টি ক্লাস) রুটিন এখনো আপলোড হয়নি।</div>';
       return;
     }
-    box.innerHTML = myRoutines.map(r => `
-      <div class="req-card" style="margin-bottom:9px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
-          <strong style="font-size:14px;color:var(--accent-light);">📅 ${r.day}</strong>
-          <span class="badge-ok" style="font-size:10.5px;">${r.time}</span>
-        </div>
-        <div style="font-size:14px;font-weight:800;color:var(--text);margin-top:5px;">${r.subject}</div>
-        <div style="font-size:11.5px;color:var(--muted);margin-top:2px;">${r.type}${r.teacher && r.teacher !== '-' ? ' • ' + r.teacher : ''}</div>
+
+    const t = r.times || ['1st Class', '2nd Class', '3rd Class'];
+    box.innerHTML = `
+      <div style="font-size:12px;font-weight:700;color:var(--muted);margin-bottom:8px;">${r.title || 'Weekly Class Routine'} • প্রতিদিন 3টি ক্লাস (সোম–রবি)</div>
+      <div style="overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;font-size:12px;min-width:410px;">
+          <thead>
+            <tr style="background:var(--accent-grad);color:var(--accent-text);">
+              <th style="padding:9px 7px;border:1px solid var(--border);text-align:left;">Day</th>
+              <th style="padding:9px 6px;border:1px solid var(--border);text-align:center;">Class 1<br><span style="font-size:10px;opacity:0.92;">${t[0]}</span></th>
+              <th style="padding:9px 6px;border:1px solid var(--border);text-align:center;">Class 2<br><span style="font-size:10px;opacity:0.92;">${t[1]}</span></th>
+              <th style="padding:9px 6px;border:1px solid var(--border);text-align:center;">Class 3<br><span style="font-size:10px;opacity:0.92;">${t[2]}</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            ${WEEK_DAYS.map((day, i) => {
+              const vals = (r.days && r.days[day]) || ['-', '-', '-'];
+              return `<tr style="background:${i % 2 === 0 ? 'var(--bg-card)' : 'var(--bg-subcard)'};">
+                <td style="padding:8px 7px;border:1px solid var(--border);font-weight:800;color:var(--accent-light);">${day}</td>
+                <td style="padding:8px 6px;border:1px solid var(--border);text-align:center;font-weight:700;">${vals[0] || '-'}</td>
+                <td style="padding:8px 6px;border:1px solid var(--border);text-align:center;font-weight:700;">${vals[1] || '-'}</td>
+                <td style="padding:8px 6px;border:1px solid var(--border);text-align:center;font-weight:700;">${vals[2] || '-'}</td>
+              </tr>`;
+            }).join('')}
+          </tbody>
+        </table>
       </div>
-    `).join('');
+    `;
   }
 
-  function buildStudentRoutineCanvas(list, clsName) {
-    const W = 960;
-    const rowH = 54;
-    const headerH = 190;
-    const footerH = 70;
-    const H = Math.max(540, headerH + 46 + (Math.max(1, list.length) * rowH) + footerH);
+  function buildStudentWeeklyRoutineCanvas(r) {
+    const W = 1120, H = 760;
     const c = document.createElement('canvas');
     c.width = W; c.height = H;
     const ctx = c.getContext('2d');
@@ -4384,119 +4399,135 @@
     ctx.strokeRect(14, 14, W - 28, H - 28);
 
     ctx.fillStyle = '#0f766e';
-    ctx.fillRect(16, 16, W - 32, 136);
+    ctx.fillRect(16, 16, W - 32, 126);
     ctx.fillStyle = '#d4af37';
-    ctx.fillRect(16, 150, W - 32, 5);
+    ctx.fillRect(16, 140, W - 32, 5);
 
     ctx.textAlign = 'center';
     ctx.fillStyle = '#ffffff';
     ctx.font = 'bold 34px sans-serif';
-    ctx.fillText('U.C.C INSTITUTE', W / 2, 68);
-    ctx.font = 'bold 20px sans-serif';
+    ctx.fillText('U.C.C INSTITUTE', W / 2, 62);
     ctx.fillStyle = '#fde68a';
-    ctx.fillText(`CLASS / EXAM ROUTINE • ${String(clsName || 'SCHOOL').toUpperCase()}`, W / 2, 104);
-    ctx.font = '16px sans-serif';
+    ctx.font = 'bold 21px sans-serif';
+    ctx.fillText(`${String(r.targetClass || 'CLASS').toUpperCase()} • ${String(r.title || 'WEEKLY CLASS ROUTINE').toUpperCase()}`, W / 2, 98);
     ctx.fillStyle = '#e2e8f0';
-    ctx.fillText('Penchakola, Raipur, Bankura • Session 2027', W / 2, 134);
+    ctx.font = '15px sans-serif';
+    ctx.fillText('Penchakola, Raipur, Bankura • 7 Days Weekly (3 Classes Daily) • Session 2027', W / 2, 126);
 
-    const cols = [44, 230, 460, 720];
-    const y0 = headerH;
+    const x0 = 36, y0 = 168, tableW = W - 72;
+    const colW = [190, (tableW - 190) / 3, (tableW - 190) / 3, (tableW - 190) / 3];
+    const headH = 62, rowH = 66;
+
     ctx.fillStyle = '#0f172a';
-    ctx.fillRect(30, y0, W - 60, 46);
+    ctx.fillRect(x0, y0, tableW, headH);
     ctx.fillStyle = '#ffffff';
-    ctx.textAlign = 'left';
-    ctx.font = 'bold 18px sans-serif';
-    ctx.fillText('Day / Date', cols[0], y0 + 29);
-    ctx.fillText('Time', cols[1], y0 + 29);
-    ctx.fillText('Subject', cols[2], y0 + 29);
-    ctx.fillText('Teacher', cols[3], y0 + 29);
+    ctx.textAlign = 'center';
+    ctx.font = 'bold 19px sans-serif';
+    ctx.fillText('DAY', x0 + colW[0] / 2, y0 + 38);
 
-    let y = y0 + 46;
-    list.forEach((r, idx) => {
+    for (let p = 0; p < 3; p++) {
+      const cx = x0 + colW[0] + p * colW[1] + colW[1] / 2;
+      ctx.fillStyle = '#fde68a';
+      ctx.font = 'bold 18px sans-serif';
+      ctx.fillText(`CLASS ${p + 1}`, cx, y0 + 26);
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 15px sans-serif';
+      ctx.fillText(String((r.times && r.times[p]) || ''), cx, y0 + 49);
+    }
+
+    WEEK_DAYS.forEach((day, idx) => {
+      const ry = y0 + headH + idx * rowH;
       ctx.fillStyle = idx % 2 === 0 ? '#ffffff' : '#f0fdfa';
-      ctx.fillRect(30, y, W - 60, rowH);
-      ctx.strokeStyle = '#cbd5e1';
-      ctx.lineWidth = 1;
-      ctx.beginPath(); ctx.moveTo(30, y + rowH); ctx.lineTo(W - 30, y + rowH); ctx.stroke();
+      ctx.fillRect(x0, ry, tableW, rowH);
+      ctx.fillStyle = idx % 2 === 0 ? '#f1f5f9' : '#e2f5f2';
+      ctx.fillRect(x0, ry, colW[0], rowH);
 
-      ctx.textAlign = 'left';
       ctx.fillStyle = '#0f172a';
-      ctx.font = 'bold 17px sans-serif';
-      ctx.fillText(String(r.day || '-').slice(0, 18), cols[0], y + 33);
-      ctx.fillStyle = '#0f766e';
-      ctx.font = 'bold 16px sans-serif';
-      ctx.fillText(String(r.time || '-').slice(0, 20), cols[1], y + 33);
-      ctx.fillStyle = '#0f172a';
-      ctx.font = 'bold 17px sans-serif';
-      ctx.fillText(String(r.subject || '-').slice(0, 24), cols[2], y + 33);
-      ctx.fillStyle = '#334155';
-      ctx.font = '16px sans-serif';
-      ctx.fillText(String(r.teacher || '-').slice(0, 18), cols[3], y + 33);
-      y += rowH;
+      ctx.textAlign = 'center';
+      ctx.font = 'bold 18px sans-serif';
+      ctx.fillText(day, x0 + colW[0] / 2, ry + 39);
+
+      const vals = (r.days && r.days[day]) || ['-', '-', '-'];
+      for (let p = 0; p < 3; p++) {
+        const cx = x0 + colW[0] + p * colW[1] + colW[1] / 2;
+        ctx.fillStyle = '#0f172a';
+        ctx.font = 'bold 17px sans-serif';
+        ctx.fillText(String(vals[p] || '-').slice(0, 26), cx, ry + 39);
+      }
     });
+
+    ctx.strokeStyle = '#94a3b8';
+    ctx.lineWidth = 1.5;
+    const totalH = headH + WEEK_DAYS.length * rowH;
+    ctx.strokeRect(x0, y0, tableW, totalH);
+    let vx = x0;
+    for (let i = 0; i < 3; i++) {
+      vx += colW[i];
+      ctx.beginPath(); ctx.moveTo(vx, y0); ctx.lineTo(vx, y0 + totalH); ctx.stroke();
+    }
+    for (let i = 0; i <= WEEK_DAYS.length; i++) {
+      const hy = y0 + headH + i * rowH;
+      ctx.beginPath(); ctx.moveTo(x0, hy); ctx.lineTo(x0 + tableW, hy); ctx.stroke();
+    }
 
     ctx.textAlign = 'center';
     ctx.fillStyle = '#64748b';
     ctx.font = '14px sans-serif';
-    ctx.fillText('U.C.C Institute • Contact: 8016972121 / 8159980707', W / 2, H - 30);
+    ctx.fillText('U.C.C Institute • Contact: 8016972121 / 8159980707', W / 2, H - 28);
     return c;
   }
 
   function downloadStudentRoutinePng() {
-    const list = getMyStudentRoutines();
-    if (!list.length) { toast('ডাউনলোড করার মতো কোনো রুটিন নেই!'); return; }
-    const clsName = (stData && stData.student && stData.student.studentClass) || 'Class';
-    const c = buildStudentRoutineCanvas(list, clsName);
+    const r = getMyWeeklyRoutine();
+    if (!r) { toast('ডাউনলোড করার মতো কোনো রুটিন নেই!'); return; }
+    const c = buildStudentWeeklyRoutineCanvas(r);
     const a = document.createElement('a');
-    a.download = `UCC_Routine_${clsName.replace(/\s+/g, '_')}.png`;
+    a.download = `UCC_Weekly_Routine_${String(r.targetClass || 'Class').replace(/\s+/g, '_')}.png`;
     a.href = c.toDataURL('image/png');
     a.click();
-    toast('✅ Routine PNG ডাউনলোড হয়েছে!');
+    toast('✅ 7-Day Routine PNG ডাউনলোড হয়েছে!');
   }
 
   function downloadStudentRoutinePdf() {
-    const list = getMyStudentRoutines();
-    if (!list.length) { toast('ডাউনলোড করার মতো কোনো রুটিন নেই!'); return; }
-    const clsName = (stData && stData.student && stData.student.studentClass) || 'Class';
-    const c = buildStudentRoutineCanvas(list, clsName);
+    const r = getMyWeeklyRoutine();
+    if (!r) { toast('ডাউনলোড করার মতো কোনো রুটিন নেই!'); return; }
+    const c = buildStudentWeeklyRoutineCanvas(r);
     if (window.jspdf && window.jspdf.jsPDF) {
-      const doc = new window.jspdf.jsPDF({ orientation: 'p', unit: 'pt', format: 'a4' });
+      const doc = new window.jspdf.jsPDF({ orientation: 'l', unit: 'pt', format: 'a4' });
       const pdfW = doc.internal.pageSize.getWidth();
-      const imgW = pdfW - 48;
+      const pdfH = doc.internal.pageSize.getHeight();
+      const imgW = pdfW - 44;
       const imgH = imgW * (c.height / c.width);
-      doc.addImage(c.toDataURL('image/jpeg', 0.94), 'JPEG', 24, 24, imgW, Math.min(imgH, doc.internal.pageSize.getHeight() - 48));
-      doc.save(`UCC_Routine_${clsName.replace(/\s+/g, '_')}.pdf`);
-      toast('✅ Routine PDF ডাউনলোড হয়েছে!');
+      doc.addImage(c.toDataURL('image/jpeg', 0.95), 'JPEG', 22, (pdfH - imgH) / 2, imgW, imgH);
+      doc.save(`UCC_Weekly_Routine_${String(r.targetClass || 'Class').replace(/\s+/g, '_')}.pdf`);
+      toast('✅ 7-Day Routine PDF ডাউনলোড হয়েছে!');
     } else {
       downloadStudentRoutinePng();
     }
   }
 
-  // Inject Routine tile on Student Dashboard & filter [ROUTINE] out of normal Notices
   const _origRenderAllStV30 = renderAllStudentUI;
   renderAllStudentUI = function() {
     _origRenderAllStV30();
     renderStudentRoutinePage();
 
-    // Add Routine Tile to dashboard grid if not already present
     const grid = document.getElementById('dashTilesGrid');
     if (grid && !grid.querySelector('[data-tile="routine"]')) {
-      const cnt = getMyStudentRoutines().length;
+      const hasR = Boolean(getMyWeeklyRoutine());
       grid.insertAdjacentHTML('beforeend', `
         <div class="dash-tile" data-tile="routine" onclick="openPage('routine')">
-          ${cnt > 0 ? `<span class="dash-tile-badge ok">${cnt}</span>` : ''}
+          ${hasR ? `<span class="dash-tile-badge ok">7 Days</span>` : ''}
           <div class="dash-tile-circle" style="background:rgba(14,165,233,0.14);color:#0284c7;">
             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
           </div>
           <div class="dash-tile-label">Routine</div>
-          <div class="dash-tile-sub">${cnt > 0 ? cnt + ' Classes • PDF/PNG' : 'Class & Exam'}</div>
+          <div class="dash-tile-sub">7 Days • 3 Classes</div>
         </div>
       `);
     }
 
-    // Filter out [ROUTINE] items from regular Notices list
     const allN = (stData && Array.isArray(stData.notices)) ? stData.notices : [];
-    const regularN = allN.filter(n => !String(n.title || '').startsWith(ROUTINE_TAG));
+    const regularN = allN.filter(n => !String(n.title || '').startsWith('[ROUTINE'));
     const nPill = document.getElementById('sideNotPill');
     if (nPill) nPill.textContent = regularN.length;
     const nList = document.getElementById('stNoticesList');
