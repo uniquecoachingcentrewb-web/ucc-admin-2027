@@ -902,39 +902,46 @@
   <div class="splash-bar"><div class="splash-fill"></div></div>
 </div>
 
-<!-- STUDENT LOGIN & SIGN UP SCREEN (BOARD EXAM vs COMPETITIVE EXAM) -->
+<!-- STUDENT LOGIN & SIGN UP SCREEN (CLEAN & SIMPLE) -->
 <div id="loginScreen">
-  <div class="login-card" style="max-width:400px;">
+  <div class="login-card" style="max-width:390px;padding-top:22px;">
+    <button type="button" id="topSignupToggleBtn" onclick="toggleCompactSignup()" title="New Student Sign Up" style="position:absolute;top:14px;right:14px;display:inline-flex;align-items:center;gap:5px;padding:6px 10px;border-radius:11px;border:1.5px solid var(--accent-border);background:var(--accent-soft);color:var(--accent-light);font-size:11.5px;font-weight:800;cursor:pointer;">
+      <span id="topSignupIcon">📁</span>
+      <span id="topSignupText">Sign Up</span>
+    </button>
+
     <img src="logo.png?v=4" alt="Logo" class="login-logo" onerror="this.style.display='none'">
     <div class="login-title">
       <h2 id="loginBrandTitle">U.C.C Institute</h2>
-      <p id="loginTrackSubtitle">SELECT EXAM TRACK &amp; CONTINUE</p>
+      <p id="loginTrackSubtitle">STUDENT PORTAL • NURSERY – CLASS 12</p>
     </div>
 
-    <!-- Step 1: Choose Board Exam vs Competitive Exam -->
-    <div class="track-choice-grid">
-      <button type="button" id="trackBtnBoard" class="track-choice-btn active" onclick="selectAuthTrack('BOARD')">
-        <div style="font-size:20px;">🏫</div>
-        <div style="font-size:13px;font-weight:800;margin-top:3px;">Board Exam</div>
-        <div style="font-size:10.5px;color:var(--muted);margin-top:1px;">Nursery – Class 12</div>
-      </button>
-      <button type="button" id="trackBtnComp" class="track-choice-btn" onclick="selectAuthTrack('COMPETITIVE')">
-        <div style="font-size:20px;">🎯</div>
-        <div style="font-size:13px;font-weight:800;margin-top:3px;">Competitive</div>
-        <div style="font-size:10.5px;color:var(--muted);margin-top:1px;">PSC • TET • SSC • WBCS</div>
-      </button>
-    </div>
-
-    <!-- Step 2: Sign Up vs Login Mode -->
-    <div class="auth-mode-tabs">
-      <button type="button" id="tabModeSignup" class="auth-mode-tab active" onclick="setAuthMode('SIGNUP')">✨ Sign Up (নতুন)</button>
-      <button type="button" id="tabModeLogin" class="auth-mode-tab" onclick="setAuthMode('LOGIN')">🔑 Login (আগের ID)</button>
+    <!-- Hidden compatibility placeholders so existing JS references stay safe -->
+    <div style="display:none;">
+      <button type="button" id="trackBtnBoard"></button>
+      <button type="button" id="trackBtnComp"></button>
+      <button type="button" id="tabModeSignup"></button>
+      <button type="button" id="tabModeLogin"></button>
+      <div id="compTargetGroup"><select id="stRegTarget"><option value="Class 10">Class 10</option></select></div>
     </div>
 
     <div id="loginErr" class="login-err">Invalid Student ID or Mobile Number!</div>
 
-    <!-- SIGN UP FORM -->
-    <form id="stSignupForm" onsubmit="handleStudentSignup(event)">
+    <!-- LOGIN FORM (DEFAULT, JUST LIKE BEFORE) -->
+    <form id="stLoginForm" style="display:block;" onsubmit="handleStudentLogin(event)">
+      <div class="form-group">
+        <label id="stLoginIdLabel">Student / Teacher ID *</label>
+        <input type="text" id="stLoginId" required placeholder="e.g. UCC001" autocomplete="username" style="text-transform:uppercase;">
+      </div>
+      <div class="form-group">
+        <label>Registered Mobile Number *</label>
+        <input type="tel" id="stLoginMob" required maxlength="10" placeholder="10-digit mobile number" autocomplete="tel">
+      </div>
+      <button type="submit" id="stLoginBtn" class="btn btn-accent" style="margin-top:8px;">Open Dashboard</button>
+    </form>
+
+    <!-- SIGN UP FORM (TOGGLED FROM TOP-RIGHT SMALL FOLDER ICON) -->
+    <form id="stSignupForm" style="display:none;" onsubmit="handleStudentSignup(event)">
       <div class="form-group">
         <label>Student Full Name *</label>
         <input type="text" id="stRegName" required placeholder="তোমার পুরো নাম লেখো">
@@ -942,12 +949,12 @@
       <div id="boardClassSelectGroup" class="form-group">
         <label>Select Class (ক্লাস বেছে নাও) *</label>
         <select id="stRegClass">
-          <option value="Nursery">Nursery (Primary)</option>
-          <option value="KG">KG (Primary)</option>
-          <option value="Class 1">Class 1 (Primary)</option>
-          <option value="Class 2">Class 2 (Primary)</option>
-          <option value="Class 3">Class 3 (Primary)</option>
-          <option value="Class 4">Class 4 (Primary)</option>
+          <option value="Nursery">Nursery</option>
+          <option value="KG">KG</option>
+          <option value="Class 1">Class 1</option>
+          <option value="Class 2">Class 2</option>
+          <option value="Class 3">Class 3</option>
+          <option value="Class 4">Class 4</option>
           <option value="Class 5" selected>Class 5</option>
           <option value="Class 6">Class 6</option>
           <option value="Class 7">Class 7</option>
@@ -956,16 +963,6 @@
           <option value="Class 10">Class 10 (Madhyamik)</option>
           <option value="Class 11">Class 11</option>
           <option value="Class 12">Class 12 (HS)</option>
-        </select>
-      </div>
-      <div id="compTargetGroup" class="form-group" style="display:none;">
-        <label>Target Competitive Exam *</label>
-        <select id="stRegTarget">
-          <option value="WBPSC Clerkship">WBPSC Clerkship</option>
-          <option value="Primary / Upper Primary TET">Primary / Upper Primary TET</option>
-          <option value="WBP / KP Constable & SI">WBP / KP Constable &amp; SI</option>
-          <option value="SSC / Railway Foundation">SSC / Railway Foundation</option>
-          <option value="WBCS / General Competitive">WBCS / General Competitive</option>
         </select>
       </div>
       <div class="form-group">
@@ -977,19 +974,6 @@
         <input type="text" id="stRegGuardian" placeholder="Father / Mother name">
       </div>
       <button type="submit" id="stSignupBtn" class="btn btn-accent" style="margin-top:6px;">Create Account &amp; Continue</button>
-    </form>
-
-    <!-- LOGIN FORM -->
-    <form id="stLoginForm" style="display:none;" onsubmit="handleStudentLogin(event)">
-      <div class="form-group">
-        <label id="stLoginIdLabel">Student ID (or Mobile Number) *</label>
-        <input type="text" id="stLoginId" required placeholder="e.g. UCC001 বা CMP001" autocomplete="username" style="text-transform:uppercase;">
-      </div>
-      <div class="form-group">
-        <label>Registered Mobile Number *</label>
-        <input type="tel" id="stLoginMob" required maxlength="10" placeholder="10-digit mobile number" autocomplete="tel">
-      </div>
-      <button type="submit" id="stLoginBtn" class="btn btn-accent" style="margin-top:8px;">Open Dashboard</button>
     </form>
 
     <div id="loginInstallWrap" style="margin-top:12px;padding-top:11px;border-top:1px dashed var(--border);text-align:center;">
@@ -1019,10 +1003,21 @@
       <span class="side-left">📲 Install Mobile App</span>
       <span class="side-pill">Install</span>
     </button>
-    <button id="sideCompBatchBtn" class="side-item" style="border-color:var(--accent);" onclick="switchTrackToCompetitive()">
-      <span class="side-left">🎯 Competitive Batches</span>
-      <span class="side-pill">Batches</span>
+    <button id="sideCompBatchBtn" class="side-item" style="display:none;" onclick="openPage('home')">
+      <span class="side-left">🏫 School Classes</span>
     </button>
+    <!-- INSTRUCTIONS & SETTINGS AT TOP OF SIDEBAR -->
+    <details class="theme-accordion" open style="margin-top:0;margin-bottom:10px;">
+      <summary>
+        <span class="side-left">📘 নির্দেশিকা ও সেটিংস (Instructions)</span>
+        <span>▾</span>
+      </summary>
+      <div class="theme-acc-body" style="font-size:12px;color:var(--text-2);line-height:1.5;">
+        <div class="guide-step"><span class="guide-num">1</span><div><strong>লগইন / সাইন-আপ:</strong> নিজের Student ID ও মোবাইল নম্বর দিয়ে লগইন করো। নতুন হলে ওপরের <strong>📁 Sign Up</strong> আইকনে ট্যাপ করে অ্যাকাউন্ট বানাও।</div></div>
+        <div class="guide-step"><span class="guide-num">2</span><div><strong>ফ্রি ক্লাস ভিডিও:</strong> Nursery থেকে Class 12 পর্যন্ত সব ক্লাসের ভিডিও ফোল্ডার অনুযায়ী ফ্রি দেখতে পারবে।</div></div>
+        <div class="guide-step"><span class="guide-num">3</span><div><strong>ID কার্ড ও ফি রসিদ:</strong> প্রোফাইল ফটো সেট করে Smart QR ID Card এবং Paid মাসের রসিদ PDF/PNG ডাউনলোড করো।</div></div>
+      </div>
+    </details>
     <button class="side-item" onclick="triggerPhotoUpload()">
       <span class="side-left">📷 Change My Profile Photo</span>
       <span class="side-pill">Photo</span>
@@ -1454,7 +1449,7 @@
 <script>
   // Register Service Worker & update cache cleanly so direct PWA Install works 100%
   (function() {
-    const UI_BUILD = 'ucc_student_v28_clean_signup_isolation_premium';
+    const UI_BUILD = 'ucc_student_v29_simple_clean_no_comp_top_guide';
     try {
       if (localStorage.getItem('ucc_st_ui_build') !== UI_BUILD) {
         localStorage.setItem('ucc_st_ui_build', UI_BUILD);
@@ -4239,6 +4234,59 @@
     } finally {
       if (btn) btn.classList.remove('spin');
     }
+  };
+
+
+  // ===== V29: SIMPLE SCHOOL-ONLY FLOW, COMPACT TOP SIGNUP & NO COMPETITIVE CLUTTER =====
+  selectedAuthTrack = 'BOARD';
+  selectedAuthMode = 'LOGIN';
+  localStorage.setItem('ucc_st_track_pref', 'BOARD');
+  localStorage.setItem('ucc_st_active_view_track', 'BOARD');
+
+  function toggleCompactSignup() {
+    const nextMode = selectedAuthMode === 'LOGIN' ? 'SIGNUP' : 'LOGIN';
+    setAuthMode(nextMode);
+    const ic = document.getElementById('topSignupIcon');
+    const tx = document.getElementById('topSignupText');
+    if (ic && tx) {
+      if (nextMode === 'SIGNUP') {
+        ic.textContent = '🔑';
+        tx.textContent = 'Login';
+      } else {
+        ic.textContent = '📁';
+        tx.textContent = 'Sign Up';
+      }
+    }
+  }
+
+  // Ensure onload always starts in LOGIN mode and BOARD track (no competitive hub redirect)
+  const _origOnloadV28 = window.onload;
+  window.onload = function() {
+    selectedAuthTrack = 'BOARD';
+    selectedAuthMode = 'LOGIN';
+    localStorage.setItem('ucc_st_active_view_track', 'BOARD');
+    if (stData && stData.student) stData.student.track = 'BOARD';
+    if (_origOnloadV28) _origOnloadV28();
+    setAuthMode('LOGIN');
+    const sideComp = document.getElementById('sideCompBatchBtn');
+    if (sideComp) sideComp.style.display = 'none';
+  };
+
+  // Keep sideCompBatchBtn always hidden and remove Competitive/Unlock All clutter banner
+  const _origRenderAllV28 = renderAllStudentUI;
+  renderAllStudentUI = function() {
+    if (stData && stData.student) stData.student.track = 'BOARD';
+    _origRenderAllV28();
+    const sideComp = document.getElementById('sideCompBatchBtn');
+    if (sideComp) sideComp.style.display = 'none';
+    ['videoLockAlert', 'pdfLockAlert', 'testLockAlert'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el && stData && stData.student) {
+        el.innerHTML = `<div class="card" style="background:var(--success-soft);border:1.5px solid var(--success);padding:10px 14px;">
+          <div style="font-weight:800;font-size:13px;color:var(--success);">📚 ${stData.student.studentClass || 'School'} — সব ক্লাস ভিডিও ফোল্ডার অনুযায়ী চালু আছে</div>
+        </div>`;
+      }
+    });
   };
 
 </script>
