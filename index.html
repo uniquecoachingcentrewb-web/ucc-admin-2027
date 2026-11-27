@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<!-- U.C.C Institute Teacher Panel - Final Build v14 Q&A -->
+<!-- U.C.C Institute Teacher Panel - Final Build v18 -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <meta name="theme-color" id="metaThemeColor" content="#061121">
-  <link rel="manifest" href="manifest.json?v=4">
-  <link rel="icon" type="image/png" href="logo.png?v=4">
+  <link rel="manifest" href="./manifest.json">
+  <link rel="icon" type="image/png" href="logo.png?v=17">
   <title>U.C.C Institute Teacher Panel</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -625,6 +625,39 @@
       flex: 1; text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
 
+
+    /* ===== DIRECT 1-CLICK MOBILE APP INSTALL BAR ===== */
+    body.has-install-bar { padding-bottom: 94px !important; }
+    .pwa-install-bar {
+      position: fixed; left: 12px; right: 12px;
+      bottom: calc(12px + env(safe-area-inset-bottom));
+      max-width: 560px; margin: 0 auto; z-index: 260;
+      background: linear-gradient(135deg, #061121 0%, #0f294a 100%);
+      color: #ffffff; border: 1.5px solid #d4af37; border-radius: 18px;
+      padding: 11px 13px; display: none; align-items: center;
+      justify-content: space-between; gap: 10px;
+      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.45);
+    }
+    .pwa-install-bar.show { display: flex; }
+    .pwa-inst-left { display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1; }
+    .pwa-inst-logo { width: 42px; height: 42px; border-radius: 12px; object-fit: cover; background: #fff; border: 1.5px solid #d4af37; flex-shrink: 0; }
+    .pwa-inst-title { font-size: 13.5px; font-weight: 800; color: #fae094; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .pwa-inst-sub { font-size: 11px; color: #cbd5e1; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .pwa-inst-actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+    .pwa-inst-btn {
+      background: linear-gradient(135deg, #fde047 0%, #f59e0b 100%);
+      color: #061121; border: none; border-radius: 11px; padding: 9px 13px;
+      font-size: 12.5px; font-weight: 800; cursor: pointer;
+      display: inline-flex; align-items: center; gap: 5px;
+      box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35); white-space: nowrap;
+    }
+    .pwa-inst-btn:active { transform: scale(0.93); }
+    .pwa-inst-close {
+      background: rgba(255, 255, 255, 0.12); color: #cbd5e1;
+      border: 1px solid rgba(255, 255, 255, 0.2); width: 28px; height: 28px;
+      border-radius: 50%; font-size: 13px; font-weight: 800; cursor: pointer;
+      display: inline-flex; align-items: center; justify-content: center;
+    }
   </style>
 </head>
 <body>
@@ -686,6 +719,10 @@
     <button id="sideContentBtn" class="side-item" onclick="openSidePage('content')">
       <span class="side-left"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-light)" stroke-width="2.2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>Live / Video / PDF / Test</span>
       <span style="color:var(--accent-light);">→</span>
+    </button>
+    <button id="sideRoutineBtn" class="side-item" onclick="openSidePage('routine')">
+      <span class="side-left"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-light)" stroke-width="2.2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Class &amp; Exam Routine</span>
+      <span id="sideRoutinePill" class="side-pill">0</span>
     </button>
     <button id="sideNoticesBtn" class="side-item" onclick="openSidePage('notices')">
       <span class="side-left"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-light)" stroke-width="2.2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>Notices & Due-Lock</span>
@@ -974,19 +1011,66 @@
       <form onsubmit="postContent(event)">
         <div class="row-2">
           <div class="form-group"><label>Target Class *</label><select id="cClass" required></select></div>
-          <div class="form-group"><label>Type *</label><select id="cType"><option value="Live">Live Class (YouTube Unlisted)</option><option value="Video">Recorded Video</option><option value="PDF">PDF Notes</option><option value="Mock Test">Mock Test</option></select></div>
+          <div class="form-group"><label>Type &amp; Access *</label><div style="display:grid;grid-template-columns:1.2fr 1fr;gap:6px;"><select id="cType"><option value="Video" selected>Recorded Video</option><option value="Live">Live Class</option><option value="PDF">PDF Notes</option><option value="Mock Test">Mock Test</option></select><select id="cAccessType"><option value="FREE" selected>🆓 Free (ক্লাসের সবার জন্য)</option><option value="PREMIUM">👑 Premium (পেমেন্টে খুলবে)</option></select></div></div>
         </div>
         <div class="row-2">
           <div class="form-group"><label>Subject *</label><input type="text" id="cSub" required placeholder="e.g. Geography / Math"></div>
-          <div class="form-group"><label>Chapter Folder *</label><input type="text" id="cChap" required placeholder="e.g. ভূ-পরিচয় / শিলা"></div>
+          <div class="form-group">
+          <label>Chapter Folder *</label>
+          <input type="text" id="cChap" required placeholder="e.g. ত্রিকোণমিতি / ভূ-পরিচয়" list="existingChapterDatalist">
+          <datalist id="existingChapterDatalist"></datalist>
+          <div id="quickFolderChips" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;"></div>
+        </div>
         </div>
         <div class="form-group"><label>Class / Topic Title *</label><input type="text" id="cTitle" required placeholder="e.g. Part 1 Explanation"></div>
         <div class="form-group"><label>Upload Method</label><select id="cUploadMode" onchange="toggleUploadMode()"><option value="link">Paste Link (YouTube / Google Drive / Form)</option><option value="file">Direct File Upload (PDF / Small Video up to 15 MB)</option></select></div>
-        <div class="form-group" id="cLinkWrap"><label>YouTube / Drive / Form Link *</label><input type="url" id="cLink" placeholder="https://..."></div>
+        <div class="form-group" id="cLinkWrap"><label>YouTube / Drive / Form Link *</label><input type="url" id="cLink" placeholder="https://..." oninput="onContentLinkInput(this.value)"></div>
         <div class="form-group" id="cFileWrap" style="display:none;"><label>Select PDF or Video File (Max 15 MB) *</label><input type="file" id="cFile" accept=".pdf,video/*,image/*"><div style="font-size:11px;color:var(--muted);margin-top:4px;">Google Drive-এ সেভ হবে; Delete করলেই Drive থেকেও মুছে স্টোরেজ খালি হবে।</div></div>
         <button type="submit" id="cSubmitBtn" class="btn btn-accent">Publish to Student App</button>
       </form>
     </div>
+            <div class="card" id="customFolderAdminCard" style="border-color:var(--accent);">
+      <div class="card-title">📁 Create Folder (Primary / Class 5–12 / Competitive) (<span id="customFolderAdminCount">0</span>)</div>
+      <form onsubmit="createCustomFolderAdmin(event)">
+        <div class="row-2">
+          <div class="form-group"><label>Folder Name *</label><input type="text" id="cfTitle" required placeholder="e.g. WBPSC GK / Primary Rhymes"></div>
+          <div class="form-group"><label>Section / Track *</label><select id="cfTrack"><option value="COMPETITIVE">Competitive (PSC/TET)</option><option value="PRIMARY">Primary (Nursery–Class 4)</option><option value="BOARD">Board (Class 5–12)</option></select></div>
+        </div>
+        <div class="row-2">
+          <div class="form-group"><label>Animated Icon / Emoji</label><input type="text" id="cfIcon" value="📁" maxlength="4" placeholder="📁 / 📘 / 🎨"></div>
+          <div class="form-group"><label>Custom Image URL (Optional)</label><input type="url" id="cfImg" placeholder="https://... (খালি থাকলে অ্যানিমেটেড আইকন দেখাবে)"></div>
+        </div>
+        <button type="submit" class="btn btn-accent">➕ Create Folder</button>
+      </form>
+      <div id="customFolderAdminList" style="margin-top:12px;"></div>
+    </div>
+
+    <div class="card" id="studentUsageTrackerCard" style="border-color:var(--accent);">
+      <div class="card-title">⏱️ Student App Usage Time (কে কতক্ষণ অ্যাপ দেখছে)</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">স্টুডেন্টরা অ্যাপে কতক্ষণ সক্রিয় থাকছে তার লাইভ সময় নিচে দেখা যাচ্ছে:</div>
+      <div id="studentUsageList"></div>
+    </div>
+
+    <div class="card" id="compBatchAdminCard" style="border-color:var(--accent);">
+      <div class="card-title">🎯 Competitive Batches &amp; Package Lock (<span id="compBatchAdminCount">0</span>)</div>
+      <form onsubmit="createCompetitiveBatchAdmin(event)">
+        <div class="row-2">
+          <div class="form-group"><label>Batch Title *</label><input type="text" id="cbTitle" required placeholder="e.g. WBPSC Clerkship 2027"></div>
+          <div class="form-group"><label>Batch Fee (₹) (0 = Free)</label><input type="number" id="cbPrice" value="499" min="0" required></div>
+        </div>
+        <div class="row-2">
+          <div class="form-group"><label>Exam Name</label><input type="text" id="cbExam" placeholder="e.g. WBPSC / TET"></div>
+          <div class="form-group"><label>Validity</label><input type="text" id="cbValidity" value="6 Months"></div>
+        </div>
+        <div class="row-2">
+          <div class="form-group"><label>Short Description</label><input type="text" id="cbDesc" placeholder="First 2 classes Free Demo, rest locked till payment"></div>
+          <div class="form-group"><label>Auto-Lock Date (মেয়াদ শেষ)</label><input type="date" id="cbExpiry"></div>
+        </div>
+        <button type="submit" class="btn btn-accent">➕ Add Competitive Batch</button>
+      </form>
+      <div id="compBatchAdminList" style="margin-top:12px;"></div>
+    </div>
+
     <div class="card" id="qaInboxCard" style="display:none;border:1.5px solid var(--accent);background:var(--accent-soft);">
       <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:9px;">
         <div class="card-title" style="margin-bottom:0;">💬 ছাত্রছাত্রীদের প্রশ্ন (Student Q&amp;A Inbox)</div>
@@ -995,6 +1079,40 @@
       <div id="qaInboxList"></div>
     </div>
     <div class="card"><div class="card-title">Uploaded Classes & Materials (<span id="conCount">0</span>)</div><div id="adminContentList"></div></div>
+  </div>
+
+  <!-- SIDEBAR PAGE R: CLASS & EXAM ROUTINE -->
+  <div id="page-routine" class="page">
+    <div class="card">
+      <div class="card-title">📅 Add Class / Exam Routine</div>
+      <form id="routineForm" onsubmit="postRoutineItem(event)">
+        <div class="row-2">
+          <div class="form-group"><label>Target Class *</label><select id="rtClass" required></select></div>
+          <div class="form-group"><label>Routine Type *</label><select id="rtType"><option value="Class Routine">Class Routine</option><option value="Exam Routine">Exam Routine</option></select></div>
+        </div>
+        <div class="row-2">
+          <div class="form-group"><label>Day / Date *</label><input type="text" id="rtDay" required placeholder="e.g. Monday / 25 Nov"></div>
+          <div class="form-group"><label>Time *</label><input type="text" id="rtTime" required placeholder="e.g. 7:00 AM - 8:30 AM"></div>
+        </div>
+        <div class="row-2">
+          <div class="form-group"><label>Subject *</label><input type="text" id="rtSub" required placeholder="e.g. Mathematics"></div>
+          <div class="form-group"><label>Teacher / Note</label><input type="text" id="rtTeacher" placeholder="e.g. Pralay Sir"></div>
+        </div>
+        <button type="submit" id="rtSubmitBtn" class="btn btn-accent">➕ Publish Routine to Student App</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+        <div class="card-title" style="margin-bottom:0;">📋 Published Routine (<span id="rtCount">0</span>)</div>
+        <select id="rtFilterClass" onchange="renderAdminRoutinePage()" style="width:auto;padding:6px 10px;font-size:12px;font-weight:700;"></select>
+      </div>
+      <div class="row-2" style="margin-bottom:12px;">
+        <button type="button" class="btn btn-accent" style="padding:9px;font-size:12px;" onclick="downloadAdminRoutinePdf()">📥 Download PDF</button>
+        <button type="button" class="btn" style="padding:9px;font-size:12px;" onclick="downloadAdminRoutinePng()">🖼️ Save PNG</button>
+      </div>
+      <div id="adminRoutineList"></div>
+    </div>
   </div>
 
   <!-- SIDEBAR PAGE C: NOTICES & DUE-LOCK -->
@@ -1342,12 +1460,29 @@
     <span id="callerPendingBadge" class="nav-badge">0</span>
   </button>
 </nav>
+<!-- DIRECT BOTTOM FLOATING INSTALL APP BAR (TEACHER APP) -->
+<div id="pwaInstallBar" class="pwa-install-bar">
+  <div class="pwa-inst-left" onclick="triggerMobileAppInstall()" style="cursor:pointer;">
+    <img src="logo.png?v=17" alt="U.C.C" class="pwa-inst-logo" onerror="this.style.display='none'">
+    <div style="min-width:0;">
+      <div class="pwa-inst-title">U.C.C Teacher App</div>
+      <div id="pwaInstallSubText" class="pwa-inst-sub">Install Now — সরাসরি মোবাইলে ইনস্টল করুন</div>
+    </div>
+  </div>
+  <div class="pwa-inst-actions">
+    <button type="button" class="pwa-inst-btn" onclick="triggerMobileAppInstall()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Install Now
+    </button>
+    <button type="button" class="pwa-inst-close" onclick="dismissInstallBar()" title="Close">✕</button>
+  </div>
+</div>
 <div id="toast" class="toast"></div>
 
 <script>
   // Auto-clear old Service Worker cache whenever a new UI build is deployed
   (function() {
-    const UI_BUILD = 'ucc_teacher_v14_qa';
+    const UI_BUILD = 'ucc_teacher_v30_routine_pdf_png';
     try {
       if (localStorage.getItem('ucc_ui_build') !== UI_BUILD) {
         localStorage.setItem('ucc_ui_build', UI_BUILD);
@@ -2030,6 +2165,8 @@
     updateNetUI(); applyAdminUI(); renderAll();
     if (getCurrentAdmin()) { document.getElementById('loginScreen').style.display = 'none'; openDefaultAllowedPage(); if (navigator.onLine) syncNow(true); }
     else document.getElementById('loginScreen').style.display = 'flex';
+    if (isAppAlreadyInstalled()) hideAllInstallPrompts();
+    else setTimeout(showBottomInstallBar, 600);
   };
 
   function todayStr() { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); }
@@ -2884,6 +3021,23 @@
     const m = document.getElementById('cUploadMode').value;
     document.getElementById('cLinkWrap').style.display = m === 'link' ? 'block' : 'none';
     document.getElementById('cFileWrap').style.display = m === 'file' ? 'block' : 'none';
+    if (m === 'file' && document.getElementById('cType').value === 'Live') {
+      document.getElementById('cType').value = 'Video';
+    }
+  }
+  function onContentLinkInput(rawUrl) {
+    const u = String(rawUrl || '').trim().toLowerCase();
+    const sel = document.getElementById('cType');
+    if (!u || !sel) return;
+    if (u.includes('forms.gle') || u.includes('docs.google.com/forms')) {
+      sel.value = 'Mock Test';
+    } else if (u.endsWith('.pdf') || u.includes('.pdf?')) {
+      sel.value = 'PDF';
+    } else if (u.includes('youtube.com/live/') || u.includes('studio.youtube.com')) {
+      sel.value = 'Live';
+    } else if (u.includes('youtube.com') || u.includes('youtu.be') || u.includes('drive.google.com')) {
+      if (sel.value === 'Live') sel.value = 'Video';
+    }
   }
   let contentChatCache = {};
 
@@ -4437,6 +4591,599 @@
     }
     setInterval(cycleBrand, 2400);
   })();
+
+
+  // ===== DIRECT 1-CLICK INSTALL FOR U.C.C Teacher App =====
+  let deferredInstallPrompt = null;
+
+  function isAppAlreadyInstalled() {
+    return window.matchMedia('(display-mode: standalone)').matches ||
+           window.navigator.standalone === true ||
+           document.referrer.includes('android-app://');
+  }
+
+  function showBottomInstallBar() {
+    if (isAppAlreadyInstalled()) {
+      hideAllInstallPrompts();
+      return;
+    }
+    if (sessionStorage.getItem('ucc_t_install_dismissed') === '1') return;
+    const bar = document.getElementById('pwaInstallBar');
+    if (bar) {
+      bar.classList.add('show');
+      document.body.classList.add('has-install-bar');
+    }
+  }
+
+  function hideAllInstallPrompts() {
+    const bar = document.getElementById('pwaInstallBar');
+    if (bar) bar.classList.remove('show');
+    document.body.classList.remove('has-install-bar');
+  }
+
+  function dismissInstallBar() {
+    sessionStorage.setItem('ucc_t_install_dismissed', '1');
+    hideAllInstallPrompts();
+  }
+
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredInstallPrompt = e;
+    const sub = document.getElementById('pwaInstallSubText');
+    if (sub) sub.textContent = 'Direct Install Ready • ১ ক্লিকে ইনস্টল করুন';
+    showBottomInstallBar();
+  });
+
+  window.addEventListener('appinstalled', () => {
+    deferredInstallPrompt = null;
+    hideAllInstallPrompts();
+    toast('🎉 U.C.C Teacher App মোবাইলে ইনস্টল হয়ে গেছে!');
+  });
+
+  async function triggerMobileAppInstall() {
+    if (typeof closeSidebar === 'function') closeSidebar();
+    if (isAppAlreadyInstalled()) {
+      toast('✅ অ্যাপটি আগেই মোবাইলে ইনস্টল করা আছে!');
+      return;
+    }
+    if (deferredInstallPrompt) {
+      try {
+        deferredInstallPrompt.prompt();
+        const choice = await deferredInstallPrompt.userChoice;
+        if (choice && choice.outcome === 'accepted') {
+          deferredInstallPrompt = null;
+          hideAllInstallPrompts();
+          toast('📲 U.C.C Teacher App ইনস্টল হচ্ছে...');
+        }
+        return;
+      } catch (err) {}
+    }
+    if (/iPhone|iPad|iPod/i.test(navigator.userAgent || '') && navigator.share) {
+      try {
+        await navigator.share({ title: 'U.C.C Teacher App', url: window.location.href });
+        return;
+      } catch (err) {}
+    }
+    toast('ব্রাউজারের ⋮ মেনু থেকে "Install app" চাপলে সরাসরি ইনস্টল হয়ে যাবে।');
+  }
+
+
+  // ===== ADMIN COMPETITIVE BATCH MANAGER & INSTANT BATCH UNLOCK ON APPROVE =====
+  let adminCompBatches = JSON.parse(localStorage.getItem('ucc_admin_comp_batches') || 'null') || [
+    { id: 'BATCH_PSC_CLK', title: 'WBPSC Clerkship Target Batch 2027', exam: 'WBPSC Clerkship', price: 499, validity: '6 Months', description: 'প্রথম ২টি ক্লাস ফ্রি ডেমো, বাকিগুলো পেমেন্টে আনলক' },
+    { id: 'BATCH_TET_MATH', title: 'Primary & Upper Primary TET Special', exam: 'WB TET', price: 399, validity: '6 Months', description: 'Child Pedagogy, Math & Mock Tests' }
+  ];
+
+  function renderCompetitiveBatchesAdmin() {
+    const box = document.getElementById('compBatchAdminList');
+    const cnt = document.getElementById('compBatchAdminCount');
+    if (!box) return;
+    if (cnt) cnt.textContent = adminCompBatches.length;
+    box.innerHTML = adminCompBatches.length ? adminCompBatches.map((b, idx) => `
+      <div class="info-item" style="font-size:12.5px;">
+        <div>
+          <strong>${b.title}</strong> <span class="badge-ok">₹${b.price}</span><br>
+          <span style="color:var(--muted);font-size:11px;">${b.exam || 'Competitive'} • ${b.validity || 'Full Course'}</span>
+        </div>
+        <button type="button" class="btn-sm" style="background:var(--danger-soft);color:var(--danger);" onclick="deleteCompBatchAdmin(${idx})">Delete</button>
+      </div>
+    `).join('') : '<div style="font-size:12px;color:var(--muted);text-align:center;">কোনো কম্পিটিটিভ ব্যাচ নেই।</div>';
+  }
+
+  function createCompetitiveBatchAdmin(e) {
+    e.preventDefault();
+    const title = document.getElementById('cbTitle').value.trim();
+    const price = Number(document.getElementById('cbPrice').value) || 0;
+    const exam = document.getElementById('cbExam').value.trim() || 'Competitive';
+    const validity = document.getElementById('cbValidity').value.trim() || 'Full Course';
+    const description = document.getElementById('cbDesc').value.trim();
+    if (!title) return;
+    adminCompBatches.push({
+      id: 'BATCH_' + Date.now(),
+      title, price, exam, validity, description
+    });
+    localStorage.setItem('ucc_admin_comp_batches', JSON.stringify(adminCompBatches));
+    e.target.reset();
+    document.getElementById('cbPrice').value = '499';
+    document.getElementById('cbValidity').value = '6 Months';
+    renderCompetitiveBatchesAdmin();
+    toast('✅ নতুন Competitive Batch যুক্ত হয়েছে!');
+  }
+
+  function deleteCompBatchAdmin(idx) {
+    adminCompBatches.splice(idx, 1);
+    localStorage.setItem('ucc_admin_comp_batches', JSON.stringify(adminCompBatches));
+    renderCompetitiveBatchesAdmin();
+    toast('Batch removed.');
+  }
+
+  const _origRenderContentTab = renderContentTab;
+  renderContentTab = function() {
+    _origRenderContentTab();
+    renderCompetitiveBatchesAdmin();
+  };
+
+
+  // ===== ADMIN FOLDER CREATOR + USAGE TIME MONITOR + BATCH EXPIRY =====
+  let adminCustomFolders = JSON.parse(localStorage.getItem('ucc_custom_folders') || 'null') || [
+    { id: 'FLD_PRIMARY_1', title: 'Primary Rhymes & Stories', track: 'PRIMARY', icon: '🌈', image: '' },
+    { id: 'FLD_COMP_PSC', title: 'WBPSC Clerkship Folder', track: 'COMPETITIVE', icon: '📘', image: '' }
+  ];
+
+  function renderCustomFoldersAdmin() {
+    const box = document.getElementById('customFolderAdminList');
+    const cnt = document.getElementById('customFolderAdminCount');
+    if (cnt) cnt.textContent = adminCustomFolders.length;
+    if (!box) return;
+    box.innerHTML = adminCustomFolders.length ? adminCustomFolders.map((f, idx) => `
+      <div class="info-item" style="font-size:12.5px;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:20px;">${f.image ? '🖼️' : (f.icon || '📁')}</span>
+          <div>
+            <strong>${f.title}</strong> <span class="badge-ok">${f.track || 'ALL'}</span>
+          </div>
+        </div>
+        <button type="button" class="btn-sm" style="background:var(--danger-soft);color:var(--danger);" onclick="deleteCustomFolderAdmin(${idx})">Delete</button>
+      </div>
+    `).join('') : '<div style="font-size:12px;color:var(--muted);text-align:center;">কোনো কাস্টম ফোল্ডার নেই।</div>';
+  }
+
+  function createCustomFolderAdmin(e) {
+    e.preventDefault();
+    const title = document.getElementById('cfTitle').value.trim();
+    const track = document.getElementById('cfTrack').value;
+    const icon = document.getElementById('cfIcon').value.trim() || '📁';
+    const image = document.getElementById('cfImg').value.trim();
+    if (!title) return;
+    const newFolder = { id: 'FLD_' + Date.now(), title, track, icon, image };
+    adminCustomFolders.push(newFolder);
+    localStorage.setItem('ucc_custom_folders', JSON.stringify(adminCustomFolders));
+    if (navigator.onLine) {
+      fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ action: 'addCustomFolder', folder: newFolder })
+      }).catch(() => {});
+    }
+    e.target.reset();
+    document.getElementById('cfIcon').value = '📁';
+    renderCustomFoldersAdmin();
+    toast('✅ নতুন ফোল্ডার তৈরি হয়েছে!');
+  }
+
+  function deleteCustomFolderAdmin(idx) {
+    adminCustomFolders.splice(idx, 1);
+    localStorage.setItem('ucc_custom_folders', JSON.stringify(adminCustomFolders));
+    renderCustomFoldersAdmin();
+    toast('Folder deleted.');
+  }
+
+  function renderStudentUsageMonitor() {
+    const box = document.getElementById('studentUsageList');
+    if (!box) return;
+    const usageMap = JSON.parse(localStorage.getItem('ucc_st_usage_map') || '{}');
+    const items = Object.values(usageMap);
+    if (!items.length) {
+      box.innerHTML = '<div style="font-size:12px;color:var(--muted);text-align:center;padding:8px 0;">স্টুডেন্টরা অ্যাপ ব্যবহার করলে তাদের ব্যবহারের সময় এখানে দেখাবে।</div>';
+      return;
+    }
+    items.sort((a, b) => (Number(b.seconds) || 0) - (Number(a.seconds) || 0));
+    box.innerHTML = items.map(u => {
+      const sec = Number(u.seconds) || 0;
+      const mins = Math.floor(sec / 60);
+      const hrs = Math.floor(mins / 60);
+      const timeStr = hrs > 0 ? `${hrs}h ${mins % 60}m` : `${mins}m ${sec % 60}s`;
+      return `
+      <div class="info-item" style="font-size:12.5px;">
+        <div>
+          <strong>${u.studentName || u.studentId}</strong> <span style="color:var(--muted);">(${u.studentId} • ${u.studentClass || ''})</span><br>
+          <span style="color:var(--muted);font-size:11px;">Page: ${u.currentPage || 'home'} • Last: ${u.lastActive || '-'}</span>
+        </div>
+        <span class="badge-ok">⏱️ ${timeStr}</span>
+      </div>`;
+    }).join('');
+  }
+
+  const _origCreateBatchAdm = createCompetitiveBatchAdmin;
+  createCompetitiveBatchAdmin = function(e) {
+    const expInp = document.getElementById('cbExpiry');
+    const expVal = expInp ? expInp.value : '';
+    _origCreateBatchAdm(e);
+    if (expVal && adminCompBatches.length) {
+      adminCompBatches[adminCompBatches.length - 1].expiresAt = expVal;
+      localStorage.setItem('ucc_admin_comp_batches', JSON.stringify(adminCompBatches));
+    }
+  };
+
+  const _prevRenderContentTab2 = renderContentTab;
+  renderContentTab = function() {
+    _prevRenderContentTab2();
+    renderCustomFoldersAdmin();
+    renderStudentUsageMonitor();
+  };
+
+
+  // ===== V21: MERGE SELF-SIGNED-UP STUDENTS & GRANT FREE ACCESS =====
+  function mergeSelfSignupStudentsIntoMain() {
+    const signups = JSON.parse(localStorage.getItem('ucc_signup_students') || '[]');
+    if (!Array.isArray(signups) || !signups.length) return;
+    signups.forEach(ns => {
+      if (!ns || !ns.id) return;
+      const exists = students.some(s => String(s.id).toUpperCase() === String(ns.id).toUpperCase());
+      if (!exists) {
+        students.push({
+          ...ns,
+          studentClass: CLASSES.includes(ns.studentClass) ? ns.studentClass : 'Class 10',
+          months: ns.months || {},
+          totalDue: Number(ns.totalDue) || 0
+        });
+      }
+    });
+    saveLocal();
+  }
+
+  function grantFreeAccessToStudent(studentId) {
+    const freeMap = JSON.parse(localStorage.getItem('ucc_free_grants') || '{}');
+    const sidU = String(studentId || '').toUpperCase();
+    freeMap[sidU] = ['ALL'];
+    localStorage.setItem('ucc_free_grants', JSON.stringify(freeMap));
+    toast(`✅ ${sidU}-কে ফ্রি ভিডিও/কোর্স অ্যাক্সেস দেওয়া হয়েছে!`);
+  }
+
+  const _origApplyPayloadV21 = applyServerPayload;
+  applyServerPayload = function(data, forceRender = false) {
+    _origApplyPayloadV21(data, forceRender);
+    mergeSelfSignupStudentsIntoMain();
+  };
+
+  const _origOpenProfileV21 = openProfile;
+  openProfile = function(id, keepReceipt = false) {
+    _origOpenProfileV21(id, keepReceipt);
+    const s = students.find(x => x.id === id);
+    if (!s) return;
+    const sheet = document.querySelector('#profileModal .modal-sheet');
+    if (sheet && !document.querySelector('#freeGrantBtnWrap')) {
+      const wrap = document.createElement('div');
+      wrap.id = 'freeGrantBtnWrap';
+      wrap.style.marginTop = '10px';
+      wrap.innerHTML = `<button type="button" class="btn" style="border-color:var(--success);color:var(--success);" onclick="grantFreeAccessToStudent('${s.id}')">🎁 Grant Free Video / Batch Access (${s.id})</button>`;
+      sheet.appendChild(wrap);
+    }
+  };
+
+  // Run once on load
+  mergeSelfSignupStudentsIntoMain();
+
+
+  // ===== V24: REUSE EXISTING SUBJECT & CHAPTER FOLDERS WITHOUT DUPLICATES =====
+  function syncExistingChapterSuggestions() {
+    const dl = document.getElementById('existingChapterDatalist');
+    const chips = document.getElementById('quickFolderChips');
+    if (!dl || !chips) return;
+    const chaps = Array.from(new Set(
+      (classesContent || []).map(x => String(x.chapter || '').trim()).filter(Boolean)
+    ));
+    dl.innerHTML = chaps.map(ch => `<option value="${ch.replace(/"/g, '&quot;')}"></option>`).join('');
+    chips.innerHTML = chaps.slice(0, 8).map(ch => `
+      <button type="button" class="btn-sm" style="background:var(--accent-soft);color:var(--accent-light);border:1px solid var(--accent-border);" onclick="document.getElementById('cChap').value='${ch.replace(/'/g, "\'")}';toast('Folder selected: ${ch.replace(/'/g, "\'")}');">📂 ${ch}</button>
+    `).join('');
+  }
+
+  const _origRenderContentV24 = renderContentTab;
+  renderContentTab = function() {
+    _origRenderContentV24();
+    syncExistingChapterSuggestions();
+  };
+
+
+  // ===== V26: SEND FREE / PREMIUM ACCESS FLAG WHEN UPLOADING CONTENT =====
+  const _origPostContentV26 = postContent;
+  postContent = async function(e) {
+    const accEl = document.getElementById('cAccessType');
+    const accVal = accEl ? accEl.value : 'FREE';
+    const titleEl = document.getElementById('cTitle');
+    if (accVal === 'PREMIUM' && titleEl && !titleEl.value.toLowerCase().includes('premium')) {
+      titleEl.value = titleEl.value.trim() + ' [Premium]';
+    }
+    return _origPostContentV26(e);
+  };
+
+
+  // ===== V30: CLASS & EXAM ROUTINE MANAGER + PDF/PNG EXPORT =====
+  const ROUTINE_TAG = '[ROUTINE]';
+
+  function parseRoutineFromNotice(n) {
+    if (!n || !String(n.title || '').startsWith(ROUTINE_TAG)) return null;
+    const tParts = String(n.title).slice(ROUTINE_TAG.length).trim().split('|').map(x => x.trim());
+    const mParts = String(n.message || '').split('|').map(x => x.trim());
+    return {
+      id: n.id,
+      targetClass: n.targetClass || 'ALL',
+      type: tParts[0] || 'Class Routine',
+      day: tParts[1] || '-',
+      time: tParts[2] || '-',
+      subject: mParts[0] || '-',
+      teacher: mParts[1] || '-',
+      date: n.date || ''
+    };
+  }
+
+  function getAdminRoutines(filterCls = 'ALL') {
+    const fromNotices = (notices || []).map(parseRoutineFromNotice).filter(Boolean);
+    const localOnly = JSON.parse(localStorage.getItem('ucc_local_routines') || '[]');
+    const merged = [...fromNotices];
+    localOnly.forEach(lr => {
+      if (!merged.some(x => x.day === lr.day && x.time === lr.time && x.subject === lr.subject && x.targetClass === lr.targetClass)) {
+        merged.push(lr);
+      }
+    });
+    if (filterCls && filterCls !== 'ALL') {
+      return merged.filter(r => r.targetClass === filterCls || r.targetClass === 'ALL');
+    }
+    return merged;
+  }
+
+  function initRoutineDropdowns() {
+    const clsOpts = '<option value="ALL">All Classes</option>' + CLASSES.map(c => `<option value="${c}">${c}</option>`).join('');
+    const rtCls = document.getElementById('rtClass');
+    if (rtCls && !rtCls.options.length) rtCls.innerHTML = clsOpts;
+    const rtFilt = document.getElementById('rtFilterClass');
+    if (rtFilt && !rtFilt.options.length) rtFilt.innerHTML = clsOpts;
+  }
+
+  function renderAdminRoutinePage() {
+    initRoutineDropdowns();
+    const filt = (document.getElementById('rtFilterClass') && document.getElementById('rtFilterClass').value) || 'ALL';
+    const list = getAdminRoutines(filt);
+    const cntEl = document.getElementById('rtCount');
+    if (cntEl) cntEl.textContent = list.length;
+    const pillEl = document.getElementById('sideRoutinePill');
+    if (pillEl) pillEl.textContent = getAdminRoutines('ALL').length;
+
+    const box = document.getElementById('adminRoutineList');
+    if (!box) return;
+    if (!list.length) {
+      box.innerHTML = '<div style="font-size:12.5px;color:var(--muted);text-align:center;padding:12px 0;">এখনো কোনো রুটিন যুক্ত করা হয়নি।</div>';
+      return;
+    }
+    box.innerHTML = list.map(r => `
+      <div class="info-item" style="align-items:flex-start;font-size:12.5px;">
+        <div style="flex:1;min-width:0;">
+          <strong style="color:var(--accent-light);">${r.day}</strong> • <span style="font-weight:700;">${r.time}</span>
+          <span class="badge-ok" style="font-size:10px;padding:2px 7px;margin-left:4px;">${r.targetClass}</span><br>
+          <strong>${r.subject}</strong>${r.teacher && r.teacher !== '-' ? ` <span style="color:var(--text-2);">(${r.teacher})</span>` : ''}
+          <div style="font-size:10.5px;color:var(--muted);margin-top:2px;">${r.type}</div>
+        </div>
+        <button type="button" class="btn-sm" style="background:var(--danger-soft);color:var(--danger);flex-shrink:0;" onclick="deleteRoutineItem('${r.id}')">Delete</button>
+      </div>
+    `).join('');
+  }
+
+  async function postRoutineItem(e) {
+    e.preventDefault();
+    const targetClass = document.getElementById('rtClass').value || 'ALL';
+    const type = document.getElementById('rtType').value || 'Class Routine';
+    const day = document.getElementById('rtDay').value.trim();
+    const time = document.getElementById('rtTime').value.trim();
+    const subject = document.getElementById('rtSub').value.trim();
+    const teacher = document.getElementById('rtTeacher').value.trim() || '-';
+    if (!day || !time || !subject) return;
+
+    const btn = document.getElementById('rtSubmitBtn');
+    btn.disabled = true; btn.textContent = 'Publishing...';
+
+    const title = `${ROUTINE_TAG} ${type} | ${day} | ${time}`;
+    const message = `${subject} | ${teacher}`;
+
+    try {
+      if (navigator.onLine) {
+        const res = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ action: 'addNotice', targetClass, title, message, link: '' })
+        });
+        const data = await res.json();
+        if (data && data.status === 'ok') {
+          applyServerPayload(data);
+          e.target.reset();
+          renderAdminRoutinePage();
+          toast('✅ রুটিন পাবলিশ হয়েছে! স্টুডেন্ট অ্যাপে দেখা যাবে।');
+          return;
+        }
+      }
+      // Offline / fallback local save
+      const localList = JSON.parse(localStorage.getItem('ucc_local_routines') || '[]');
+      localList.push({ id: 'LOC_RT_' + Date.now(), targetClass, type, day, time, subject, teacher, date: todayStr() });
+      localStorage.setItem('ucc_local_routines', JSON.stringify(localList));
+      e.target.reset();
+      renderAdminRoutinePage();
+      toast('✅ রুটিন সেভ হয়েছে!');
+    } catch (err) {
+      toast('Network error! আবার চেষ্টা করুন।');
+    } finally {
+      btn.disabled = false; btn.textContent = '➕ Publish Routine to Student App';
+    }
+  }
+
+  async function deleteRoutineItem(id) {
+    if (!confirm('এই রুটিন এন্ট্রিটি ডিলিট করবেন?')) return;
+    if (String(id).startsWith('LOC_RT_')) {
+      const localList = JSON.parse(localStorage.getItem('ucc_local_routines') || '[]').filter(x => x.id !== id);
+      localStorage.setItem('ucc_local_routines', JSON.stringify(localList));
+      renderAdminRoutinePage();
+      toast('Routine deleted.');
+      return;
+    }
+    await deleteNotice(id);
+    renderAdminRoutinePage();
+  }
+
+  function buildRoutineCanvas(list, clsLabel) {
+    const W = 1000;
+    const rowH = 54;
+    const headerH = 190;
+    const footerH = 70;
+    const H = Math.max(560, headerH + 54 + (Math.max(1, list.length) * rowH) + footerH);
+    const c = document.createElement('canvas');
+    c.width = W; c.height = H;
+    const ctx = c.getContext('2d');
+
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, W, H);
+    ctx.strokeStyle = '#0f766e';
+    ctx.lineWidth = 6;
+    ctx.strokeRect(14, 14, W - 28, H - 28);
+
+    // Header
+    ctx.fillStyle = '#0f766e';
+    ctx.fillRect(16, 16, W - 32, 136);
+    ctx.fillStyle = '#d4af37';
+    ctx.fillRect(16, 150, W - 32, 5);
+
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 34px sans-serif';
+    ctx.fillText('U.C.C INSTITUTE', W / 2, 68);
+    ctx.font = 'bold 20px sans-serif';
+    ctx.fillStyle = '#fde68a';
+    ctx.fillText(`CLASS / EXAM ROUTINE • ${clsLabel === 'ALL' ? 'ALL CLASSES' : clsLabel.toUpperCase()}`, W / 2, 104);
+    ctx.font = '16px sans-serif';
+    ctx.fillStyle = '#e2e8f0';
+    ctx.fillText('Penchakola, Raipur, Bankura • Session 2027', W / 2, 134);
+
+    // Table Header
+    const cols = [40, 210, 410, 660, 840];
+    const y0 = headerH;
+    ctx.fillStyle = '#0f172a';
+    ctx.fillRect(30, y0, W - 60, 46);
+    ctx.fillStyle = '#ffffff';
+    ctx.textAlign = 'left';
+    ctx.font = 'bold 18px sans-serif';
+    ctx.fillText('Day / Date', cols[0], y0 + 29);
+    ctx.fillText('Time', cols[1], y0 + 29);
+    ctx.fillText('Subject', cols[2], y0 + 29);
+    ctx.fillText('Teacher', cols[3], y0 + 29);
+    ctx.fillText('Class', cols[4], y0 + 29);
+
+    let y = y0 + 46;
+    if (!list.length) {
+      ctx.fillStyle = '#64748b';
+      ctx.textAlign = 'center';
+      ctx.font = '18px sans-serif';
+      ctx.fillText('No routine entries available.', W / 2, y + 36);
+    } else {
+      list.forEach((r, idx) => {
+        ctx.fillStyle = idx % 2 === 0 ? '#ffffff' : '#f0fdfa';
+        ctx.fillRect(30, y, W - 60, rowH);
+        ctx.strokeStyle = '#cbd5e1';
+        ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(30, y + rowH); ctx.lineTo(W - 30, y + rowH); ctx.stroke();
+
+        ctx.textAlign = 'left';
+        ctx.fillStyle = '#0f172a';
+        ctx.font = 'bold 17px sans-serif';
+        ctx.fillText(String(r.day || '-').slice(0, 16), cols[0], y + 33);
+        ctx.fillStyle = '#0f766e';
+        ctx.font = 'bold 16px sans-serif';
+        ctx.fillText(String(r.time || '-').slice(0, 18), cols[1], y + 33);
+        ctx.fillStyle = '#0f172a';
+        ctx.font = 'bold 17px sans-serif';
+        ctx.fillText(String(r.subject || '-').slice(0, 22), cols[2], y + 33);
+        ctx.fillStyle = '#334155';
+        ctx.font = '16px sans-serif';
+        ctx.fillText(String(r.teacher || '-').slice(0, 16), cols[3], y + 33);
+        ctx.fillStyle = '#475569';
+        ctx.font = 'bold 15px sans-serif';
+        ctx.fillText(String(r.targetClass || 'ALL').slice(0, 10), cols[4], y + 33);
+        y += rowH;
+      });
+    }
+
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#64748b';
+    ctx.font = '14px sans-serif';
+    ctx.fillText('U.C.C Institute • Contact: 8016972121 / 8159980707', W / 2, H - 30);
+    return c;
+  }
+
+  function downloadAdminRoutinePng() {
+    const filt = (document.getElementById('rtFilterClass') && document.getElementById('rtFilterClass').value) || 'ALL';
+    const list = getAdminRoutines(filt);
+    if (!list.length) { toast('ডাউনলোড করার মতো কোনো রুটিন নেই!'); return; }
+    const c = buildRoutineCanvas(list, filt);
+    const a = document.createElement('a');
+    a.download = `UCC_Routine_${filt.replace(/\s+/g, '_')}.png`;
+    a.href = c.toDataURL('image/png');
+    a.click();
+    toast('✅ Routine PNG ডাউনলোড হয়েছে!');
+  }
+
+  function downloadAdminRoutinePdf() {
+    const filt = (document.getElementById('rtFilterClass') && document.getElementById('rtFilterClass').value) || 'ALL';
+    const list = getAdminRoutines(filt);
+    if (!list.length) { toast('ডাউনলোড করার মতো কোনো রুটিন নেই!'); return; }
+    const c = buildRoutineCanvas(list, filt);
+    if (window.jspdf && window.jspdf.jsPDF) {
+      const doc = new window.jspdf.jsPDF({ orientation: 'p', unit: 'pt', format: 'a4' });
+      const pdfW = doc.internal.pageSize.getWidth();
+      const imgW = pdfW - 48;
+      const imgH = imgW * (c.height / c.width);
+      doc.addImage(c.toDataURL('image/jpeg', 0.94), 'JPEG', 24, 24, imgW, Math.min(imgH, doc.internal.pageSize.getHeight() - 48));
+      doc.save(`UCC_Routine_${filt.replace(/\s+/g, '_')}.pdf`);
+      toast('✅ Routine PDF ডাউনলোড হয়েছে!');
+    } else {
+      downloadAdminRoutinePng();
+    }
+  }
+
+  // Hook into page routing, permissions & notice rendering
+  PAGE_TITLES.routine = 'Class & Exam Routine';
+  const _origCanAccessV30 = canAccessPage;
+  canAccessPage = function(name) {
+    if (name === 'routine') return true;
+    return _origCanAccessV30(name);
+  };
+  const _origOpenPageAdmV30 = openPage;
+  openPage = function(name, btn) {
+    _origOpenPageAdmV30(name, btn);
+    if (name === 'routine') renderAdminRoutinePage();
+  };
+  const _origRenderContentV30 = renderContentTab;
+  renderContentTab = function() {
+    _origRenderContentV30();
+    // Filter out [ROUTINE] items from regular notices list
+    const normalNotices = (notices || []).filter(n => !String(n.title || '').startsWith(ROUTINE_TAG));
+    const nCnt = document.getElementById('notCount');
+    if (nCnt) nCnt.textContent = normalNotices.length;
+    const nBox = document.getElementById('adminNoticesList');
+    if (nBox) {
+      nBox.innerHTML = normalNotices.length
+        ? normalNotices.slice().reverse().map(n => `<div class="info-item"><div style="font-size:12.5px;"><strong>${n.title}</strong> <span style="color:var(--accent-light);font-weight:700;">[${n.targetClass}]</span><br><span style="color:var(--text-2);">${n.message}</span><br><span style="color:var(--muted);font-size:11px;">${n.date}</span></div>${isSuperAdmin() ? `<button class="btn-sm" style="background:var(--danger-soft);color:var(--danger);" onclick="deleteNotice('${n.id}')">Delete</button>` : ''}</div>`).join('')
+        : '<div style="font-size:12.5px;color:var(--muted);">No notices posted yet.</div>';
+    }
+    const pillEl = document.getElementById('sideRoutinePill');
+    if (pillEl) pillEl.textContent = getAdminRoutines('ALL').length;
+  };
 
 </script>
 </body>
