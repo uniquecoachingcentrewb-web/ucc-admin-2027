@@ -1084,34 +1084,51 @@
   <!-- SIDEBAR PAGE R: CLASS & EXAM ROUTINE -->
   <div id="page-routine" class="page">
     <div class="card">
-      <div class="card-title">📅 Add Class / Exam Routine</div>
-      <form id="routineForm" onsubmit="postRoutineItem(event)">
+      <div class="card-title">📅 7-Day Weekly Routine (প্রতিদিন 3টি ক্লাস • সোম–রবি)</div>
+      <form id="routineForm" onsubmit="saveWeeklyRoutine(event)">
         <div class="row-2">
-          <div class="form-group"><label>Target Class *</label><select id="rtClass" required></select></div>
-          <div class="form-group"><label>Routine Type *</label><select id="rtType"><option value="Class Routine">Class Routine</option><option value="Exam Routine">Exam Routine</option></select></div>
+          <div class="form-group">
+            <label>Select Class *</label>
+            <select id="rtClass" required onchange="loadRoutineIntoEditor()"></select>
+          </div>
+          <div class="form-group">
+            <label>Routine Title</label>
+            <input type="text" id="rtTitleNote" value="Regular Class Routine" placeholder="e.g. Regular Class Routine">
+          </div>
         </div>
-        <div class="row-2">
-          <div class="form-group"><label>Day / Date *</label><input type="text" id="rtDay" required placeholder="e.g. Monday / 25 Nov"></div>
-          <div class="form-group"><label>Time *</label><input type="text" id="rtTime" required placeholder="e.g. 7:00 AM - 8:30 AM"></div>
+
+        <div style="font-size:11.5px;font-weight:800;color:var(--accent-light);margin:4px 0 6px;">⏰ প্রতিদিন 3টি ক্লাসের সময় (3 Periods Time):</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:12px;">
+          <div>
+            <label style="font-size:10.5px;">1st Class Time</label>
+            <input type="text" id="rtT1" value="6:30 - 7:30" style="padding:8px;font-size:12px;" required>
+          </div>
+          <div>
+            <label style="font-size:10.5px;">2nd Class Time</label>
+            <input type="text" id="rtT2" value="7:30 - 8:30" style="padding:8px;font-size:12px;" required>
+          </div>
+          <div>
+            <label style="font-size:10.5px;">3rd Class Time</label>
+            <input type="text" id="rtT3" value="8:30 - 9:30" style="padding:8px;font-size:12px;" required>
+          </div>
         </div>
-        <div class="row-2">
-          <div class="form-group"><label>Subject *</label><input type="text" id="rtSub" required placeholder="e.g. Mathematics"></div>
-          <div class="form-group"><label>Teacher / Note</label><input type="text" id="rtTeacher" placeholder="e.g. Pralay Sir"></div>
-        </div>
-        <button type="submit" id="rtSubmitBtn" class="btn btn-accent">➕ Publish Routine to Student App</button>
+
+        <div style="font-size:11.5px;font-weight:800;color:var(--accent-light);margin-bottom:6px;">📚 7 দিনের রুটিন (Monday – Sunday • প্রতিদিন 3টি ক্লাস):</div>
+        <div id="rtDaysEditor"></div>
+
+        <button type="submit" id="rtSubmitBtn" class="btn btn-accent" style="margin-top:8px;">💾 Save &amp; Publish 7-Day Routine</button>
       </form>
     </div>
 
     <div class="card">
       <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
-        <div class="card-title" style="margin-bottom:0;">📋 Published Routine (<span id="rtCount">0</span>)</div>
-        <select id="rtFilterClass" onchange="renderAdminRoutinePage()" style="width:auto;padding:6px 10px;font-size:12px;font-weight:700;"></select>
+        <div class="card-title" style="margin-bottom:0;">📋 Live Preview &amp; Download (<span id="rtCount">0</span> Classes Set)</div>
       </div>
       <div class="row-2" style="margin-bottom:12px;">
-        <button type="button" class="btn btn-accent" style="padding:9px;font-size:12px;" onclick="downloadAdminRoutinePdf()">📥 Download PDF</button>
-        <button type="button" class="btn" style="padding:9px;font-size:12px;" onclick="downloadAdminRoutinePng()">🖼️ Save PNG</button>
+        <button type="button" class="btn btn-accent" style="padding:9.5px;font-size:12px;" onclick="downloadAdminRoutinePdf()">📥 Download PDF</button>
+        <button type="button" class="btn" style="padding:9.5px;font-size:12px;" onclick="downloadAdminRoutinePng()">🖼️ Save PNG</button>
       </div>
-      <div id="adminRoutineList"></div>
+      <div id="adminRoutineList" style="overflow-x:auto;"></div>
     </div>
   </div>
 
@@ -1482,7 +1499,7 @@
 <script>
   // Auto-clear old Service Worker cache whenever a new UI build is deployed
   (function() {
-    const UI_BUILD = 'ucc_teacher_v30_routine_pdf_png';
+    const UI_BUILD = 'ucc_teacher_v31_7day_3class_routine';
     try {
       if (localStorage.getItem('ucc_ui_build') !== UI_BUILD) {
         localStorage.setItem('ucc_ui_build', UI_BUILD);
@@ -4909,141 +4926,170 @@
   };
 
 
-  // ===== V30: CLASS & EXAM ROUTINE MANAGER + PDF/PNG EXPORT =====
-  const ROUTINE_TAG = '[ROUTINE]';
+  // ===== V31: 7-DAY x 3-CLASS WEEKLY ROUTINE MANAGER + GRID PDF/PNG =====
+  const ROUTINE_TAG = '[ROUTINE_7X3]';
+  const WEEK_DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
-  function parseRoutineFromNotice(n) {
-    if (!n || !String(n.title || '').startsWith(ROUTINE_TAG)) return null;
-    const tParts = String(n.title).slice(ROUTINE_TAG.length).trim().split('|').map(x => x.trim());
-    const mParts = String(n.message || '').split('|').map(x => x.trim());
-    return {
-      id: n.id,
-      targetClass: n.targetClass || 'ALL',
-      type: tParts[0] || 'Class Routine',
-      day: tParts[1] || '-',
-      time: tParts[2] || '-',
-      subject: mParts[0] || '-',
-      teacher: mParts[1] || '-',
-      date: n.date || ''
-    };
-  }
-
-  function getAdminRoutines(filterCls = 'ALL') {
-    const fromNotices = (notices || []).map(parseRoutineFromNotice).filter(Boolean);
-    const localOnly = JSON.parse(localStorage.getItem('ucc_local_routines') || '[]');
-    const merged = [...fromNotices];
-    localOnly.forEach(lr => {
-      if (!merged.some(x => x.day === lr.day && x.time === lr.time && x.subject === lr.subject && x.targetClass === lr.targetClass)) {
-        merged.push(lr);
-      }
+  function getSavedWeeklyRoutinesMap() {
+    const map = {};
+    // 1. From local storage
+    try {
+      const loc = JSON.parse(localStorage.getItem('ucc_weekly_routines_v31') || '{}');
+      Object.assign(map, loc);
+    } catch (e) {}
+    // 2. From synced server notices (latest wins per class)
+    (notices || []).forEach(n => {
+      if (!n || !String(n.title || '').startsWith(ROUTINE_TAG)) return;
+      try {
+        const parsed = JSON.parse(n.message || '{}');
+        const cls = n.targetClass || parsed.targetClass || 'Class 5';
+        map[cls] = { ...parsed, targetClass: cls, noticeId: n.id };
+      } catch (e) {}
     });
-    if (filterCls && filterCls !== 'ALL') {
-      return merged.filter(r => r.targetClass === filterCls || r.targetClass === 'ALL');
-    }
-    return merged;
+    return map;
   }
 
-  function initRoutineDropdowns() {
-    const clsOpts = '<option value="ALL">All Classes</option>' + CLASSES.map(c => `<option value="${c}">${c}</option>`).join('');
-    const rtCls = document.getElementById('rtClass');
-    if (rtCls && !rtCls.options.length) rtCls.innerHTML = clsOpts;
-    const rtFilt = document.getElementById('rtFilterClass');
-    if (rtFilt && !rtFilt.options.length) rtFilt.innerHTML = clsOpts;
-  }
-
-  function renderAdminRoutinePage() {
-    initRoutineDropdowns();
-    const filt = (document.getElementById('rtFilterClass') && document.getElementById('rtFilterClass').value) || 'ALL';
-    const list = getAdminRoutines(filt);
-    const cntEl = document.getElementById('rtCount');
-    if (cntEl) cntEl.textContent = list.length;
-    const pillEl = document.getElementById('sideRoutinePill');
-    if (pillEl) pillEl.textContent = getAdminRoutines('ALL').length;
-
-    const box = document.getElementById('adminRoutineList');
-    if (!box) return;
-    if (!list.length) {
-      box.innerHTML = '<div style="font-size:12.5px;color:var(--muted);text-align:center;padding:12px 0;">এখনো কোনো রুটিন যুক্ত করা হয়নি।</div>';
-      return;
-    }
-    box.innerHTML = list.map(r => `
-      <div class="info-item" style="align-items:flex-start;font-size:12.5px;">
-        <div style="flex:1;min-width:0;">
-          <strong style="color:var(--accent-light);">${r.day}</strong> • <span style="font-weight:700;">${r.time}</span>
-          <span class="badge-ok" style="font-size:10px;padding:2px 7px;margin-left:4px;">${r.targetClass}</span><br>
-          <strong>${r.subject}</strong>${r.teacher && r.teacher !== '-' ? ` <span style="color:var(--text-2);">(${r.teacher})</span>` : ''}
-          <div style="font-size:10.5px;color:var(--muted);margin-top:2px;">${r.type}</div>
+  function buildAdminDaysEditorHtml() {
+    const ed = document.getElementById('rtDaysEditor');
+    if (!ed || ed.dataset.built === '1') return;
+    ed.dataset.built = '1';
+    ed.innerHTML = WEEK_DAYS.map((day, i) => `
+      <div style="background:var(--bg-subcard);border:1px solid var(--border);border-radius:12px;padding:9px 10px;margin-bottom:8px;">
+        <div style="font-size:12px;font-weight:800;color:var(--accent-light);margin-bottom:6px;">${i + 1}. ${day}</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;">
+          <input type="text" id="rt_${i}_0" placeholder="1st Class" style="padding:7px 8px;font-size:12px;">
+          <input type="text" id="rt_${i}_1" placeholder="2nd Class" style="padding:7px 8px;font-size:12px;">
+          <input type="text" id="rt_${i}_2" placeholder="3rd Class" style="padding:7px 8px;font-size:12px;">
         </div>
-        <button type="button" class="btn-sm" style="background:var(--danger-soft);color:var(--danger);flex-shrink:0;" onclick="deleteRoutineItem('${r.id}')">Delete</button>
       </div>
     `).join('');
   }
 
-  async function postRoutineItem(e) {
-    e.preventDefault();
-    const targetClass = document.getElementById('rtClass').value || 'ALL';
-    const type = document.getElementById('rtType').value || 'Class Routine';
-    const day = document.getElementById('rtDay').value.trim();
-    const time = document.getElementById('rtTime').value.trim();
-    const subject = document.getElementById('rtSub').value.trim();
-    const teacher = document.getElementById('rtTeacher').value.trim() || '-';
-    if (!day || !time || !subject) return;
+  function initRoutineDropdowns() {
+    const rtCls = document.getElementById('rtClass');
+    if (rtCls && !rtCls.options.length) {
+      rtCls.innerHTML = CLASSES.map(c => `<option value="${c}">${c}</option>`).join('');
+      rtCls.value = 'Class 5';
+    }
+    buildAdminDaysEditorHtml();
+  }
 
+  function loadRoutineIntoEditor() {
+    initRoutineDropdowns();
+    const cls = document.getElementById('rtClass').value;
+    const map = getSavedWeeklyRoutinesMap();
+    const r = map[cls];
+    document.getElementById('rtTitleNote').value = (r && r.title) || 'Regular Class Routine';
+    document.getElementById('rtT1').value = (r && r.times && r.times[0]) || '6:30 - 7:30';
+    document.getElementById('rtT2').value = (r && r.times && r.times[1]) || '7:30 - 8:30';
+    document.getElementById('rtT3').value = (r && r.times && r.times[2]) || '8:30 - 9:30';
+    WEEK_DAYS.forEach((day, i) => {
+      const row = (r && r.days && r.days[day]) || ['', '', ''];
+      for (let p = 0; p < 3; p++) {
+        const inp = document.getElementById(`rt_${i}_${p}`);
+        if (inp) inp.value = row[p] || '';
+      }
+    });
+    renderAdminRoutinePreview();
+  }
+
+  function collectEditorRoutineObj() {
+    const targetClass = document.getElementById('rtClass').value || 'Class 5';
+    const title = document.getElementById('rtTitleNote').value.trim() || 'Regular Class Routine';
+    const times = [
+      document.getElementById('rtT1').value.trim() || '1st Class',
+      document.getElementById('rtT2').value.trim() || '2nd Class',
+      document.getElementById('rtT3').value.trim() || '3rd Class'
+    ];
+    const days = {};
+    WEEK_DAYS.forEach((day, i) => {
+      days[day] = [
+        (document.getElementById(`rt_${i}_0`).value || '').trim() || '-',
+        (document.getElementById(`rt_${i}_1`).value || '').trim() || '-',
+        (document.getElementById(`rt_${i}_2`).value || '').trim() || '-'
+      ];
+    });
+    return { targetClass, title, times, days };
+  }
+
+  function renderAdminRoutinePreview() {
+    const map = getSavedWeeklyRoutinesMap();
+    const savedCount = Object.keys(map).length;
+    const cntEl = document.getElementById('rtCount');
+    if (cntEl) cntEl.textContent = savedCount;
+    const pillEl = document.getElementById('sideRoutinePill');
+    if (pillEl) pillEl.textContent = savedCount;
+
+    const r = collectEditorRoutineObj();
+    const box = document.getElementById('adminRoutineList');
+    if (!box) return;
+    box.innerHTML = `
+      <table style="width:100%;border-collapse:collapse;font-size:11.5px;min-width:420px;">
+        <thead>
+          <tr style="background:var(--accent-grad);color:var(--accent-text);">
+            <th style="padding:8px 6px;border:1px solid var(--border);text-align:left;">Day</th>
+            <th style="padding:8px 6px;border:1px solid var(--border);text-align:center;">1st<br><span style="font-size:10px;opacity:0.9;">${r.times[0]}</span></th>
+            <th style="padding:8px 6px;border:1px solid var(--border);text-align:center;">2nd<br><span style="font-size:10px;opacity:0.9;">${r.times[1]}</span></th>
+            <th style="padding:8px 6px;border:1px solid var(--border);text-align:center;">3rd<br><span style="font-size:10px;opacity:0.9;">${r.times[2]}</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          ${WEEK_DAYS.map(day => {
+            const c = r.days[day] || ['-', '-', '-'];
+            return `<tr>
+              <td style="padding:7px 6px;border:1px solid var(--border);font-weight:800;color:var(--accent-light);">${day}</td>
+              <td style="padding:7px 6px;border:1px solid var(--border);text-align:center;">${c[0]}</td>
+              <td style="padding:7px 6px;border:1px solid var(--border);text-align:center;">${c[1]}</td>
+              <td style="padding:7px 6px;border:1px solid var(--border);text-align:center;">${c[2]}</td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+    `;
+  }
+
+  function renderAdminRoutinePage() {
+    loadRoutineIntoEditor();
+  }
+
+  async function saveWeeklyRoutine(e) {
+    e.preventDefault();
+    const r = collectEditorRoutineObj();
     const btn = document.getElementById('rtSubmitBtn');
     btn.disabled = true; btn.textContent = 'Publishing...';
 
-    const title = `${ROUTINE_TAG} ${type} | ${day} | ${time}`;
-    const message = `${subject} | ${teacher}`;
+    // Save locally immediately
+    const loc = JSON.parse(localStorage.getItem('ucc_weekly_routines_v31') || '{}');
+    loc[r.targetClass] = r;
+    localStorage.setItem('ucc_weekly_routines_v31', JSON.stringify(loc));
 
     try {
       if (navigator.onLine) {
         const res = await fetch(API_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify({ action: 'addNotice', targetClass, title, message, link: '' })
+          body: JSON.stringify({
+            action: 'addNotice',
+            targetClass: r.targetClass,
+            title: `${ROUTINE_TAG} ${r.targetClass}`,
+            message: JSON.stringify(r),
+            link: ''
+          })
         });
         const data = await res.json();
-        if (data && data.status === 'ok') {
-          applyServerPayload(data);
-          e.target.reset();
-          renderAdminRoutinePage();
-          toast('✅ রুটিন পাবলিশ হয়েছে! স্টুডেন্ট অ্যাপে দেখা যাবে।');
-          return;
-        }
+        if (data && data.status === 'ok') applyServerPayload(data);
       }
-      // Offline / fallback local save
-      const localList = JSON.parse(localStorage.getItem('ucc_local_routines') || '[]');
-      localList.push({ id: 'LOC_RT_' + Date.now(), targetClass, type, day, time, subject, teacher, date: todayStr() });
-      localStorage.setItem('ucc_local_routines', JSON.stringify(localList));
-      e.target.reset();
-      renderAdminRoutinePage();
-      toast('✅ রুটিন সেভ হয়েছে!');
+      renderAdminRoutinePreview();
+      toast(`✅ ${r.targetClass}-এর 7 দিনের (প্রতিদিন 3টি ক্লাস) রুটিন পাবলিশ হয়েছে!`);
     } catch (err) {
-      toast('Network error! আবার চেষ্টা করুন।');
+      toast('Locally saved! ইন্টারনেট এলে আবার Publish করুন।');
     } finally {
-      btn.disabled = false; btn.textContent = '➕ Publish Routine to Student App';
+      btn.disabled = false; btn.textContent = '💾 Save & Publish 7-Day Routine';
     }
   }
 
-  async function deleteRoutineItem(id) {
-    if (!confirm('এই রুটিন এন্ট্রিটি ডিলিট করবেন?')) return;
-    if (String(id).startsWith('LOC_RT_')) {
-      const localList = JSON.parse(localStorage.getItem('ucc_local_routines') || '[]').filter(x => x.id !== id);
-      localStorage.setItem('ucc_local_routines', JSON.stringify(localList));
-      renderAdminRoutinePage();
-      toast('Routine deleted.');
-      return;
-    }
-    await deleteNotice(id);
-    renderAdminRoutinePage();
-  }
-
-  function buildRoutineCanvas(list, clsLabel) {
-    const W = 1000;
-    const rowH = 54;
-    const headerH = 190;
-    const footerH = 70;
-    const H = Math.max(560, headerH + 54 + (Math.max(1, list.length) * rowH) + footerH);
+  function buildWeeklyRoutineCanvas(r) {
+    const W = 1120, H = 760;
     const c = document.createElement('canvas');
     c.width = W; c.height = H;
     const ctx = c.getContext('2d');
@@ -5056,108 +5102,118 @@
 
     // Header
     ctx.fillStyle = '#0f766e';
-    ctx.fillRect(16, 16, W - 32, 136);
+    ctx.fillRect(16, 16, W - 32, 126);
     ctx.fillStyle = '#d4af37';
-    ctx.fillRect(16, 150, W - 32, 5);
+    ctx.fillRect(16, 140, W - 32, 5);
 
     ctx.textAlign = 'center';
     ctx.fillStyle = '#ffffff';
     ctx.font = 'bold 34px sans-serif';
-    ctx.fillText('U.C.C INSTITUTE', W / 2, 68);
-    ctx.font = 'bold 20px sans-serif';
+    ctx.fillText('U.C.C INSTITUTE', W / 2, 62);
     ctx.fillStyle = '#fde68a';
-    ctx.fillText(`CLASS / EXAM ROUTINE • ${clsLabel === 'ALL' ? 'ALL CLASSES' : clsLabel.toUpperCase()}`, W / 2, 104);
-    ctx.font = '16px sans-serif';
+    ctx.font = 'bold 21px sans-serif';
+    ctx.fillText(`${String(r.targetClass || 'CLASS').toUpperCase()} • ${String(r.title || 'WEEKLY CLASS ROUTINE').toUpperCase()}`, W / 2, 98);
     ctx.fillStyle = '#e2e8f0';
-    ctx.fillText('Penchakola, Raipur, Bankura • Session 2027', W / 2, 134);
+    ctx.font = '15px sans-serif';
+    ctx.fillText('Penchakola, Raipur, Bankura • 7 Days Weekly (3 Classes Daily) • Session 2027', W / 2, 126);
 
-    // Table Header
-    const cols = [40, 210, 410, 660, 840];
-    const y0 = headerH;
+    // Grid Table: Day + 3 Periods
+    const x0 = 36, y0 = 168, tableW = W - 72;
+    const colW = [190, (tableW - 190) / 3, (tableW - 190) / 3, (tableW - 190) / 3];
+    const headH = 62, rowH = 66;
+
+    // Header row
     ctx.fillStyle = '#0f172a';
-    ctx.fillRect(30, y0, W - 60, 46);
+    ctx.fillRect(x0, y0, tableW, headH);
     ctx.fillStyle = '#ffffff';
-    ctx.textAlign = 'left';
-    ctx.font = 'bold 18px sans-serif';
-    ctx.fillText('Day / Date', cols[0], y0 + 29);
-    ctx.fillText('Time', cols[1], y0 + 29);
-    ctx.fillText('Subject', cols[2], y0 + 29);
-    ctx.fillText('Teacher', cols[3], y0 + 29);
-    ctx.fillText('Class', cols[4], y0 + 29);
+    ctx.textAlign = 'center';
+    ctx.font = 'bold 19px sans-serif';
+    ctx.fillText('DAY', x0 + colW[0] / 2, y0 + 38);
 
-    let y = y0 + 46;
-    if (!list.length) {
-      ctx.fillStyle = '#64748b';
+    for (let p = 0; p < 3; p++) {
+      const cx = x0 + colW[0] + p * colW[1] + colW[1] / 2;
+      ctx.fillStyle = '#fde68a';
+      ctx.font = 'bold 18px sans-serif';
+      ctx.fillText(`CLASS ${p + 1}`, cx, y0 + 26);
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 15px sans-serif';
+      ctx.fillText(String((r.times && r.times[p]) || ''), cx, y0 + 49);
+    }
+
+    // 7 Days Rows
+    WEEK_DAYS.forEach((day, idx) => {
+      const ry = y0 + headH + idx * rowH;
+      ctx.fillStyle = idx % 2 === 0 ? '#ffffff' : '#f0fdfa';
+      ctx.fillRect(x0, ry, tableW, rowH);
+
+      // Day cell background
+      ctx.fillStyle = idx % 2 === 0 ? '#f1f5f9' : '#e2f5f2';
+      ctx.fillRect(x0, ry, colW[0], rowH);
+
+      ctx.fillStyle = '#0f172a';
       ctx.textAlign = 'center';
-      ctx.font = '18px sans-serif';
-      ctx.fillText('No routine entries available.', W / 2, y + 36);
-    } else {
-      list.forEach((r, idx) => {
-        ctx.fillStyle = idx % 2 === 0 ? '#ffffff' : '#f0fdfa';
-        ctx.fillRect(30, y, W - 60, rowH);
-        ctx.strokeStyle = '#cbd5e1';
-        ctx.lineWidth = 1;
-        ctx.beginPath(); ctx.moveTo(30, y + rowH); ctx.lineTo(W - 30, y + rowH); ctx.stroke();
+      ctx.font = 'bold 18px sans-serif';
+      ctx.fillText(day, x0 + colW[0] / 2, ry + 39);
 
-        ctx.textAlign = 'left';
+      const vals = (r.days && r.days[day]) || ['-', '-', '-'];
+      for (let p = 0; p < 3; p++) {
+        const cx = x0 + colW[0] + p * colW[1] + colW[1] / 2;
         ctx.fillStyle = '#0f172a';
         ctx.font = 'bold 17px sans-serif';
-        ctx.fillText(String(r.day || '-').slice(0, 16), cols[0], y + 33);
-        ctx.fillStyle = '#0f766e';
-        ctx.font = 'bold 16px sans-serif';
-        ctx.fillText(String(r.time || '-').slice(0, 18), cols[1], y + 33);
-        ctx.fillStyle = '#0f172a';
-        ctx.font = 'bold 17px sans-serif';
-        ctx.fillText(String(r.subject || '-').slice(0, 22), cols[2], y + 33);
-        ctx.fillStyle = '#334155';
-        ctx.font = '16px sans-serif';
-        ctx.fillText(String(r.teacher || '-').slice(0, 16), cols[3], y + 33);
-        ctx.fillStyle = '#475569';
-        ctx.font = 'bold 15px sans-serif';
-        ctx.fillText(String(r.targetClass || 'ALL').slice(0, 10), cols[4], y + 33);
-        y += rowH;
-      });
+        ctx.fillText(String(vals[p] || '-').slice(0, 26), cx, ry + 39);
+      }
+    });
+
+    // Crisp Grid Lines
+    ctx.strokeStyle = '#94a3b8';
+    ctx.lineWidth = 1.5;
+    const totalH = headH + WEEK_DAYS.length * rowH;
+    ctx.strokeRect(x0, y0, tableW, totalH);
+    let vx = x0;
+    for (let i = 0; i < 3; i++) {
+      vx += colW[i];
+      ctx.beginPath(); ctx.moveTo(vx, y0); ctx.lineTo(vx, y0 + totalH); ctx.stroke();
+    }
+    for (let i = 0; i <= WEEK_DAYS.length; i++) {
+      const hy = y0 + headH + i * rowH;
+      ctx.beginPath(); ctx.moveTo(x0, hy); ctx.lineTo(x0 + tableW, hy); ctx.stroke();
     }
 
     ctx.textAlign = 'center';
     ctx.fillStyle = '#64748b';
     ctx.font = '14px sans-serif';
-    ctx.fillText('U.C.C Institute • Contact: 8016972121 / 8159980707', W / 2, H - 30);
+    ctx.fillText('U.C.C Institute • Contact: 8016972121 / 8159980707', W / 2, H - 28);
     return c;
   }
 
   function downloadAdminRoutinePng() {
-    const filt = (document.getElementById('rtFilterClass') && document.getElementById('rtFilterClass').value) || 'ALL';
-    const list = getAdminRoutines(filt);
-    if (!list.length) { toast('ডাউনলোড করার মতো কোনো রুটিন নেই!'); return; }
-    const c = buildRoutineCanvas(list, filt);
+    const r = collectEditorRoutineObj();
+    const c = buildWeeklyRoutineCanvas(r);
     const a = document.createElement('a');
-    a.download = `UCC_Routine_${filt.replace(/\s+/g, '_')}.png`;
+    a.download = `UCC_Weekly_Routine_${r.targetClass.replace(/\s+/g, '_')}.png`;
     a.href = c.toDataURL('image/png');
     a.click();
-    toast('✅ Routine PNG ডাউনলোড হয়েছে!');
+    toast('✅ 7-Day Routine PNG ডাউনলোড হয়েছে!');
   }
 
   function downloadAdminRoutinePdf() {
-    const filt = (document.getElementById('rtFilterClass') && document.getElementById('rtFilterClass').value) || 'ALL';
-    const list = getAdminRoutines(filt);
-    if (!list.length) { toast('ডাউনলোড করার মতো কোনো রুটিন নেই!'); return; }
-    const c = buildRoutineCanvas(list, filt);
+    const r = collectEditorRoutineObj();
+    const c = buildWeeklyRoutineCanvas(r);
     if (window.jspdf && window.jspdf.jsPDF) {
-      const doc = new window.jspdf.jsPDF({ orientation: 'p', unit: 'pt', format: 'a4' });
+      const doc = new window.jspdf.jsPDF({ orientation: 'l', unit: 'pt', format: 'a4' });
       const pdfW = doc.internal.pageSize.getWidth();
-      const imgW = pdfW - 48;
+      const pdfH = doc.internal.pageSize.getHeight();
+      const imgW = pdfW - 44;
       const imgH = imgW * (c.height / c.width);
-      doc.addImage(c.toDataURL('image/jpeg', 0.94), 'JPEG', 24, 24, imgW, Math.min(imgH, doc.internal.pageSize.getHeight() - 48));
-      doc.save(`UCC_Routine_${filt.replace(/\s+/g, '_')}.pdf`);
-      toast('✅ Routine PDF ডাউনলোড হয়েছে!');
+      doc.addImage(c.toDataURL('image/jpeg', 0.95), 'JPEG', 22, (pdfH - imgH) / 2, imgW, imgH);
+      doc.save(`UCC_Weekly_Routine_${r.targetClass.replace(/\s+/g, '_')}.pdf`);
+      toast('✅ 7-Day Routine PDF ডাউনলোড হয়েছে!');
     } else {
       downloadAdminRoutinePng();
     }
   }
 
-  // Hook into page routing, permissions & notice rendering
-  PAGE_TITLES.routine = 'Class & Exam Routine';
+  PAGE_TITLES.routine = '7-Day Weekly Routine';
   const _origCanAccessV30 = canAccessPage;
   canAccessPage = function(name) {
     if (name === 'routine') return true;
@@ -5171,8 +5227,7 @@
   const _origRenderContentV30 = renderContentTab;
   renderContentTab = function() {
     _origRenderContentV30();
-    // Filter out [ROUTINE] items from regular notices list
-    const normalNotices = (notices || []).filter(n => !String(n.title || '').startsWith(ROUTINE_TAG));
+    const normalNotices = (notices || []).filter(n => !String(n.title || '').startsWith('[ROUTINE'));
     const nCnt = document.getElementById('notCount');
     if (nCnt) nCnt.textContent = normalNotices.length;
     const nBox = document.getElementById('adminNoticesList');
@@ -5182,7 +5237,7 @@
         : '<div style="font-size:12.5px;color:var(--muted);">No notices posted yet.</div>';
     }
     const pillEl = document.getElementById('sideRoutinePill');
-    if (pillEl) pillEl.textContent = getAdminRoutines('ALL').length;
+    if (pillEl) pillEl.textContent = Object.keys(getSavedWeeklyRoutinesMap()).length;
   };
 
 </script>
