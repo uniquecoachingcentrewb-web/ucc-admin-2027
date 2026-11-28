@@ -724,6 +724,14 @@
       <span class="side-left"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-light)" stroke-width="2.2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Class &amp; Exam Routine</span>
       <span id="sideRoutinePill" class="side-pill">0</span>
     </button>
+    <button id="sideResultsBtn" class="side-item" onclick="openSidePage('results')">
+      <span class="side-left"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>Exam Results (UCC vs School)</span>
+      <span id="sideResultsPill" class="side-pill">0</span>
+    </button>
+    <button id="sideMyBdayBtn" class="side-item" onclick="setMyTeacherBirthday()">
+      <span class="side-left">🎂 Set My Birthday</span>
+      <span id="sideMyBdayPill" class="side-pill">DOB</span>
+    </button>
     <button id="sideNoticesBtn" class="side-item" onclick="openSidePage('notices')">
       <span class="side-left"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-light)" stroke-width="2.2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>Notices & Due-Lock</span>
       <span style="color:var(--accent-light);">→</span>
@@ -884,7 +892,10 @@
           <div class="form-group"><label>Class *</label><select id="fClass" required></select></div>
           <div class="form-group"><label>Mobile Number *</label><input type="tel" id="fMobile" required maxlength="10" placeholder="10-digit number"></div>
         </div>
-        <div class="form-group"><label>Father's Name</label><input type="text" id="fFather" placeholder="Father's name"></div>
+        <div class="row-2">
+          <div class="form-group"><label>Father's Name</label><input type="text" id="fFather" placeholder="Father's name"></div>
+          <div class="form-group"><label>🎂 Birthday (Optional)</label><input type="date" id="fDob"></div>
+        </div>
         <div class="form-group"><label>Address</label><input type="text" id="fAddress" placeholder="Village, Post"></div>
         <div class="row-2">
           <div class="form-group"><label>Admission Date *</label><input type="date" id="fAdmDate" required></div>
@@ -1132,6 +1143,55 @@
     </div>
   </div>
 
+  <!-- SIDEBAR PAGE RES: EXAM RESULTS (U.C.C vs SCHOOL COMPARISON) -->
+  <div id="page-results" class="page">
+    <div class="card">
+      <div class="card-title">📊 New Result Update (U.C.C vs School Exam)</div>
+      <form id="resultForm" onsubmit="saveStudentResultV34(event)">
+        <div class="row-2">
+          <div class="form-group">
+            <label>Select Class *</label>
+            <select id="resClass" required onchange="populateResultStudents()"></select>
+          </div>
+          <div class="form-group">
+            <label>Select Student *</label>
+            <select id="resStudent" required></select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Exam Name (পরীক্ষার নাম) *</label>
+          <input type="text" id="resExamName" required placeholder="e.g. 1st Summative Evaluation" list="resExamSuggestions">
+          <datalist id="resExamSuggestions">
+            <option value="1st Summative Evaluation"></option>
+            <option value="2nd Summative Evaluation"></option>
+            <option value="3rd Summative Evaluation"></option>
+            <option value="Unit Test 1"></option>
+            <option value="Unit Test 2"></option>
+            <option value="Medha Anweshan 2027"></option>
+          </datalist>
+        </div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center;margin:6px 0 8px;">
+          <strong style="font-size:12px;color:var(--accent-light);">📚 বিষয় ও নম্বর (Subject | Full | UCC | School):</strong>
+          <button type="button" class="btn-sm" style="background:var(--accent-soft);color:var(--accent-light);border:1px solid var(--accent-border);" onclick="addResultSubjectRow()">➕ Add Subject</button>
+        </div>
+        <div id="resSubjectsWrap"></div>
+
+        <div id="resLiveSummary" style="background:var(--bg-subcard);border:1.5px solid var(--accent-border);border-radius:14px;padding:11px 12px;margin:10px 0 12px;font-size:12.5px;"></div>
+
+        <button type="submit" id="resSubmitBtn" class="btn btn-accent">💾 Save &amp; Publish Result</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px;">
+        <div class="card-title" style="margin-bottom:0;">📋 Published Results (<span id="resListCount">0</span>)</div>
+        <select id="resFilterClass" onchange="renderAdminResultsList()" style="width:auto;padding:6px 10px;font-size:12px;font-weight:700;"></select>
+      </div>
+      <div id="adminResultsList"></div>
+    </div>
+  </div>
+
   <!-- SIDEBAR PAGE C: NOTICES & DUE-LOCK -->
   <div id="page-notices" class="page">
     <div class="card" id="dueLockCard">
@@ -1185,6 +1245,7 @@
           <div class="form-group"><label>Fixed Monthly Salary (Rs.)</label><input type="number" id="ntSal" value="1500" min="0"></div>
           <div class="form-group"><label>Subjects</label><input type="text" id="ntSub" placeholder="e.g. Math, Science"></div>
         </div>
+        <div class="form-group"><label>🎂 Birthday / Date of Birth (Optional)</label><input type="date" id="ntDob"></div>
         <div style="font-size:11.5px;font-weight:700;color:var(--accent-light);margin-bottom:6px;">Permissions (যা অন করবেন শুধু তাই খুলবে):</div>
         <div style="display:flex;flex-wrap:wrap;gap:12px;margin-bottom:14px;font-size:12.5px;font-weight:700;background:var(--bg-subcard);padding:10px;border-radius:12px;border:1px solid var(--border);">
           <label style="display:flex;align-items:center;gap:5px;margin:0;color:var(--text);cursor:pointer;"><input type="checkbox" id="ntQr" checked style="width:16px;height:16px;"> QR</label>
@@ -1283,6 +1344,7 @@
         <div class="form-group"><label>Father's Name</label><input type="text" id="eFather"></div>
         <div class="form-group"><label>Mobile</label><input type="tel" id="eMobile" maxlength="10"></div>
         <div class="form-group"><label>Address</label><input type="text" id="eAddress"></div>
+        <div class="form-group"><label>🎂 Birthday (Optional)</label><input type="date" id="eDob"></div>
         <button class="btn" onclick="saveEditedDetails()">Update Details</button>
       </div>
     </details>
@@ -1494,12 +1556,26 @@
     <button type="button" class="pwa-inst-close" onclick="dismissInstallBar()" title="Close">✕</button>
   </div>
 </div>
+<!-- BIG ANIMATED BIRTHDAY WISH POPUP -->
+<div id="birthdayPopupModal" style="display:none;position:fixed;inset:0;z-index:300;background:rgba(2,8,18,0.82);justify-content:center;align-items:center;padding:18px;">
+  <div style="width:100%;max-width:390px;background:linear-gradient(145deg,#1e1b4b 0%,#312e81 48%,#0f766e 100%);color:#ffffff;border:2.5px solid #fde047;border-radius:28px;padding:28px 22px;text-align:center;box-shadow:0 22px 54px rgba(0,0,0,0.55);animation:popIn 0.28s cubic-bezier(0.22,1,0.36,1);">
+    <div style="font-size:58px;line-height:1;margin-bottom:10px;">🎂🎉🎈</div>
+    <div style="display:inline-block;background:rgba(253,224,71,0.2);color:#fde047;border:1px solid rgba(253,224,71,0.45);font-size:11px;font-weight:800;letter-spacing:1.4px;padding:4px 12px;border-radius:99px;margin-bottom:10px;">U.C.C INSTITUTE WISHES YOU</div>
+    <h2 style="margin:0;font-size:26px;font-weight:800;color:#fde047;line-height:1.2;">Happy Birthday!</h2>
+    <div id="bdayUserName" style="font-size:20px;font-weight:800;color:#ffffff;margin:8px 0 6px;"></div>
+    <p id="bdayWishMsg" style="margin:0 0 18px;font-size:13.5px;color:#e2e8f0;line-height:1.55;">
+      জন্মদিনের অনেক অনেক শুভেচ্ছা ও ভালোবাসা! আপনার জীবন আনন্দ, সুস্থতা ও সাফল্যে ভরে উঠুক। 💐✨
+    </p>
+    <button type="button" class="btn" style="background:linear-gradient(135deg,#fde047,#f59e0b);color:#061121;border:none;font-size:14px;padding:12px;" onclick="closeBirthdayPopup()">🙏 Thank You!</button>
+  </div>
+</div>
+
 <div id="toast" class="toast"></div>
 
 <script>
   // Auto-clear old Service Worker cache whenever a new UI build is deployed
   (function() {
-    const UI_BUILD = 'ucc_teacher_v31_7day_3class_routine';
+    const UI_BUILD = 'ucc_teacher_v35_bday_fields_student_confirm';
     try {
       if (localStorage.getItem('ucc_ui_build') !== UI_BUILD) {
         localStorage.setItem('ucc_ui_build', UI_BUILD);
@@ -2337,6 +2413,10 @@
             <input type="text" id="sub_${t.id}" value="${t.subjects || ''}" style="padding:7px 10px;font-size:13px;">
           </div>
         </div>
+        <div style="margin:6px 0 8px;">
+          <label style="font-size:10.5px;margin-bottom:3px;">🎂 Birthday (Optional — Edit Anytime)</label>
+          <input type="date" id="dob_${t.id}" value="${t.dob || localStorage.getItem('ucc_teacher_dob_' + String(t.id).toUpperCase()) || ''}" style="padding:7px 10px;font-size:13px;">
+        </div>
         ${!isSA ? `
         <div style="display:flex;flex-wrap:wrap;gap:9px;margin:8px 0;font-size:11.5px;font-weight:700;background:var(--bg-subcard);padding:8px;border-radius:10px;border:1px solid var(--border);">
           <label style="display:flex;align-items:center;gap:4px;margin:0;color:var(--text);"><input type="checkbox" id="p_qr_${t.id}" ${p.qr?'checked':''} style="width:15px;height:15px;"> QR</label>
@@ -2386,6 +2466,7 @@
         mobile: document.getElementById('ntMob').value.trim(),
         salary: Number(document.getElementById('ntSal').value) || 0,
         subjects: document.getElementById('ntSub').value.trim(),
+        dob: (document.getElementById('ntDob') && document.getElementById('ntDob').value) || '', 
         qr: document.getElementById('ntQr').checked,
         video: document.getElementById('ntVid').checked,
         qa: document.getElementById('ntQa').checked,
@@ -2395,7 +2476,7 @@
       };
       const res = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) });
       const data = await res.json();
-      if (data.status === 'ok') { applyServerPayload(data); e.target.reset(); toast('নতুন টিচার অ্যাড হয়েছে!'); }
+      if (data.status === 'ok') { if (payload.dob) localStorage.setItem('ucc_teacher_dob_' + payload.id, payload.dob); applyServerPayload(data); e.target.reset(); toast('নতুন টিচার অ্যাড হয়েছে!'); }
       else toast(data.message || 'Failed!');
     } catch (err) { toast('Network error!'); }
     finally { btn.disabled = false; btn.textContent = 'Save New Teacher'; }
@@ -2403,11 +2484,16 @@
 
   async function saveTeacherChanges(id, isSA) {
     if (!navigator.onLine) { toast('Internet required.'); return; }
+    const dobEl = document.getElementById('dob_' + id);
+    const dobVal = dobEl ? dobEl.value.trim() : '';
+    if (dobVal) localStorage.setItem('ucc_teacher_dob_' + String(id).toUpperCase(), dobVal);
+    else localStorage.removeItem('ucc_teacher_dob_' + String(id).toUpperCase());
     const payload = {
       action: 'updateTeacher',
       id,
       salary: Number(document.getElementById('sal_' + id).value) || 0,
-      subjects: document.getElementById('sub_' + id).value.trim()
+      subjects: document.getElementById('sub_' + id).value.trim(),
+      dob: dobVal
     };
     if (!isSA) {
       payload.perms = {
@@ -3375,13 +3461,25 @@
     e.preventDefault(); const collector = getCurrentAdmin(); if (!collector) { lockApp(); return; }
     const fMonth = document.getElementById('fMonth').value, fAmt = Number(document.getElementById('fAmt').value) || 0, fMode = document.getElementById('fMode').value;
     const stName = document.getElementById('fName').value.trim();
-    if (fMonth && fAmt > 0) {
-      const ok = confirm(`Are you confirmed?\n\nStudent: ${stName}\nMonth: ${fMonth.replace('_',' ')}\nAmount: Rs. ${fAmt} (${fMode})\n\nOK চাপলে পেমেন্টসহ এন্ট্রি সেভ হবে।`);
-      if (!ok) return;
-    }
+    const stCls = document.getElementById('fClass').value;
+    const stMob = document.getElementById('fMobile').value.trim();
+    const stDob = (document.getElementById('fDob') && document.getElementById('fDob').value) || '';
+    const confirmLines = [
+      'নতুন স্টুডেন্ট যুক্ত করতে কনফার্ম করুন:',
+      '',
+      `Name: ${stName}`,
+      `Class: ${stCls}`,
+      `Mobile: ${stMob}`
+    ];
+    if (stDob) confirmLines.push(`Birthday: ${stDob}`);
+    if (fMonth && fAmt > 0) confirmLines.push(`Fee: Rs. ${fAmt} (${fMonth.replace('_',' ')} • ${fMode})`);
+    confirmLines.push('', 'OK চাপলে স্টুডেন্ট যুক্ত হয়ে যাবে।');
+    if (!confirm(confirmLines.join('\n'))) return;
+
     const newId = getNextStudentId(), months = {}; MONTHS.forEach(([k]) => { months[k] = ''; });
     if (fMonth && fAmt > 0) months[fMonth] = fAmt;
-    const studentObj = { id: newId, name: stName, studentClass: document.getElementById('fClass').value, mobile: document.getElementById('fMobile').value.trim(), fatherName: document.getElementById('fFather').value.trim(), address: document.getElementById('fAddress').value.trim(), admissionDate: document.getElementById('fAdmDate').value, firstPayment: document.getElementById('fFirstPay').value, months, totalDue: 0 };
+    if (stDob) localStorage.setItem('ucc_st_dob_' + newId.toUpperCase(), stDob);
+    const studentObj = { id: newId, name: stName, studentClass: stCls, mobile: stMob, fatherName: document.getElementById('fFather').value.trim(), dob: stDob, address: document.getElementById('fAddress').value.trim(), admissionDate: document.getElementById('fAdmDate').value, firstPayment: document.getElementById('fFirstPay').value, months, totalDue: 0 };
     studentObj.totalDue = calcDueLocal(studentObj); students.push(studentObj);
     if (fMonth && fAmt > 0) paymentLog.push({ receiptNo: 'UCC-R27' + String(paymentLog.length+1).padStart(4,'0'), date: studentObj.firstPayment || studentObj.admissionDate || todayStr(), time: bnNowTime(), studentId: newId, studentName: studentObj.name, studentClass: studentObj.studentClass, month: fMonth, amount: fAmt, collector, mode: fMode });
     queue.push({ type: 'addStudent', data: { ...studentObj, firstFeeMonth: fMonth, firstFeeAmount: fAmt, collector, mode: fMode } });
@@ -3403,7 +3501,7 @@
     document.getElementById('pDue').textContent = 'Rs. ' + (Number(s.totalDue) || 0); document.getElementById('pDue').style.color = s.totalDue > 0 ? 'var(--danger)' : 'var(--success)';
     document.getElementById('pFather').textContent = s.fatherName || '-'; document.getElementById('pMobile').textContent = s.mobile || '-';
     document.getElementById('pAddress').textContent = s.address || '-'; document.getElementById('pAdm').textContent = s.admissionDate || '-'; document.getElementById('pFirst').textContent = s.firstPayment || '-';
-    document.getElementById('eFather').value = s.fatherName || ''; document.getElementById('eMobile').value = s.mobile || ''; document.getElementById('eAddress').value = s.address || '';
+    document.getElementById('eFather').value = s.fatherName || ''; document.getElementById('eMobile').value = s.mobile || ''; document.getElementById('eAddress').value = s.address || ''; if (document.getElementById('eDob')) document.getElementById('eDob').value = s.dob || localStorage.getItem('ucc_st_dob_' + String(s.id).toUpperCase()) || '';
 
     let firstUnpaidKey = '', selectHtml = '';
     document.getElementById('pMonths').innerHTML = MONTHS.map(([key, lbl]) => {
@@ -3486,7 +3584,11 @@
   function saveEditedDetails() {
     const s = students.find(x => x.id === activeStudentId); if (!s) return;
     s.fatherName = document.getElementById('eFather').value.trim(); s.mobile = document.getElementById('eMobile').value.trim(); s.address = document.getElementById('eAddress').value.trim();
-    queue.push({ type: 'updateDetails', data: { studentId: s.id, fatherName: s.fatherName, mobile: s.mobile, address: s.address } });
+    const eDobVal = (document.getElementById('eDob') && document.getElementById('eDob').value) || '';
+    s.dob = eDobVal;
+    if (eDobVal) localStorage.setItem('ucc_st_dob_' + String(s.id).toUpperCase(), eDobVal);
+    else localStorage.removeItem('ucc_st_dob_' + String(s.id).toUpperCase());
+    queue.push({ type: 'updateDetails', data: { studentId: s.id, fatherName: s.fatherName, mobile: s.mobile, address: s.address, dob: eDobVal } });
     saveLocal(); openProfile(s.id, true); toast('Updated!'); scheduleSync(250);
   }
 
@@ -5238,6 +5340,334 @@
     }
     const pillEl = document.getElementById('sideRoutinePill');
     if (pillEl) pillEl.textContent = Object.keys(getSavedWeeklyRoutinesMap()).length;
+  };
+
+  // ===== V34: DYNAMIC EXAM RESULTS (UCC vs SCHOOL) + NOTICE AUTHOR NAME + BIRTHDAY POPUP =====
+  const RESULT_TAG = '[RESULT_V34]';
+  PAGE_TITLES.results = 'Exam Results (UCC vs School)';
+
+  function getSavedResultsV34() {
+    const map = {};
+    try {
+      const loc = JSON.parse(localStorage.getItem('ucc_results_v34') || '[]');
+      loc.forEach(r => { if (r && r.id) map[r.id] = r; });
+    } catch (e) {}
+    (notices || []).forEach(n => {
+      if (!n || !String(n.title || '').startsWith(RESULT_TAG)) return;
+      try {
+        const r = JSON.parse(n.message || '{}');
+        if (r && r.studentId && r.examName) {
+          const rid = r.id || n.id;
+          map[rid] = { ...r, id: rid, noticeId: n.id, date: n.date || r.date || '' };
+        }
+      } catch (e) {}
+    });
+    return Object.values(map);
+  }
+
+  function initResultsPageControls() {
+    const clsSel = document.getElementById('resClass');
+    const filtSel = document.getElementById('resFilterClass');
+    if (clsSel && !clsSel.options.length) {
+      clsSel.innerHTML = CLASSES.map(c => `<option value="${c}">${c}</option>`).join('');
+      clsSel.value = 'Class 5';
+    }
+    if (filtSel && !filtSel.options.length) {
+      filtSel.innerHTML = '<option value="ALL">All Classes</option>' + CLASSES.map(c => `<option value="${c}">${c}</option>`).join('');
+    }
+    populateResultStudents();
+    const wrap = document.getElementById('resSubjectsWrap');
+    if (wrap && !wrap.children.length) {
+      addResultSubjectRow('Mathematics', 100, '', '');
+      addResultSubjectRow('English', 100, '', '');
+      addResultSubjectRow('Bengali', 100, '', '');
+    }
+    updateResultLiveCalc();
+    renderAdminResultsList();
+  }
+
+  function populateResultStudents() {
+    const cls = (document.getElementById('resClass') && document.getElementById('resClass').value) || '';
+    const stSel = document.getElementById('resStudent');
+    if (!stSel) return;
+    const list = students.filter(s => s.studentClass === cls);
+    stSel.innerHTML = list.length
+      ? list.map(s => `<option value="${s.id}">${s.name} (${s.id})</option>`).join('')
+      : '<option value="">এই ক্লাসে কোনো স্টুডেন্ট নেই</option>';
+  }
+
+  function addResultSubjectRow(sub = '', full = 100, ucc = '', sch = '') {
+    const wrap = document.getElementById('resSubjectsWrap');
+    if (!wrap) return;
+    const row = document.createElement('div');
+    row.className = 'res-sub-row';
+    row.style.cssText = 'display:grid;grid-template-columns:1.5fr 0.8fr 0.9fr 0.9fr 30px;gap:5px;margin-bottom:7px;align-items:center;';
+    row.innerHTML = `
+      <input type="text" class="rs-name" value="${String(sub).replace(/"/g,'&quot;')}" placeholder="Subject" required style="padding:7px 8px;font-size:12px;" oninput="updateResultLiveCalc()">
+      <input type="number" class="rs-full" value="${full}" placeholder="Full" min="1" required style="padding:7px 6px;font-size:12px;" oninput="updateResultLiveCalc()">
+      <input type="number" class="rs-ucc" value="${ucc}" placeholder="UCC" min="0" style="padding:7px 6px;font-size:12px;" oninput="updateResultLiveCalc()">
+      <input type="number" class="rs-sch" value="${sch}" placeholder="School" min="0" style="padding:7px 6px;font-size:12px;" oninput="updateResultLiveCalc()">
+      <button type="button" onclick="this.parentElement.remove();updateResultLiveCalc();" style="border:none;background:var(--danger-soft);color:var(--danger);width:28px;height:30px;border-radius:8px;font-weight:800;cursor:pointer;">✕</button>
+    `;
+    wrap.appendChild(row);
+    updateResultLiveCalc();
+  }
+
+  function collectResultSubjects() {
+    const rows = document.querySelectorAll('#resSubjectsWrap .res-sub-row');
+    const subs = [];
+    rows.forEach(r => {
+      const name = (r.querySelector('.rs-name').value || '').trim();
+      const full = Number(r.querySelector('.rs-full').value) || 0;
+      const uccRaw = r.querySelector('.rs-ucc').value;
+      const schRaw = r.querySelector('.rs-sch').value;
+      if (name) {
+        subs.push({
+          name,
+          full,
+          ucc: uccRaw === '' ? null : Number(uccRaw),
+          school: schRaw === '' ? null : Number(schRaw)
+        });
+      }
+    });
+    return subs;
+  }
+
+  function calcResultStats(subs) {
+    let totalFull = 0, uccTotal = 0, schTotal = 0, hasUcc = false, hasSch = false;
+    (subs || []).forEach(s => {
+      totalFull += Number(s.full) || 0;
+      if (s.ucc !== null && s.ucc !== '' && !isNaN(Number(s.ucc))) { uccTotal += Number(s.ucc); hasUcc = true; }
+      if (s.school !== null && s.school !== '' && !isNaN(Number(s.school))) { schTotal += Number(s.school); hasSch = true; }
+    });
+    const uccPct = totalFull > 0 && hasUcc ? ((uccTotal / totalFull) * 100).toFixed(1) : '-';
+    const schPct = totalFull > 0 && hasSch ? ((schTotal / totalFull) * 100).toFixed(1) : '-';
+    let verdict = 'নম্বর বসালে অটো-হিসাব ও তুলনা দেখাবে';
+    let verdictColor = 'var(--muted)';
+    if (hasUcc && hasSch) {
+      const diff = uccTotal - schTotal;
+      if (diff > 0) { verdict = `🏆 U.C.C Institute-এ +${diff} নম্বর বেশি পেয়েছে!`; verdictColor = 'var(--success)'; }
+      else if (diff < 0) { verdict = `🏫 School Exam-এ +${Math.abs(diff)} নম্বর বেশি পেয়েছে!`; verdictColor = '#0284c7'; }
+      else { verdict = '🤝 U.C.C Institute ও School-এ সমান নম্বর!'; verdictColor = 'var(--accent-light)'; }
+    } else if (hasUcc) {
+      verdict = `U.C.C Total: ${uccTotal}/${totalFull} (${uccPct}%)`; verdictColor = 'var(--success)';
+    } else if (hasSch) {
+      verdict = `School Total: ${schTotal}/${totalFull} (${schPct}%)`; verdictColor = '#0284c7';
+    }
+    return { totalFull, uccTotal, schTotal, hasUcc, hasSch, uccPct, schPct, verdict, verdictColor };
+  }
+
+  function updateResultLiveCalc() {
+    const box = document.getElementById('resLiveSummary');
+    if (!box) return;
+    const subs = collectResultSubjects();
+    const st = calcResultStats(subs);
+    box.innerHTML = `
+      <div style="display:flex;justify-content:space-between;gap:8px;margin-bottom:5px;">
+        <span><strong>U.C.C Total:</strong> ${st.hasUcc ? st.uccTotal + '/' + st.totalFull + ' (' + st.uccPct + '%)' : '-'}</span>
+        <span><strong>School Total:</strong> ${st.hasSch ? st.schTotal + '/' + st.totalFull + ' (' + st.schPct + '%)' : '-'}</span>
+      </div>
+      <div style="font-weight:800;color:${st.verdictColor};">${st.verdict}</div>
+    `;
+  }
+
+  async function saveStudentResultV34(e) {
+    e.preventDefault();
+    const cls = document.getElementById('resClass').value;
+    const sid = document.getElementById('resStudent').value;
+    const examName = document.getElementById('resExamName').value.trim();
+    const subs = collectResultSubjects();
+    if (!sid || !examName || !subs.length) { toast('স্টুডেন্ট, পরীক্ষার নাম এবং অন্তত ১টি বিষয় দিন!'); return; }
+    const sObj = students.find(x => x.id === sid) || { id: sid, name: sid, studentClass: cls };
+    const stats = calcResultStats(subs);
+    const resObj = {
+      id: 'RES_' + sid + '_' + Date.now(),
+      studentId: sid,
+      studentName: sObj.name,
+      targetClass: cls,
+      examName,
+      subjects: subs,
+      totalFull: stats.totalFull,
+      uccTotal: stats.hasUcc ? stats.uccTotal : null,
+      schoolTotal: stats.hasSch ? stats.schTotal : null,
+      verdict: stats.verdict,
+      postedBy: getCurrentAdmin() || 'Admin',
+      date: todayStr()
+    };
+
+    const btn = document.getElementById('resSubmitBtn');
+    btn.disabled = true; btn.textContent = 'Publishing...';
+
+    const loc = JSON.parse(localStorage.getItem('ucc_results_v34') || '[]');
+    loc.push(resObj);
+    localStorage.setItem('ucc_results_v34', JSON.stringify(loc));
+
+    try {
+      if (navigator.onLine) {
+        const res = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({
+            action: 'addNotice',
+            targetClass: cls,
+            title: `${RESULT_TAG} ${sid} | ${examName}`,
+            message: JSON.stringify(resObj),
+            link: ''
+          })
+        });
+        const data = await res.json();
+        if (data && data.status === 'ok') applyServerPayload(data);
+      }
+      renderAdminResultsList();
+      toast(`✅ ${sObj.name}-এর ${examName} রেজাল্ট পাবলিশ হয়েছে!`);
+    } catch (err) {
+      toast('Locally saved! ইন্টারনেট এলে Sync হবে।');
+    } finally {
+      btn.disabled = false; btn.textContent = '💾 Save & Publish Result';
+    }
+  }
+
+  function renderAdminResultsList() {
+    const filt = (document.getElementById('resFilterClass') && document.getElementById('resFilterClass').value) || 'ALL';
+    const all = getSavedResultsV34();
+    const pill = document.getElementById('sideResultsPill');
+    if (pill) pill.textContent = all.length;
+    const list = filt === 'ALL' ? all : all.filter(r => r.targetClass === filt);
+    const cnt = document.getElementById('resListCount');
+    if (cnt) cnt.textContent = list.length;
+    const box = document.getElementById('adminResultsList');
+    if (!box) return;
+    if (!list.length) {
+      box.innerHTML = '<div style="font-size:12.5px;color:var(--muted);text-align:center;padding:12px 0;">এখনো কোনো রেজাল্ট আপডেট করা হয়নি।</div>';
+      return;
+    }
+    box.innerHTML = list.slice().reverse().map(r => {
+      const st = calcResultStats(r.subjects || []);
+      return `<div class="req-card" style="margin-bottom:9px;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+          <div>
+            <strong style="font-size:14px;color:var(--accent-light);">${r.studentName} (${r.studentId})</strong>
+            <span class="badge-ok" style="font-size:10px;padding:2px 7px;margin-left:4px;">${r.targetClass}</span>
+            <div style="font-size:12.5px;font-weight:800;margin-top:2px;">📝 ${r.examName}</div>
+            <div style="font-size:11.5px;color:var(--text-2);margin-top:3px;">UCC: <strong>${st.hasUcc ? st.uccTotal + '/' + st.totalFull : '-'}</strong> • School: <strong>${st.hasSch ? st.schTotal + '/' + st.totalFull : '-'}</strong></div>
+            <div style="font-size:11.5px;font-weight:800;color:${st.verdictColor};margin-top:2px;">${st.verdict}</div>
+          </div>
+          ${r.noticeId ? `<button type="button" class="btn-sm" style="background:var(--danger-soft);color:var(--danger);" onclick="deleteResultV34('${r.id}','${r.noticeId}')">Del</button>` : ''}
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  async function deleteResultV34(rid, noticeId) {
+    if (!confirm('এই রেজাল্টটি ডিলিট করবেন?')) return;
+    const loc = JSON.parse(localStorage.getItem('ucc_results_v34') || '[]').filter(x => x.id !== rid);
+    localStorage.setItem('ucc_results_v34', JSON.stringify(loc));
+    if (noticeId) await deleteNotice(noticeId);
+    renderAdminResultsList();
+  }
+
+  // Override postNotice so posting Teacher/Admin name is automatically included!
+  postNotice = async function(e) {
+    e.preventDefault();
+    if (!navigator.onLine) { toast('Internet required.'); return; }
+    const targetClass = document.getElementById('nClass').value;
+    const title = document.getElementById('nTitle').value.trim();
+    const rawMsg = document.getElementById('nMsg').value.trim();
+    const link = document.getElementById('nLink').value.trim();
+    const author = getCurrentAdmin() || 'Admin';
+    const message = `${rawMsg}\n— Posted by: ${author}`;
+    const res = await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action: 'addNotice', targetClass, title, message, link })
+    });
+    const data = await res.json();
+    if (data.status === 'ok') {
+      applyServerPayload(data);
+      const waText = `📢 *U.C.C Institute Notice (${targetClass})*\n*${title}*\n${rawMsg}\n✍️ — ${author}${link ? '\n🔗 ' + link : ''}`;
+      document.getElementById('waNoticeShareLink').href = 'https://wa.me/?text=' + encodeURIComponent(waText);
+      document.getElementById('waNoticeShareBox').style.display = 'block';
+      e.target.reset();
+      toast(`Notice Published by ${author}!`);
+    }
+  };
+
+  // Birthday Wish Popup for Teachers
+  function setMyTeacherBirthday() {
+    closeSidebar();
+    const u = getCurrentUserObj();
+    if (!u) return;
+    const key = 'ucc_teacher_dob_' + String(u.id).toUpperCase();
+    const cur = localStorage.getItem(key) || '';
+    const val = prompt('আপনার জন্মতারিখ লিখুন (YYYY-MM-DD, যেমন: 2000-07-30):', cur);
+    if (val === null) return;
+    const clean = val.trim();
+    if (/^\d{4}-\d{2}-\d{2}$/.test(clean)) {
+      localStorage.setItem(key, clean);
+      toast('🎂 জন্মতারিখ সেভ হয়েছে!');
+      checkTeacherBirthdayPopup();
+    } else {
+      toast('সঠিক ফরম্যাটে লিখুন: YYYY-MM-DD');
+    }
+  }
+
+  function closeBirthdayPopup() {
+    const m = document.getElementById('birthdayPopupModal');
+    if (m) m.style.display = 'none';
+  }
+
+  function checkTeacherBirthdayPopup() {
+    const u = getCurrentUserObj();
+    if (!u) return;
+    const dob = u.dob || localStorage.getItem('ucc_teacher_dob_' + String(u.id).toUpperCase()) || '';
+    const pill = document.getElementById('sideMyBdayPill');
+    if (pill && dob) pill.textContent = dob.slice(5);
+    if (!dob || dob.length < 10) return;
+    const todayMmDd = todayStr().slice(5);
+    if (dob.slice(5) === todayMmDd) {
+      const seenKey = `ucc_bday_seen_${u.id}_${todayStr()}`;
+      if (localStorage.getItem(seenKey) === '1') return;
+      localStorage.setItem(seenKey, '1');
+      const nm = document.getElementById('bdayUserName');
+      if (nm) nm.textContent = u.name;
+      const modal = document.getElementById('birthdayPopupModal');
+      if (modal) modal.style.display = 'flex';
+    }
+  }
+
+  // Hook into routing, permissions, notices filter & onload
+  const _origCanAccessV34 = canAccessPage;
+  canAccessPage = function(name) {
+    if (name === 'results') return true;
+    return _origCanAccessV34(name);
+  };
+  const _origOpenPageAdmV34 = openPage;
+  openPage = function(name, btn) {
+    _origOpenPageAdmV34(name, btn);
+    if (name === 'results') initResultsPageControls();
+  };
+  const _origRenderContentV34 = renderContentTab;
+  renderContentTab = function() {
+    _origRenderContentV34();
+    const normalNotices = (notices || []).filter(n => {
+      const t = String(n.title || '');
+      return !t.startsWith('[ROUTINE') && !t.startsWith('[RESULT');
+    });
+    const nCnt = document.getElementById('notCount');
+    if (nCnt) nCnt.textContent = normalNotices.length;
+    const nBox = document.getElementById('adminNoticesList');
+    if (nBox) {
+      nBox.innerHTML = normalNotices.length
+        ? normalNotices.slice().reverse().map(n => `<div class="info-item"><div style="font-size:12.5px;"><strong>${n.title}</strong> <span style="color:var(--accent-light);font-weight:700;">[${n.targetClass}]</span><br><span style="color:var(--text-2);white-space:pre-line;">${n.message}</span><br><span style="color:var(--muted);font-size:11px;">${n.date}</span></div>${isSuperAdmin() ? `<button class="btn-sm" style="background:var(--danger-soft);color:var(--danger);" onclick="deleteNotice('${n.id}')">Delete</button>` : ''}</div>`).join('')
+        : '<div style="font-size:12.5px;color:var(--muted);">No notices posted yet.</div>';
+    }
+    const rPill = document.getElementById('sideResultsPill');
+    if (rPill) rPill.textContent = getSavedResultsV34().length;
+  };
+  const _origOnloadAdmV34 = window.onload;
+  window.onload = function() {
+    if (_origOnloadAdmV34) _origOnloadAdmV34();
+    setTimeout(checkTeacherBirthdayPopup, 650);
   };
 
 </script>
