@@ -969,9 +969,15 @@
         <label>Mobile Number (মোবাইল নম্বর) *</label>
         <input type="tel" id="stRegMob" required maxlength="10" placeholder="10-digit mobile number">
       </div>
-      <div class="form-group">
-        <label>Guardian Name (অভিভাবকের নাম)</label>
-        <input type="text" id="stRegGuardian" placeholder="Father / Mother name">
+      <div class="row-2">
+        <div class="form-group">
+          <label>Guardian Name (অভিভাবকের নাম)</label>
+          <input type="text" id="stRegGuardian" placeholder="Father / Mother name">
+        </div>
+        <div class="form-group">
+          <label>🎂 Birthday (Optional)</label>
+          <input type="date" id="stRegDob">
+        </div>
       </div>
       <button type="submit" id="stSignupBtn" class="btn btn-accent" style="margin-top:6px;">Create Account &amp; Continue</button>
     </form>
@@ -1045,6 +1051,14 @@
     <button class="side-item" onclick="openPage('routine')">
       <span class="side-left">📅 Class &amp; Exam Routine</span>
       <span id="sideRoutinePill" class="side-pill">0</span>
+    </button>
+    <button class="side-item" onclick="openPage('results')">
+      <span class="side-left">📊 My Exam Results</span>
+      <span id="sideResultsPill" class="side-pill">0</span>
+    </button>
+    <button class="side-item" onclick="setMyStudentBirthday()">
+      <span class="side-left">🎂 Set My Birthday</span>
+      <span id="sideMyBdayPill" class="side-pill">DOB</span>
     </button>
     <button class="side-item" onclick="openPage('notices')">
       <span class="side-left">📢 Institute Notices</span>
@@ -1305,6 +1319,18 @@
     </div>
   </div>
 
+  <!-- PAGE: MY EXAM RESULTS (U.C.C vs SCHOOL COMPARISON) -->
+  <div id="page-results" class="page">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;">
+        <div class="card-title" style="margin-bottom:0;">📊 My Exam Results (U.C.C vs School)</div>
+        <span id="stResultClassBadge" class="badge-ok">Class</span>
+      </div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">প্রতিটি পরীক্ষায় U.C.C Institute ও School Exam-এর নম্বরের তুলনা এবং মোট ফলাফল নিচে দেখা যাচ্ছে।</div>
+      <div id="stResultsContainer"></div>
+    </div>
+  </div>
+
   <!-- PAGE: NOTICES -->
   <div id="page-notices" class="page">
     <div class="card">
@@ -1463,12 +1489,26 @@
   </div>
 </div>
 
+<!-- BIG ANIMATED BIRTHDAY WISH POPUP -->
+<div id="birthdayPopupModal" style="display:none;position:fixed;inset:0;z-index:300;background:rgba(2,8,18,0.82);justify-content:center;align-items:center;padding:18px;">
+  <div style="width:100%;max-width:390px;background:linear-gradient(145deg,#1e1b4b 0%,#312e81 48%,#0f766e 100%);color:#ffffff;border:2.5px solid #fde047;border-radius:28px;padding:28px 22px;text-align:center;box-shadow:0 22px 54px rgba(0,0,0,0.55);animation:popIn 0.28s cubic-bezier(0.22,1,0.36,1);">
+    <div style="font-size:58px;line-height:1;margin-bottom:10px;">🎂🎉🎈</div>
+    <div style="display:inline-block;background:rgba(253,224,71,0.2);color:#fde047;border:1px solid rgba(253,224,71,0.45);font-size:11px;font-weight:800;letter-spacing:1.4px;padding:4px 12px;border-radius:99px;margin-bottom:10px;">U.C.C INSTITUTE WISHES YOU</div>
+    <h2 style="margin:0;font-size:26px;font-weight:800;color:#fde047;line-height:1.2;">Happy Birthday!</h2>
+    <div id="bdayUserName" style="font-size:20px;font-weight:800;color:#ffffff;margin:8px 0 6px;"></div>
+    <p id="bdayWishMsg" style="margin:0 0 18px;font-size:13.5px;color:#e2e8f0;line-height:1.55;">
+      জন্মদিনের অনেক অনেক শুভেচ্ছা ও ভালোবাসা! আপনার জীবন আনন্দ, সুস্থতা ও সাফল্যে ভরে উঠুক। 💐✨
+    </p>
+    <button type="button" class="btn" style="background:linear-gradient(135deg,#fde047,#f59e0b);color:#061121;border:none;font-size:14px;padding:12px;" onclick="closeBirthdayPopup()">🙏 Thank You!</button>
+  </div>
+</div>
+
 <div id="toast" class="toast"></div>
 
 <script>
   // Register Service Worker & update cache cleanly so direct PWA Install works 100%
   (function() {
-    const UI_BUILD = 'ucc_student_v31_7day_3class_routine';
+    const UI_BUILD = 'ucc_student_v35_signup_bday_confirm';
     try {
       if (localStorage.getItem('ucc_st_ui_build') !== UI_BUILD) {
         localStorage.setItem('ucc_st_ui_build', UI_BUILD);
@@ -4082,16 +4122,30 @@
     const errEl = document.getElementById('loginErr');
     const btn = document.getElementById('stSignupBtn');
 
+    const regDob = (document.getElementById('stRegDob') && document.getElementById('stRegDob').value) || '';
     if (!name || mob.length < 10) {
       errEl.textContent = 'তোমার নাম এবং 10 সংখ্যার মোবাইল নম্বর সঠিকভাবে দাও!';
       errEl.style.display = 'block';
       return;
     }
+    const confLines = [
+      'নতুন অ্যাকাউন্ট তৈরি করতে কনফার্ম করো:',
+      '',
+      `Name: ${name}`,
+      `Class: ${clsVal}`,
+      `Mobile: ${mob}`
+    ];
+    if (guardian) confLines.push(`Guardian: ${guardian}`);
+    if (regDob) confLines.push(`Birthday: ${regDob}`);
+    confLines.push('', 'OK চাপলে অ্যাকাউন্ট তৈরি হয়ে যাবে।');
+    if (!confirm(confLines.join('\n'))) return;
+
     errEl.style.display = 'none';
     btn.disabled = true; btn.textContent = 'Creating Account...';
 
     // Generate unique ID that will NOT collide with old UCC001 records
     const newId = generateUniqueStudentId(mob, selectedAuthTrack);
+    if (regDob) localStorage.setItem('ucc_st_dob_' + newId.toUpperCase(), regDob);
     const freshStudent = {
       id: newId,
       name: name,
@@ -4099,6 +4153,7 @@
       track: selectedAuthTrack,
       mobile: mob,
       fatherName: guardian || '-',
+      dob: regDob,
       address: selectedAuthTrack === 'COMPETITIVE' ? `Competitive (${clsVal})` : 'West Bengal',
       admissionDate: new Date().toISOString().slice(0, 10),
       months: {},
@@ -4150,6 +4205,7 @@
           track: selectedAuthTrack,
           mobile: mob,
           fatherName: guardian || '-',
+          dob: regDob,
           address: freshStudent.address,
           admissionDate: freshStudent.admissionDate,
           collector: 'Self SignUp'
@@ -4539,6 +4595,217 @@
               <span style="font-size:11px;color:var(--muted);">${n.date}</span>
             </div>
             <div style="font-size:13px;color:var(--text-2);margin-top:5px;line-height:1.45;">${n.message}</div>
+            ${n.link ? `<a href="${n.link}" target="_blank" class="btn-sm" style="margin-top:8px;background:var(--accent-grad);color:var(--accent-text);">Open Link →</a>` : ''}
+          </div>`).join('')
+        : '<div style="font-size:12.5px;color:var(--muted);text-align:center;">বর্তমানে কোনো নতুন নোটিশ নেই।</div>';
+    }
+  };
+
+
+  // ===== V34: STUDENT RESULTS (UCC vs SCHOOL) + NOTICE AUTHOR + BIRTHDAY POPUP =====
+  const RESULT_TAG = '[RESULT_V34]';
+  PAGE_TITLES.results = 'My Exam Results';
+
+  function getMyStudentResultsV34() {
+    const s = (stData && stData.student) || {};
+    const myId = String(s.id || '').trim().toUpperCase();
+    const map = {};
+    try {
+      const loc = JSON.parse(localStorage.getItem('ucc_results_v34') || '[]');
+      loc.forEach(r => {
+        if (r && String(r.studentId || '').toUpperCase() === myId) map[r.id] = r;
+      });
+    } catch (e) {}
+    const noticesArr = (stData && Array.isArray(stData.notices)) ? stData.notices : [];
+    noticesArr.forEach(n => {
+      if (!n || !String(n.title || '').startsWith(RESULT_TAG)) return;
+      try {
+        const r = JSON.parse(n.message || '{}');
+        if (r && String(r.studentId || '').toUpperCase() === myId) {
+          const rid = r.id || n.id;
+          map[rid] = { ...r, id: rid, date: n.date || r.date || '' };
+        }
+      } catch (e) {}
+    });
+    return Object.values(map);
+  }
+
+  function calcStResultStats(subs) {
+    let totalFull = 0, uccTotal = 0, schTotal = 0, hasUcc = false, hasSch = false;
+    (subs || []).forEach(s => {
+      totalFull += Number(s.full) || 0;
+      if (s.ucc !== null && s.ucc !== '' && !isNaN(Number(s.ucc))) { uccTotal += Number(s.ucc); hasUcc = true; }
+      if (s.school !== null && s.school !== '' && !isNaN(Number(s.school))) { schTotal += Number(s.school); hasSch = true; }
+    });
+    const uccPct = totalFull > 0 && hasUcc ? ((uccTotal / totalFull) * 100).toFixed(1) : '-';
+    const schPct = totalFull > 0 && hasSch ? ((schTotal / totalFull) * 100).toFixed(1) : '-';
+    let verdict = '';
+    let vColor = 'var(--accent-light)';
+    if (hasUcc && hasSch) {
+      const diff = uccTotal - schTotal;
+      if (diff > 0) { verdict = `🏆 U.C.C Institute-এ +${diff} নম্বর বেশি পেয়েছো!`; vColor = 'var(--success)'; }
+      else if (diff < 0) { verdict = `🏫 School Exam-এ +${Math.abs(diff)} নম্বর বেশি পেয়েছো!`; vColor = '#0284c7'; }
+      else { verdict = '🤝 U.C.C Institute ও School-এ সমান নম্বর!'; vColor = 'var(--accent-light)'; }
+    } else if (hasUcc) {
+      verdict = `U.C.C Institute Total: ${uccTotal}/${totalFull} (${uccPct}%)`; vColor = 'var(--success)';
+    } else if (hasSch) {
+      verdict = `School Exam Total: ${schTotal}/${totalFull} (${schPct}%)`; vColor = '#0284c7';
+    }
+    return { totalFull, uccTotal, schTotal, hasUcc, hasSch, uccPct, schPct, verdict, vColor };
+  }
+
+  function renderStudentResultsPage() {
+    const s = (stData && stData.student) || {};
+    const list = getMyStudentResultsV34();
+    const clsBadge = document.getElementById('stResultClassBadge');
+    if (clsBadge) clsBadge.textContent = s.studentClass || 'School';
+    const sidePill = document.getElementById('sideResultsPill');
+    if (sidePill) sidePill.textContent = list.length;
+
+    const box = document.getElementById('stResultsContainer');
+    if (!box) return;
+    if (!list.length) {
+      box.innerHTML = '<div style="font-size:12.5px;color:var(--muted);text-align:center;padding:16px 0;">তোমার পরীক্ষার রেজাল্ট এখনো আপলোড হয়নি।</div>';
+      return;
+    }
+
+    box.innerHTML = list.slice().reverse().map(r => {
+      const st = calcStResultStats(r.subjects || []);
+      return `<div class="card" style="padding:13px;margin-bottom:12px;border:1.5px solid var(--accent-border);">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:8px;">
+          <strong style="font-size:15px;color:var(--accent-light);">📝 ${r.examName}</strong>
+          <span style="font-size:11px;color:var(--muted);">${r.date || ''}</span>
+        </div>
+        <div style="overflow-x:auto;">
+          <table style="width:100%;border-collapse:collapse;font-size:12px;min-width:340px;">
+            <thead>
+              <tr style="background:var(--accent-grad);color:var(--accent-text);">
+                <th style="padding:7px 6px;border:1px solid var(--border);text-align:left;">Subject</th>
+                <th style="padding:7px 5px;border:1px solid var(--border);text-align:center;">Full</th>
+                <th style="padding:7px 5px;border:1px solid var(--border);text-align:center;">U.C.C</th>
+                <th style="padding:7px 5px;border:1px solid var(--border);text-align:center;">School</th>
+                <th style="padding:7px 5px;border:1px solid var(--border);text-align:center;">Higher</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${(r.subjects || []).map((sub, i) => {
+                const u = sub.ucc !== null && sub.ucc !== '' ? Number(sub.ucc) : null;
+                const sc = sub.school !== null && sub.school !== '' ? Number(sub.school) : null;
+                let cmp = '-';
+                if (u !== null && sc !== null) {
+                  if (u > sc) cmp = `<span style="color:var(--success);font-weight:800;">UCC (+${u - sc})</span>`;
+                  else if (sc > u) cmp = `<span style="color:#0284c7;font-weight:800;">School (+${sc - u})</span>`;
+                  else cmp = '<span style="color:var(--muted);font-weight:700;">Equal</span>';
+                }
+                return `<tr style="background:${i % 2 === 0 ? 'var(--bg-card)' : 'var(--bg-subcard)'};">
+                  <td style="padding:7px 6px;border:1px solid var(--border);font-weight:700;">${sub.name}</td>
+                  <td style="padding:7px 5px;border:1px solid var(--border);text-align:center;">${sub.full}</td>
+                  <td style="padding:7px 5px;border:1px solid var(--border);text-align:center;font-weight:800;color:var(--success);">${u !== null ? u : '-'}</td>
+                  <td style="padding:7px 5px;border:1px solid var(--border);text-align:center;font-weight:800;color:#0284c7;">${sc !== null ? sc : '-'}</td>
+                  <td style="padding:7px 5px;border:1px solid var(--border);text-align:center;font-size:11px;">${cmp}</td>
+                </tr>`;
+              }).join('')}
+              <tr style="background:var(--accent-soft);font-weight:800;">
+                <td style="padding:8px 6px;border:1px solid var(--border);">TOTAL</td>
+                <td style="padding:8px 5px;border:1px solid var(--border);text-align:center;">${st.totalFull}</td>
+                <td style="padding:8px 5px;border:1px solid var(--border);text-align:center;color:var(--success);">${st.hasUcc ? st.uccTotal + ' (' + st.uccPct + '%)' : '-'}</td>
+                <td style="padding:8px 5px;border:1px solid var(--border);text-align:center;color:#0284c7;">${st.hasSch ? st.schTotal + ' (' + st.schPct + '%)' : '-'}</td>
+                <td style="padding:8px 5px;border:1px solid var(--border);text-align:center;">—</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="margin-top:9px;padding:9px 11px;border-radius:11px;background:var(--bg-subcard);border:1px solid var(--border);font-size:12.5px;font-weight:800;color:${st.vColor};text-align:center;">
+          ${st.verdict}
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  // Student Birthday Wish Popup
+  function setMyStudentBirthday() {
+    closeSidebar();
+    if (!stData || !stData.student) return;
+    const sid = String(stData.student.id || '').toUpperCase();
+    const key = 'ucc_st_dob_' + sid;
+    const cur = localStorage.getItem(key) || '';
+    const val = prompt('তোমার জন্মতারিখ লেখো (YYYY-MM-DD, যেমন: 2012-07-30):', cur);
+    if (val === null) return;
+    const clean = val.trim();
+    if (/^\d{4}-\d{2}-\d{2}$/.test(clean)) {
+      localStorage.setItem(key, clean);
+      toast('🎂 জন্মতারিখ সেভ হয়েছে!');
+      checkStudentBirthdayPopup();
+    } else {
+      toast('সঠিক ফরম্যাটে লেখো: YYYY-MM-DD');
+    }
+  }
+
+  function closeBirthdayPopup() {
+    const m = document.getElementById('birthdayPopupModal');
+    if (m) m.style.display = 'none';
+  }
+
+  function checkStudentBirthdayPopup() {
+    if (!stData || !stData.student) return;
+    const s = stData.student;
+    const sid = String(s.id || '').toUpperCase();
+    const dob = s.dob || localStorage.getItem('ucc_st_dob_' + sid) || '';
+    const pill = document.getElementById('sideMyBdayPill');
+    if (pill && dob) pill.textContent = dob.slice(5);
+    if (!dob || dob.length < 10) return;
+    const now = new Date();
+    const todayIso = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
+    if (dob.slice(5) === todayIso.slice(5)) {
+      const seenKey = `ucc_st_bday_seen_${sid}_${todayIso}`;
+      if (localStorage.getItem(seenKey) === '1') return;
+      localStorage.setItem(seenKey, '1');
+      const nm = document.getElementById('bdayUserName');
+      if (nm) nm.textContent = s.name;
+      const modal = document.getElementById('birthdayPopupModal');
+      if (modal) modal.style.display = 'flex';
+    }
+  }
+
+  // Hook into renderAllStudentUI to add Results Tile, filter [RESULT_V34] from Notices & show Notice Author nicely
+  const _origRenderAllStV34 = renderAllStudentUI;
+  renderAllStudentUI = function() {
+    _origRenderAllStV34();
+    renderStudentResultsPage();
+    checkStudentBirthdayPopup();
+
+    const grid = document.getElementById('dashTilesGrid');
+    if (grid && !grid.querySelector('[data-tile="results"]')) {
+      const cnt = getMyStudentResultsV34().length;
+      grid.insertAdjacentHTML('beforeend', `
+        <div class="dash-tile" data-tile="results" onclick="openPage('results')">
+          ${cnt > 0 ? `<span class="dash-tile-badge ok">${cnt}</span>` : ''}
+          <div class="dash-tile-circle" style="background:rgba(16,185,129,0.14);color:#059669;">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+          </div>
+          <div class="dash-tile-label">Results</div>
+          <div class="dash-tile-sub">U.C.C vs School</div>
+        </div>
+      `);
+    }
+
+    // Filter out both [ROUTINE and [RESULT from regular Notices & format Posted by cleanly
+    const allN = (stData && Array.isArray(stData.notices)) ? stData.notices : [];
+    const regularN = allN.filter(n => {
+      const t = String(n.title || '');
+      return !t.startsWith('[ROUTINE') && !t.startsWith('[RESULT');
+    });
+    const nPill = document.getElementById('sideNotPill');
+    if (nPill) nPill.textContent = regularN.length;
+    const nList = document.getElementById('stNoticesList');
+    if (nList) {
+      nList.innerHTML = regularN.length
+        ? regularN.map(n => `<div class="req-card">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+              <strong style="font-size:14px;color:var(--accent-light);">${n.title}</strong>
+              <span style="font-size:11px;color:var(--muted);">${n.date}</span>
+            </div>
+            <div style="font-size:13px;color:var(--text-2);margin-top:5px;line-height:1.45;white-space:pre-line;">${n.message}</div>
             ${n.link ? `<a href="${n.link}" target="_blank" class="btn-sm" style="margin-top:8px;background:var(--accent-grad);color:var(--accent-text);">Open Link →</a>` : ''}
           </div>`).join('')
         : '<div style="font-size:12.5px;color:var(--muted);text-align:center;">বর্তমানে কোনো নতুন নোটিশ নেই।</div>';
