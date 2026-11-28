@@ -969,15 +969,9 @@
         <label>Mobile Number (মোবাইল নম্বর) *</label>
         <input type="tel" id="stRegMob" required maxlength="10" placeholder="10-digit mobile number">
       </div>
-      <div class="row-2">
-        <div class="form-group">
-          <label>Guardian Name (অভিভাবকের নাম)</label>
-          <input type="text" id="stRegGuardian" placeholder="Father / Mother name">
-        </div>
-        <div class="form-group">
-          <label>🎂 Birthday (Optional)</label>
-          <input type="date" id="stRegDob">
-        </div>
+      <div class="form-group">
+        <label>Guardian Name (অভিভাবকের নাম)</label>
+        <input type="text" id="stRegGuardian" placeholder="Father / Mother name">
       </div>
       <button type="submit" id="stSignupBtn" class="btn btn-accent" style="margin-top:6px;">Create Account &amp; Continue</button>
     </form>
@@ -1056,10 +1050,7 @@
       <span class="side-left">📊 My Exam Results</span>
       <span id="sideResultsPill" class="side-pill">0</span>
     </button>
-    <button class="side-item" onclick="setMyStudentBirthday()">
-      <span class="side-left">🎂 Set My Birthday</span>
-      <span id="sideMyBdayPill" class="side-pill">DOB</span>
-    </button>
+
     <button class="side-item" onclick="openPage('notices')">
       <span class="side-left">📢 Institute Notices</span>
       <span id="sideNotPill" class="side-pill">0</span>
@@ -1155,6 +1146,8 @@
     </div>
 
     <div class="dash-stats-row" id="dashStatsRow"></div>
+
+    <div id="stHomeBirthdayBanner"></div>
 
     <div class="dash-tiles-grid" id="dashTilesGrid"></div>
 
@@ -1489,17 +1482,15 @@
   </div>
 </div>
 
-<!-- BIG ANIMATED BIRTHDAY WISH POPUP -->
-<div id="birthdayPopupModal" style="display:none;position:fixed;inset:0;z-index:300;background:rgba(2,8,18,0.82);justify-content:center;align-items:center;padding:18px;">
-  <div style="width:100%;max-width:390px;background:linear-gradient(145deg,#1e1b4b 0%,#312e81 48%,#0f766e 100%);color:#ffffff;border:2.5px solid #fde047;border-radius:28px;padding:28px 22px;text-align:center;box-shadow:0 22px 54px rgba(0,0,0,0.55);animation:popIn 0.28s cubic-bezier(0.22,1,0.36,1);">
-    <div style="font-size:58px;line-height:1;margin-bottom:10px;">🎂🎉🎈</div>
-    <div style="display:inline-block;background:rgba(253,224,71,0.2);color:#fde047;border:1px solid rgba(253,224,71,0.45);font-size:11px;font-weight:800;letter-spacing:1.4px;padding:4px 12px;border-radius:99px;margin-bottom:10px;">U.C.C INSTITUTE WISHES YOU</div>
-    <h2 style="margin:0;font-size:26px;font-weight:800;color:#fde047;line-height:1.2;">Happy Birthday!</h2>
-    <div id="bdayUserName" style="font-size:20px;font-weight:800;color:#ffffff;margin:8px 0 6px;"></div>
-    <p id="bdayWishMsg" style="margin:0 0 18px;font-size:13.5px;color:#e2e8f0;line-height:1.55;">
-      জন্মদিনের অনেক অনেক শুভেচ্ছা ও ভালোবাসা! আপনার জীবন আনন্দ, সুস্থতা ও সাফল্যে ভরে উঠুক। 💐✨
-    </p>
-    <button type="button" class="btn" style="background:linear-gradient(135deg,#fde047,#f59e0b);color:#061121;border:none;font-size:14px;padding:12px;" onclick="closeBirthdayPopup()">🙏 Thank You!</button>
+<!-- BIG ANIMATED FESTIVAL GREETING POPUP (DURGA PUJA, KALI PUJA, ETC.) -->
+<div id="festivalPopupModal" style="display:none;position:fixed;inset:0;z-index:300;background:rgba(2,8,18,0.82);justify-content:center;align-items:center;padding:18px;">
+  <div style="width:100%;max-width:390px;background:linear-gradient(145deg,#7c2d12 0%,#b45309 48%,#0f766e 100%);color:#ffffff;border:2.5px solid #fde047;border-radius:28px;padding:28px 22px;text-align:center;box-shadow:0 22px 54px rgba(0,0,0,0.55);animation:popIn 0.28s cubic-bezier(0.22,1,0.36,1);">
+    <div id="festPopIcon" style="font-size:58px;line-height:1;margin-bottom:10px;">🪔🎉✨</div>
+    <div style="display:inline-block;background:rgba(253,224,71,0.2);color:#fde047;border:1px solid rgba(253,224,71,0.45);font-size:11px;font-weight:800;letter-spacing:1.4px;padding:4px 12px;border-radius:99px;margin-bottom:10px;">U.C.C INSTITUTE GREETINGS</div>
+    <h2 id="festPopTitle" style="margin:0;font-size:25px;font-weight:800;color:#fde047;line-height:1.25;">শুভ দুর্গাপূজা!</h2>
+    <p id="festPopMsg" style="margin:12px 0 14px;font-size:13.5px;color:#f8fafc;line-height:1.6;white-space:pre-line;"></p>
+    <div id="festPopAuthor" style="font-size:11.5px;color:#fde68a;font-weight:700;margin-bottom:16px;">— U.C.C Institute</div>
+    <button type="button" class="btn" style="background:linear-gradient(135deg,#fde047,#f59e0b);color:#061121;border:none;font-size:14px;padding:12px;" onclick="closeFestivalPopup()">🙏 ধন্যবাদ / Close</button>
   </div>
 </div>
 
@@ -1508,7 +1499,7 @@
 <script>
   // Register Service Worker & update cache cleanly so direct PWA Install works 100%
   (function() {
-    const UI_BUILD = 'ucc_student_v35_signup_bday_confirm';
+    const UI_BUILD = 'ucc_student_v36_bday_banner_festival_popup';
     try {
       if (localStorage.getItem('ucc_st_ui_build') !== UI_BUILD) {
         localStorage.setItem('ucc_st_ui_build', UI_BUILD);
@@ -4122,7 +4113,6 @@
     const errEl = document.getElementById('loginErr');
     const btn = document.getElementById('stSignupBtn');
 
-    const regDob = (document.getElementById('stRegDob') && document.getElementById('stRegDob').value) || '';
     if (!name || mob.length < 10) {
       errEl.textContent = 'তোমার নাম এবং 10 সংখ্যার মোবাইল নম্বর সঠিকভাবে দাও!';
       errEl.style.display = 'block';
@@ -4136,7 +4126,6 @@
       `Mobile: ${mob}`
     ];
     if (guardian) confLines.push(`Guardian: ${guardian}`);
-    if (regDob) confLines.push(`Birthday: ${regDob}`);
     confLines.push('', 'OK চাপলে অ্যাকাউন্ট তৈরি হয়ে যাবে।');
     if (!confirm(confLines.join('\n'))) return;
 
@@ -4145,7 +4134,6 @@
 
     // Generate unique ID that will NOT collide with old UCC001 records
     const newId = generateUniqueStudentId(mob, selectedAuthTrack);
-    if (regDob) localStorage.setItem('ucc_st_dob_' + newId.toUpperCase(), regDob);
     const freshStudent = {
       id: newId,
       name: name,
@@ -4153,7 +4141,6 @@
       track: selectedAuthTrack,
       mobile: mob,
       fatherName: guardian || '-',
-      dob: regDob,
       address: selectedAuthTrack === 'COMPETITIVE' ? `Competitive (${clsVal})` : 'West Bengal',
       admissionDate: new Date().toISOString().slice(0, 10),
       months: {},
@@ -4205,7 +4192,6 @@
           track: selectedAuthTrack,
           mobile: mob,
           fatherName: guardian || '-',
-          dob: regDob,
           address: freshStudent.address,
           admissionDate: freshStudent.admissionDate,
           collector: 'Self SignUp'
@@ -4722,49 +4708,80 @@
     }).join('');
   }
 
-  // Student Birthday Wish Popup
-  function setMyStudentBirthday() {
-    closeSidebar();
-    if (!stData || !stData.student) return;
-    const sid = String(stData.student.id || '').toUpperCase();
-    const key = 'ucc_st_dob_' + sid;
-    const cur = localStorage.getItem(key) || '';
-    const val = prompt('তোমার জন্মতারিখ লেখো (YYYY-MM-DD, যেমন: 2012-07-30):', cur);
-    if (val === null) return;
-    const clean = val.trim();
-    if (/^\d{4}-\d{2}-\d{2}$/.test(clean)) {
-      localStorage.setItem(key, clean);
-      toast('🎂 জন্মতারিখ সেভ হয়েছে!');
-      checkStudentBirthdayPopup();
-    } else {
-      toast('সঠিক ফরম্যাটে লেখো: YYYY-MM-DD');
-    }
+  // ===== V36: ALL-DAY HOME BIRTHDAY NOTIFICATION PANEL (ADMIN-SET ONLY) + FESTIVAL POPUPS =====
+  const FESTIVAL_TAG = '[FESTIVAL_V36]';
+
+  function getTodayIsoSt() {
+    const now = new Date();
+    return now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
   }
 
-  function closeBirthdayPopup() {
-    const m = document.getElementById('birthdayPopupModal');
-    if (m) m.style.display = 'none';
-  }
-
-  function checkStudentBirthdayPopup() {
-    if (!stData || !stData.student) return;
+  function renderStudentBirthdayBanner() {
+    const box = document.getElementById('stHomeBirthdayBanner');
+    if (!box) return;
+    if (!stData || !stData.student) { box.innerHTML = ''; return; }
     const s = stData.student;
     const sid = String(s.id || '').toUpperCase();
     const dob = s.dob || localStorage.getItem('ucc_st_dob_' + sid) || '';
-    const pill = document.getElementById('sideMyBdayPill');
-    if (pill && dob) pill.textContent = dob.slice(5);
-    if (!dob || dob.length < 10) return;
-    const now = new Date();
-    const todayIso = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
-    if (dob.slice(5) === todayIso.slice(5)) {
-      const seenKey = `ucc_st_bday_seen_${sid}_${todayIso}`;
-      if (localStorage.getItem(seenKey) === '1') return;
-      localStorage.setItem(seenKey, '1');
-      const nm = document.getElementById('bdayUserName');
-      if (nm) nm.textContent = s.name;
-      const modal = document.getElementById('birthdayPopupModal');
-      if (modal) modal.style.display = 'flex';
+    if (!dob || dob.length < 10 || dob.slice(5) !== getTodayIsoSt().slice(5)) {
+      box.innerHTML = '';
+      return;
     }
+    box.innerHTML = `
+      <div class="card" style="background:linear-gradient(135deg,#312e81 0%,#4f46e5 50%,#0f766e 100%);color:#ffffff;border:2px solid #fde047;margin-bottom:14px;box-shadow:0 12px 28px rgba(49,46,129,0.28);">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="font-size:40px;line-height:1;flex-shrink:0;">🎂🎉</div>
+          <div style="min-width:0;flex:1;">
+            <div style="font-size:10.5px;font-weight:800;letter-spacing:1px;color:#fde047;">U.C.C INSTITUTE • HAPPY BIRTHDAY</div>
+            <div style="font-size:17px;font-weight:800;color:#ffffff;margin-top:2px;">শুভ জন্মদিন, ${s.name}! 🎈</div>
+            <div style="font-size:12px;color:#e2e8f0;margin-top:3px;line-height:1.45;">জন্মদিনের অনেক অনেক শুভেচ্ছা ও ভালোবাসা! তোমার জীবন আনন্দ, সুস্থতা ও সাফল্যে ভরে উঠুক। 💐✨</div>
+          </div>
+        </div>
+      </div>`;
+  }
+
+  function getSavedFestivalsStV36() {
+    const map = {};
+    try {
+      const loc = JSON.parse(localStorage.getItem('ucc_festivals_v36') || '[]');
+      loc.forEach(f => { if (f && f.id) map[f.id] = f; });
+    } catch (e) {}
+    const noticesArr = (stData && Array.isArray(stData.notices)) ? stData.notices : [];
+    noticesArr.forEach(n => {
+      if (!n || !String(n.title || '').startsWith(FESTIVAL_TAG)) return;
+      try {
+        const f = JSON.parse(n.message || '{}');
+        if (f && f.title) {
+          const fid = f.id || n.id;
+          map[fid] = { ...f, id: fid };
+        }
+      } catch (e) {}
+    });
+    return Object.values(map);
+  }
+
+  function closeFestivalPopup() {
+    const m = document.getElementById('festivalPopupModal');
+    if (m) m.style.display = 'none';
+  }
+
+  function checkStudentFestivalPopupV36() {
+    if (!stData || !stData.student) return;
+    const today = getTodayIsoSt();
+    const list = getSavedFestivalsStV36().filter(f =>
+      (!f.showDate || f.showDate === today) &&
+      (f.target === 'ALL' || f.target === 'STUDENTS')
+    );
+    if (!list.length) return;
+    const latest = list[list.length - 1];
+    const seenKey = 'ucc_st_fest_seen_' + latest.id + '_' + today;
+    if (sessionStorage.getItem(seenKey) === '1') return;
+    sessionStorage.setItem(seenKey, '1');
+    document.getElementById('festPopIcon').textContent = latest.icon || '🎉✨';
+    document.getElementById('festPopTitle').textContent = latest.title;
+    document.getElementById('festPopMsg').textContent = latest.message;
+    document.getElementById('festPopAuthor').textContent = `— ${latest.postedBy || 'U.C.C Institute'}`;
+    document.getElementById('festivalPopupModal').style.display = 'flex';
   }
 
   // Hook into renderAllStudentUI to add Results Tile, filter [RESULT_V34] from Notices & show Notice Author nicely
@@ -4772,7 +4789,8 @@
   renderAllStudentUI = function() {
     _origRenderAllStV34();
     renderStudentResultsPage();
-    checkStudentBirthdayPopup();
+    renderStudentBirthdayBanner();
+    checkStudentFestivalPopupV36();
 
     const grid = document.getElementById('dashTilesGrid');
     if (grid && !grid.querySelector('[data-tile="results"]')) {
@@ -4793,7 +4811,7 @@
     const allN = (stData && Array.isArray(stData.notices)) ? stData.notices : [];
     const regularN = allN.filter(n => {
       const t = String(n.title || '');
-      return !t.startsWith('[ROUTINE') && !t.startsWith('[RESULT');
+      return !t.startsWith('[ROUTINE') && !t.startsWith('[RESULT') && !t.startsWith('[FESTIVAL');
     });
     const nPill = document.getElementById('sideNotPill');
     if (nPill) nPill.textContent = regularN.length;
